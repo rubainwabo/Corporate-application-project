@@ -1,4 +1,4 @@
-package be.vinci.pae;
+package be.vinci.pae.main;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

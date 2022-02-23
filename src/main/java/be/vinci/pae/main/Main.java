@@ -1,7 +1,7 @@
 package be.vinci.pae.main;
 
 /**
- * Main class.
+ * Main class
  */
 public class Main {
 
@@ -10,6 +10,7 @@ public class Main {
    *
    * @param args command line arguments
    */
+
   public static void main(String[] args) {
     System.out.println("Hello world!");
   }

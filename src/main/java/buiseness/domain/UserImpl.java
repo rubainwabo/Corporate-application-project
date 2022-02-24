@@ -1,4 +1,4 @@
 package buiseness.domain;
 
-public class UserImpl implements buiseness.domain.User {
+public class UserImpl implements User {
 }

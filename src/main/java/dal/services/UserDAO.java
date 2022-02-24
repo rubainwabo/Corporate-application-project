@@ -1,5 +1,4 @@
 package dal.services;
 
-public class UserDAO {
-
+public interface UserDAO {
 }

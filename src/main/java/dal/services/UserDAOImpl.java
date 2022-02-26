@@ -20,9 +20,10 @@ public class UserDAOImpl implements UserDAO {
     private final Algorithm jwtAlgorithm = Algorithm.HMAC256(Config.getProperty("JWTSecret"));
     private final ObjectMapper jsonMapper = new ObjectMapper();
 
-    public UserDTO login(UserDTO user) {
-        PreparedStatement ps = myDalService.getPs("INSERT INTO projet.personnes values ");
-        ps.executeQuery();
+    public UserDTO login(String login, String password) {
+        /*
+        //PreparedStatement ps = myDalService.getPs("INSERT INTO projet.personnes values()");
+        //ps.executeQuery();
         if (user == null)return null;
         String token;
         try {
@@ -38,5 +39,7 @@ public class UserDAOImpl implements UserDAO {
             return null;
         }
     }
-
+         */
+        return null;
+    }
 }

@@ -1,7 +1,7 @@
-package ihm.routes;
+package ihm;
 
+import buiseness.domain.UserDTO;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -19,23 +19,23 @@ public class UserRessource {
     @Path("login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ObjectNode login(JsonNode json) {
+    public UserDTO login(JsonNode user) {
         // Get and check credentials
-        if (!json.hasNonNull("login") || !json.hasNonNull("password")) {
+       if (!user.hasNonNull("login") || !user.hasNonNull("password")) {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("login or password required").type("text/plain").build());
         }
-        String login = json.get("login").asText();
-        String password = json.get("password").asText();
+
+        String login = user.get("login").asText();
+        String password = user.get("password").asText();
 
         // Try to login
-        ObjectNode publicUser = myUserDataService.login(login, password);
+        UserDTO publicUser = myUserDataService.login(login,password);
         if (publicUser == null) {
             throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
                     .entity("Login or password incorrect").type(MediaType.TEXT_PLAIN)
                     .build());
         }
         return publicUser;
-
     }
 }

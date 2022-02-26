@@ -1,4 +1,4 @@
 package buiseness.domain;
 
-public interface User extends buiseness.domain.UserDTO {
+public interface User extends UserDTO {
 }

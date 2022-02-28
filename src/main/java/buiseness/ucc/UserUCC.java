@@ -4,5 +4,5 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface UserUCC {
 
-  ObjectNode seConnecter(String pseudo, String password);
+  ObjectNode login(String pseudo, String password,boolean rememberMe);
 }

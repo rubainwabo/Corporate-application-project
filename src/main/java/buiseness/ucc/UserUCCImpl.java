@@ -21,8 +21,11 @@ public class UserUCCImpl implements UserUCC {
    * @param mdp    son mot de passe
    * @return un objet contenant son token,son id,son pseudo, si tout se passe bien, sinon null
    */
-  public ObjectNode seConnecter(String pseudo, String mdp) {
+  public ObjectNode login(String pseudo, String mdp, boolean rememberMe) {
+    System.out.println(pseudo);
+
     User user = (User) myUserDAO.getOne(pseudo);
+
     // faut utiliser la factory pour créer le userDTO ???
     if (user == null) {
       return null;
@@ -34,6 +37,6 @@ public class UserUCCImpl implements UserUCC {
     if (!user.getEtat().equals("validé")) {
       return null;
     }
-    return user.creeToken(user.getId(), user.getPseudo());
+    return user.creeToken(user.getId(), user.getPseudo(), rememberMe);
   }
 }

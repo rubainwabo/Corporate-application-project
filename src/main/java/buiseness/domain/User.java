@@ -8,7 +8,7 @@ public interface User extends UserDTO {
 
   String hashMdp(String mdp);
 
-  ObjectNode creeToken(int id, String pseudo);
+  ObjectNode creeToken(int id, String pseudo, boolean rememberMe);
 
   boolean checkEtat(String etat);
 }

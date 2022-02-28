@@ -5,7 +5,7 @@ public interface UserDTO {
   String getPseudo();
 
   void setPseudo(String setPseudo);
-
+  
   int getId();
 
   void setId(int id);

@@ -12,6 +12,8 @@ const affichage = `
 const LoginPage = () => { 
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = affichage;
+  
 };
+
 
 export default LoginPage;

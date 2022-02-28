@@ -16,7 +16,7 @@ import jakarta.ws.rs.core.Response;
 @Singleton
 @Path("/auths")
 public class UserRessource {
-  
+
   /*
    * @Inject
    * private UserDAO myUserDataService;
@@ -28,21 +28,28 @@ public class UserRessource {
   /**
    * permet de connecter l'utilisateur.
    *
-   * @param user les données que l'utilisateur à entré mise sous format json
+   * @param body les données que l'utilisateur à entré mise sous format json
    * @return le token associé à l'utilisateur, sinon une erreur en cas d'échec
    */
   @POST
   @Path("login")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public ObjectNode login(JsonNode user) {
-    if (!user.hasNonNull("pseudo") || !user.hasNonNull("mdp")) {
+  public ObjectNode login(JsonNode body) {
+
+    if (!body.hasNonNull("pseudo") || !body.hasNonNull("password") || !body.hasNonNull(
+        "rememberMe")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("login or password required").type("text/plain").build());
     }
-    String pseudo = user.get("pseudo").asText();
-    String mdp = user.get("mdp").asText();
-    ObjectNode token = myUserUCC.seConnecter(pseudo, mdp);
+  
+    String pseudo = body.get("pseudo").asText();
+    String password = body.get("password").asText();
+
+    boolean rememberMe = body.get("rememberMe").asBoolean();
+
+    ObjectNode token = myUserUCC.login(pseudo, password, rememberMe);
+    System.out.println(token);
     if (token == null) {
       throw new WebApplicationException();
     }

@@ -4,5 +4,5 @@ import buiseness.domain.UserDTO;
 
 public interface BizFactory {
 
-  public UserDTO getUser();
+  UserDTO getUser();
 }

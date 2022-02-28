@@ -4,5 +4,5 @@ import buiseness.domain.UserDTO;
 
 public interface UserDAO {
 
-  public UserDTO getOne(String pseudo);
+  UserDTO getOne(String pseudo);
 }

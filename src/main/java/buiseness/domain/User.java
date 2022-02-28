@@ -10,5 +10,5 @@ public interface User extends UserDTO {
 
   ObjectNode creeToken(int id, String pseudo);
 
-  public boolean checkEtat(String etat);
+  boolean checkEtat(String etat);
 }

@@ -6,6 +6,6 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 @Provider
 public class ApplicationBinder extends AbstractBinder {
 
-    protected void configure() {
-    }
+  protected void configure() {
+  }
 }

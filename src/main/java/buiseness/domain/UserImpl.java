@@ -9,83 +9,83 @@ import utils.Config;
 
 public class UserImpl implements User, UserDTO {
 
-    private final Algorithm jwtAlgorithm = Algorithm.HMAC256(Config.getProperty("JWTSecret"));
-    private final ObjectMapper jsonMapper = new ObjectMapper();
-    private int id;
-    private String mdp;
-    private String pseudo;
-    private String prenom;
-    private String etat;
-    private final String[] etatPossible = {"validé", "attente", "refusé"};
-    private Adresse adr;
-    // on pourrait faire un boolean ici
-    private String role;
-    private String txt_refus;
-    private String num_tel;
-    private String url_photo;
+  private final Algorithm jwtAlgorithm = Algorithm.HMAC256(Config.getProperty("JWTSecret"));
+  private final ObjectMapper jsonMapper = new ObjectMapper();
+  private final String[] etatPossible = {"validé", "attente", "refusé"};
+  private int id;
+  private String mdp;
+  private String pseudo;
+  private String prenom;
+  private String etat;
+  private Adresse adr;
+  // on pourrait faire un boolean ici
+  private String role;
+  private String txtRefus;
+  private String numTel;
+  private String urlPhoto;
 
-    public UserImpl() {
-    }
+  public UserImpl() {
+  }
 
-    @Override
-    public boolean verifMdp(String mdp) {
-        return BCrypt.checkpw(mdp, this.mdp);
-    }
+  @Override
+  public boolean verifMdp(String mdp) {
+    return BCrypt.checkpw(mdp, this.mdp);
+  }
 
-    @Override
-    public String hashMdp(String mdp) {
-        return BCrypt.hashpw(mdp, BCrypt.gensalt());
-    }
+  @Override
+  public String hashMdp(String mdp) {
+    return BCrypt.hashpw(mdp, BCrypt.gensalt());
+  }
 
-    @Override
-    public ObjectNode creeToken(int id, String pseudo) {
-        String token;
-        try {
-            token = JWT.create().withIssuer("auth0")
-                    .withClaim("utilisateur", id).sign(this.jwtAlgorithm);
-            ObjectNode publicUser = jsonMapper.createObjectNode()
-                    .put("token", token)
-                    .put("id", id)
-                    .put("pseudo", pseudo);
-            return publicUser;
-        } catch (Exception e) {
-            System.out.println("Unable to create token");
-            return null;
-        }
+  @Override
+  public ObjectNode creeToken(int id, String pseudo) {
+    String token;
+    try {
+      token = JWT.create().withIssuer("auth0")
+          .withClaim("utilisateur", id).sign(this.jwtAlgorithm);
+      ObjectNode publicUser = jsonMapper.createObjectNode()
+          .put("token", token)
+          .put("id", id)
+          .put("pseudo", pseudo);
+      return publicUser;
+    } catch (Exception e) {
+      System.out.println("Unable to create token");
+      return null;
     }
+  }
 
-    @Override
-    public String getPseudo() {
-        return pseudo;
-    }
+  @Override
+  public String getPseudo() {
+    return pseudo;
+  }
 
-    @Override
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
-    }
+  @Override
+  public void setPseudo(String pseudo) {
+    this.pseudo = pseudo;
+  }
 
-    @Override
-    public int getId() {
-        return id;
-    }
+  @Override
+  public int getId() {
+    return id;
+  }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
+  @Override
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    @Override
-    public String getMdp() {
-        return mdp;
-    }
+  @Override
+  public String getMdp() {
+    return mdp;
+  }
 
-    @Override
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
+  @Override
+  public void setMdp(String mdp) {
+    this.mdp = mdp;
+  }
 
-    @Override
-    public String getEtat() {
-        return etat;
-    }
+  @Override
+  public String getEtat() {
+    return etat;
+  }
 }

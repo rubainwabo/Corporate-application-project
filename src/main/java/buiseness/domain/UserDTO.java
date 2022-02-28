@@ -1,17 +1,18 @@
 package buiseness.domain;
 
 public interface UserDTO {
-    String getPseudo();
 
-    void setPseudo(String setPseudo);
+  String getPseudo();
 
-    int getId();
+  void setPseudo(String setPseudo);
 
-    void setId(int id);
+  int getId();
 
-    String getMdp();
+  void setId(int id);
 
-    void setMdp(String mdp);
+  String getMdp();
 
-    String getEtat();
+  void setMdp(String mdp);
+
+  String getEtat();
 }

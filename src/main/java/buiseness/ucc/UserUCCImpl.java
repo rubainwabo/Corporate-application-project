@@ -31,7 +31,7 @@ public class UserUCCImpl implements UserUCC {
     if (!user.verifMdp(mdp)) {
       return null;
     }
-    if (!user.getEtat().equals("accépté")) {
+    if (!user.getEtat().equals("validé")) {
       return null;
     }
     return user.creeToken(user.getId(), user.getPseudo());

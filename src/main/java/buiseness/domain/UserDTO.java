@@ -15,4 +15,6 @@ public interface UserDTO {
   void setMdp(String mdp);
 
   String getEtat();
+
+  void setEtat(String etat);
 }

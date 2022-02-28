@@ -24,8 +24,8 @@ public class UserRessource {
   private UserUCC myUserUCC;
 
   /**
-   * @param user, les données que l'utilisateur à entré mise sous format json
-   * @return token, le token associé à l'utilisateur, sinon une erreur en cas d'échec
+   * @param user les données que l'utilisateur à entré mise sous format json
+   * @return le token associé à l'utilisateur, sinon une erreur en cas d'échec
    */
   @POST
   @Path("login")

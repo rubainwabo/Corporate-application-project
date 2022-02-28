@@ -14,8 +14,8 @@ public class UserUCCImpl implements UserUCC {
   private BizFactory myBizFacto;
 
   /**
-   * @param pseudo, le pseudo de la personne essayant de se connecter
-   * @param mdp,    son mot de passe
+   * @param pseudo le pseudo de la personne essayant de se connecter
+   * @param mdp    son mot de passe
    * @return son token si tout se passe bien, sinon null
    */
   public ObjectNode seConnecter(String pseudo, String mdp) {

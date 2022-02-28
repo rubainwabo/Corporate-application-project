@@ -13,7 +13,7 @@ public class UserDAOImpl implements UserDAO {
   private DalServices myDalService;
 
   /**
-   * @param pseudo, le pseudo entré par l'utilisateur
+   * @param pseudo le pseudo entré par l'utilisateur
    * @return User trouvé
    */
   public UserDTO getOne(String pseudo) {

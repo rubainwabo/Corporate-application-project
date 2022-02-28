@@ -13,14 +13,15 @@ public class UserDAOImpl implements UserDAO {
   private DalServices myDalService;
 
   /**
-   * @param pseudo
-   * @return
+   * @param pseudo, le pseudo entré par l'utilisateur
+   * @return User trouvé
    */
   public UserDTO getOne(String pseudo) {
         /*
         //PreparedStatement ps = myDalService.getPs("INSERT INTO projet.personnes values()");
         //ps.executeQuery();
-         */
+        */
     return null;
+
   }
 }

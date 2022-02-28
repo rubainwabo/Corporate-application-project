@@ -24,8 +24,8 @@ public class UserRessource {
   private UserUCC myUserUCC;
 
   /**
-   * @param user
-   * @return
+   * @param user, les données que l'utilisateur à entré mise sous format json
+   * @return token, le token associé à l'utilisateur, sinon une erreur en cas d'échec
    */
   @POST
   @Path("login")
@@ -39,9 +39,9 @@ public class UserRessource {
     String pseudo = user.get("pseudo").asText();
     String mdp = user.get("mdp").asText();
     ObjectNode token = myUserUCC.seConnecter(pseudo, mdp);
-      if (token == null) {
-          throw new WebApplicationException();
-      }
+    if (token == null) {
+      throw new WebApplicationException();
+    }
     return token;
   }
 }

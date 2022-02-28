@@ -3,7 +3,6 @@ package ihm;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
@@ -17,9 +16,12 @@ import jakarta.ws.rs.core.Response;
 @Singleton
 @Path("/auths")
 public class UserRessource {
+  
+  /*
+   * @Inject
+   * private UserDAO myUserDataService;
+   */
 
-  @Inject
-  private UserDAO myUserDataService;
   @Inject
   private UserUCC myUserUCC;
 

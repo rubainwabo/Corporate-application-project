@@ -1,7 +1,6 @@
 package buiseness.ucc;
 
 import buiseness.domain.User;
-import buiseness.factory.BizFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
@@ -10,8 +9,10 @@ public class UserUCCImpl implements UserUCC {
 
   @Inject
   private UserDAO myUserDAO;
-  @Inject
-  private BizFactory myBizFacto;
+  /*
+   *  @Inject
+   *  private BizFactory myBizFacto;
+   */
 
   /**
    * permet de connecter un utilisateur.

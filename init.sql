@@ -6,7 +6,7 @@ CREATE TABLE projet.personnes
     pseudo            VARCHAR(100) NOT NULL,
     nom               VARCHAR(100) NOT NULL,
     prenom            VARCHAR(100) NOT NULL,
-    boite_postale      INTEGER,
+    boite_postale     INTEGER,
     etat              VARCHAR(100) NOT NULL,
     _role             VARCHAR(100) NOT NULL,
     texte_refus       VARCHAR(100),
@@ -65,9 +65,17 @@ CREATE TABLE projet.notifications
     personne        INTEGER REFERENCES projet.personnes (id_personne) NOT NULL
 );
 
-INSERT INTO projet.personnes VALUES (DEFAULT, 'test', 'test', 'test',2, 'accepté', 'admin', DEFAULT, 'test', DEFAULT, 'test', 1234, 1, 'test', DEFAULT, 0);
-INSERT INTO projet.types_objet VALUES (DEFAULT, 'test');
-INSERT INTO projet.objets VALUES (DEFAULT, 'test', DEFAULT, DEFAULT, DEFAULT, 'test', 'test', 1, 1, DEFAULT);
-INSERT INTO projet.dates VALUES (DEFAULT, '1-1-1', 1);
-INSERT INTO projet.interets VALUES ('1-1-1', 1, 1);
-INSERT INTO projet.notifications VALUES (DEFAULT, false, 'test', 1);
+INSERT INTO projet.personnes
+VALUES (DEFAULT, 'test', 'test', 'test', 2, 'accepté', 'admin', DEFAULT,
+        '$2a$10$rRmgL91HV9iLQgzhelBWwOopa5sK1ZrAXAASk5G0kXKJZqbZfN6b6', DEFAULT, 'test', 1234, 1,
+        'test', DEFAULT, 0);
+INSERT INTO projet.types_objet
+VALUES (DEFAULT, 'test');
+INSERT INTO projet.objets
+VALUES (DEFAULT, 'test', DEFAULT, DEFAULT, DEFAULT, 'test', 'test', 1, 1, DEFAULT);
+INSERT INTO projet.dates
+VALUES (DEFAULT, '1-1-1', 1);
+INSERT INTO projet.interets
+VALUES ('1-1-1', 1, 1);
+INSERT INTO projet.notifications
+VALUES (DEFAULT, false, 'test', 1);

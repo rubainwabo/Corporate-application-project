@@ -16,7 +16,7 @@ public class UserImpl implements User, UserDTO {
     private String pseudo;
     private String prenom;
     private String etat;
-    private final String[] etatPossible = {"accepté","attente","refusé"};
+    private final String[] etatPossible = {"validé", "attente", "refusé"};
     private Adresse adr;
     // on pourrait faire un boolean ici
     private String role;
@@ -34,7 +34,8 @@ public class UserImpl implements User, UserDTO {
 
     @Override
     public String hashMdp(String mdp) {
-        return BCrypt.hashpw(mdp, BCrypt.gensalt());    }
+        return BCrypt.hashpw(mdp, BCrypt.gensalt());
+    }
 
     @Override
     public ObjectNode creeToken(int id, String pseudo) {
@@ -70,7 +71,7 @@ public class UserImpl implements User, UserDTO {
 
     @Override
     public void setId(int id) {
-        this.id=id;
+        this.id = id;
     }
 
     @Override
@@ -80,7 +81,7 @@ public class UserImpl implements User, UserDTO {
 
     @Override
     public void setMdp(String mdp) {
-        this.mdp=mdp;
+        this.mdp = mdp;
     }
 
     @Override

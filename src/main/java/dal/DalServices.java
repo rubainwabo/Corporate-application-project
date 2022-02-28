@@ -1,3 +1,4 @@
 package dal;
 
-public class DalServices {}
+public class DalServices {
+}

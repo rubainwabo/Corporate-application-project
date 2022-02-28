@@ -17,10 +17,10 @@ public class UserDAOImpl implements UserDAO {
    * @return User trouvé
    */
   public UserDTO getOne(String pseudo) {
-        /*
-        //PreparedStatement ps = myDalService.getPs("INSERT INTO projet.personnes values()");
-        //ps.executeQuery();
-        */
+    /*
+     *  PreparedStatement ps = myDalService.getPs("INSERT INTO projet.personnes values()");
+     *  ps.executeQuery();
+     */
     return null;
 
   }

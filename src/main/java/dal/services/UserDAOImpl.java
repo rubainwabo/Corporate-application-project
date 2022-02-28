@@ -13,6 +13,9 @@ public class UserDAOImpl implements UserDAO {
   private DalServices myDalService;
 
   /**
+   * permet de récuperer un utilisateur par rapport à un pseudo et le renvoie à l'user UCC pour
+   * continuer les checks
+   *
    * @param pseudo le pseudo entré par l'utilisateur
    * @return User trouvé
    */

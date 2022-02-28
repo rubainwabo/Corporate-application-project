@@ -24,6 +24,8 @@ public class UserRessource {
   private UserUCC myUserUCC;
 
   /**
+   * permet de connecter l'utilisateur
+   *
    * @param user les données que l'utilisateur à entré mise sous format json
    * @return le token associé à l'utilisateur, sinon une erreur en cas d'échec
    */

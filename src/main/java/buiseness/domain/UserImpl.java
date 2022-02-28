@@ -15,9 +15,9 @@ public class UserImpl implements User, UserDTO {
   private int id;
   private String mdp;
   private String pseudo;
+  private String etat;
   /*
    * private String prenom;
-   * private String etat;
    * private Adresse adr;
    * private boolean role;
    * private String txtRefus;
@@ -57,6 +57,16 @@ public class UserImpl implements User, UserDTO {
   }
 
   @Override
+  public boolean checkEtat(String etat) {
+    for (String e : this.etatPossible) {
+      if (e.equals(etat)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
   public String getPseudo() {
     return pseudo;
   }
@@ -88,6 +98,10 @@ public class UserImpl implements User, UserDTO {
 
   @Override
   public String getEtat() {
-    return etat;
+    return this.etat;
+  }
+
+  public void setEtat(String etat) {
+    this.etat = etat;
   }
 }

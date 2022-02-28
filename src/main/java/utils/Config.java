@@ -12,6 +12,9 @@ import java.util.Properties;
 public class Config {
     private static Properties props;
 
+    /**
+     * @param file
+     */
     public static void load(String file) {
         props = new Properties();
         try (InputStream input = new FileInputStream(file)) {
@@ -22,14 +25,26 @@ public class Config {
         }
     }
 
+    /**
+     * @param key
+     * @return
+     */
     public static String getProperty(String key) {
         return props.getProperty(key);
     }
 
+    /**
+     * @param key
+     * @return
+     */
     public static Integer getIntProperty(String key) {
         return Integer.parseInt(props.getProperty(key));
     }
 
+    /**
+     * @param key
+     * @return
+     */
     public static boolean getBoolProperty(String key) {
         return Boolean.parseBoolean(props.getProperty(key));
     }

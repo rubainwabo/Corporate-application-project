@@ -1,7 +1,8 @@
 package ihm;
 
-import buiseness.domain.UserDTO;
+import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -14,28 +15,26 @@ import jakarta.ws.rs.core.Response;
 public class UserRessource {
     @Inject
     private UserDAO myUserDataService;
+    @Inject
+    private UserUCC myUserUCC;
 
+    /**
+     * @param user
+     * @return
+     */
     @POST
     @Path("login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserDTO login(JsonNode user) {
-        // Get and check credentials
-       if (!user.hasNonNull("login") || !user.hasNonNull("password")) {
+    public ObjectNode login(JsonNode user) {
+        if (!user.hasNonNull("pseudo") || !user.hasNonNull("mdp")) {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("login or password required").type("text/plain").build());
         }
-
-        String login = user.get("login").asText();
-        String password = user.get("password").asText();
-
-        // Try to login
-        UserDTO publicUser = myUserDataService.login(login,password);
-        if (publicUser == null) {
-            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("Login or password incorrect").type(MediaType.TEXT_PLAIN)
-                    .build());
-        }
-        return publicUser;
+        String pseudo = user.get("pseudo").asText();
+        String mdp = user.get("mdp").asText();
+        ObjectNode token = myUserUCC.seConnecter(pseudo,mdp);
+        if (token == null) throw new WebApplicationException();
+        return token;
     }
 }

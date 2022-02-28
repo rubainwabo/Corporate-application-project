@@ -9,12 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAOImpl implements UserDAO {
-
+  
 
   @Inject
   private BizFactory myDomainFactory;
 
-  //@Inject
+  @Inject
   private DalServices myDalService;
 
   /**
@@ -28,8 +28,10 @@ public class UserDAOImpl implements UserDAO {
 
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select id_personne,mot_de_passe,pseudo,etat from projet.personnes where pseudo=?")) {
+
       ps.setString(1, pseudo);
       ResultSet rs = ps.executeQuery();
+
       UserDTO user = myDomainFactory.getUser();
       if (!rs.next()) {
         return null;
@@ -41,8 +43,10 @@ public class UserDAOImpl implements UserDAO {
       return user;
 
     } catch (SQLException throwables) {
+
       throwables.printStackTrace();
     }
+
     return null;
   }
 }

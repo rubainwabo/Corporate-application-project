@@ -31,6 +31,7 @@ public class UserImpl implements User, UserDTO {
 
   @Override
   public boolean verifMdp(String mdp) {
+    System.out.println(BCrypt.checkpw(mdp, this.mdp));
     return BCrypt.checkpw(mdp, this.mdp);
   }
 
@@ -40,7 +41,7 @@ public class UserImpl implements User, UserDTO {
   }
 
   @Override
-  public ObjectNode creeToken(int id, String pseudo) {
+  public ObjectNode creeToken(int id, String pseudo, boolean rememberMe) {
     String token;
     try {
       token = JWT.create().withIssuer("auth0")
@@ -48,10 +49,11 @@ public class UserImpl implements User, UserDTO {
       ObjectNode publicUser = jsonMapper.createObjectNode()
           .put("token", token)
           .put("id", id)
-          .put("pseudo", pseudo);
+          .put("pseudo", pseudo)
+          .put("rememberMe", rememberMe);
+
       return publicUser;
     } catch (Exception e) {
-      System.out.println("Unable to create token");
       return null;
     }
   }

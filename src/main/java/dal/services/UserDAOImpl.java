@@ -14,7 +14,7 @@ public class UserDAOImpl implements UserDAO {
   @Inject
   private BizFactory myDomainFactory;
 
-  @Inject
+  //@Inject
   private DalServices myDalService;
 
   /**
@@ -25,14 +25,15 @@ public class UserDAOImpl implements UserDAO {
    * @return User trouvé
    */
   public UserDTO getOne(String pseudo) {
+
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select id_personne,mot_de_passe,pseudo,etat from projet.personnes where pseudo=?")) {
       ps.setString(1, pseudo);
       ResultSet rs = ps.executeQuery();
-      if (rs == null) {
+      UserDTO user = myDomainFactory.getUser();
+      if (!rs.next()) {
         return null;
       }
-      UserDTO user = myDomainFactory.getUser();
       user.setId(rs.getInt(1));
       user.setMdp(rs.getString(2));
       user.setPseudo(rs.getString(3));

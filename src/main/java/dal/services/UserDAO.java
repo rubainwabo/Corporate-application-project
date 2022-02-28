@@ -1,5 +1,8 @@
 package dal.services;
 
-public class UserDAO {
+import buiseness.domain.UserDTO;
 
+public interface UserDAO {
+
+  UserDTO getOne(String pseudo);
 }

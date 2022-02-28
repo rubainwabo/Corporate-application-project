@@ -1,7 +1,9 @@
 import LoginPage from "../Pages/LoginPage";
+import HomePage from "../Pages/HomePage";
 
 // Configure your routes here
 const routes = {
+  '/' : HomePage,
   "/login": LoginPage,
 };
 

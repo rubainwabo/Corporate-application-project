@@ -13,7 +13,7 @@ public class Config {
   private static Properties props;
 
   /**
-   * permet de charger le fichier passé en paramètre
+   * permet de charger le fichier passé en paramètre.
    *
    * @param file le fichier à charger
    */
@@ -29,7 +29,7 @@ public class Config {
   }
 
   /**
-   * permet de recupérer la valeur d'une clé contenu dans un fichier properties
+   * permet de recupérer la valeur d'une clé contenu dans un fichier properties.
    *
    * @param key la clé associé à ce qu'on recherche
    * @return la valeur associé à la key
@@ -39,7 +39,7 @@ public class Config {
   }
 
   /**
-   * permet de recupérer la valeur d'une clé contenu dans un fichier properties
+   * permet de recupérer la valeur d'une clé contenu dans un fichier properties.
    *
    * @param key la clé associé à ce qu'on recherche
    * @return la valeur associé à la key en int
@@ -49,7 +49,7 @@ public class Config {
   }
 
   /**
-   * permet de recupérer la valeur d'une clé contenu dans un fichier properties
+   * permet de recupérer la valeur d'une clé contenu dans un fichier properties.
    *
    * @param key la clé associé à ce qu'on recherche
    * @return la valeur associé à la key en boolean

@@ -14,7 +14,7 @@ public class UserUCCImpl implements UserUCC {
   private BizFactory myBizFacto;
 
   /**
-   * permet de connecter un utilisateur
+   * permet de connecter un utilisateur.
    *
    * @param pseudo le pseudo de la personne essayant de se connecter
    * @param mdp    son mot de passe

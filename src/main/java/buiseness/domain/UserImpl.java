@@ -15,14 +15,16 @@ public class UserImpl implements User, UserDTO {
   private int id;
   private String mdp;
   private String pseudo;
-  private String prenom;
-  private String etat;
-  private Adresse adr;
-  // on pourrait faire un boolean ici
-  private String role;
-  private String txtRefus;
-  private String numTel;
-  private String urlPhoto;
+  /*
+   * private String prenom;
+   * private String etat;
+   * private Adresse adr;
+   * private boolean role;
+   * private String txtRefus;
+   * private String numTel;
+   * private String urlPhoto;
+   */
+
 
   public UserImpl() {
   }

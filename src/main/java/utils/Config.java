@@ -13,7 +13,7 @@ public class Config {
   private static Properties props;
 
   /**
-   * @param file, le fchier à charger
+   * @param file le fichier à charger
    */
   public static void load(String file) {
     props = new Properties();
@@ -27,24 +27,24 @@ public class Config {
   }
 
   /**
-   * @param key, la clé associé à ce qu'on recherche
-   * @return valeur, la valeur associé à la key
+   * @param key la clé associé à ce qu'on recherche
+   * @return la valeur associé à la key
    */
   public static String getProperty(String key) {
     return props.getProperty(key);
   }
 
   /**
-   * @param key, la clé associé à ce qu'on recherche
-   * @return valeur, la valeur associé à la key en int
+   * @param key la clé associé à ce qu'on recherche
+   * @return la valeur associé à la key en int
    */
   public static Integer getIntProperty(String key) {
     return Integer.parseInt(props.getProperty(key));
   }
 
   /**
-   * @param key, la clé associé à ce qu'on recherche
-   * @return valeur, la valeur associé à la key en boolean
+   * @param key la clé associé à ce qu'on recherche
+   * @return la valeur associé à la key en boolean
    */
   public static boolean getBoolProperty(String key) {
     return Boolean.parseBoolean(props.getProperty(key));

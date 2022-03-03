@@ -4,6 +4,7 @@ import buiseness.domain.User;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 
 public class UserUCCImpl implements UserUCC {
 
@@ -27,15 +28,9 @@ public class UserUCCImpl implements UserUCC {
     User user = (User) myUserDAO.getOne(pseudo);
 
     // faut utiliser la factory pour créer le userDTO ???
-    if (user == null) {
-      return null;
-    }
     // check si les pasword correspondent
-    if (!user.verifMdp(mdp)) {
-      return null;
-    }
-    if (!user.getEtat().equals("validé")) {
-      return null;
+    if (user == null || !user.verifMdp(mdp) || !user.getEtat().equals("validé")) {
+      throw new WebApplicationException();
     }
     return user.creeToken(user.getId(), user.getPseudo(), rememberMe);
   }

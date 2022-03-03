@@ -66,7 +66,7 @@ CREATE TABLE projet.notifications
 );
 
 INSERT INTO projet.personnes
-VALUES (DEFAULT, 'test', 'test', 'test', 2, 'accepté', 'admin', DEFAULT,
+VALUES (DEFAULT, 'test', 'test', 'test', 2, 'validé', 'admin', DEFAULT,
         '$2a$10$rRmgL91HV9iLQgzhelBWwOopa5sK1ZrAXAASk5G0kXKJZqbZfN6b6', DEFAULT, 'test', 1234, 1,
         'test', DEFAULT, 0);
 INSERT INTO projet.types_objet

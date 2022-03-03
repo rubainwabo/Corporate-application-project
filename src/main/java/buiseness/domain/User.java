@@ -1,14 +1,15 @@
 package buiseness.domain;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 public interface User extends UserDTO {
 
   boolean verifMdp(String mdp);
 
   String hashMdp(String mdp);
 
-  ObjectNode creeToken(int id, String pseudo, boolean rememberMe);
+  // String createToken(int id);
 
-  boolean checkEtat(String etat);
+  //ObjectNode localStorageLogin (int id, String pseudo, boolean rememberMe);
+
+
+    boolean checkEtat(String etat);
 }

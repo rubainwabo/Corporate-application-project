@@ -1,6 +1,7 @@
 package ihm;
 
 import buiseness.ucc.UserUCC;
+import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
@@ -25,6 +26,8 @@ public class UserRessource {
   @Inject
   private UserUCC myUserUCC;
 
+
+
   /**
    * permet de connecter l'utilisateur.
    *
@@ -42,17 +45,67 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("login or password required").type("text/plain").build());
     }
-  
+
     String pseudo = body.get("pseudo").asText();
     String password = body.get("password").asText();
 
     boolean rememberMe = body.get("rememberMe").asBoolean();
 
-    ObjectNode token = myUserUCC.login(pseudo, password, rememberMe);
-    System.out.println(token);
+    ObjectNode authentifiedUser = myUserUCC.login(pseudo, password, rememberMe);
+    if (authentifiedUser == null) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("null token").type("text/plain").build());
+    }
+    return authentifiedUser;
+  }
+
+  /**
+   * Refresh the user token.
+   *
+   * @param body the user's data retrieved via his local storage in the front-end
+   * @return the created token, otherwise null in case of error
+   */
+
+  @POST
+  @Path("refreshToken")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String refreshToken(JsonNode body) {
+    return myUserUCC.refreshToken(JWT.decode(body.get("token").asText()).getClaim("user").asInt());
+    /*
+        DecodedJWT decodedToken = null;
+    try {
+      System.out.println(JWT.decode(body.get("token").asText()).getClaim("user") + " voici son id");
+      System.out.println(JWT.decode(body.get("token").asText()).getExpiresAt().toString());
+      decodedToken = JWT.require(Algorithm.HMAC256(Config.getProperty("JWTAccess"))).withIssuer("auth0").build().verify(body.get("token").asText());
+    } catch (Exception e) {
+      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
+          .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
+    }
+    return null;
+
+     */
+    /*
+     if (!body.hasNonNull("token")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("login or password required").type("text/plain").build());
+    }
+     JWT.create().withExpiresAt(new Date(1))
+     String token = body.get("token").asText();
+    DecodedJWT decodedToken = null;
+    try {
+      decodedToken = JWT.require(Algorithm.HMAC256(Config.getProperty("JWTAccess"))).withIssuer("auth0").build().verify(token);
+    } catch (Exception e) {
+      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
+          .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
+    }
+    int idUser = decodedToken.getClaim("user").asInt();
+
     if (token == null) {
       throw new WebApplicationException();
     }
-    return token;
+    return (ObjectNode) body;
+  }
+     */
   }
 }

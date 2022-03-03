@@ -13,14 +13,15 @@ import utils.Config;
  * Main class.
  */
 public class Main {
-
-  public static final String BASE_URI = Config.getProperty("BaseUri");
-  // Base URI the Grizzly HTTP server will listen on
-  // public static final String BASE_URI = "http://localhost:8080/";
-
   static {
     Config.load("prod.properties");
   }
+
+  public static String BASE_URI = Config.getProperty("BaseUri");
+
+
+  // Base URI the Grizzly HTTP server will listen on
+  // public static final String BASE_URI = "http://localhost:8080/";
 
   /**
    * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.

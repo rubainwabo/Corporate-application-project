@@ -6,5 +6,5 @@ public interface UserUCC {
 
   ObjectNode login(String pseudo, String password, boolean rememberMe);
 
-  String refreshToken( int id);
+  String refreshToken( int id,String token);
 }

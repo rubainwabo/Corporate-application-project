@@ -7,18 +7,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Date;
 
 public class TokenServiceImpl implements TokenService {
-  private final Algorithm jwtAlgorithm = Algorithm.HMAC256(Config.getProperty("JWTAccess"));
+  private final Algorithm jwtAlgorithmAcess = Algorithm.HMAC256(Config.getProperty("JWTAccess"));
+  private final Algorithm jwtAlgorithmRefresh = Algorithm.HMAC256(Config.getProperty("JWTRefresh"));
   private final ObjectMapper jsonMapper = new ObjectMapper();
+  private final long tokenAcessLifeTime = 1000000;
+  private final long tokenRefreshLifeTime = 1000000000;
 
   @Override
-  public String createToken(int id) {
+  public String createToken(int id,Algorithm algo, long lifeTime) {
     String token=null;
-    // add +- 15 min token life's 1000000
-    long tokenLifeTime = System.currentTimeMillis() + (1000000);
+    long tokenLifeTime = System.currentTimeMillis() + (lifeTime);
     try {
       token = JWT.create().withIssuer("auth0")
           .withClaim("user", id)
-          .withExpiresAt(new Date(tokenLifeTime)).sign(this.jwtAlgorithm);
+          .withExpiresAt(new Date(tokenLifeTime)).sign(algo);
     }catch (Exception e){
       e.printStackTrace();
     }
@@ -27,11 +29,30 @@ public class TokenServiceImpl implements TokenService {
 
   @Override
   public ObjectNode localStorageLogin(int id, String pseudo, boolean rememberMe) {
-    String token = this.createToken(id);
+    String tokenAccess = this.createToken(id,jwtAlgorithmAcess, tokenAcessLifeTime);
+    String tokenRefresh = this.createToken(id,jwtAlgorithmRefresh, tokenRefreshLifeTime);
+
     return jsonMapper.createObjectNode()
-        .put("token", token)
+        .put("tokenRefresh",tokenRefresh)
+        .put("accessToken", tokenAccess)
         .put("id", id)
         .put("pseudo", pseudo)
         .put("rememberMe", rememberMe);
   }
-}
+  @Override
+  public String getAccessToken(int id){
+    return this.createToken(id,jwtAlgorithmAcess,tokenAcessLifeTime);
+  }
+
+
+  @Override
+  public boolean verifyRefreshToken(String token) {
+     try {
+       JWT.require(jwtAlgorithmRefresh).withIssuer("auth0").build().verify(token);
+     }catch (Exception e){
+       e.printStackTrace();
+       return false;
+     }
+      return true;
+    }
+  }

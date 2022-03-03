@@ -13,6 +13,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 @Singleton
 @Path("/auths")
@@ -25,7 +26,6 @@ public class UserRessource {
 
   @Inject
   private UserUCC myUserUCC;
-
 
 
   /**
@@ -71,7 +71,24 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String refreshToken(JsonNode body) {
-    return myUserUCC.refreshToken(JWT.decode(body.get("token").asText()).getClaim("user").asInt());
+    // faudrait passer l'id dans le body, histoire d'éviter de faire des if partout (sinon y a des
+    // soucis av le decodedToken, vaut mieux ne pas le faire et direct mettre l'id dans le JsonNode
+    if (!body.hasNonNull("token")){
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("a token is required").type("text/plain").build());
+    }
+    String token = body.get("token").asText();
+    if (token.isBlank()){
+      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
+          .entity("empty token").type("text/plain").build());
+    }
+    var idUser = JWT.decode(token).getClaim("user").asInt();
+    String refreshedToken = myUserUCC.refreshToken(idUser, token);
+    if (refreshedToken == null) {
+      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
+          .entity("token not valid").type("text/plain").build());
+    }
+    return refreshedToken;
     /*
         DecodedJWT decodedToken = null;
     try {

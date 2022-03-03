@@ -16,6 +16,7 @@ const HomePage = async () => {
       return Redirect("/login");
     }
     let remeberMe = getSessionObject("remeberMe");
+    // si son refreshToken a expiré, il faut le déconnecté (implémenter une page de deconnexion)
     if(isJwtExpired(userToken)){
         if(remeberMe){
             try {

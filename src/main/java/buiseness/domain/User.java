@@ -6,10 +6,5 @@ public interface User extends UserDTO {
 
   String hashMdp(String mdp);
 
-  // String createToken(int id);
-
-  //ObjectNode localStorageLogin (int id, String pseudo, boolean rememberMe);
-
-
-    boolean checkEtat(String etat);
+  boolean checkEtat(String etat);
 }

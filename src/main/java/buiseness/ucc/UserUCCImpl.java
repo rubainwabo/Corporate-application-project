@@ -35,8 +35,15 @@ public class UserUCCImpl implements UserUCC {
     return myTokenService.localStorageLogin(user.getId(), user.getPseudo(), rememberMe);
   }
 
-  public String refreshToken(int id,String token) {
-    if (!myTokenService.verifyRefreshToken(token)){
+  /**
+   * verify the refresh token.
+   *
+   * @param id    userId in the token
+   * @param token token of the request
+   * @return an acessToken
+   */
+  public String refreshToken(int id, String token) {
+    if (!myTokenService.verifyRefreshToken(token)) {
       return null;
     }
     return myTokenService.getAccessToken(id);

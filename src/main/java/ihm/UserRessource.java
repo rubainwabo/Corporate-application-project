@@ -71,14 +71,12 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String refreshToken(JsonNode body) {
-    // faudrait passer l'id dans le body, histoire d'éviter de faire des if partout (sinon y a des
-    // soucis av le decodedToken, vaut mieux ne pas le faire et direct mettre l'id dans le JsonNode
-    if (!body.hasNonNull("token")){
+    if (!body.hasNonNull("token")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token is required").type("text/plain").build());
     }
     String token = body.get("token").asText();
-    if (token.isBlank()){
+    if (token.isBlank()) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity("empty token").type("text/plain").build());
     }
@@ -89,40 +87,5 @@ public class UserRessource {
           .entity("token not valid").type("text/plain").build());
     }
     return refreshedToken;
-    /*
-        DecodedJWT decodedToken = null;
-    try {
-      System.out.println(JWT.decode(body.get("token").asText()).getClaim("user") + " voici son id");
-      System.out.println(JWT.decode(body.get("token").asText()).getExpiresAt().toString());
-      decodedToken = JWT.require(Algorithm.HMAC256(Config.getProperty("JWTAccess"))).withIssuer("auth0").build().verify(body.get("token").asText());
-    } catch (Exception e) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
-    }
-    return null;
-
-     */
-    /*
-     if (!body.hasNonNull("token")) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("login or password required").type("text/plain").build());
-    }
-     JWT.create().withExpiresAt(new Date(1))
-     String token = body.get("token").asText();
-    DecodedJWT decodedToken = null;
-    try {
-      decodedToken = JWT.require(Algorithm.HMAC256(Config.getProperty("JWTAccess"))).withIssuer("auth0").build().verify(token);
-    } catch (Exception e) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
-    }
-    int idUser = decodedToken.getClaim("user").asInt();
-
-    if (token == null) {
-      throw new WebApplicationException();
-    }
-    return (ObjectNode) body;
-  }
-     */
   }
 }

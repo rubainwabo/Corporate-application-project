@@ -4,7 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.Base64;
 import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class TokenServiceImpl implements TokenService {
 
@@ -13,7 +17,6 @@ public class TokenServiceImpl implements TokenService {
   private final ObjectMapper jsonMapper = new ObjectMapper();
   private final long tokenAccessLifeTime = 1000000;
   private final long tokenRefreshLifeTime = 2000000000;
-
 
   @Override
   public String createToken(int id, Algorithm algo, long lifeTime) {
@@ -55,6 +58,26 @@ public class TokenServiceImpl implements TokenService {
       JWT.require(jwtAlgorithmRefresh).withIssuer("auth0").build().verify(token);
     } catch (Exception e) {
       e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public boolean isJWT(String token) {
+    String[] jwtSplitted = token.split("\\.");
+    if (jwtSplitted.length != 3) // The JWT is composed of three parts
+    {
+      return false;
+    }
+    try {
+      String jsonFirstPart = new String(Base64.getDecoder().decode(jwtSplitted[0]));
+      JSONObject firstPart = new JSONObject(jsonFirstPart); // The first part of the JWT is a JSON
+      if (!firstPart.has("alg")) // The first part has the attribute "alg"
+      {
+        return false;
+      }
+    } catch (JSONException err) {
       return false;
     }
     return true;

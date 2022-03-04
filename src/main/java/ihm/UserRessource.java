@@ -1,7 +1,6 @@
 package ihm;
 
 import buiseness.ucc.UserUCC;
-import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
@@ -74,8 +73,7 @@ public class UserRessource {
           .entity("a token is required").type("text/plain").build());
     }
     String refreshToken = body.get("refreshToken").asText();
-    var idUser = JWT.decode(refreshToken).getClaim("user").asInt();
-    String refreshedToken = myUserUCC.refreshToken(idUser, refreshToken);
+    String refreshedToken = myUserUCC.refreshToken(refreshToken);
     if (refreshedToken == null) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity("token not valid").type("text/plain").build());

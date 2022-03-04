@@ -1,6 +1,7 @@
 package buiseness.ucc;
 
 import buiseness.domain.User;
+import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
@@ -30,10 +31,14 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public String refreshToken(int id, String token) {
+  public String refreshToken(String token) {
+    if (!myTokenService.isJWT(token)) {
+      return null;
+    }
     if (!myTokenService.verifyRefreshToken(token)) {
       return null;
     }
-    return myTokenService.getAccessToken(id);
+    var idUser = JWT.decode(token).getClaim("user").asInt();
+    return myTokenService.getAccessToken(idUser);
   }
 }

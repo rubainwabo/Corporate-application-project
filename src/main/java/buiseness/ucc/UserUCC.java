@@ -17,9 +17,8 @@ public interface UserUCC {
   /**
    * verify the refresh token.
    *
-   * @param id    userId in the token
    * @param token token of the request
    * @return an acessToken
    */
-  String refreshToken(int id, String token);
+  String refreshToken(String token);
 }

@@ -40,4 +40,12 @@ public interface TokenService {
    * @return the created token
    */
   String getAccessToken(int id);
+
+  /**
+   * verifies if the token is a JWT.
+   *
+   * @param token a refresh token(usually)
+   * @return true if it's a JWT, else false
+   */
+  boolean isJWT(String token);
 }

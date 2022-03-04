@@ -40,6 +40,6 @@ public interface User extends UserDTO {
    * @param state user state
    * @return true if the state is valid
    */
-  public boolean isValid(String state);
+  boolean isValid(String state);
 
 }

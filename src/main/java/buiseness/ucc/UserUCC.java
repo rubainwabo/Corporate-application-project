@@ -20,5 +20,5 @@ public interface UserUCC {
    * @param token token of the request
    * @return an acess and refresh token
    */
-  public ObjectNode refreshToken(String token);
+  ObjectNode refreshToken(String token);
 }

@@ -88,6 +88,7 @@
   <dependencyManagement>
     <dependencies>
 
+  <name>projet-ae-boilerplate</name>
 
       <dependency>
         <artifactId>jersey-bom</artifactId>

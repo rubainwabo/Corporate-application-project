@@ -8,11 +8,11 @@ import java.util.Date;
 
 public class TokenServiceImpl implements TokenService {
 
-  private final Algorithm jwtAlgorithmAcess = Algorithm.HMAC256(Config.getProperty("JWTAccess"));
+  private final Algorithm jwtAlgorithmAccess = Algorithm.HMAC256(Config.getProperty("JWTAccess"));
   private final Algorithm jwtAlgorithmRefresh = Algorithm.HMAC256(Config.getProperty("JWTRefresh"));
   private final ObjectMapper jsonMapper = new ObjectMapper();
-  private final long tokenAcessLifeTime = 1000000;
-  private final long tokenRefreshLifeTime = 1000000000;
+  private final long tokenAccessLifeTime = 1000000;
+  private final long tokenRefreshLifeTime = 2000000000;
 
   @Override
   public String createToken(int id, Algorithm algo, long lifeTime) {
@@ -30,22 +30,27 @@ public class TokenServiceImpl implements TokenService {
 
   @Override
   public ObjectNode localStorageLogin(int id, String pseudo, boolean rememberMe) {
-    String tokenAccess = this.createToken(id, jwtAlgorithmAcess, tokenAcessLifeTime);
-    String tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
-
+    String tokenAccess = this.createToken(id, jwtAlgorithmAccess, tokenAccessLifeTime);
+    if (rememberMe) {
+      String tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
+      return jsonMapper.createObjectNode()
+          .put("tokenRefresh", tokenRefresh)
+          .put("accessToken", tokenAccess)
+          .put("id", id)
+          .put("pseudo", pseudo)
+          .put("rememberMe", true);
+    }
     return jsonMapper.createObjectNode()
-        .put("tokenRefresh", tokenRefresh)
         .put("accessToken", tokenAccess)
         .put("id", id)
         .put("pseudo", pseudo)
-        .put("rememberMe", rememberMe);
+        .put("rememberMe", false);
   }
 
   @Override
   public String getAccessToken(int id) {
-    return this.createToken(id, jwtAlgorithmAcess, tokenAcessLifeTime);
+    return this.createToken(id, jwtAlgorithmAccess, tokenAccessLifeTime);
   }
-
 
   @Override
   public boolean verifyRefreshToken(String token) {

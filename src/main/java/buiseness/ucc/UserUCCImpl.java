@@ -15,11 +15,12 @@ public class UserUCCImpl implements UserUCC {
   private TokenService myTokenService;
 
   /**
-   * permet de connecter un utilisateur.
+   * allows you to connect a user.
    *
-   * @param pseudo le pseudo de la personne essayant de se connecter
-   * @param mdp    son mot de passe
-   * @return un objet contenant son token,son id,son pseudo, si tout se passe bien, sinon null
+   * @param pseudo the username of the person trying to connect
+   * @param mdp    his password
+   * @return an objectNode which will be composed of his token(s), his id, his nickname and if he
+   * wants to be remembered
    */
   public ObjectNode login(String pseudo, String mdp, boolean rememberMe) {
     User user = (User) myUserDAO.getOne(pseudo);

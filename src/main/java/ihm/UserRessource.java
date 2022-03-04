@@ -1,7 +1,6 @@
 package ihm;
 
 import buiseness.ucc.UserUCC;
-import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
@@ -64,14 +63,13 @@ public class UserRessource {
   @Path("refreshToken")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String refreshToken(JsonNode body) {
+  public ObjectNode refreshToken(JsonNode body) {
     if (!body.hasNonNull("refreshToken") || body.get("refreshToken").asText().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token is required").type("text/plain").build());
     }
-    String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
-    var idUser = JWT.decode(refreshToken).getClaim("user").asInt();
-    String refreshedToken = myUserUCC.refreshToken(idUser, refreshToken);
+    String refreshToken = body.get("refreshToken").asText();
+    ObjectNode refreshedToken = myUserUCC.refreshToken(refreshToken);
     if (refreshedToken == null) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity("token not valid").type("text/plain").build());

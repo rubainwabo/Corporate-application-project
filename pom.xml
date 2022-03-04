@@ -81,9 +81,15 @@
       <groupId>org.apache.commons</groupId>
       <version>1.9</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.json/json -->
+    <dependency>
+      <artifactId>json</artifactId>
+      <groupId>org.json</groupId>
+      <version>20211205</version>
+    </dependency>
+
 
   </dependencies>
-
   <dependencyManagement>
     <dependencies>
       <dependency>

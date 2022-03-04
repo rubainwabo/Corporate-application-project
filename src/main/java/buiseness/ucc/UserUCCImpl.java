@@ -31,7 +31,7 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public String refreshToken(String token) {
+  public ObjectNode refreshToken(String token) {
     if (!myTokenService.isJWT(token)) {
       return null;
     }

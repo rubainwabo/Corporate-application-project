@@ -48,8 +48,11 @@ public class TokenServiceImpl implements TokenService {
   }
 
   @Override
-  public String getAccessToken(int id) {
-    return this.createToken(id, jwtAlgorithmAccess, tokenAccessLifeTime);
+  public ObjectNode getAccessToken(int id) {
+    String tokenAccess = this.createToken(id, jwtAlgorithmAccess, tokenAccessLifeTime);
+    String tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
+    return jsonMapper.createObjectNode().put("tokenRefresh", tokenRefresh)
+        .put("accessToken", tokenAccess);
   }
 
   @Override

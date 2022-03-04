@@ -15,10 +15,10 @@ public interface UserUCC {
   ObjectNode login(String username, String password, boolean rememberMe);
 
   /**
-   * verify the refresh token.
+   * verify the refresh token and create 2 token (1 refresh and 1 access).
    *
    * @param token token of the request
    * @return an acessToken
    */
-  String refreshToken(String token);
+  ObjectNode refreshToken(String token);
 }

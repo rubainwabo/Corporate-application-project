@@ -67,13 +67,13 @@ public class UserRessource {
   @Path("refreshToken")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public String refreshToken(JsonNode body) {
+  public ObjectNode refreshToken(JsonNode body) {
     if (!body.hasNonNull("refreshToken") || body.get("refreshToken").asText().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token is required").type("text/plain").build());
     }
     String refreshToken = body.get("refreshToken").asText();
-    String refreshedToken = myUserUCC.refreshToken(refreshToken);
+    ObjectNode refreshedToken = myUserUCC.refreshToken(refreshToken);
     if (refreshedToken == null) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity("token not valid").type("text/plain").build());

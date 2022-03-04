@@ -34,12 +34,12 @@ public interface TokenService {
   boolean verifyRefreshToken(String token);
 
   /**
-   * creates a token.
+   * creates a refresh and access tokens.
    *
    * @param id user's id
    * @return the created token
    */
-  String getAccessToken(int id);
+  ObjectNode getAccessToken(int id);
 
   /**
    * verifies if the token is a JWT.

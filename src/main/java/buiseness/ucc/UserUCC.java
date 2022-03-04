@@ -18,7 +18,7 @@ public interface UserUCC {
    * verify the refresh token and create 2 token (1 refresh and 1 access).
    *
    * @param token token of the request
-   * @return an acessToken
+   * @return an acess and refresh token
    */
-  ObjectNode refreshToken(String token);
+  public ObjectNode refreshToken(String token);
 }

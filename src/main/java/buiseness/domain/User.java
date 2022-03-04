@@ -19,10 +19,27 @@ public interface User extends UserDTO {
   String hashPassword(String password);
 
   /**
-   * will check that the state passed in parameter is one of the possible states.
+   * will check that the state passed in parameter is denied.
    *
    * @param state user state
-   * @return true if the state exist
+   * @return true if the state is denied
    */
-  boolean checkState(String state);
+  boolean isDenied(String state);
+
+  /**
+   * will check that the state passed in parameter is waiting.
+   *
+   * @param state user state
+   * @return true if the state is waiting
+   */
+  boolean isWaiting(String state);
+
+  /**
+   * will check that the state passed in parameter is valid.
+   *
+   * @param state user state
+   * @return true if the state is valid
+   */
+  public boolean isValid(String state);
+
 }

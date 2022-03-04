@@ -23,22 +23,48 @@ public class UserDAOImpl implements UserDAO {
         "select id,password,username,state from projet.members where username=?")) {
 
       ps.setString(1, username);
-      ResultSet rs = ps.executeQuery();
-
-      UserDTO user = myDomainFactory.getUser();
-      if (!rs.next()) {
-        return null;
-      }
-      user.setId(rs.getInt(1));
-      user.setPassword(rs.getString(2));
-      user.setUserName(rs.getString(3));
-      user.setState(rs.getString(4));
-      return user;
+      return executeQuery(ps);
 
     } catch (SQLException throwables) {
-
       throwables.printStackTrace();
+      return null;
+    }
+  }
+
+  public PreparedStatement getPs(String query) {
+    try {
+      return myDalService.getPreparedStatement(query);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     return null;
+  }
+
+  @Override
+  public UserDTO getOneById(int id) {
+    try (PreparedStatement ps = this.getPs(
+        "select id,password,username,state from projet.members where id=?")) {
+
+      ps.setInt(1, id);
+      return executeQuery(ps);
+
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+      return null;
+    }
+  }
+
+  private UserDTO executeQuery(PreparedStatement ps) throws SQLException {
+    ResultSet rs = ps.executeQuery();
+
+    UserDTO user = myDomainFactory.getUser();
+    if (!rs.next()) {
+      return null;
+    }
+    user.setId(rs.getInt(1));
+    user.setPassword(rs.getString(2));
+    user.setUserName(rs.getString(3));
+    user.setState(rs.getString(4));
+    return user;
   }
 }

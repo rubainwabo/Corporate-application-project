@@ -17,18 +17,12 @@ public class UserDAOImpl implements UserDAO {
   @Inject
   private DalServices myDalService;
 
-  /**
-   * permet de récuperer un utilisateur par rapport à un pseudo et le renvoie à l'user UCC pour
-   * continuer les checks.
-   *
-   * @param pseudo le pseudo entré par l'utilisateur
-   * @return User trouvé
-   */
-  public UserDTO getOne(String pseudo) {
+  @Override
+  public UserDTO getOne(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select id_personne,mot_de_passe,pseudo,etat from projet.personnes where pseudo=?")) {
 
-      ps.setString(1, pseudo);
+      ps.setString(1, username);
       ResultSet rs = ps.executeQuery();
 
       UserDTO user = myDomainFactory.getUser();
@@ -36,16 +30,15 @@ public class UserDAOImpl implements UserDAO {
         return null;
       }
       user.setId(rs.getInt(1));
-      user.setMdp(rs.getString(2));
-      user.setPseudo(rs.getString(3));
-      user.setEtat(rs.getString(4));
+      user.setPassword(rs.getString(2));
+      user.setUserName(rs.getString(3));
+      user.setState(rs.getString(4));
       return user;
 
     } catch (SQLException throwables) {
 
       throwables.printStackTrace();
     }
-
     return null;
   }
 }

@@ -19,7 +19,7 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public ObjectNode login(String username, String password, boolean rememberMe) {
-    User user = (User) myUserDAO.getOne(username);
+    User user = (User) myUserDAO.getOneByUsername(username);
     if (user == null) {
       throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
           .entity("user or password incorrect").type("text/plain").build());

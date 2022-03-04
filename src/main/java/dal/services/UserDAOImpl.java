@@ -18,7 +18,7 @@ public class UserDAOImpl implements UserDAO {
   private DalServices myDalService;
 
   @Override
-  public UserDTO getOne(String username) {
+  public UserDTO getOneByUsername(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select id,password,username,state from projet.members where username=?")) {
 

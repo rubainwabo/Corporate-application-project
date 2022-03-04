@@ -14,6 +14,7 @@ public class TokenServiceImpl implements TokenService {
   private final long tokenAccessLifeTime = 1000000;
   private final long tokenRefreshLifeTime = 2000000000;
 
+
   @Override
   public String createToken(int id, Algorithm algo, long lifeTime) {
     String token = null;
@@ -29,22 +30,18 @@ public class TokenServiceImpl implements TokenService {
   }
 
   @Override
-  public ObjectNode localStorageLogin(int id, String pseudo, boolean rememberMe) {
+  public ObjectNode login(int id, String username, boolean rememberMe) {
     String tokenAccess = this.createToken(id, jwtAlgorithmAccess, tokenAccessLifeTime);
+    String tokenRefresh = null;
     if (rememberMe) {
-      String tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
-      return jsonMapper.createObjectNode()
-          .put("tokenRefresh", tokenRefresh)
-          .put("accessToken", tokenAccess)
-          .put("id", id)
-          .put("pseudo", pseudo)
-          .put("rememberMe", true);
+      tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
     }
     return jsonMapper.createObjectNode()
+        .put("tokenRefresh", tokenRefresh)
         .put("accessToken", tokenAccess)
         .put("id", id)
-        .put("pseudo", pseudo)
-        .put("rememberMe", false);
+        .put("username", username)
+        .put("rememberMe", rememberMe);
   }
 
   @Override

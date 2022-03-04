@@ -5,11 +5,39 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface TokenService {
 
+  /**
+   * allows the creation of a token via a certain algo and a lifetime.
+   *
+   * @param id       the user id
+   * @param algo     the algo used
+   * @param lifeTime the lifeTime of the token
+   * @return the created token
+   */
   String createToken(int id, Algorithm algo, long lifeTime);
 
-  ObjectNode localStorageLogin(int id, String pseudo, boolean rememberMe);
+  /**
+   * will create an objectNode containing all user information (id, token(s),username,rememberMe).
+   *
+   * @param id         user id
+   * @param username   user username
+   * @param rememberMe if he want to be remembered
+   * @return an objectNode containing all user information
+   */
+  ObjectNode login(int id, String username, boolean rememberMe);
 
+  /**
+   * verifies the validity of the token.
+   *
+   * @param token a refresh token
+   * @return true if it is valid, else false
+   */
   boolean verifyRefreshToken(String token);
 
+  /**
+   * creates a token.
+   *
+   * @param id user's id
+   * @return the created token
+   */
   String getAccessToken(int id);
 }

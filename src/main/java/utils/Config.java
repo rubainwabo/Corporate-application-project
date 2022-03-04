@@ -13,9 +13,9 @@ public class Config {
   private static Properties props;
 
   /**
-   * permet de charger le fichier passé en paramètre.
+   * allows to load the file passed in parameter.
    *
-   * @param file le fichier à charger
+   * @param file the file to be uploaded
    */
   public static void load(String file) {
     props = new Properties();
@@ -29,30 +29,30 @@ public class Config {
   }
 
   /**
-   * permet de recupérer la valeur d'une clé contenu dans un fichier properties.
+   * allows to retrieve the value of a key contained in a properties file.
    *
-   * @param key la clé associé à ce qu'on recherche
-   * @return la valeur associé à la key
+   * @param key the key associated with what we are looking for
+   * @return the value associated with the key
    */
   public static String getProperty(String key) {
     return props.getProperty(key);
   }
 
   /**
-   * permet de recupérer la valeur d'une clé contenu dans un fichier properties.
+   * allows to retrieve the value of a key contained in a properties file.
    *
-   * @param key la clé associé à ce qu'on recherche
-   * @return la valeur associé à la key en int
+   * @param key the key associated with what we are looking for
+   * @return the value associated with the key as int
    */
   public static Integer getIntProperty(String key) {
     return Integer.parseInt(props.getProperty(key));
   }
 
   /**
-   * permet de recupérer la valeur d'une clé contenu dans un fichier properties.
+   * allows to retrieve the value of a key contained in a properties file.
    *
-   * @param key la clé associé à ce qu'on recherche
-   * @return la valeur associé à la key en boolean
+   * @param key the key associated with what we are looking for
+   * @return the value associated with the key as boolean
    */
   public static boolean getBoolProperty(String key) {
     return Boolean.parseBoolean(props.getProperty(key));

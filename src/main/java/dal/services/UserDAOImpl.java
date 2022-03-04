@@ -20,7 +20,7 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOne(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select id_personne,mot_de_passe,pseudo,etat from projet.personnes where pseudo=?")) {
+        "select id,password,username,state from projet.members where username=?")) {
 
       ps.setString(1, username);
       ResultSet rs = ps.executeQuery();

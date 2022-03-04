@@ -26,7 +26,7 @@ public class UserUCCImpl implements UserUCC {
     if (!user.checkState(user.getState()) || !user.getState().equals("valid")) {
       return null;
     }
-    return myTokenService.localStorageLogin(user.getId(), username, rememberMe);
+    return myTokenService.login(user.getId(), username, rememberMe);
   }
 
   @Override

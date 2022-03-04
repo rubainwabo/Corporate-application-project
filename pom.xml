@@ -76,6 +76,11 @@
       <groupId>org.junit.platform</groupId>
       <version>1.8.2</version>
     </dependency>
+    <dependency>
+      <artifactId>commons-text</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <version>1.9</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.json/json -->
     <dependency>
       <artifactId>json</artifactId>
@@ -87,9 +92,6 @@
   </dependencies>
   <dependencyManagement>
     <dependencies>
-
-  <name>projet-ae-boilerplate</name>
-
       <dependency>
         <artifactId>jersey-bom</artifactId>
         <groupId>org.glassfish.jersey</groupId>

@@ -39,7 +39,6 @@ public class TokenServiceImpl implements TokenService {
     if (rememberMe) {
       tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
     }
-    System.out.println("voci le temps max = " + JWT.decode(tokenRefresh).getExpiresAt().toString());
     return jsonMapper.createObjectNode()
         .put("tokenRefresh", tokenRefresh)
         .put("accessToken", tokenAccess)

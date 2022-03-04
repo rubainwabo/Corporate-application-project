@@ -16,12 +16,12 @@ public class TokenServiceImpl implements TokenService {
   private final Algorithm jwtAlgorithmRefresh = Algorithm.HMAC256(Config.getProperty("JWTRefresh"));
   private final ObjectMapper jsonMapper = new ObjectMapper();
   private final long tokenAccessLifeTime = 1000000;
-  private final long tokenRefreshLifeTime = 2000000000;
+  private final long tokenRefreshLifeTime = 200000000;
 
   @Override
   public String createToken(int id, Algorithm algo, long lifeTime) {
     String token = null;
-    long tokenLifeTime = System.currentTimeMillis() + (lifeTime);
+    long tokenLifeTime = new Date().getTime() + (lifeTime);
     try {
       token = JWT.create().withIssuer("auth0")
           .withClaim("user", id)
@@ -39,6 +39,7 @@ public class TokenServiceImpl implements TokenService {
     if (rememberMe) {
       tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
     }
+
     return jsonMapper.createObjectNode()
         .put("tokenRefresh", tokenRefresh)
         .put("accessToken", tokenAccess)
@@ -48,10 +49,11 @@ public class TokenServiceImpl implements TokenService {
   }
 
   @Override
-  public ObjectNode getAccessToken(int id) {
+  public ObjectNode getRefreshedTokens(int id) {
     String tokenAccess = this.createToken(id, jwtAlgorithmAccess, tokenAccessLifeTime);
     String tokenRefresh = this.createToken(id, jwtAlgorithmRefresh, tokenRefreshLifeTime);
-    return jsonMapper.createObjectNode().put("tokenRefresh", tokenRefresh)
+    return jsonMapper.createObjectNode()
+        .put("tokenRefresh", tokenRefresh)
         .put("accessToken", tokenAccess);
   }
 

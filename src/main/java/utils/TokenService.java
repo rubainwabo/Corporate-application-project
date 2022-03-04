@@ -39,7 +39,7 @@ public interface TokenService {
    * @param id user's id
    * @return the created token
    */
-  ObjectNode getAccessToken(int id);
+  ObjectNode getRefreshedTokens(int id);
 
   /**
    * verifies if the token is a JWT.

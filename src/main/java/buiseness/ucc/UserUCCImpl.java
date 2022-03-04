@@ -39,6 +39,6 @@ public class UserUCCImpl implements UserUCC {
       return null;
     }
     var idUser = JWT.decode(token).getClaim("user").asInt();
-    return myTokenService.getAccessToken(idUser);
+    return myTokenService.getRefreshedTokens(idUser);
   }
 }

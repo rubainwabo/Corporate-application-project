@@ -14,19 +14,15 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import org.apache.commons.text.StringEscapeUtils;
+
 
 @Singleton
 @Path("/auths")
 public class UserRessource {
 
-  /*
-   * @Inject
-   * private UserDAO myUserDataService;
-   */
-
   @Inject
   private UserUCC myUserUCC;
-
 
   /**
    * allows to connect the user.
@@ -46,8 +42,8 @@ public class UserRessource {
           .entity("username or password required").type("text/plain").build());
     }
 
-    String username = body.get("username").asText();
-    String password = body.get("password").asText();
+    String username = StringEscapeUtils.escapeHtml4(body.get("username").asText());
+    String password = StringEscapeUtils.escapeHtml4(body.get("password").asText());
     boolean rememberMe = body.get("rememberMe").asBoolean();
 
     ObjectNode authentifiedUser = myUserUCC.login(username, password, rememberMe);
@@ -73,7 +69,7 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token is required").type("text/plain").build());
     }
-    String refreshToken = body.get("refreshToken").asText();
+    String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
     var idUser = JWT.decode(refreshToken).getClaim("user").asInt();
     String refreshedToken = myUserUCC.refreshToken(idUser, refreshToken);
     if (refreshedToken == null) {

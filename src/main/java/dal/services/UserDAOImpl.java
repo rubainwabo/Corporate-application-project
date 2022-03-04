@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAOImpl implements UserDAO {
-  
+
 
   @Inject
   private BizFactory myDomainFactory;
@@ -25,7 +25,6 @@ public class UserDAOImpl implements UserDAO {
    * @return User trouvé
    */
   public UserDTO getOne(String pseudo) {
-
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select id_personne,mot_de_passe,pseudo,etat from projet.personnes where pseudo=?")) {
 

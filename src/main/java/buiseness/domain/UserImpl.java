@@ -1,16 +1,9 @@
 package buiseness.domain;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.mindrot.jbcrypt.BCrypt;
-import utils.Config;
 
 public class UserImpl implements User, UserDTO {
 
-  private final Algorithm jwtAlgorithm = Algorithm.HMAC256(Config.getProperty("JWTSecret"));
-  private final ObjectMapper jsonMapper = new ObjectMapper();
   private final String[] etatPossible = {"validé", "attente", "refusé"};
   private int id;
   private String mdp;
@@ -31,7 +24,6 @@ public class UserImpl implements User, UserDTO {
 
   @Override
   public boolean verifMdp(String mdp) {
-    System.out.println(BCrypt.checkpw(mdp, this.mdp));
     return BCrypt.checkpw(mdp, this.mdp);
   }
 
@@ -40,23 +32,6 @@ public class UserImpl implements User, UserDTO {
     return BCrypt.hashpw(mdp, BCrypt.gensalt());
   }
 
-  @Override
-  public ObjectNode creeToken(int id, String pseudo, boolean rememberMe) {
-    String token;
-    try {
-      token = JWT.create().withIssuer("auth0")
-          .withClaim("utilisateur", id).sign(this.jwtAlgorithm);
-      ObjectNode publicUser = jsonMapper.createObjectNode()
-          .put("token", token)
-          .put("id", id)
-          .put("pseudo", pseudo)
-          .put("rememberMe", rememberMe);
-
-      return publicUser;
-    } catch (Exception e) {
-      return null;
-    }
-  }
 
   @Override
   public boolean checkEtat(String etat) {

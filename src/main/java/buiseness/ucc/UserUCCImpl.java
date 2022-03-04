@@ -4,15 +4,15 @@ import buiseness.domain.User;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
+import utils.TokenService;
 
 public class UserUCCImpl implements UserUCC {
 
   @Inject
   private UserDAO myUserDAO;
-  /*
-   *  @Inject
-   *  private BizFactory myBizFacto;
-   */
+
+  @Inject
+  private TokenService myTokenService;
 
   /**
    * permet de connecter un utilisateur.
@@ -22,21 +22,30 @@ public class UserUCCImpl implements UserUCC {
    * @return un objet contenant son token,son id,son pseudo, si tout se passe bien, sinon null
    */
   public ObjectNode login(String pseudo, String mdp, boolean rememberMe) {
-    System.out.println(pseudo);
-
     User user = (User) myUserDAO.getOne(pseudo);
-
-    // faut utiliser la factory pour créer le userDTO ???
     if (user == null) {
       return null;
     }
-    // check si les pasword correspondent
     if (!user.verifMdp(mdp)) {
       return null;
     }
-    if (!user.getEtat().equals("validé")) {
+    if (!user.checkEtat(user.getEtat()) || !user.getEtat().equals("validé")) {
       return null;
     }
-    return user.creeToken(user.getId(), user.getPseudo(), rememberMe);
+    return myTokenService.localStorageLogin(user.getId(), user.getPseudo(), rememberMe);
+  }
+
+  /**
+   * verify the refresh token.
+   *
+   * @param id    userId in the token
+   * @param token token of the request
+   * @return an acessToken
+   */
+  public String refreshToken(int id, String token) {
+    if (!myTokenService.verifyRefreshToken(token)) {
+      return null;
+    }
+    return myTokenService.getAccessToken(id);
   }
 }

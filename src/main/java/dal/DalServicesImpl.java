@@ -16,7 +16,7 @@ public class DalServicesImpl implements DalServices {
   public DalServicesImpl() throws SQLException {
     con = DriverManager.getConnection(url, pseudo, mdp);
   }
-  
+
   @Override
   public PreparedStatement getPreparedStatement(String query) throws SQLException {
     return con.prepareStatement(query);

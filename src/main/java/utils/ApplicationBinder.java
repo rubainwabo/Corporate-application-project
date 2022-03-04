@@ -20,6 +20,6 @@ public class ApplicationBinder extends AbstractBinder {
     bind(UserDAOImpl.class).to(UserDAO.class).in(Singleton.class);
     bind(UserUCCImpl.class).to(UserUCC.class).in(Singleton.class);
     bind(DalServicesImpl.class).to(DalServices.class).in(Singleton.class);
-    
+    bind(TokenServiceImpl.class).to(TokenService.class).in(Singleton.class);
   }
 }

@@ -29,10 +29,10 @@ public class UserRessource {
 
 
   /**
-   * permet de connecter l'utilisateur.
+   * allows to connect the user.
    *
-   * @param body les données que l'utilisateur à entré mise sous format json
-   * @return le token associé à l'utilisateur, sinon une erreur en cas d'échec
+   * @param body the data that the user has entered put in json format
+   * @return the token associated to the user, otherwise an error in case of failure
    */
   @POST
   @Path("login")
@@ -40,18 +40,17 @@ public class UserRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode login(JsonNode body) {
 
-    if (!body.hasNonNull("pseudo") || !body.hasNonNull("password") || !body.hasNonNull(
+    if (!body.hasNonNull("username") || !body.hasNonNull("password") || !body.hasNonNull(
         "rememberMe")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("login or password required").type("text/plain").build());
+          .entity("username or password required").type("text/plain").build());
     }
 
-    String pseudo = body.get("pseudo").asText();
+    String username = body.get("username").asText();
     String password = body.get("password").asText();
-
     boolean rememberMe = body.get("rememberMe").asBoolean();
 
-    ObjectNode authentifiedUser = myUserUCC.login(pseudo, password, rememberMe);
+    ObjectNode authentifiedUser = myUserUCC.login(username, password, rememberMe);
     if (authentifiedUser == null) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("null token").type("text/plain").build());
@@ -65,23 +64,18 @@ public class UserRessource {
    * @param body the user's data retrieved via his local storage in the front-end
    * @return the created token, otherwise null in case of error
    */
-
   @POST
   @Path("refreshToken")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String refreshToken(JsonNode body) {
-    if (!body.hasNonNull("token")) {
+    if (!body.hasNonNull("refreshToken") || body.get("refreshToken").asText().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token is required").type("text/plain").build());
     }
-    String token = body.get("token").asText();
-    if (token.isBlank()) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity("empty token").type("text/plain").build());
-    }
-    var idUser = JWT.decode(token).getClaim("user").asInt();
-    String refreshedToken = myUserUCC.refreshToken(idUser, token);
+    String refreshToken = body.get("refreshToken").asText();
+    var idUser = JWT.decode(refreshToken).getClaim("user").asInt();
+    String refreshedToken = myUserUCC.refreshToken(idUser, refreshToken);
     if (refreshedToken == null) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity("token not valid").type("text/plain").build());

@@ -14,34 +14,22 @@ public class UserUCCImpl implements UserUCC {
   @Inject
   private TokenService myTokenService;
 
-  /**
-   * permet de connecter un utilisateur.
-   *
-   * @param pseudo le pseudo de la personne essayant de se connecter
-   * @param mdp    son mot de passe
-   * @return un objet contenant son token,son id,son pseudo, si tout se passe bien, sinon null
-   */
-  public ObjectNode login(String pseudo, String mdp, boolean rememberMe) {
-    User user = (User) myUserDAO.getOne(pseudo);
+  @Override
+  public ObjectNode login(String username, String password, boolean rememberMe) {
+    User user = (User) myUserDAO.getOne(username);
     if (user == null) {
       return null;
     }
-    if (!user.verifMdp(mdp)) {
+    if (!user.checkPassword(password)) {
       return null;
     }
-    if (!user.checkEtat(user.getEtat()) || !user.getEtat().equals("validé")) {
+    if (!user.checkState(user.getState()) || !user.getState().equals("valid")) {
       return null;
     }
-    return myTokenService.localStorageLogin(user.getId(), user.getPseudo(), rememberMe);
+    return myTokenService.login(user.getId(), username, rememberMe);
   }
 
-  /**
-   * verify the refresh token.
-   *
-   * @param id    userId in the token
-   * @param token token of the request
-   * @return an acessToken
-   */
+  @Override
   public String refreshToken(int id, String token) {
     if (!myTokenService.verifyRefreshToken(token)) {
       return null;

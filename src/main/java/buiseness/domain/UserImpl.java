@@ -4,39 +4,29 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class UserImpl implements User, UserDTO {
 
-  private final String[] etatPossible = {"validé", "attente", "refusé"};
+  private final String[] possibleState = {"valid", "waiting", "denied"};
   private int id;
-  private String mdp;
-  private String pseudo;
-  private String etat;
-  /*
-   * private String prenom;
-   * private Adresse adr;
-   * private boolean role;
-   * private String txtRefus;
-   * private String numTel;
-   * private String urlPhoto;
-   */
-
+  private String password;
+  private String username;
+  private String state;
 
   public UserImpl() {
   }
 
   @Override
-  public boolean verifMdp(String mdp) {
-    return BCrypt.checkpw(mdp, this.mdp);
+  public boolean checkPassword(String password) {
+    return BCrypt.checkpw(password, this.password);
   }
 
   @Override
-  public String hashMdp(String mdp) {
-    return BCrypt.hashpw(mdp, BCrypt.gensalt());
+  public String hashPassword(String password) {
+    return BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
-
   @Override
-  public boolean checkEtat(String etat) {
-    for (String e : this.etatPossible) {
-      if (e.equals(etat)) {
+  public boolean checkState(String state) {
+    for (String e : this.possibleState) {
+      if (e.equals(state)) {
         return true;
       }
     }
@@ -44,13 +34,13 @@ public class UserImpl implements User, UserDTO {
   }
 
   @Override
-  public String getPseudo() {
-    return pseudo;
+  public String getUserName() {
+    return username;
   }
 
   @Override
-  public void setPseudo(String pseudo) {
-    this.pseudo = pseudo;
+  public void setUserName(String username) {
+    this.username = username;
   }
 
   @Override
@@ -64,21 +54,21 @@ public class UserImpl implements User, UserDTO {
   }
 
   @Override
-  public String getMdp() {
-    return mdp;
+  public String getPassword() {
+    return password;
   }
 
   @Override
-  public void setMdp(String mdp) {
-    this.mdp = mdp;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   @Override
-  public String getEtat() {
-    return this.etat;
+  public String getState() {
+    return this.state;
   }
 
-  public void setEtat(String etat) {
-    this.etat = etat;
+  public void setState(String state) {
+    this.state = state;
   }
 }

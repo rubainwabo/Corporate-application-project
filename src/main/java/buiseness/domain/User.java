@@ -2,9 +2,27 @@ package buiseness.domain;
 
 public interface User extends UserDTO {
 
-  boolean verifMdp(String mdp);
+  /**
+   * checks if the password entered by the user matches his hashed password.
+   *
+   * @param password input password
+   * @return true if the password is checked, else false
+   */
+  boolean checkPassword(String password);
 
-  String hashMdp(String mdp);
+  /**
+   * hash the password in params.
+   *
+   * @param password user password
+   * @return the hashed password
+   */
+  String hashPassword(String password);
 
-  boolean checkEtat(String etat);
+  /**
+   * will check that the state passed in parameter is one of the possible states.
+   *
+   * @param state user state
+   * @return true if the state exist
+   */
+  boolean checkState(String state);
 }

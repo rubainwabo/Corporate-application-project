@@ -10,8 +10,8 @@ public class DalServicesImpl implements DalServices {
 
   private Connection con = null;
   private String url = Config.getProperty("URL");
-  private String username = Config.getProperty("Pseudo");
-  private String password = Config.getProperty("MotDePasse");
+  private String username = Config.getProperty("Username");
+  private String password = Config.getProperty("Password");
 
   public DalServicesImpl() throws SQLException {
     con = DriverManager.getConnection(url, username, password);

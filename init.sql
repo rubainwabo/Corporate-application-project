@@ -1,51 +1,51 @@
 DROP SCHEMA IF EXISTS projet CASCADE;
 CREATE SCHEMA projet;
-CREATE TABLE projet.personnes
+CREATE TABLE projet.members
 (
-    id_personne       SERIAL PRIMARY KEY,
-    pseudo            VARCHAR(100) NOT NULL,
-    nom               VARCHAR(100) NOT NULL,
-    prenom            VARCHAR(100) NOT NULL,
-    boite_postale     INTEGER,
-    etat              VARCHAR(100) NOT NULL,
-    _role             VARCHAR(100) NOT NULL,
-    texte_refus       VARCHAR(100),
-    mot_de_passe      VARCHAR(100) NOT NULL,
-    num_tel           VARCHAR(100),
-    rue               VARCHAR(100) NOT NULL,
-    code_postale      INTEGER      NOT NULL,
-    no_maison         INTEGER      NOT NULL,
-    ville             VARCHAR(100) NOT NULL,
-    url_photo         VARCHAR(100),
-    nb_objet_non_pris INTEGER      NOT NULL
+    id                            SERIAL PRIMARY KEY,
+    username                      VARCHAR(100) NOT NULL,
+    last_name                     VARCHAR(100) NOT NULL,
+    first_name                    VARCHAR(100) NOT NULL,
+    unit_number                   INTEGER,
+    state                         VARCHAR(100) NOT NULL,
+    _role            VARCHAR(100) NOT NULL,
+    reason_for_connection_refusal VARCHAR(100),
+    password                      VARCHAR(100) NOT NULL,
+    phone_number                  VARCHAR(100),
+    street                        VARCHAR(100) NOT NULL,
+    postCode                      INTEGER      NOT NULL,
+    building_number               INTEGER      NOT NULL,
+    city                          VARCHAR(100) NOT NULL,
+    url_picture                   VARCHAR(100),
+    nb_of_item_not_taken          INTEGER      NOT NULL
 );
 
-CREATE TABLE projet.types_objet
+CREATE TABLE projet.item_type
 (
-    id_type_objet SERIAL PRIMARY KEY,
-    libelle       VARCHAR(100) NOT NULL
+    id_item_type   SERIAL PRIMARY KEY,
+    item_type_name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE projet.objets
+CREATE TABLE projet.items
 (
-    id_objet      SERIAL PRIMARY KEY,
-    description   VARCHAR(100)                                          NOT NULL,
-    url_photo     VARCHAR(100),
-    note          INTEGER,
-    commentaire   VARCHAR(200),
-    etat          VARCHAR(20)                                           NOT NULL,
-    plage_horaire VARCHAR(200)                                          NOT NULL,
-    offreur       INTEGER REFERENCES projet.personnes (id_personne)     NOT NULL,
-    type_objet    INTEGER REFERENCES projet.types_objet (id_type_objet) NOT NULL,
-    receveur      INTEGER REFERENCES projet.personnes (id_personne)
+    id_item     SERIAL PRIMARY KEY,
+    description VARCHAR(100)                                          NOT NULL,
+    url_picture VARCHAR(100),
+    rating      INTEGER,
+    comment     VARCHAR(200),
+    state       VARCHAR(20)                                           NOT NULL,
+    time_slot   VARCHAR(200)                                          NOT NULL,
+    offeror     INTEGER REFERENCES projet.personnes (id_personne)     NOT NULL,
+    item_type   INTEGER REFERENCES projet.types_objet (id_type_objet) NOT NULL,
+    recipient   INTEGER REFERENCES projet.personnes (id_personne)
 );
 
-CREATE TABLE projet.interets
+CREATE TABLE projet.interests
 (
     _date  DATE                                              NOT NULL,
-    membre INTEGER REFERENCES projet.personnes (id_personne) NOT NULL,
-    objet  INTEGER REFERENCES projet.objets (id_objet)       NOT NULL,
-    PRIMARY KEY (membre, objet)
+    member INTEGER REFERENCES projet.personnes (id_personne) NOT NULL,
+    item   INTEGER REFERENCES projet.objets (id_objet)       NOT NULL,
+    PRIMARY KEY (member, item)
 );
 
 
@@ -54,15 +54,15 @@ CREATE TABLE projet.dates
 (
     id_date SERIAL PRIMARY KEY,
     _date   DATE                                        NOT NULL,
-    objet   INTEGER REFERENCES projet.objets (id_objet) NOT NULL
+    item    INTEGER REFERENCES projet.objets (id_objet) NOT NULL
 );
 
 CREATE TABLE projet.notifications
 (
     id_notification SERIAL PRIMARY KEY,
-    estVue          BOOLEAN                                           NOT NULL,
-    texte           VARCHAR(200)                                      NOT NULL,
-    personne        INTEGER REFERENCES projet.personnes (id_personne) NOT NULL
+    is_viewed       BOOLEAN                                           NOT NULL,
+    text            VARCHAR(200)                                      NOT NULL,
+    person          INTEGER REFERENCES projet.personnes (id_personne) NOT NULL
 );
 
 INSERT INTO projet.personnes

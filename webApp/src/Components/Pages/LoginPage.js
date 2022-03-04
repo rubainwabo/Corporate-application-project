@@ -16,7 +16,7 @@ const affichage = `
 `;
 
 const LoginPage = () => { 
-  let userToken = getSessionObject("token");
+  let userToken = getSessionObject("accessToken");
   if (userToken){
      return Redirect("/");
     }
@@ -40,7 +40,7 @@ const LoginPage = () => {
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         body: JSON.stringify({
-          pseudo: username.value,
+          username: username.value,
           password: password.value,
           rememberMe:rememberMe.checked
         }), // body data type must match "Content-Type" header
@@ -58,10 +58,15 @@ const LoginPage = () => {
       }
       const user = await response.json(); // json() returns a promise => we wait for the data
       // save the user into the localStorage
+
       setSessionObject("userId", user.id );
-      setSessionObject("userPseudo", user.pseudo );
-      setSessionObject("token", user.token);
+      setSessionObject("userPseudo", user.username);
       setSessionObject("remeberMe", user.rememberMe);
+      setSessionObject("accessToken", user.accessToken);
+
+      if(rememberMe.checked){
+        setSessionObject("tokenRefresh", user.tokenRefresh);
+      }
 
       // call the HomePage via the Router
       Redirect("/");

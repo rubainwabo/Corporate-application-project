@@ -25,7 +25,7 @@ public class UserUCCImpl implements UserUCC {
           .entity("user or password incorrect").type("text/plain").build());
     }
     if (!user.checkPassword(password)) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+      throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
           .entity("username or password incorrect").type("text/plain").build());
     }
     if (user.isDenied(user.getState())) {

@@ -5,6 +5,8 @@ import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import utils.TokenService;
 
 public class UserUCCImpl implements UserUCC {
@@ -17,28 +19,39 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public ObjectNode login(String username, String password, boolean rememberMe) {
-    User user = (User) myUserDAO.getOne(username);
+    User user = (User) myUserDAO.getOneByUsername(username);
     if (user == null) {
-      return null;
+      throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+          .entity("user or password incorrect").type("text/plain").build());
     }
     if (!user.checkPassword(password)) {
-      return null;
+      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+          .entity("username or password incorrect").type("text/plain").build());
     }
-    if (!user.checkState(user.getState()) || !user.getState().equals("valid")) {
-      return null;
+    if (user.isDenied(user.getState())) {
+      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+          .entity("denied user").type("text/plain").build());
+    }
+    if (user.isWaiting(user.getState())) {
+      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+          .entity("user on hold").type("text/plain").build());
     }
     return myTokenService.login(user.getId(), username, rememberMe);
   }
 
   @Override
   public ObjectNode refreshToken(String token) {
-    if (!myTokenService.isJWT(token)) {
-      return null;
+
+    if (!myTokenService.isJWT(token) || !myTokenService.verifyRefreshToken(token)) {
+      throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
+          .entity("invalid token").type("text/plain").build());
     }
-    if (!myTokenService.verifyRefreshToken(token)) {
-      return null;
+    var userId = JWT.decode(token).getClaim("user").asInt();
+    User user = (User) myUserDAO.getOneById(userId);
+    if (!user.isValid(user.getState())) {
+      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+          .entity("unvalid user").type("text/plain").build());
     }
-    var idUser = JWT.decode(token).getClaim("user").asInt();
-    return myTokenService.getRefreshedTokens(idUser);
+    return myTokenService.getRefreshedTokens(userId);
   }
 }

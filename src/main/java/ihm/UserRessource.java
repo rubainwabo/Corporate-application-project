@@ -12,7 +12,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import org.apache.commons.text.StringEscapeUtils;
 
 
@@ -40,17 +39,15 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
-
     String username = StringEscapeUtils.escapeHtml4(body.get("username").asText());
     String password = StringEscapeUtils.escapeHtml4(body.get("password").asText());
     boolean rememberMe = body.get("rememberMe").asBoolean();
 
-    ObjectNode authentifiedUser = myUserUCC.login(username, password, rememberMe);
-    if (authentifiedUser == null) {
+    if (username.isBlank() || password.isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("null token").type("text/plain").build());
+          .entity("username or password required").type("text/plain").build());
     }
-    return authentifiedUser;
+    return myUserUCC.login(username, password, rememberMe);
   }
 
   /**
@@ -64,16 +61,11 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode refreshToken(JsonNode body) {
-    if (!body.hasNonNull("refreshToken") || body.get("refreshToken").asText().isBlank()) {
+    if (!body.hasNonNull("refreshToken")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("a token is required").type("text/plain").build());
+          .entity("a token required").type("text/plain").build());
     }
     String refreshToken = body.get("refreshToken").asText();
-    ObjectNode refreshedToken = myUserUCC.refreshToken(refreshToken);
-    if (refreshedToken == null) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity("token not valid").type("text/plain").build());
-    }
-    return refreshedToken;
+    return myUserUCC.refreshToken(refreshToken);
   }
 }

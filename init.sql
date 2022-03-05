@@ -2,7 +2,7 @@ DROP SCHEMA IF EXISTS projet CASCADE;
 CREATE SCHEMA projet;
 CREATE TABLE projet.members
 (
-    id                            SERIAL PRIMARY KEY,
+    user_id                       SERIAL PRIMARY KEY,
     username                      VARCHAR(100) NOT NULL,
     last_name                     VARCHAR(100) NOT NULL,
     first_name                    VARCHAR(100) NOT NULL,
@@ -29,22 +29,22 @@ CREATE TABLE projet.item_type
 CREATE TABLE projet.items
 (
     id_item     SERIAL PRIMARY KEY,
-    description VARCHAR(100)                                          NOT NULL,
+    description VARCHAR(100)                                       NOT NULL,
     url_picture VARCHAR(100),
     rating      INTEGER,
     comment     VARCHAR(200),
-    state       VARCHAR(20)                                           NOT NULL,
-    time_slot   VARCHAR(200)                                          NOT NULL,
-    offeror     INTEGER REFERENCES projet.personnes (id_personne)     NOT NULL,
-    item_type   INTEGER REFERENCES projet.types_objet (id_type_objet) NOT NULL,
-    recipient   INTEGER REFERENCES projet.personnes (id_personne)
+    state       VARCHAR(20)                                        NOT NULL,
+    time_slot   VARCHAR(200)                                       NOT NULL,
+    offeror     INTEGER REFERENCES projet.members (user_id)        NOT NULL,
+    item_type   INTEGER REFERENCES projet.item_type (id_item_type) NOT NULL,
+    recipient   INTEGER REFERENCES projet.members (user_id)
 );
 
 CREATE TABLE projet.interests
 (
-    _date  DATE                                              NOT NULL,
-    member INTEGER REFERENCES projet.personnes (id_personne) NOT NULL,
-    item   INTEGER REFERENCES projet.objets (id_objet)       NOT NULL,
+    _date  DATE                                        NOT NULL,
+    member INTEGER REFERENCES projet.members (user_id) NOT NULL,
+    item   INTEGER REFERENCES projet.items (id_item)   NOT NULL,
     PRIMARY KEY (member, item)
 );
 
@@ -53,16 +53,16 @@ CREATE TABLE projet.interests
 CREATE TABLE projet.dates
 (
     id_date SERIAL PRIMARY KEY,
-    _date   DATE                                        NOT NULL,
-    item    INTEGER REFERENCES projet.objets (id_objet) NOT NULL
+    _date   DATE                                      NOT NULL,
+    item    INTEGER REFERENCES projet.items (id_item) NOT NULL
 );
 
 CREATE TABLE projet.notifications
 (
     id_notification SERIAL PRIMARY KEY,
-    is_viewed       BOOLEAN                                           NOT NULL,
-    text            VARCHAR(200)                                      NOT NULL,
-    person          INTEGER REFERENCES projet.personnes (id_personne) NOT NULL
+    is_viewed       BOOLEAN                                     NOT NULL,
+    text            VARCHAR(200)                                NOT NULL,
+    person          INTEGER REFERENCES projet.members (user_id) NOT NULL
 );
 
 INSERT INTO projet.members

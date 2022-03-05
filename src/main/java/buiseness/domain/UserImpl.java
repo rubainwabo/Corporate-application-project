@@ -33,11 +33,6 @@ public class UserImpl implements User, UserDTO {
   }
 
   @Override
-  public boolean isValid(String state) {
-    return state.equals("valid");
-  }
-
-  @Override
   public String getUserName() {
     return username;
   }

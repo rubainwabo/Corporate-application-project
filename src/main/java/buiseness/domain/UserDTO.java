@@ -57,4 +57,26 @@ public interface UserDTO {
    * @param state the new user's state
    */
   void setState(String state);
+
+  /**
+   * allows to retrieve the reason of refusal of a user.
+   *
+   * @param msg the reason of the connection refusal
+   * @return the refusal message
+   */
+  String getReasonForConnectionRefusal(String msg);
+
+  /**
+   * change the user's reasonForConnectionRefusal by the one passed in parameter.
+   *
+   * @param reasonForConnectionRefusal the new user's reasonForConnectionRefusal
+   */
+  void setReasonForConnectionRefusal(String reasonForConnectionRefusal);
+
+  /**
+   * change the user's username by the one passed in parameter.
+   *
+   * @param username the new user's username
+   */
+  void setUsername(String username);
 }

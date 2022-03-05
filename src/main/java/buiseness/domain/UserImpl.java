@@ -8,6 +8,7 @@ public class UserImpl implements User, UserDTO {
   private String password;
   private String username;
   private String state;
+  private String reasonForConnectionRefusal;
 
   public UserImpl() {
   }
@@ -74,5 +75,20 @@ public class UserImpl implements User, UserDTO {
 
   public void setState(String state) {
     this.state = state;
+  }
+
+  @Override
+  public String getReasonForConnectionRefusal(String msg) {
+    return reasonForConnectionRefusal;
+  }
+
+  @Override
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  @Override
+  public void setReasonForConnectionRefusal(String reasonForConnectionRefusal) {
+    this.reasonForConnectionRefusal = reasonForConnectionRefusal;
   }
 }

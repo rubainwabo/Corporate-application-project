@@ -12,11 +12,4 @@ public interface UserDAO {
    */
   UserDTO getOneByUsername(String username);
 
-  /**
-   * allows you to retrieve a user against an id.
-   *
-   * @param id the user id
-   * @return the found user or null if it does not exist
-   */
-  UserDTO getOneById(int id);
 }

@@ -34,12 +34,4 @@ public interface User extends UserDTO {
    */
   boolean isWaiting(String state);
 
-  /**
-   * will check that the state passed in parameter is valid.
-   *
-   * @param state user state
-   * @return true if the state is valid
-   */
-  boolean isValid(String state);
-
 }

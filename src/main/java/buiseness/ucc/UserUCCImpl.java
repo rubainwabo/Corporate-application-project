@@ -25,7 +25,7 @@ public class UserUCCImpl implements UserUCC {
           .entity("user or password incorrect").type("text/plain").build());
     }
     if (!user.checkPassword(password)) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+      throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
           .entity("username or password incorrect").type("text/plain").build());
     }
     if (user.isDenied(user.getState())) {
@@ -41,17 +41,11 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public ObjectNode refreshToken(String token) {
-
     if (!myTokenService.isJWT(token) || !myTokenService.verifyRefreshToken(token)) {
       throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
           .entity("invalid token").type("text/plain").build());
     }
     var userId = JWT.decode(token).getClaim("user").asInt();
-    User user = (User) myUserDAO.getOneById(userId);
-    if (!user.isValid(user.getState())) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity("unvalid user").type("text/plain").build());
-    }
     return myTokenService.getRefreshedTokens(userId);
   }
 }

@@ -61,10 +61,9 @@ public interface UserDTO {
   /**
    * allows to retrieve the reason of refusal of a user.
    *
-   * @param msg the reason of the connection refusal
    * @return the refusal message
    */
-  String getReasonForConnectionRefusal(String msg);
+  String getReasonForConnectionRefusal();
 
   /**
    * change the user's reasonForConnectionRefusal by the one passed in parameter.

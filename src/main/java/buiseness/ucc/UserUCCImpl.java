@@ -30,7 +30,7 @@ public class UserUCCImpl implements UserUCC {
     }
     if (user.isDenied(user.getState())) {
       throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity("denied user").type("text/plain").build());
+          .entity(user.getReasonForConnectionRefusal()).type("text/plain").build());
     }
     if (user.isWaiting(user.getState())) {
       throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)

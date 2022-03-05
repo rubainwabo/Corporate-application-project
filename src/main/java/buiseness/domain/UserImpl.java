@@ -73,17 +73,17 @@ public class UserImpl implements User, UserDTO {
   }
 
   @Override
-  public String getReasonForConnectionRefusal(String msg) {
+  public String getReasonForConnectionRefusal() {
     return reasonForConnectionRefusal;
-  }
-
-  @Override
-  public void setUsername(String username) {
-    this.username = username;
   }
 
   @Override
   public void setReasonForConnectionRefusal(String reasonForConnectionRefusal) {
     this.reasonForConnectionRefusal = reasonForConnectionRefusal;
+  }
+
+  @Override
+  public void setUsername(String username) {
+    this.username = username;
   }
 }

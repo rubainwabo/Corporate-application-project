@@ -22,7 +22,7 @@ public class UserUCCImpl implements UserUCC {
     User user = (User) myUserDAO.getOneByUsername(username);
     if (user == null) {
       throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-          .entity("user or password incorrect").type("text/plain").build());
+          .entity("username or password incorrect").type("text/plain").build());
     }
     if (!user.checkPassword(password)) {
       throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)

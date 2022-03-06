@@ -4,11 +4,11 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class UserImpl implements User, UserDTO {
 
-  private final String[] possibleState = {"valid", "waiting", "denied"};
   private int id;
   private String password;
   private String username;
   private String state;
+  private String reasonForConnectionRefusal;
 
   public UserImpl() {
   }
@@ -24,13 +24,13 @@ public class UserImpl implements User, UserDTO {
   }
 
   @Override
-  public boolean checkState(String state) {
-    for (String e : this.possibleState) {
-      if (e.equals(state)) {
-        return true;
-      }
-    }
-    return false;
+  public boolean isDenied(String state) {
+    return state.equals("denied");
+  }
+
+  @Override
+  public boolean isWaiting(String state) {
+    return state.equals("waiting");
   }
 
   @Override
@@ -70,5 +70,20 @@ public class UserImpl implements User, UserDTO {
 
   public void setState(String state) {
     this.state = state;
+  }
+
+  @Override
+  public String getReasonForConnectionRefusal() {
+    return reasonForConnectionRefusal;
+  }
+
+  @Override
+  public void setReasonForConnectionRefusal(String reasonForConnectionRefusal) {
+    this.reasonForConnectionRefusal = reasonForConnectionRefusal;
+  }
+
+  @Override
+  public void setUsername(String username) {
+    this.username = username;
   }
 }

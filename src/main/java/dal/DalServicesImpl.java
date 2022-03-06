@@ -10,13 +10,13 @@ public class DalServicesImpl implements DalServices {
 
   private Connection con = null;
   private String url = Config.getProperty("URL");
-  private String pseudo = Config.getProperty("Pseudo");
-  private String mdp = Config.getProperty("MotDePasse");
+  private String username = Config.getProperty("Username");
+  private String password = Config.getProperty("Password");
 
   public DalServicesImpl() throws SQLException {
-    con = DriverManager.getConnection(url, pseudo, mdp);
+    con = DriverManager.getConnection(url, username, password);
   }
-  
+
   @Override
   public PreparedStatement getPreparedStatement(String query) throws SQLException {
     return con.prepareStatement(query);

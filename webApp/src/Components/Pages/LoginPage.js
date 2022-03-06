@@ -1,6 +1,6 @@
 import { Redirect } from "../Router/Router";
 
-import { setSessionObject } from "../../utils/session";
+import { setSessionObject,getSessionObject } from "../../utils/session";
 /**
  * Render the LoginPage
  */
@@ -16,6 +16,10 @@ const affichage = `
 `;
 
 const LoginPage = () => { 
+  let userToken = getSessionObject("token");
+  if (userToken){
+     return Redirect("/");
+    }
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = affichage;
   
@@ -53,10 +57,11 @@ const LoginPage = () => {
         );
       }
       const user = await response.json(); // json() returns a promise => we wait for the data
-      console.log("user authenticated", user);
       // save the user into the localStorage
-      setSessionObject("user", user);
-
+      setSessionObject("userId", user.id );
+      setSessionObject("userPseudo", user.pseudo );
+      setSessionObject("token", user.token);
+      setSessionObject("remeberMe", user.rememberMe);
 
       // call the HomePage via the Router
       Redirect("/");

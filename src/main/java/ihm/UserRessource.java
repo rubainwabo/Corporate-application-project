@@ -12,24 +12,21 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.commons.text.StringEscapeUtils;
+
 
 @Singleton
 @Path("/auths")
 public class UserRessource {
 
-  /*
-   * @Inject
-   * private UserDAO myUserDataService;
-   */
-
   @Inject
   private UserUCC myUserUCC;
 
   /**
-   * permet de connecter l'utilisateur.
+   * allows to connect the user.
    *
-   * @param body les données que l'utilisateur à entré mise sous format json
-   * @return le token associé à l'utilisateur, sinon une erreur en cas d'échec
+   * @param body the data that the user has entered put in json format
+   * @return the token associated to the user, otherwise an error in case of failure
    */
   @POST
   @Path("login")
@@ -37,22 +34,38 @@ public class UserRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode login(JsonNode body) {
 
-    if (!body.hasNonNull("pseudo") || !body.hasNonNull("password") || !body.hasNonNull(
+    if (!body.hasNonNull("username") || !body.hasNonNull("password") || !body.hasNonNull(
         "rememberMe")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("login or password required").type("text/plain").build());
+          .entity("username or password required").type("text/plain").build());
     }
-  
-    String pseudo = body.get("pseudo").asText();
-    String password = body.get("password").asText();
-
+    String username = StringEscapeUtils.escapeHtml4(body.get("username").asText());
+    String password = StringEscapeUtils.escapeHtml4(body.get("password").asText());
     boolean rememberMe = body.get("rememberMe").asBoolean();
 
-    ObjectNode token = myUserUCC.login(pseudo, password, rememberMe);
-    System.out.println(token);
-    if (token == null) {
-      throw new WebApplicationException();
+    if (username.isBlank() || password.isBlank()) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("username or password required").type("text/plain").build());
     }
-    return token;
+    return myUserUCC.login(username, password, rememberMe);
+  }
+
+  /**
+   * Refresh the user token.
+   *
+   * @param body the user's data retrieved via his local storage in the front-end
+   * @return the created token, otherwise null in case of error
+   */
+  @POST
+  @Path("refreshToken")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ObjectNode refreshToken(JsonNode body) {
+    if (!body.hasNonNull("refreshToken")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("a token required").type("text/plain").build());
+    }
+    String refreshToken = body.get("refreshToken").asText();
+    return myUserUCC.refreshToken(refreshToken);
   }
 }

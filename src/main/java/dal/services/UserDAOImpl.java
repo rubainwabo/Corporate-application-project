@@ -20,7 +20,8 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneByUsername(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select id,password,username,state,reason_for_connection_refusal from projet.members where username=?")) {
+        "select id,password,username,state,"
+            + "reason_for_connection_refusal from projet.members where username=?")) {
 
       ps.setString(1, username);
       try (ResultSet rs = ps.executeQuery()) {

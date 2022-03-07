@@ -2,7 +2,7 @@ package buiseness.domain;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class UserImpl implements User, UserDTO {
+public class UserImpl implements User {
 
   private int id;
   private String password;

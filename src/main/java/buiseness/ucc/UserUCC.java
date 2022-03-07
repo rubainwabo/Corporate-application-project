@@ -1,6 +1,11 @@
 package buiseness.ucc;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import utils.exception.InvalidTokenException;
+import utils.exception.PasswordOrUsernameException;
+import utils.exception.ReasonForConnectionRefusalException;
+import utils.exception.UserInvalidException;
+import utils.exception.UserOnHoldException;
 
 public interface UserUCC {
 
@@ -12,7 +17,8 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), his id, his nickname and if he
    * wants to be remembered
    */
-  ObjectNode login(String username, String password, boolean rememberMe);
+  ObjectNode login(String username, String password, boolean rememberMe)
+      throws PasswordOrUsernameException, ReasonForConnectionRefusalException, UserOnHoldException, UserInvalidException;
 
   /**
    * verify the refresh token and create 2 token (1 refresh and 1 access).
@@ -20,5 +26,5 @@ public interface UserUCC {
    * @param token token of the request
    * @return an acess and refresh token
    */
-  ObjectNode refreshToken(String token);
+  ObjectNode refreshToken(String token) throws InvalidTokenException;
 }

@@ -12,7 +12,7 @@ import utils.TokenService;
 import utils.TokenServiceImpl;
 
 @Provider
-public class ApplicationBinder extends AbstractBinder {
+public class TestApplicationBinder extends AbstractBinder {
 
   protected void configure() {
     bind(Mockito.mock(UserDAOImpl.class)).to(UserDAO.class);

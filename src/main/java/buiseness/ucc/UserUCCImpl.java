@@ -1,13 +1,15 @@
 package buiseness.ucc;
 
 import buiseness.domain.User;
-import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 import utils.TokenService;
+import utils.exception.InvalidTokenException;
+import utils.exception.PasswordOrUsernameException;
+import utils.exception.ReasonForConnectionRefusalException;
+import utils.exception.UserInvalidException;
+import utils.exception.UserOnHoldException;
 
 public class UserUCCImpl implements UserUCC {
 
@@ -18,34 +20,30 @@ public class UserUCCImpl implements UserUCC {
   private TokenService myTokenService;
 
   @Override
-  public ObjectNode login(String username, String password, boolean rememberMe) {
+  public ObjectNode login(String username, String password, boolean rememberMe)
+      throws PasswordOrUsernameException, ReasonForConnectionRefusalException, UserOnHoldException, UserInvalidException {
     User user = (User) myUserDAO.getOneByUsername(username);
     if (user == null) {
-      throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-          .entity("username or password incorrect").type("text/plain").build());
+      throw new UserInvalidException("username or password incorrect");
     }
     if (!user.checkPassword(password)) {
-      throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
-          .entity("username or password incorrect").type("text/plain").build());
+      throw new PasswordOrUsernameException("username or password incorrect");
     }
     if (user.isDenied(user.getState())) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity(user.getReasonForConnectionRefusal()).type("text/plain").build());
+      throw new ReasonForConnectionRefusalException(user.getReasonForConnectionRefusal());
     }
     if (user.isWaiting(user.getState())) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity("user on hold").type("text/plain").build());
+      throw new UserOnHoldException("user on hold");
     }
     return myTokenService.login(user.getId(), username, rememberMe);
   }
 
   @Override
-  public ObjectNode refreshToken(String token) {
+  public ObjectNode refreshToken(String token) throws InvalidTokenException {
     if (!myTokenService.isJWT(token) || !myTokenService.verifyRefreshToken(token)) {
-      throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
-          .entity("invalid token").type("text/plain").build());
+      throw new InvalidTokenException("invalid token");
     }
-    var userId = JWT.decode(token).getClaim("user").asInt();
+    var userId = myTokenService.getUserId(token);
     return myTokenService.getRefreshedTokens(userId);
   }
 }

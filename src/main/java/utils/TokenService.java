@@ -48,4 +48,12 @@ public interface TokenService {
    * @return true if it's a JWT, else false
    */
   boolean isJWT(String token);
+
+  /**
+   * returns an userId.
+   *
+   * @param token a refresh token(usually)
+   * @return true if it's a JWT, else false
+   */
+  int getUserId(String token);
 }

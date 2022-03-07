@@ -23,18 +23,19 @@ public class UserDAOImpl implements UserDAO {
         "select id,password,username,state,reason_for_connection_refusal from projet.members where username=?")) {
 
       ps.setString(1, username);
-      ResultSet rs = ps.executeQuery();
-
-      UserDTO user = myDomainFactory.getUser();
-      if (!rs.next()) {
-        return null;
+      try (ResultSet rs = ps.executeQuery()) {
+        UserDTO user = myDomainFactory.getUser();
+        if (!rs.next()) {
+          return null;
+        }
+        user.setId(rs.getInt(1));
+        user.setPassword(rs.getString(2));
+        user.setUserName(rs.getString(3));
+        user.setState(rs.getString(4));
+        user.setReasonForConnectionRefusal(rs.getString(5));
+        return user;
       }
-      user.setId(rs.getInt(1));
-      user.setPassword(rs.getString(2));
-      user.setUserName(rs.getString(3));
-      user.setState(rs.getString(4));
-      user.setReasonForConnectionRefusal(rs.getString(5));
-      return user;
+
 
     } catch (SQLException throwables) {
       throwables.printStackTrace();

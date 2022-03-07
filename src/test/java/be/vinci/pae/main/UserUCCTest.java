@@ -134,11 +134,12 @@ public class UserUCCTest {
     Assertions.assertAll(
         () -> Assertions.assertEquals(objectNode,
             userUCC.login(validUser.getUserName(), validUser.getPassword(), true)),
-        () -> Mockito.verify(validUser, Mockito.atMost(4)).getUserName(),
+        () -> Mockito.verify(validUser, Mockito.atMost(3)).getUserName(),
         () -> Mockito.verify(validUser, Mockito.atMost(4)).getState(),
         () -> Mockito.verify(validUser, Mockito.atMost(3)).getPassword(),
         () -> Mockito.verify(validUser, Mockito.atMost(2)).checkPassword(PASSWORD),
-        () -> Mockito.verify(userDAO).getOneByUsername(USER));
+        () -> Mockito.verify(userDAO).getOneByUsername(USER),
+        () -> Mockito.verify(tokenService).login(validUser.getId(), validUser.getUserName(), true));
   }
 
   @Test

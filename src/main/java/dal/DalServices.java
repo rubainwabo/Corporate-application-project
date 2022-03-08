@@ -10,7 +10,7 @@ public interface DalServices {
    *
    * @param query the query we want to call on the database
    * @return a prepare statement based on the query passed in parameter
-   * @throws SQLException
+   * @throws SQLException when an sql exception occurs
    */
   PreparedStatement getPreparedStatement(String query) throws SQLException;
 }

@@ -90,5 +90,9 @@ public class TokenServiceImpl implements TokenService {
     }
     return true;
   }
-}
 
+  @Override
+  public int getUserId(String token) {
+    return JWT.decode(token).getClaim("user").asInt();
+  }
+}

@@ -17,8 +17,10 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), his id, his nickname and if he
    * wants to be remembered
    */
+
   ObjectNode login(String username, String password, boolean rememberMe)
-      throws PasswordOrUsernameException, ReasonForConnectionRefusalException, UserOnHoldException, UserInvalidException;
+      throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
+      UserOnHoldException, UserInvalidException;
 
   /**
    * verify the refresh token and create 2 token (1 refresh and 1 access).

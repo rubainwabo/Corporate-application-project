@@ -40,6 +40,10 @@ public class UserUCCTest {
     userUCC = locator.getService(UserUCC.class);
   }
 
+  /**
+   * allows to get the services before each test and to clear the invocations for the Mockito Verify
+   * methods to work.
+   */
   @BeforeEach
   public void setup() {
     userDAO = locator.getService(UserDAO.class);

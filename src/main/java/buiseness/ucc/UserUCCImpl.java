@@ -21,7 +21,8 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public ObjectNode login(String username, String password, boolean rememberMe)
-      throws PasswordOrUsernameException, ReasonForConnectionRefusalException, UserOnHoldException, UserInvalidException {
+      throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
+      UserOnHoldException, UserInvalidException {
     User user = (User) myUserDAO.getOneByUsername(username);
     if (user == null) {
       throw new UserInvalidException("username or password incorrect");

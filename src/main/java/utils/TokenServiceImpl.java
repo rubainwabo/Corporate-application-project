@@ -74,15 +74,14 @@ public class TokenServiceImpl implements TokenService {
   @Override
   public boolean isJWT(String token) {
     String[] jwtSplitted = token.split("\\.");
-    if (jwtSplitted.length != 3) // The JWT is composed of three parts
-    {
+    if (jwtSplitted.length != 3) {
       return false;
     }
     try {
       String jsonFirstPart = new String(Base64.getDecoder().decode(jwtSplitted[0]));
       JSONObject firstPart = new JSONObject(jsonFirstPart); // The first part of the JWT is a JSON
-      if (!firstPart.has("alg")) // The first part has the attribute "alg"
-      {
+      // The first part has the attribute "alg"
+      if (!firstPart.has("alg")) {
         return false;
       }
     } catch (JSONException err) {

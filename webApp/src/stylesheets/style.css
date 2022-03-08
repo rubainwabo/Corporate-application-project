@@ -1,1 +1,61 @@
+nav{
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 10vh; 
+    
+}
+a{
+    color: black;
 
+}
+#navigation{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;  
+}
+#nav-connection{
+    display: flex;
+}
+#connection{
+    margin-right: 10px;
+}
+
+
+#connection-box{
+    
+    position: absolute;
+    height: 500px;
+    width: 500px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top:0;
+    bottom:0;
+}
+#error{
+    color: red;
+}
+#form{
+    
+    border: 1px solid rgb(104, 104, 104);
+    height: 100%;   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    
+}
+form input[type=text]{
+    width: 300px;
+}
+form input[type=submit]{
+    border: none;
+    background-color: white;
+
+}
+#form h2{
+   
+    margin-bottom: 35px;
+}

@@ -3,6 +3,7 @@
 // Here, because our JS component 'Navbar' has the same name as Navbar Bootstrap's component
 // we change the name of the imported Bootstrap's 'Navbar' component
 import { Navbar as BootstrapNavbar} from "bootstrap";
+import { getSessionObject } from "../../utils/session";
 
 /**
  * Render the Navbar which is styled by using Bootstrap
@@ -13,6 +14,9 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
 
 const Navbar = () => {
   const navbarWrapper = document.querySelector("#navbarWrapper");
+  let accesToken = getSessionObject("accessToken");
+  let username = getSessionObject("userPseudo");
+  /*
   let navbar = `
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -38,6 +42,40 @@ const Navbar = () => {
         </div>
       </nav>
   `;  
+*/
+let navbar = "";
+if(accesToken){
+  navbar = `
+      <nav>
+        <div id="navigation">
+          <div id="logo"> <a class="nav-item" href="#"  data-uri="/"> Donnamis </a></div>
+
+          <div id="username"> bonjour ${username}</div>
+
+          <div id="nav-connection"> 
+            <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
+            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se connecter </a>  </div>
+          </div>
+        </div>
+      </nav>
+  `;  
+}else{
+   navbar = `
+      <nav>
+        <div id="navigation">
+          <div id="logo"> <a class="nav-item" href="#"  data-uri="/"> Donnamis </a></div>
+
+          <div id="nav-connection"> 
+            <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
+            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> S'inscrire </a>  </div>
+          </div>
+        </div>
+      </nav>
+  `; 
+}
+ 
+
+
   navbarWrapper.innerHTML = navbar;
 };
 

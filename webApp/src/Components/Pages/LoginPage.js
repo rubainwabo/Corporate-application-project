@@ -1,22 +1,31 @@
 import { Redirect } from "../Router/Router";
+import Navbar from "../Navbar/Navbar";
 
 import { setSessionObject,getSessionObject } from "../../utils/session";
 /**
  * Render the LoginPage
  */
 const affichage = `
-<div>
-  <form action="#" id="form">
-    <input id="pseudo" type="text" placeholder="Pseudo">
-    <input  id="password" type="text" placeholder="Password">
-    <input type="checkbox" id="rememberMe" name="rememberMe">
-    <input type="submit" id="btnSubmit">
-  </form>
-</div>
+<section id="section-connection">
+  <div id="connection-box">
+    
+
+    <form action="#" id="form">
+      <h2> Connectez-vous !</h2>
+      <span id="error"></span>
+      <p><input id="pseudo" type="text" placeholder="Pseudo"></p>
+      <p><input  id="password" type="text" placeholder="Password"></p>
+      <p> se souvenir de moi <input type="checkbox" id="rememberMe" name="rememberMe"></p>
+      <input type="submit" id="btnSubmit" value="sss">
+    </form>
+
+   
+  <div>
+</section>
 `;
 
 const LoginPage = () => { 
-  let userToken = getSessionObject("token");
+  let userToken = getSessionObject("accessToken");
   if (userToken){
      return Redirect("/");
     }
@@ -40,7 +49,7 @@ const LoginPage = () => {
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         body: JSON.stringify({
-          pseudo: username.value,
+          username: username.value,
           password: password.value,
           rememberMe:rememberMe.checked
         }), // body data type must match "Content-Type" header
@@ -52,18 +61,27 @@ const LoginPage = () => {
       const response = await fetch("/api/auths/login", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
+        response.text().then((result)=>{
+          document.getElementById("error").innerText=result;
+        })
         throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
         );
       }
       const user = await response.json(); // json() returns a promise => we wait for the data
       // save the user into the localStorage
+
       setSessionObject("userId", user.id );
-      setSessionObject("userPseudo", user.pseudo );
-      setSessionObject("token", user.token);
+      setSessionObject("userPseudo", user.username);
       setSessionObject("remeberMe", user.rememberMe);
+      setSessionObject("accessToken", user.accessToken);
+
+      if(rememberMe.checked){
+        setSessionObject("tokenRefresh", user.tokenRefresh);
+      }
 
       // call the HomePage via the Router
+      Navbar();
       Redirect("/");
     } catch (error) {
       console.error("LoginPage::error: ", error);

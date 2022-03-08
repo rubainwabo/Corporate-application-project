@@ -15,8 +15,10 @@ public class TokenServiceImpl implements TokenService {
   private final Algorithm jwtAlgorithmAccess = Algorithm.HMAC256(Config.getProperty("JWTAccess"));
   private final Algorithm jwtAlgorithmRefresh = Algorithm.HMAC256(Config.getProperty("JWTRefresh"));
   private final ObjectMapper jsonMapper = new ObjectMapper();
+
   private final long tokenAccessLifeTime = 1000000;
   private final long tokenRefreshLifeTime = 2147483647;
+
 
   @Override
   public String createToken(int id, Algorithm algo, long lifeTime) {
@@ -67,6 +69,7 @@ public class TokenServiceImpl implements TokenService {
     }
     return true;
   }
+
 
   @Override
   public boolean isJWT(String token) {

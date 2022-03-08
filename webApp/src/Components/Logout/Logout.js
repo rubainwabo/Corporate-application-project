@@ -13,7 +13,7 @@ const Logout = () => {
 
   // re-render the navbar (for a non-authenticated user)
   Navbar();
-  Redirect("/login");
+  Redirect("/");
 };
 
 export default Logout;

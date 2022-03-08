@@ -1,18 +1,27 @@
 import { Redirect } from "../Router/Router";
+import Navbar from "../Navbar/Navbar";
 
 import { setSessionObject,getSessionObject } from "../../utils/session";
 /**
  * Render the LoginPage
  */
 const affichage = `
-<div>
-  <form action="#" id="form">
-    <input id="pseudo" type="text" placeholder="Pseudo">
-    <input  id="password" type="text" placeholder="Password">
-    <input type="checkbox" id="rememberMe" name="rememberMe">
-    <input type="submit" id="btnSubmit">
-  </form>
-</div>
+<section id="section-connection">
+  <div id="connection-box">
+    
+
+    <form action="#" id="form">
+      <h2> Connectez-vous !</h2>
+      <span id="error"></span>
+      <p><input id="pseudo" type="text" placeholder="Pseudo"></p>
+      <p><input  id="password" type="text" placeholder="Password"></p>
+      <p> se souvenir de moi <input type="checkbox" id="rememberMe" name="rememberMe"></p>
+      <input type="submit" id="btnSubmit" value="sss">
+    </form>
+
+   
+  <div>
+</section>
 `;
 
 const LoginPage = () => { 
@@ -52,6 +61,9 @@ const LoginPage = () => {
       const response = await fetch("/api/auths/login", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
+        response.text().then((result)=>{
+          document.getElementById("error").innerText=result;
+        })
         throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
         );
@@ -69,6 +81,7 @@ const LoginPage = () => {
       }
 
       // call the HomePage via the Router
+      Navbar();
       Redirect("/");
     } catch (error) {
       console.error("LoginPage::error: ", error);

@@ -7,18 +7,19 @@ import { getSessionObject,setSessionObject,removeSessionObject } from "../../uti
  */
 const home = `
 <div>
-  <p> Hello world</p>
+  <p> Bienvue sur Donnamis </p>
 </div>
 `;
 
 const HomePage = async () => { 
     let accessToken = getSessionObject("accessToken");
-    if (!accessToken){
-      return Redirect("/login");
-    }
-    let remeberMe = getSessionObject("remeberMe");
+  
+    
     // si son refreshToken a expiré, il faut le déconnecté (implémenter une page de deconnexion)
-    if(isJwtExpired(accessToken)){
+    
+    if((accessToken) && isJwtExpired(accessToken)){
+      
+      let remeberMe = getSessionObject("remeberMe");
       let refreshToken = getSessionObject("tokenRefresh");
 
         if(remeberMe && !isJwtExpired(refreshToken)){
@@ -49,10 +50,11 @@ const HomePage = async () => {
             } catch (error) {
               console.error("LoginPage::error: ", error);
             }
-          }else {
-            return Redirect("/logout")
           }
     }
+  
+    
+    
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
   

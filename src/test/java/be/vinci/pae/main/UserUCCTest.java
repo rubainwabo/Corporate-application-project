@@ -41,8 +41,7 @@ public class UserUCCTest {
   }
 
   /**
-   * allows to get the services before each test and to clear the invocations for the Mockito Verify
-   * methods to work.
+   * setup all the service before each test.
    */
   @BeforeEach
   public void setup() {

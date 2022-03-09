@@ -14,6 +14,7 @@ const Logout = () => {
   // re-render the navbar (for a non-authenticated user)
   Navbar();
   Redirect("/");
+  
 };
 
 export default Logout;

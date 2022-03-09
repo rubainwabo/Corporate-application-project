@@ -45,8 +45,10 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
+    // escape characters to avoid XSS injections
     String username = StringEscapeUtils.escapeHtml4(body.get("username").asText());
     String password = StringEscapeUtils.escapeHtml4(body.get("password").asText());
+    // allows to know if the user wants to be remembered
     boolean rememberMe = body.get("rememberMe").asBoolean();
 
     if (username.isBlank() || password.isBlank()) {
@@ -85,6 +87,7 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token required").type("text/plain").build());
     }
+    // escape characters to avoid XSS injections and transforms the received token into text
     String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
     try {
       return myUserUCC.refreshToken(refreshToken);

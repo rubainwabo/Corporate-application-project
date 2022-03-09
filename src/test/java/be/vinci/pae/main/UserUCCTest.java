@@ -40,6 +40,9 @@ public class UserUCCTest {
     userUCC = locator.getService(UserUCC.class);
   }
 
+  /**
+   * setup all the service before each test.
+   */
   @BeforeEach
   public void setup() {
     userDAO = locator.getService(UserDAO.class);

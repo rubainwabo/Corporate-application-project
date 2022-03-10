@@ -11,19 +11,19 @@ const home = `
 </div>
 `;
 
-const HomePage = async () => { 
+const HomePage = async () => {
     let accessToken = getSessionObject("accessToken");
-  
-    
-    // si son refreshToken a expiré, il faut le déconnecté (implémenter une page de deconnexion)
-    
-    if((accessToken) && isJwtExpired(accessToken)){
-      
-      let remeberMe = getSessionObject("remeberMe");
-      let refreshToken = getSessionObject("tokenRefresh");
 
-        if(remeberMe && !isJwtExpired(refreshToken)){
-          
+    // if the user has a accesToken and the token is expired
+    if(((accessToken) && isJwtExpired(accessToken))){
+      let refreshToken = getSessionObject("tokenRefresh");
+      // if his not in possession of a refresh
+      if (!refreshToken) {
+       return  Redirect("/logout");
+      }
+      // try to get the user new tokens if his refresh token is not expired
+        if(!isJwtExpired(refreshToken)){
+          console.log("voici le refrehs bg : " +refreshToken)
             try {
               const options = {
                 method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -34,32 +34,28 @@ const HomePage = async () => {
                   "Content-Type": "application/json",
                 },
               };
-        
               const response = await fetch("/api/auths/refreshToken", options); // fetch return a promise => we wait for the response
-        
+
               if (!response.ok) {
                 throw new Error(
                   "fetch error : " + response.status + " : " + response.statusText
                 );
               }
 
-              const tokenRefresh = await response.text(); // json() returns a promise => we wait for the data
-              console.log(tokenRefresh);
-              setSessionObject("accessToken", tokenRefresh);
+              const tokens = await response.json(); // json() returns a promise => we wait for the data
+              console.log(tokens);
+              setSessionObject("accessToken", tokens.accessToken);
+              setSessionObject("tokenRefresh",tokens.tokenRefresh);
               // call the HomePage via the Router
             } catch (error) {
               console.error("LoginPage::error: ", error);
             }
           }
     }
-  
-    
-    
+
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
-  
-  
-  
+
 };
 
 

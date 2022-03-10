@@ -8,8 +8,6 @@ import { setSessionObject,getSessionObject } from "../../utils/session";
 const affichage = `
 <section id="section-connection">
   <div id="connection-box">
-    
-
     <form action="#" id="form">
       <h2> Connectez-vous !</h2>
       <span id="error"></span>
@@ -18,33 +16,29 @@ const affichage = `
       <p> se souvenir de moi <input type="checkbox" id="rememberMe" name="rememberMe"></p>
       <input type="submit" id="btnSubmit" value="sss">
     </form>
-
-   
   <div>
 </section>
 `;
 
-const LoginPage = () => { 
+const LoginPage = () => {
   let userToken = getSessionObject("accessToken");
+  // if the user is already connect we redirect him to the homepage
   if (userToken){
      return Redirect("/");
     }
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = affichage;
-  
+
   const form = document.getElementById("form");
 
   form.addEventListener("submit",onSubmit);
-
+  // try to log the user
   async function onSubmit(e) {
     e.preventDefault();
     const username = document.getElementById("pseudo");
     const password = document.getElementById("password");
     const rememberMe = document.getElementById("rememberMe");
-    
-    console.log(rememberMe.checked);
 
-    
     try {
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -69,8 +63,8 @@ const LoginPage = () => {
         );
       }
       const user = await response.json(); // json() returns a promise => we wait for the data
-      // save the user into the localStorage
 
+      // save the user into the localStorage
       setSessionObject("userId", user.id );
       setSessionObject("userPseudo", user.username);
       setSessionObject("remeberMe", user.rememberMe);
@@ -86,7 +80,7 @@ const LoginPage = () => {
     } catch (error) {
       console.error("LoginPage::error: ", error);
     }
-    
+
   }
 };
 

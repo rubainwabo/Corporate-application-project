@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 public class UserDAOImpl implements UserDAO {
 
-
   @Inject
   private BizFactory myDomainFactory;
 
@@ -24,18 +23,7 @@ public class UserDAOImpl implements UserDAO {
             + "reason_for_connection_refusal from projet.members where username=?")) {
 
       ps.setString(1, username);
-      try (ResultSet rs = ps.executeQuery()) {
-        UserDTO user = myDomainFactory.getUser();
-        if (!rs.next()) {
-          return null;
-        }
-        user.setId(rs.getInt(1));
-        user.setPassword(rs.getString(2));
-        user.setUserName(rs.getString(3));
-        user.setState(rs.getString(4));
-        user.setReasonForConnectionRefusal(rs.getString(5));
-        return user;
-      }
+      return getUserDTO(ps);
 
 
     } catch (SQLException throwables) {
@@ -43,6 +31,38 @@ public class UserDAOImpl implements UserDAO {
       return null;
     }
 
+  }
+
+  @Override
+  public UserDTO getOneById(int id) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+            "select id,password,username,state, _role,"
+                    + "reason_for_connection_refusal from projet.members where id=?")) {
+
+      ps.setInt(1, id);
+      return getUserDTO(ps);
+
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+      return null;
+    }
+  }
+
+  //Made to avoid duplicata code for getOneById and getOneByUsername
+  private UserDTO getUserDTO(PreparedStatement ps) throws SQLException {
+    try (ResultSet rs = ps.executeQuery()) {
+      UserDTO user = myDomainFactory.getUser();
+      if (!rs.next()) {
+        return null;
+      }
+      user.setId(rs.getInt(1));
+      user.setPassword(rs.getString(2));
+      user.setUserName(rs.getString(3));
+      user.setState(rs.getString(4));
+      user.setReasonForConnectionRefusal(rs.getString(5));
+      user.setRole(rs.getString(6));
+      return user;
+    }
   }
 
 }

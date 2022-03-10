@@ -1,5 +1,6 @@
 package buiseness.ucc;
 
+import buiseness.domain.User;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
@@ -27,4 +28,6 @@ public interface UserUCC {
    * @return an acess and refresh token
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
+
+  User getOneById(int id);
 }

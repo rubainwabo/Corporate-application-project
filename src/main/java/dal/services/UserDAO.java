@@ -12,4 +12,5 @@ public interface UserDAO {
    */
   UserDTO getOneByUsername(String username);
 
+  UserDTO getOneById(int id);
 }

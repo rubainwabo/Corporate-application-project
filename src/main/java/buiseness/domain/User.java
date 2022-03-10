@@ -20,18 +20,15 @@ public interface User extends UserDTO {
 
   /**
    * will check that the state passed in parameter is denied.
-   *
-   * @param state user state
    * @return true if the state is denied
    */
-  boolean isDenied(String state);
+  boolean isDenied();
 
   /**
    * will check that the state passed in parameter is waiting.
    *
-   * @param state user state
    * @return true if the state is waiting
    */
-  boolean isWaiting(String state);
+  boolean isWaiting();
 
 }

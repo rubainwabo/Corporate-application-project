@@ -3,17 +3,15 @@ package ihm;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import filters.Authorize;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.apache.commons.text.StringEscapeUtils;
+import org.glassfish.jersey.inject.hk2.RequestContext;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -60,14 +58,8 @@ public class UserRessource {
     } catch (UserInvalidException e) {
       throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
           .entity(e.getMessage()).type("text/plain").build());
-    } catch (PasswordOrUsernameException e) {
+    } catch (PasswordOrUsernameException | ReasonForConnectionRefusalException | UserOnHoldException e) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    } catch (ReasonForConnectionRefusalException e) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    } catch (UserOnHoldException e) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
           .entity(e.getMessage()).type("text/plain").build());
     }
   }
@@ -82,10 +74,11 @@ public class UserRessource {
   @Path("refreshToken")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
+  @Authorize
   public ObjectNode refreshToken(JsonNode body) {
-    if (!body.hasNonNull("refreshToken")) {
+    if (!body.hasNonNull("refreshToken") && !body.hasNonNull("token")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("a token required").type("text/plain").build());
+          .entity("a token or refreshToken is required").type("text/plain").build());
     }
     // escape characters to avoid XSS injections and transforms the received token into text
     String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());

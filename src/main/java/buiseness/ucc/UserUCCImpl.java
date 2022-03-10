@@ -30,10 +30,10 @@ public class UserUCCImpl implements UserUCC {
     if (!user.checkPassword(password)) {
       throw new PasswordOrUsernameException("username or password incorrect");
     }
-    if (user.isDenied(user.getState())) {
+    if (user.isDenied()) {
       throw new ReasonForConnectionRefusalException(user.getReasonForConnectionRefusal());
     }
-    if (user.isWaiting(user.getState())) {
+    if (user.isWaiting()) {
       throw new UserOnHoldException("user on hold");
     }
     return myTokenService.login(user.getId(), username, rememberMe);
@@ -41,10 +41,12 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public ObjectNode refreshToken(String token) throws InvalidTokenException {
-    if (!myTokenService.isJWT(token) || !myTokenService.verifyRefreshToken(token)) {
-      throw new InvalidTokenException("invalid token");
-    }
     var userId = myTokenService.getUserId(token);
     return myTokenService.getRefreshedTokens(userId);
+  }
+
+  @Override
+  public User getOneById(int id) {
+    return (User) myUserDAO.getOneById(id);
   }
 }

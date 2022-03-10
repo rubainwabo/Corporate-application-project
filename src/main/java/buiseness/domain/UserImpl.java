@@ -9,6 +9,7 @@ public class UserImpl implements User {
   private String username;
   private String state;
   private String reasonForConnectionRefusal;
+  private String role;
 
   public UserImpl() {
   }
@@ -24,13 +25,13 @@ public class UserImpl implements User {
   }
 
   @Override
-  public boolean isDenied(String state) {
-    return state.equals("denied");
+  public boolean isDenied() {
+    return this.state.equals("denied");
   }
 
   @Override
-  public boolean isWaiting(String state) {
-    return state.equals("waiting");
+  public boolean isWaiting() {
+    return this.state.equals("waiting");
   }
 
   @Override
@@ -85,5 +86,13 @@ public class UserImpl implements User {
   @Override
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  @Override
+  public void setRole(String role) { this.role = role;}
+
+  @Override
+  public String getRole() {
+    return this.role;
   }
 }

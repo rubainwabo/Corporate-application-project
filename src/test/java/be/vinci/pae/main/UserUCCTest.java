@@ -83,7 +83,7 @@ public class UserUCCTest {
     Mockito.when(userDenied.getReasonForConnectionRefusal()).thenReturn("You are not recognized");
     Mockito.when(userDenied.checkPassword(PASSWORD)).thenReturn(true);
     Mockito.when(userDenied.getState()).thenReturn(DENIED);
-    Mockito.when(userDenied.isDenied(userDenied.getState())).thenReturn(true);
+    Mockito.when(userDenied.isDenied()).thenReturn(true);
     Mockito.when(userDAO.getOneByUsername(USER)).thenReturn(userDenied);
 
     Throwable exception = Assertions.assertThrows(Exception.class,
@@ -95,7 +95,7 @@ public class UserUCCTest {
         () -> Mockito.verify(userDenied, Mockito.atMost(2)).getReasonForConnectionRefusal(),
         () -> Mockito.verify(userDenied).checkPassword(PASSWORD),
         () -> Mockito.verify(userDenied, Mockito.atMost(2)).getState(),
-        () -> Mockito.verify(userDenied).isDenied(DENIED),
+        () -> Mockito.verify(userDenied).isDenied(),
         () -> Mockito.verify(userDAO).getOneByUsername(USER));
   }
 
@@ -106,7 +106,7 @@ public class UserUCCTest {
 
     Mockito.when(userWaiting.checkPassword(PASSWORD)).thenReturn(true);
     Mockito.when(userWaiting.getState()).thenReturn(WAITING);
-    Mockito.when(userWaiting.isWaiting(userWaiting.getState())).thenReturn(true);
+    Mockito.when(userWaiting.isWaiting()).thenReturn(true);
     Mockito.when(userDAO.getOneByUsername(USER)).thenReturn(userWaiting);
 
     Throwable exception = Assertions.assertThrows(Exception.class,
@@ -116,7 +116,7 @@ public class UserUCCTest {
         () -> Assertions.assertEquals("user on hold", exception.getMessage()),
         () -> Mockito.verify(userWaiting).checkPassword(PASSWORD),
         () -> Mockito.verify(userWaiting, Mockito.atMost(3)).getState(),
-        () -> Mockito.verify(userWaiting).isWaiting(WAITING),
+        () -> Mockito.verify(userWaiting).isWaiting(),
         () -> Mockito.verify(userDAO).getOneByUsername(USER));
   }
 

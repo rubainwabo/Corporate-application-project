@@ -78,4 +78,8 @@ public interface UserDTO {
    * @param username the new user's username
    */
   void setUsername(String username);
+
+  void setRole(String role);
+
+  String getRole();
 }

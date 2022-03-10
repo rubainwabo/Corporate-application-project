@@ -1,6 +1,7 @@
 package utils;
 
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface TokenService {
@@ -56,4 +57,6 @@ public interface TokenService {
    * @return true if it's a JWT, else false
    */
   int getUserId(String token);
+
+  DecodedJWT getVerifyToken(String token, boolean refresh);
 }

@@ -37,7 +37,7 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode login(JsonNode body) {
-
+    System.out.println(body.get("username"));
     if (!body.hasNonNull("username") || !body.hasNonNull("password") || !body.hasNonNull(
         "rememberMe")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)

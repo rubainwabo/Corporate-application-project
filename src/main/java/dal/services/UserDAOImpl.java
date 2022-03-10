@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+//TODO Vérifier la duplication de code
 public class UserDAOImpl implements UserDAO {
 
   @Inject
@@ -19,7 +20,7 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneByUsername(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select id,password,username,state,"
+        "select user_id,password,username,state, _role,"
             + "reason_for_connection_refusal from projet.members where username=?")) {
 
       ps.setString(1, username);
@@ -36,8 +37,8 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneById(int id) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-            "select id,password,username,state, _role,"
-                    + "reason_for_connection_refusal from projet.members where id=?")) {
+            "select user_id,password,username,state, _role,"
+                    + "reason_for_connection_refusal from projet.members where user_id=?")) {
 
       ps.setInt(1, id);
       return getUserDTO(ps);

@@ -8,6 +8,7 @@ import dal.DalServices;
 import dal.DalServicesImpl;
 import dal.services.UserDAO;
 import dal.services.UserDAOImpl;
+import filters.AuthorizationRequestFilter;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.ext.Provider;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;

@@ -23,9 +23,9 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     TokenService myTokenService;
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        System.out.println("We're in AuthorizeRequestFilter");
         String token = requestContext.getHeaderString("token");
         String refreshToken = requestContext.getHeaderString("refreshToken");
-        String role = requestContext.getHeaderString("role");
         if (token == null && refreshToken == null) {
             requestContext.abortWith(Response.status(Status.UNAUTHORIZED)
                     .entity("A token is needed to access this resource").build());
@@ -42,10 +42,6 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
             if (authenticatedUser == null || authenticatedUser.isDenied() || authenticatedUser.isWaiting()) {
                 requestContext.abortWith(Response.status(Status.FORBIDDEN)
                         .entity("You are forbidden to access this resource").build());
-            }
-            if (role.equals("admin") && !authenticatedUser.getRole().equals("admin")) {
-                requestContext.abortWith(Response.status(Status.FORBIDDEN)
-                        .entity("You are forbidden to access this resource must be admin").build());
             }
             requestContext.setProperty("user",
                     myUserUCC.getOneById(decodedToken.getClaim("user").asInt()));

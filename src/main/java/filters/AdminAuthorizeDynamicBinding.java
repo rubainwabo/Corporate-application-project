@@ -11,6 +11,7 @@ public class AdminAuthorizeDynamicBinding implements DynamicFeature {
         if (UserRessource.class.equals(resourceInfo.getResourceClass())
                 && resourceInfo.getResourceMethod()
                 .getName().contains("admin")) {
+            System.out.println("ADMIN LOCATED");
             context.register(AdminAuthorizeRequestFilter.class);
         }
 }

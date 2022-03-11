@@ -1,2 +1,4 @@
-package filters;public @interface AdminAuthorize {
+package filters;
+
+public @interface AdminAuthorize {
 }

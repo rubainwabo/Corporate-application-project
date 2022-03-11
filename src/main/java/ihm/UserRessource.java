@@ -16,13 +16,9 @@ import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
 
-
-
-
 @Singleton
 @Path("/auths")
 public class UserRessource {
-
   @Inject
   private UserUCC myUserUCC;
 
@@ -34,6 +30,8 @@ public class UserRessource {
    */
   @POST
   @Path("adminPage")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
   public String adminPage(Object body){
     System.out.println("here");
     return "oui"; //TODO replace this stub to something useful

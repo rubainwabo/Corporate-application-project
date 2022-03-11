@@ -58,5 +58,7 @@ public interface TokenService {
    */
   int getUserId(String token);
 
-  DecodedJWT getVerifyToken(String token, boolean refresh);
+  DecodedJWT getVerifyToken(String token);
+
+  DecodedJWT getVerifyRefreshToken(String token);
 }

@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.Provider;
 import utils.TokenService;
-//TODO Changer poiur ne pas passer le role dans le heaader (ça a pas de sens de faire ça comme ça)
+
 @Singleton
 @Provider
 @Authorize
@@ -32,7 +32,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
         } else {
             DecodedJWT decodedToken;
             try {
-                decodedToken = (token == null) ? myTokenService.getVerifyToken(refreshToken, false) : myTokenService.getVerifyToken(token, true);
+                decodedToken = (token == null) ? myTokenService.getVerifyRefreshToken(refreshToken): myTokenService.getVerifyToken(token);
             } catch (Exception e) {
                 throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
                         .entity("Malformed token : " + e.getMessage()).type("text/plain").build());

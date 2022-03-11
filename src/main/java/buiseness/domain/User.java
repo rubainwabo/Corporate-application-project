@@ -31,4 +31,6 @@ public interface User extends UserDTO {
    */
   boolean isWaiting();
 
+  boolean isAdmin();
+
 }

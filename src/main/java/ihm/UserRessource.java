@@ -2,7 +2,6 @@ package ihm;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import filters.Authorize;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
@@ -29,12 +28,12 @@ public class UserRessource {
    * @return the token associated to the user, otherwise an error in case of failure
    */
   @POST
-  @Path("adminPage")
+  @Path("admin")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String adminPage(Object body){
     System.out.println("here");
-    return "oui"; //TODO replace this stub to something useful
+    return "oui";
   }
 
   @POST
@@ -78,8 +77,7 @@ public class UserRessource {
   @Path("refreshToken")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Authorize
-  public ObjectNode refreshToken(JsonNode body) {
+  public ObjectNode userRefreshToken(JsonNode body) {
     if (!body.hasNonNull("refreshToken") && !body.hasNonNull("token")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token or refreshToken is required").type("text/plain").build());

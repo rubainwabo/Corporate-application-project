@@ -8,7 +8,10 @@ import dal.DalServices;
 import dal.DalServicesImpl;
 import dal.services.UserDAO;
 import dal.services.UserDAOImpl;
+import filters.AdminAuthorize;
+import filters.AdminAuthorizeRequestFilter;
 import filters.AuthorizationRequestFilter;
+import filters.Authorize;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.ext.Provider;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -22,5 +25,8 @@ public class ApplicationBinder extends AbstractBinder {
     bind(UserUCCImpl.class).to(UserUCC.class).in(Singleton.class);
     bind(DalServicesImpl.class).to(DalServices.class).in(Singleton.class);
     bind(TokenServiceImpl.class).to(TokenService.class).in(Singleton.class);
+    bind(AuthorizationRequestFilter.class).to(Authorize.class).in(Singleton.class);
+    bind(AdminAuthorizeRequestFilter.class).to(AdminAuthorize.class).in(Singleton.class);
+
   }
 }

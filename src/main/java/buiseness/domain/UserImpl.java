@@ -98,4 +98,9 @@ public class UserImpl implements User {
     return this.role;
   }
 
+  @Override
+  public boolean isAdmin(){
+    return this.role.equals("admin");
+  }
+
 }

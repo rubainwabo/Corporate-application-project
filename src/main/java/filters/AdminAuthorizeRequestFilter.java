@@ -31,14 +31,14 @@ public class AdminAuthorizeRequestFilter implements ContainerRequestFilter {
         } else {
             DecodedJWT decodedToken;
             try {
-                decodedToken = (token == null) ? myTokenService.getVerifyToken(refreshToken, false) : myTokenService.getVerifyToken(token, true);
+                decodedToken = (token == null) ? myTokenService.getVerifyRefreshToken(refreshToken): myTokenService.getVerifyToken(token);
             } catch (Exception e) {
                 throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
                         .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
             }
             User authenticatedUser = myUserUCC.getOneById(decodedToken.getClaim("user").asInt());
 
-            if (authenticatedUser == null || authenticatedUser.isDenied() || authenticatedUser.isWaiting() || !authenticatedUser.getRole().equals("admin")) {
+            if (authenticatedUser == null || authenticatedUser.isDenied() || authenticatedUser.isWaiting() || !authenticatedUser.isAdmin()) {
                 requestContext.abortWith(Response.status(Status.FORBIDDEN)
                         .entity("You are forbidden to access this resource").build());
             }

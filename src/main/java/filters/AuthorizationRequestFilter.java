@@ -1,17 +1,9 @@
 package filters;
 import java.io.IOException;
-import java.util.Arrays;
-
 import buiseness.domain.User;
 import buiseness.ucc.UserUCC;
-import dal.services.UserDAO;
-import dal.services.UserDAOImpl;
 import jakarta.inject.Inject;
-import utils.Config;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.JWTVerifier;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -20,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.Provider;
 import utils.TokenService;
-
+//TODO Changer poiur ne pas passer le role dans le heaader (ça a pas de sens de faire ça comme ça)
 @Singleton
 @Provider
 @Authorize
@@ -34,7 +26,6 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
         String token = requestContext.getHeaderString("token");
         String refreshToken = requestContext.getHeaderString("refreshToken");
         String role = requestContext.getHeaderString("role");
-
         if (token == null && refreshToken == null) {
             requestContext.abortWith(Response.status(Status.UNAUTHORIZED)
                     .entity("A token is needed to access this resource").build());
@@ -52,7 +43,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
                 requestContext.abortWith(Response.status(Status.FORBIDDEN)
                         .entity("You are forbidden to access this resource").build());
             }
-            if (authenticatedUser.getState().equals("admin") && role.equals("admin")) {
+            if (role.equals("admin") && !authenticatedUser.getRole().equals("admin")) {
                 requestContext.abortWith(Response.status(Status.FORBIDDEN)
                         .entity("You are forbidden to access this resource must be admin").build());
             }
@@ -60,6 +51,5 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
                     myUserUCC.getOneById(decodedToken.getClaim("user").asInt()));
         }
     }
-
 }
 

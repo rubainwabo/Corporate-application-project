@@ -89,10 +89,13 @@ public class UserImpl implements User {
   }
 
   @Override
-  public void setRole(String role) { this.role = role;}
+  public void setRole(String role) {
+    this.role = role;
+  }
 
   @Override
   public String getRole() {
     return this.role;
   }
+
 }

@@ -1,5 +1,4 @@
 package ihm;
-
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -11,12 +10,13 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.apache.commons.text.StringEscapeUtils;
-import org.glassfish.jersey.inject.hk2.RequestContext;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
+
+
 
 
 @Singleton
@@ -33,11 +33,17 @@ public class UserRessource {
    * @return the token associated to the user, otherwise an error in case of failure
    */
   @POST
+  @Path("adminPage")
+  public String adminPage(Object body){
+    System.out.println("here");
+    return "oui"; //TODO replace this stub to something useful
+  }
+
+  @POST
   @Path("login")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode login(JsonNode body) {
-    System.out.println(body.get("username"));
     if (!body.hasNonNull("username") || !body.hasNonNull("password") || !body.hasNonNull(
         "rememberMe")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)

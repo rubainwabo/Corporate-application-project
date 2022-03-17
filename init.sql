@@ -70,13 +70,18 @@ VALUES (DEFAULT, 'test', 'test', 'test', 2, 'valid', 'admin', DEFAULT,
         '$2a$10$rRmgL91HV9iLQgzhelBWwOopa5sK1ZrAXAASk5G0kXKJZqbZfN6b6', DEFAULT, 'test', 1234, 1,
         'test', DEFAULT, 0);
 INSERT INTO projet.members
-VALUES (DEFAULT, 'test', 'test', 'test', 2, 'denied', 'admin', DEFAULT,
+VALUES (DEFAULT, 'test', 'numero1', 'test', 2, 'denied', 'admin', DEFAULT,
         '$2a$10$rRmgL91HV9iLQgzhelBWwOopa5sK1ZrAXAASk5G0kXKJZqbZfN6b6', DEFAULT, 'test', 1234, 1,
         'test', DEFAULT, 0);
 INSERT INTO projet.members
-VALUES (DEFAULT, 'test', 'test', 'test', 2, 'waiting', 'admin', DEFAULT,
+VALUES (DEFAULT, 'test', 'test1', 'test', 2, 'waiting', 'admin', DEFAULT,
         '$2a$10$rRmgL91HV9iLQgzhelBWwOopa5sK1ZrAXAASk5G0kXKJZqbZfN6b6', DEFAULT, 'test', 1234, 1,
         'test', DEFAULT, 0);
+INSERT INTO projet.members
+VALUES (DEFAULT, 'test', 'numero2', 'test', 2, 'waiting', 'admin', DEFAULT,
+        '$2a$10$rRmgL91HV9iLQgzhelBWwOopa5sK1ZrAXAASk5G0kXKJZqbZfN6b6', DEFAULT, 'test', 1234, 1,
+        'test', DEFAULT, 0);
+
 INSERT INTO projet.item_type
 VALUES (DEFAULT, 'test');
 INSERT INTO projet.items

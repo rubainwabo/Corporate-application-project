@@ -78,4 +78,28 @@ public interface UserDTO {
    * @param username the new user's username
    */
   void setUsername(String username);
+
+  String getLastName();
+
+  void setLastName(String lastName);
+
+  String getFirstName();
+
+  void setFirstName(String firstName);
+
+  String getCity();
+
+  void setCity(String city);
+
+  String getStreet();
+
+  void setStreet(String street);
+
+  String getPostCode();
+
+  void setPostCode(String postCode);
+
+  String getBuildingNumber();
+
+  void setBuildingNumber(String buildingNumber);
 }

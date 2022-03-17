@@ -1,6 +1,8 @@
 package buiseness.ucc;
 
+import buiseness.domain.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -27,4 +29,18 @@ public interface UserUCC {
    * @return an acess and refresh token
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
+
+  /**
+   * allows to retrieve all the users of the db with the role refused.
+   *
+   * @return a list of users with denied role
+   */
+  List<UserDTO> getUsersDenied();
+
+  /**
+   * allows to retrieve all the users of the db with the state waiting.
+   *
+   * @return a list of users with waiting state
+   */
+  List<UserDTO> getUserWaiting();
 }

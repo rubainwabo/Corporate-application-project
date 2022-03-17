@@ -2,7 +2,7 @@ package dal.services;
 
 import buiseness.domain.UserDTO;
 import buiseness.factory.BizFactory;
-import dal.DalServices;
+import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,7 @@ public class UserDAOImpl implements UserDAO {
   private BizFactory myDomainFactory;
 
   @Inject
-  private DalServices myDalService;
+  private DalBackService myDalService;
 
   @Override
   public UserDTO getOneByUsername(String username) {
@@ -48,7 +48,7 @@ public class UserDAOImpl implements UserDAO {
   public List<UserDTO> getAllUserByState(String state) {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select last_name,first_name,city,street,postCode,building_number,user_id from projet.members where state=?")) {
+        "select last_name,first_name,city,street,postCode,building_number,user_id,username from projet.members where state=?")) {
       ps.setString(1, state);
       try (ResultSet rs = ps.executeQuery()) {
         userDTOList = new ArrayList<>();
@@ -62,6 +62,7 @@ public class UserDAOImpl implements UserDAO {
           user.setPostCode(rs.getString(5));
           user.setBuildingNumber(rs.getString(6));
           user.setId(rs.getInt(7));
+          user.setUserName(rs.getString(8));
           userDTOList.add(user);
         }
       }

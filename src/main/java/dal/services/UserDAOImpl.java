@@ -1,6 +1,6 @@
 package dal.services;
 
-import buiseness.domain.UserDTO;
+import buiseness.domain.dto.UserDTO;
 import buiseness.factory.BizFactory;
 import dal.DalBackService;
 import jakarta.inject.Inject;
@@ -71,5 +71,24 @@ public class UserDAOImpl implements UserDAO {
       return null;
     }
     return userDTOList;
+  }
+
+  @Override
+  public UserDTO getOneById(int id) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        "select user_id from projet.members where user_id=?")) {
+      ps.setInt(1, id);
+      try (ResultSet rs = ps.executeQuery()) {
+        UserDTO user = myDomainFactory.getUser();
+        if (!rs.next()) {
+          return null;
+        }
+        user.setId(rs.getInt(1));
+        return user;
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+      return null;
+    }
   }
 }

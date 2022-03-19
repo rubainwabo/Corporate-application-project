@@ -1,5 +1,6 @@
-package buiseness.domain;
+package buiseness.domain.impl;
 
+import buiseness.domain.bizclass.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UserImpl implements User {

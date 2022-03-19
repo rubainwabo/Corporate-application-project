@@ -1,6 +1,6 @@
 package buiseness.ucc;
 
-import buiseness.domain.UserDTO;
+import buiseness.domain.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import utils.exception.InvalidTokenException;

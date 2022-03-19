@@ -1,7 +1,7 @@
 package buiseness.ucc;
 
-import buiseness.domain.User;
-import buiseness.domain.UserDTO;
+import buiseness.domain.bizclass.User;
+import buiseness.domain.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalServices;
 import dal.services.UserDAO;

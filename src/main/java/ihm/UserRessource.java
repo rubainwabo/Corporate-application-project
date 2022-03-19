@@ -1,6 +1,6 @@
 package ihm;
 
-import buiseness.domain.UserDTO;
+import buiseness.domain.dto.UserDTO;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -48,6 +48,7 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
+
     // escape characters to avoid XSS injections
     String username = StringEscapeUtils.escapeHtml4(body.get("username").asText());
     String password = StringEscapeUtils.escapeHtml4(body.get("password").asText());

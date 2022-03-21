@@ -34,9 +34,9 @@ public interface ItemDTO {
 
   void setTimeSlot(String timeSlot);
 
-  int getOfferor();
+  String getOfferor();
 
-  void setOfferor(int offeror);
+  void setOfferor(String offeror);
 
   int getRecipient();
 
@@ -45,4 +45,9 @@ public interface ItemDTO {
   String getItemtype();
 
   void setItemtype(String itemType);
+
+  int getNumberOfPeopleInterested();
+
+  int setNumberOfPeopleInterested(int numberOfPeopleInterested);
+
 }

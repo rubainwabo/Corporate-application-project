@@ -50,6 +50,5 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public ItemDTO getDetails(int id) {
     return myItemDAOService.getOneById(id);
-
   }
 }

@@ -11,9 +11,10 @@ public class ItemImpl implements Item {
   private String comment;
   private String state;
   private String timeSlot;
-  private int offeror;
+  private String offeror;
   private int recipient;
   private String itemType;
+  private int numberOfPeopleInterested;
 
   public ItemImpl() {
   }
@@ -89,12 +90,12 @@ public class ItemImpl implements Item {
   }
 
   @Override
-  public int getOfferor() {
+  public String getOfferor() {
     return offeror;
   }
 
   @Override
-  public void setOfferor(int offeror) {
+  public void setOfferor(String offeror) {
     this.offeror = offeror;
   }
 
@@ -116,5 +117,15 @@ public class ItemImpl implements Item {
   @Override
   public void setItemtype(String itemType) {
     this.itemType = itemType;
+  }
+
+  @Override
+  public int getNumberOfPeopleInterested() {
+    return numberOfPeopleInterested;
+  }
+
+  @Override
+  public int setNumberOfPeopleInterested(int numberOfPeopleInterested) {
+    return this.numberOfPeopleInterested = numberOfPeopleInterested;
   }
 }

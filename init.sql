@@ -28,16 +28,17 @@ CREATE TABLE projet.item_type
 
 CREATE TABLE projet.items
 (
-    id_item     SERIAL PRIMARY KEY,
-    description VARCHAR(100)                                       NOT NULL,
-    url_picture VARCHAR(100),
-    rating      INTEGER,
-    comment     VARCHAR(200),
-    state       VARCHAR(20)                                        NOT NULL,
-    time_slot   VARCHAR(200)                                       NOT NULL,
-    offeror     INTEGER REFERENCES projet.members (user_id)        NOT NULL,
-    item_type   INTEGER REFERENCES projet.item_type (id_item_type) NOT NULL,
-    recipient   INTEGER REFERENCES projet.members (user_id)
+    id_item                     SERIAL PRIMARY KEY,
+    description                 VARCHAR(100)                                       NOT NULL,
+    url_picture                 VARCHAR(100),
+    rating                      INTEGER,
+    comment                     VARCHAR(200),
+    state                       VARCHAR(20)                                        NOT NULL,
+    time_slot                   VARCHAR(200)                                       NOT NULL,
+    number_of_people_interested INTEGER,
+    offeror                     INTEGER REFERENCES projet.members (user_id)        NOT NULL,
+    item_type                   INTEGER REFERENCES projet.item_type (id_item_type) NOT NULL,
+    recipient                   INTEGER REFERENCES projet.members (user_id)
 );
 
 CREATE TABLE projet.interests

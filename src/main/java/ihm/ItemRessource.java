@@ -27,7 +27,7 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public int addItem(ItemDTO itemDTO) {
     if (itemDTO == null || itemDTO.getDescription().isBlank() || itemDTO.getState().isBlank()
-        || itemDTO.getItemtype().isBlank()) {
+        || itemDTO.getItemtype().isBlank() || itemDTO.getTimeSlot().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("object informations invalid").type("text/plain").build());
     }
@@ -40,7 +40,6 @@ public class ItemRessource {
   @Path("itemDetails/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public ItemDTO getItemDetails(@PathParam("id") int id) {
-    myItemUCC.getDetails(id);
-    return null;
+    return myItemUCC.getDetails(id);
   }
 }

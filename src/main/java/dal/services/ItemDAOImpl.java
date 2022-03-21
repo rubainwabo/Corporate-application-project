@@ -7,7 +7,6 @@ import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 public class ItemDAOImpl implements ItemDAO {
 
@@ -27,7 +26,7 @@ public class ItemDAOImpl implements ItemDAO {
       ps.setString(2, item.getUrlPicture());
       ps.setString(3, item.getState());
       ps.setInt(4, offerorId);
-      ps.setString(6, LocalDateTime.now().toString());
+      ps.setString(6, item.getTimeSlot());
 
       try (PreparedStatement psIdItem = myBackService.getPreparedStatement(
           "select id_item_type from projet.item_type where \"item_type_name\" = ? ")) {
@@ -60,7 +59,7 @@ public class ItemDAOImpl implements ItemDAO {
         try (PreparedStatement psTypeString = myBackService.getPreparedStatement(
             "Select item_type_name from projet.item_type where id_item_type = " + rs.getInt(2))) {
           try (ResultSet rsTypeString = psTypeString.executeQuery()) {
-            if (!rs.next()) {
+            if (!rsTypeString.next()) {
               return null;
             }
             var itemTypeAsString = rsTypeString.getString(1);
@@ -68,9 +67,33 @@ public class ItemDAOImpl implements ItemDAO {
             item.setItemtype(itemTypeAsString);
             item.setDescription(rs.getString(3));
             item.setUrlPicture(rs.getString(4));
-            item.setOfferor(rs.getInt(5));
-            item.setTimeSlot(rs.getString(6));
-            return item;
+
+            // PS to get the string of the offeror (lastName + firstName) from the id of the previous PS
+            try (PreparedStatement psOfferorAsString = myBackService.getPreparedStatement(
+                "Select last_name,first_name from projet.members where user_id = " + rs.getInt(
+                    5))) {
+              try (ResultSet rsOfferorAsString = psOfferorAsString.executeQuery()) {
+                if (!rsOfferorAsString.next()) {
+                  return null;
+                }
+                String offeror =
+                    rsOfferorAsString.getString(1) + " " + rsOfferorAsString.getString(2);
+                item.setOfferor(offeror);
+                item.setTimeSlot(rs.getString(6));
+                item.setState(rs.getString(7));
+
+                try (PreparedStatement psNbrPlpInterest = myBackService.getPreparedStatement(
+                    "Select count(member) from projet.interests where item = " + rs.getInt(1))) {
+                  try (ResultSet rsNbrPlpInterest = psNbrPlpInterest.executeQuery()) {
+                    if (!rsNbrPlpInterest.next()) {
+                      return null;
+                    }
+                    item.setNumberOfPeopleInterested(rsNbrPlpInterest.getInt(1));
+                    return item;
+                  }
+                }
+              }
+            }
           }
         }
       }

@@ -1,7 +1,6 @@
 package buiseness.domain.impl;
 
 import buiseness.domain.bizclass.Item;
-import buiseness.domain.dto.DateDTO;
 
 public class ItemImpl implements Item {
 
@@ -11,7 +10,7 @@ public class ItemImpl implements Item {
   private int rating;
   private String comment;
   private String state;
-  private DateDTO timeSlot;
+  private String timeSlot;
   private int offeror;
   private int recipient;
   private String itemType;
@@ -80,12 +79,12 @@ public class ItemImpl implements Item {
   }
 
   @Override
-  public DateDTO getTimeSlot() {
+  public String getTimeSlot() {
     return timeSlot;
   }
 
   @Override
-  public void setTimeSlot(DateDTO timeSlot) {
+  public void setTimeSlot(String timeSlot) {
     this.timeSlot = timeSlot;
   }
 

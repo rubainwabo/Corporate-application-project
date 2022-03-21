@@ -30,9 +30,9 @@ public interface ItemDTO {
 
   void setState(String state);
 
-  DateDTO getTimeSlot();
+  String getTimeSlot();
 
-  void setTimeSlot(DateDTO timeSlot);
+  void setTimeSlot(String timeSlot);
 
   int getOfferor();
 

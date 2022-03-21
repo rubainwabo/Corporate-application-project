@@ -10,6 +10,7 @@ public class ItemTypeImpl implements ItemType {
       "Matériel de jardinage",
       "Meuble", "Plantes", "Produits cosmétiques", "Vélo, trottinette", "Vêtements"};
 
+
   private int idItemType;
   private String itemTypeName;
 
@@ -19,6 +20,12 @@ public class ItemTypeImpl implements ItemType {
   @Override
   public boolean typeExist() {
     return Arrays.asList(possibleItem).contains(this.itemTypeName);
+  }
+
+  @Override
+  public boolean verfiyState() {
+    //TODO
+    return false;
   }
 
   @Override

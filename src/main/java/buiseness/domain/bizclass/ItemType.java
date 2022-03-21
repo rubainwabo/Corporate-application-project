@@ -5,4 +5,6 @@ import buiseness.domain.dto.ItemTypeDTO;
 public interface ItemType extends ItemTypeDTO {
 
   boolean typeExist();
+
+  boolean verfiyState();
 }

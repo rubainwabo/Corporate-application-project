@@ -2,12 +2,10 @@ package buiseness.ucc;
 
 import buiseness.domain.bizclass.ItemType;
 import buiseness.domain.dto.ItemDTO;
-import buiseness.domain.dto.UserDTO;
 import buiseness.factory.BizFactory;
 import dal.DalServices;
 import dal.services.ItemDAO;
 import dal.services.ItemTypeDAO;
-import dal.services.UserDAO;
 import jakarta.inject.Inject;
 
 public class ItemUCCImpl implements ItemUCC {
@@ -21,18 +19,12 @@ public class ItemUCCImpl implements ItemUCC {
   @Inject
   private BizFactory myBizFactoService;
 
-  @Inject
-  private UserDAO myUserDAOService;
 
   @Inject
   private ItemTypeDAO myItemTypeDAOService;
 
   @Override
   public int addItem(ItemDTO item, int userId) {
-    UserDTO user = myUserDAOService.getOneById(userId);
-    if (user.getId() <= 0) {
-      throw new IllegalArgumentException("user inexistant");
-    }
     int itemId = -1;
     var myItemType = (ItemType) myBizFactoService.getItemType();
     myItemType.setItemTypeName(item.getItemtype());
@@ -53,5 +45,11 @@ public class ItemUCCImpl implements ItemUCC {
     }
     myDalService.commit();
     return itemId;
+  }
+
+  @Override
+  public ItemDTO getDetails(int id) {
+    return myItemDAOService.getOneById(id);
+
   }
 }

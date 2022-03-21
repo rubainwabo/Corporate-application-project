@@ -5,8 +5,10 @@ import buiseness.ucc.ItemUCC;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
@@ -32,5 +34,13 @@ public class ItemRessource {
     // user ID
     //int userId = (int) request.getProperty("user");
     return myItemUCC.addItem(itemDTO, 1);
+  }
+
+  @GET
+  @Path("itemDetails/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ItemDTO getItemDetails(@PathParam("id") int id) {
+    myItemUCC.getDetails(id);
+    return null;
   }
 }

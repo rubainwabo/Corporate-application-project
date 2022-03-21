@@ -31,5 +31,6 @@ public class ApplicationBinder extends AbstractBinder {
     bind(DalServicesImpl.class).to(DalServices.class).to(DalBackService.class).in(Singleton.class);
     bind(TokenServiceImpl.class).to(TokenService.class).in(Singleton.class);
     bind(ItemTypeDAOImpl.class).to(ItemTypeDAO.class).in(Singleton.class);
+
   }
 }

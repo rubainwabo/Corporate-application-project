@@ -2,6 +2,7 @@ package dal.services;
 
 import buiseness.domain.dto.ItemDTO;
 import buiseness.factory.BizFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
@@ -20,7 +21,7 @@ public class ItemDAOImpl implements ItemDAO {
   public int addItem(ItemDTO item, int offerorId) {
     // get ps to insert item
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "insert into projet.items (id_item,description,url_picture,state,offeror,item_type,time_slot) VALUES (DEFAULT,?,?,?,?,?,?)")) {
+        "insert into projet.items (id_item,description,url_picture,itemCondition,offeror,item_type,time_slot) VALUES (DEFAULT,?,?,?,?,?,?)")) {
       // ps to find lastId insere
       ps.setString(1, item.getDescription());
       ps.setString(2, item.getUrlPicture());
@@ -80,7 +81,7 @@ public class ItemDAOImpl implements ItemDAO {
                     rsOfferorAsString.getString(1) + " " + rsOfferorAsString.getString(2);
                 item.setOfferor(offeror);
                 item.setTimeSlot(rs.getString(6));
-                item.setState(rs.getString(7));
+                item.setItemCondition(rs.getString(7));
 
                 try (PreparedStatement psNbrPlpInterest = myBackService.getPreparedStatement(
                     "Select count(member) from projet.interests where item = " + rs.getInt(1))) {
@@ -100,6 +101,70 @@ public class ItemDAOImpl implements ItemDAO {
     } catch (SQLException throwables) {
       throwables.printStackTrace();
       return null;
+    }
+  }
+
+  @Override
+  public void addInterest(int idItem, ObjectNode objectNode, int userId) {
+    {
+      try (PreparedStatement ps = myBackService.getPreparedStatement(
+          "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
+        ps.setString(1, objectNode.get("dateFormatted").asText());
+        ps.setInt(2, userId);
+        ps.setInt(3, idItem);
+        ps.executeUpdate();
+        var phoneNumber = objectNode.get("phoneNumber").asText();
+        if (!phoneNumber.isBlank()) {
+          phoneNumber = objectNode.get("phoneNumber").asText();
+          try (PreparedStatement psPhoneNumber = myBackService.getPreparedStatement(
+              "update projet.members set phone_number = " + phoneNumber + " where user_id = "
+                  + userId)) {
+            var result = psPhoneNumber.executeUpdate();
+            if (result <= 0) {
+              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
+            }
+          }
+        }
+        try (PreparedStatement psNbrePeople = myBackService.getPreparedStatement(
+            "select number_of_people_interested from projet.items where id_item = " + idItem)) {
+          int nbrePeople = 0;
+          try (ResultSet rsNbrePeople = psNbrePeople.executeQuery()) {
+            if (!rsNbrePeople.next()) {
+              throw new IllegalArgumentException(
+                  "probleme dans le select du nbre de people interest");
+            }
+            nbrePeople = rsNbrePeople.getInt(1);
+          }
+          try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
+              "update projet.items set number_of_people_interested = 1 + " + nbrePeople)) {
+            var result = psNbrPeopleInteresed.executeUpdate();
+            if (result <= 0) {
+              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
+            }
+          }
+        }
+        try (PreparedStatement psNotif = myBackService.getPreparedStatement(
+            "insert into projet.notifications (id_notification,is_viewed,text,person) VALUES (default,false,?,?)")) {
+          psNotif.setString(1, "url_picture");
+          try (PreparedStatement psInterestUser = myBackService.getPreparedStatement(
+              "select user_id from projet.members where user_id = (select offeror from projet.items where id_item = "
+                  + idItem + " )")) {
+
+            try (ResultSet rsInterestUser = psInterestUser.executeQuery()) {
+              if (!rsInterestUser.next()) {
+                throw new IllegalArgumentException("probleme dans la recuperation de l'offreur");
+              }
+              psNotif.setInt(2, rsInterestUser.getInt(1));
+            }
+            var result = psNotif.executeUpdate();
+            if (result <= 0) {
+              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
+            }
+          }
+        }
+      } catch (SQLException throwables) {
+        throwables.printStackTrace();
+      }
     }
   }
 }

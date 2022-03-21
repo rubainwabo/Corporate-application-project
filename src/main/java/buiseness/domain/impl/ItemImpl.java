@@ -9,7 +9,7 @@ public class ItemImpl implements Item {
   private String urlPicture;
   private int rating;
   private String comment;
-  private String state;
+  private String itemCondition;
   private String timeSlot;
   private String offeror;
   private int recipient;
@@ -70,13 +70,13 @@ public class ItemImpl implements Item {
   }
 
   @Override
-  public String getState() {
-    return state;
+  public String getItemCondition() {
+    return itemCondition;
   }
 
   @Override
-  public void setState(String state) {
-    this.state = state;
+  public void setItemCondition(String itemCondition) {
+    this.itemCondition = itemCondition;
   }
 
   @Override

@@ -26,9 +26,9 @@ public interface ItemDTO {
 
   void setComment(String comment);
 
-  String getState();
+  String getItemCondition();
 
-  void setState(String state);
+  void setItemCondition(String itemCondition);
 
   String getTimeSlot();
 

@@ -8,7 +8,7 @@ CREATE TABLE projet.members
     first_name                    VARCHAR(100) NOT NULL,
     unit_number                   INTEGER,
     state                         VARCHAR(100) NOT NULL,
-    _role            VARCHAR(100) NOT NULL,
+    _role                         VARCHAR(100) NOT NULL,
     reason_for_connection_refusal VARCHAR(100),
     password                      VARCHAR(100) NOT NULL,
     phone_number                  VARCHAR(100),
@@ -33,23 +33,21 @@ CREATE TABLE projet.items
     url_picture                 VARCHAR(100),
     rating                      INTEGER,
     comment                     VARCHAR(200),
-    state                       VARCHAR(20)                                        NOT NULL,
+    itemCondition               VARCHAR(20)                                        NOT NULL,
     time_slot                   VARCHAR(200)                                       NOT NULL,
-    number_of_people_interested INTEGER,
     offeror                     INTEGER REFERENCES projet.members (user_id)        NOT NULL,
     item_type                   INTEGER REFERENCES projet.item_type (id_item_type) NOT NULL,
-    recipient                   INTEGER REFERENCES projet.members (user_id)
+    recipient                   INTEGER REFERENCES projet.members (user_id),
+    number_of_people_interested INTEGER
 );
 
 CREATE TABLE projet.interests
 (
-    _date  DATE                                        NOT NULL,
+    _date  varchar(100) NOT NULL,
     member INTEGER REFERENCES projet.members (user_id) NOT NULL,
     item   INTEGER REFERENCES projet.items (id_item)   NOT NULL,
     PRIMARY KEY (member, item)
 );
-
-
 
 CREATE TABLE projet.dates
 (
@@ -65,6 +63,7 @@ CREATE TABLE projet.notifications
     text            VARCHAR(200)                                NOT NULL,
     person          INTEGER REFERENCES projet.members (user_id) NOT NULL
 );
+
 
 INSERT INTO projet.members
 VALUES (DEFAULT, 'test', 'test', 'test', 2, 'valid', 'admin', DEFAULT,
@@ -85,11 +84,9 @@ VALUES (DEFAULT, 'test', 'numero2', 'test', 2, 'waiting', 'admin', DEFAULT,
 
 INSERT INTO projet.item_type
 VALUES (DEFAULT, 'test');
+INSERT INTO projet.item_type
+VALUES (DEFAULT, 'Jouets');
 INSERT INTO projet.items
-VALUES (DEFAULT, 'test', DEFAULT, DEFAULT, DEFAULT, 'test', 'test', 1, 1, DEFAULT);
+VALUES (DEFAULT, 'test', DEFAULT, DEFAULT, DEFAULT, 'test', 'test', 2, 1, DEFAULT);
 INSERT INTO projet.dates
 VALUES (DEFAULT, '1-1-1', 1);
-INSERT INTO projet.interests
-VALUES ('1-1-1', 1, 1);
-INSERT INTO projet.notifications
-VALUES (DEFAULT, false, 'test', 1);

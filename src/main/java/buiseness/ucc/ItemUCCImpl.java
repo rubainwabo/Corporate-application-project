@@ -3,6 +3,7 @@ package buiseness.ucc;
 import buiseness.domain.bizclass.ItemType;
 import buiseness.domain.dto.ItemDTO;
 import buiseness.factory.BizFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalServices;
 import dal.services.ItemDAO;
 import dal.services.ItemTypeDAO;
@@ -50,5 +51,10 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public ItemDTO getDetails(int id) {
     return myItemDAOService.getOneById(id);
+  }
+
+  @Override
+  public void addInterest(int itemId, ObjectNode objectNode, int userId) {
+    myItemDAOService.addInterest(itemId, objectNode, userId);
   }
 }

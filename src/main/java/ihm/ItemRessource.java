@@ -2,6 +2,7 @@ package ihm;
 
 import buiseness.domain.dto.ItemDTO;
 import buiseness.ucc.ItemUCC;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
@@ -13,10 +14,13 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Singleton
 @Path("/items")
 public class ItemRessource {
+
 
   @Inject
   private ItemUCC myItemUCC;
@@ -40,6 +44,31 @@ public class ItemRessource {
   @Path("itemDetails/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public ItemDTO getItemDetails(@PathParam("id") int id) {
+    if (id <= 0) {
+      throw new WebApplicationException("bad request no id found in pathParams");
+    }
     return myItemUCC.getDetails(id);
+  }
+
+  @POST
+  @Path("showInterest/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public void showInterest(@PathParam("id") int itemId, ObjectNode body) {
+    // ajouter le conextManageur pour savoir qui a fait la demande et pouvoir l'utiliser dans les autrres méthode
+    if (!body.hasNonNull("availabilities") || itemId <= 0) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("information is missing").type("text/plain").build());
+    }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
+    var dateAvailable = dateTime.format(formatter);
+    body.put("dateFormatted", dateAvailable);
+    int userId = 1;
+    var phoneNumber = body.get("phoneNumber").asText();
+    if (!phoneNumber.isBlank()) {
+      body.put("phoneNumber", phoneNumber);
+    }
+    myItemUCC.addInterest(itemId, body, userId);
   }
 }

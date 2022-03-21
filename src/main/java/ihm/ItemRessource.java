@@ -26,8 +26,8 @@ public class ItemRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public int addItem(ItemDTO itemDTO) {
-    if (itemDTO == null || itemDTO.getDescription().isBlank() || itemDTO.getState().isBlank()
-        || itemDTO.getItemtype().isBlank() || itemDTO.getTimeSlot().isBlank()) {
+    if (itemDTO == null || itemDTO.getDescription().isBlank() || itemDTO.getItemtype().isBlank()
+        || itemDTO.getTimeSlot().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("object informations invalid").type("text/plain").build());
     }

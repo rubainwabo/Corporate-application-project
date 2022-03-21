@@ -24,7 +24,7 @@ public class ItemDAOImpl implements ItemDAO {
       // ps to find lastId insere
       ps.setString(1, item.getDescription());
       ps.setString(2, item.getUrlPicture());
-      ps.setString(3, item.getState());
+      ps.setString(3, "offered");
       ps.setInt(4, offerorId);
       ps.setString(6, item.getTimeSlot());
 

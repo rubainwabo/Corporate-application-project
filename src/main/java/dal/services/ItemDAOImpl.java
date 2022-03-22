@@ -133,7 +133,7 @@ public class ItemDAOImpl implements ItemDAO {
           }
         }
         try (PreparedStatement psNotif = myBackService.getPreparedStatement(
-            "insert into projet.notifications (id_notification,is_viewed,text,person) VALUES (default,false,?,?,?)")) {
+            "insert into projet.notifications (id_notification,is_viewed,text,person,item) VALUES (default,false,?,?,?)")) {
           psNotif.setString(1, "txt en non définitif");
           try (PreparedStatement psInterestUser = myBackService.getPreparedStatement(
               "select user_id from projet.members where user_id = (select offeror from projet.items where id_item = "
@@ -184,29 +184,3 @@ public class ItemDAOImpl implements ItemDAO {
     }
   }
 }
-  /*
-        var callMe = objectNode.get("callMe").asBoolean();
-        if (callMe) {
-          try (PreparedStatement psInterestPhone = myBackService.getPreparedStatement(
-              "select phone_number from projet.members where user_id = " + interestUserId)) {
-            try (ResultSet rsInterestPhone = psInterestPhone.executeQuery()) {
-              // no phone number so update his phone number with his phone number
-              if (!rsInterestPhone.next()) {
-
-              }
-
-            }
-          }
-        }
-         */
-        /*
-          try (PreparedStatement psPhoneNumber = myBackService.getPreparedStatement(
-              "update projet.members set phone_number = " + phoneNumber + " where user_id = "
-                  + userId)) {
-            var result = psPhoneNumber.executeUpdate();
-            if (result <= 0) {
-              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
-            }
-          }
-        }
-         */

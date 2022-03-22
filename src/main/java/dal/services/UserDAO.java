@@ -24,4 +24,6 @@ public interface UserDAO {
 
   String getPhoneNumber(int userId);
 
+  void addPhoneNumber(int userId, String phoneNumber);
+
 }

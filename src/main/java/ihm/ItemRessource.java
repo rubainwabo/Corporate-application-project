@@ -2,6 +2,7 @@ package ihm;
 
 import buiseness.domain.dto.ItemDTO;
 import buiseness.ucc.ItemUCC;
+import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -23,6 +24,9 @@ public class ItemRessource {
 
   @Inject
   private ItemUCC myItemUCC;
+
+  @Inject
+  private UserUCC myUserUCC;
 
   @POST
   @Path("add")
@@ -53,7 +57,7 @@ public class ItemRessource {
   @Path("addInterest/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public void showInterest(@PathParam("id") int itemId, ObjectNode body) {
+  public void addInterest(@PathParam("id") int itemId, ObjectNode body) {
     // ajouter le conextManageur pour savoir qui a fait la demande et pouvoir l'utiliser dans les autrres méthode
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -63,7 +67,12 @@ public class ItemRessource {
     LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
     var dateAvailable = dateTime.format(formatter);
     body.put("dateFormatted", dateAvailable);
+    var callMe = body.get("callMe").asBoolean();
+    var phoneNumber = body.get("phoneNumber").asText();
     int userId = 1;
+    if (callMe && !phoneNumber.isBlank()) {
+      myUserUCC.addPhoneNumber(userId, phoneNumber);
+    }
     myItemUCC.addInterest(itemId, body, userId);
   }
 

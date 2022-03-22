@@ -69,4 +69,8 @@ public class UserUCCImpl implements UserUCC {
     return myUserDAO.getPhoneNumber(userId);
   }
 
+  @Override
+  public void addPhoneNumber(int userId, String phoneNumber) {
+    myUserDAO.addPhoneNumber(userId, phoneNumber);
+  }
 }

@@ -45,4 +45,6 @@ public interface UserUCC {
   List<UserDTO> getUserWaiting();
 
   String getPhoneNumber(int userId);
+
+  void addPhoneNumber(int userId, String phoneNumber);
 }

@@ -107,4 +107,17 @@ public class UserDAOImpl implements UserDAO {
     }
     return "";
   }
+
+  @Override
+  public void addPhoneNumber(int userId, String phoneNumber) {
+    try (PreparedStatement psAddPhone = myDalService.getPreparedStatement(
+        "update projet.members set phone_number = " + phoneNumber + " where user_id = " + userId)) {
+      var result = psAddPhone.executeUpdate();
+      if (result <= 0) {
+        throw new IllegalArgumentException("prblm dans update phone number");
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+  }
 }

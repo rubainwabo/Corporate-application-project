@@ -22,4 +22,6 @@ public interface UserDAO {
 
   UserDTO getOneById(int id);
 
+  String getPhoneNumber(int userId);
+
 }

@@ -115,4 +115,12 @@ public class UserRessource {
   public List<UserDTO> waitingUserList() {
     return myUserUCC.getUserWaiting();
   }
+
+  @GET
+  @Path("phoneNumber")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getUserPhoneNumber() {
+    int userId = 1;
+    return myUserUCC.getPhoneNumber(userId);
+  }
 }

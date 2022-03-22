@@ -63,4 +63,10 @@ public class UserUCCImpl implements UserUCC {
   public List<UserDTO> getUserWaiting() {
     return myUserDAO.getAllUserByState("waiting");
   }
+
+  @Override
+  public String getPhoneNumber(int userId) {
+    return myUserDAO.getPhoneNumber(userId);
+  }
+
 }

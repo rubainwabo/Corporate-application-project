@@ -43,4 +43,6 @@ public interface UserUCC {
    * @return a list of users with waiting state
    */
   List<UserDTO> getUserWaiting();
+
+  String getPhoneNumber(int userId);
 }

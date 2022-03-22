@@ -91,4 +91,20 @@ public class UserDAOImpl implements UserDAO {
       return null;
     }
   }
+
+  @Override
+  public String getPhoneNumber(int userId) {
+    try (PreparedStatement psPhoneNumber = myDalService.getPreparedStatement(
+        "select phone_number from projet.members where user_id = " + userId)) {
+      try (ResultSet rsPhoneNumber = psPhoneNumber.executeQuery()) {
+        if (!rsPhoneNumber.next()) {
+          return "";
+        }
+        return rsPhoneNumber.getString(1);
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+    return "";
+  }
 }

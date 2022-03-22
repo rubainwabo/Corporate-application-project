@@ -65,10 +65,22 @@ public class ItemRessource {
     var dateAvailable = dateTime.format(formatter);
     body.put("dateFormatted", dateAvailable);
     int userId = 1;
-    var phoneNumber = body.get("phoneNumber").asText();
-    if (!phoneNumber.isBlank()) {
-      body.put("phoneNumber", phoneNumber);
-    }
     myItemUCC.addInterest(itemId, body, userId);
   }
+
+  @POST
+  @Path("cancelOffer/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public void cancelOffer(@PathParam("id") int itemId) {
+    // ajouter le conextManageur pour savoir qui a fait la demande et pouvoir l'utiliser dans les autrres méthode
+    if (itemId <= 0) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("information is missing").type("text/plain").build());
+    }
+    //context jsp quoi vérifier que l'id est bien le même que celui recu dans le context manageur
+    int userId = 1;
+    myItemUCC.cancelOffer(itemId, userId);
+  }
+
 }

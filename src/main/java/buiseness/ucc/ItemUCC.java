@@ -10,4 +10,6 @@ public interface ItemUCC {
   ItemDTO getDetails(int id);
 
   void addInterest(int itemId, ObjectNode objectNode, int userId);
+
+  void cancelOffer(int idItem, int userId);
 }

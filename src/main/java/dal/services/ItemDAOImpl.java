@@ -21,7 +21,7 @@ public class ItemDAOImpl implements ItemDAO {
   public int addItem(ItemDTO item, int offerorId) {
     // get ps to insert item
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "insert into projet.items (id_item,description,url_picture,itemCondition,offeror,item_type,time_slot) VALUES (DEFAULT,?,?,?,?,?,?)")) {
+        "insert into projet.items (id_item,description,url_picture,item_condition,offeror,item_type,time_slot) VALUES (DEFAULT,?,?,?,?,?,?)")) {
       // ps to find lastId insere
       ps.setString(1, item.getDescription());
       ps.setString(2, item.getUrlPicture());
@@ -105,26 +105,15 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void addInterest(int idItem, ObjectNode objectNode, int userId) {
+  public void addInterest(int idItem, ObjectNode objectNode, int interestUserId) {
     {
       try (PreparedStatement ps = myBackService.getPreparedStatement(
           "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
         ps.setString(1, objectNode.get("dateFormatted").asText());
-        ps.setInt(2, userId);
+        ps.setInt(2, interestUserId);
         ps.setInt(3, idItem);
         ps.executeUpdate();
-        var phoneNumber = objectNode.get("phoneNumber").asText();
-        if (!phoneNumber.isBlank()) {
-          phoneNumber = objectNode.get("phoneNumber").asText();
-          try (PreparedStatement psPhoneNumber = myBackService.getPreparedStatement(
-              "update projet.members set phone_number = " + phoneNumber + " where user_id = "
-                  + userId)) {
-            var result = psPhoneNumber.executeUpdate();
-            if (result <= 0) {
-              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
-            }
-          }
-        }
+
         try (PreparedStatement psNbrePeople = myBackService.getPreparedStatement(
             "select number_of_people_interested from projet.items where id_item = " + idItem)) {
           int nbrePeople = 0;
@@ -144,8 +133,8 @@ public class ItemDAOImpl implements ItemDAO {
           }
         }
         try (PreparedStatement psNotif = myBackService.getPreparedStatement(
-            "insert into projet.notifications (id_notification,is_viewed,text,person) VALUES (default,false,?,?)")) {
-          psNotif.setString(1, "url_picture");
+            "insert into projet.notifications (id_notification,is_viewed,text,person) VALUES (default,false,?,?,?)")) {
+          psNotif.setString(1, "txt en non définitif");
           try (PreparedStatement psInterestUser = myBackService.getPreparedStatement(
               "select user_id from projet.members where user_id = (select offeror from projet.items where id_item = "
                   + idItem + " )")) {
@@ -156,9 +145,10 @@ public class ItemDAOImpl implements ItemDAO {
               }
               psNotif.setInt(2, rsInterestUser.getInt(1));
             }
+            psNotif.setInt(3, idItem);
             var result = psNotif.executeUpdate();
             if (result <= 0) {
-              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
+              throw new IllegalArgumentException("probleme insert de la notification");
             }
           }
         }
@@ -167,4 +157,56 @@ public class ItemDAOImpl implements ItemDAO {
       }
     }
   }
+
+  @Override
+  public void cancelOffer(int idItem, int userId) {
+    try (PreparedStatement psVerifyUser = myBackService.getPreparedStatement(
+        "select offeror from projet.items where id_item = " + idItem)) {
+      try (ResultSet rsVerifyUser = psVerifyUser.executeQuery()) {
+        if (!rsVerifyUser.next()) {
+          throw new IllegalArgumentException("prblm cancelOffer user request");
+        }
+        if (rsVerifyUser.getInt(1) != userId) {
+          throw new IllegalArgumentException(
+              "cet utilisateur n'a pas le droit d'éffectuer cette requete");
+        }
+        try (PreparedStatement psCancelOffer = myBackService.getPreparedStatement(
+            "update projet.items set item_condition = 'cancelled' where id_item = "
+                + idItem)) {
+          int result = psCancelOffer.executeUpdate();
+          if (result <= 0) {
+            throw new IllegalArgumentException("prblm update cancel Offer");
+          }
+        }
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+  }
 }
+  /*
+        var callMe = objectNode.get("callMe").asBoolean();
+        if (callMe) {
+          try (PreparedStatement psInterestPhone = myBackService.getPreparedStatement(
+              "select phone_number from projet.members where user_id = " + interestUserId)) {
+            try (ResultSet rsInterestPhone = psInterestPhone.executeQuery()) {
+              // no phone number so update his phone number with his phone number
+              if (!rsInterestPhone.next()) {
+
+              }
+
+            }
+          }
+        }
+         */
+        /*
+          try (PreparedStatement psPhoneNumber = myBackService.getPreparedStatement(
+              "update projet.members set phone_number = " + phoneNumber + " where user_id = "
+                  + userId)) {
+            var result = psPhoneNumber.executeUpdate();
+            if (result <= 0) {
+              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
+            }
+          }
+        }
+         */

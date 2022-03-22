@@ -20,7 +20,6 @@ public class ItemUCCImpl implements ItemUCC {
   @Inject
   private BizFactory myBizFactoService;
 
-
   @Inject
   private ItemTypeDAO myItemTypeDAOService;
 
@@ -56,5 +55,10 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public void addInterest(int itemId, ObjectNode objectNode, int userId) {
     myItemDAOService.addInterest(itemId, objectNode, userId);
+  }
+
+  @Override
+  public void cancelOffer(int idItem, int userId) {
+    myItemDAOService.cancelOffer(idItem, userId);
   }
 }

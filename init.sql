@@ -33,7 +33,7 @@ CREATE TABLE projet.items
     url_picture                 VARCHAR(100),
     rating                      INTEGER,
     comment                     VARCHAR(200),
-    itemCondition               VARCHAR(20)                                        NOT NULL,
+    item_condition              VARCHAR(20)                                        NOT NULL,
     time_slot                   VARCHAR(200)                                       NOT NULL,
     offeror                     INTEGER REFERENCES projet.members (user_id)        NOT NULL,
     item_type                   INTEGER REFERENCES projet.item_type (id_item_type) NOT NULL,
@@ -61,7 +61,8 @@ CREATE TABLE projet.notifications
     id_notification SERIAL PRIMARY KEY,
     is_viewed       BOOLEAN                                     NOT NULL,
     text            VARCHAR(200)                                NOT NULL,
-    person          INTEGER REFERENCES projet.members (user_id) NOT NULL
+    person          INTEGER REFERENCES projet.members (user_id) NOT NULL,
+    item            INTEGER REFERENCES projet.items (id_item)   NOT NULL
 );
 
 

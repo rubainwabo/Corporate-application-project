@@ -10,4 +10,6 @@ public interface ItemDAO {
   ItemDTO getOneById(int id);
 
   void addInterest(int idItem, ObjectNode objectNode, int userId);
+
+  void cancelOffer(int idItem, int userId);
 }

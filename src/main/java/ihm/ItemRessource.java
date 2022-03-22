@@ -21,7 +21,6 @@ import java.time.format.DateTimeFormatter;
 @Path("/items")
 public class ItemRessource {
 
-
   @Inject
   private ItemUCC myItemUCC;
 
@@ -82,5 +81,4 @@ public class ItemRessource {
     int userId = 1;
     myItemUCC.cancelOffer(itemId, userId);
   }
-
 }

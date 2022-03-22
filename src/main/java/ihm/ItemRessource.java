@@ -50,7 +50,7 @@ public class ItemRessource {
   }
 
   @POST
-  @Path("showInterest/{id}")
+  @Path("addInterest/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public void showInterest(@PathParam("id") int itemId, ObjectNode body) {

@@ -1,7 +1,11 @@
 package utils;
 
+import buiseness.domain.bizclass.ItemType;
+import buiseness.domain.impl.ItemTypeImpl;
 import buiseness.factory.BizFactory;
 import buiseness.factory.BizFactoryImpl;
+import buiseness.ucc.ItemTypeUCC;
+import buiseness.ucc.ItemTypeUCCImpl;
 import buiseness.ucc.ItemUCC;
 import buiseness.ucc.ItemUCCImpl;
 import buiseness.ucc.UserUCC;
@@ -34,5 +38,8 @@ public class ApplicationBinder extends AbstractBinder {
     bind(TokenServiceImpl.class).to(TokenService.class).in(Singleton.class);
     bind(ItemTypeDAOImpl.class).to(ItemTypeDAO.class).in(Singleton.class);
     bind(DateDAOImpl.class).to(DateDAO.class).in(Singleton.class);
+    bind(ItemTypeImpl.class).to(ItemType.class).in(Singleton.class);
+    bind(ItemTypeUCCImpl.class).to(ItemTypeUCC.class).in(Singleton.class);
+
   }
 }

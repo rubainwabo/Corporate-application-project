@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalServices;
 import dal.services.DateDAO;
 import dal.services.ItemDAO;
-import dal.services.ItemTypeDAO;
 import jakarta.inject.Inject;
 
 public class ItemUCCImpl implements ItemUCC {
@@ -20,9 +19,6 @@ public class ItemUCCImpl implements ItemUCC {
 
   @Inject
   private BizFactory myBizFactoService;
-
-  @Inject
-  private ItemTypeDAO myItemTypeDAOService;
 
   @Inject
   private DateDAO myDateDAOService;

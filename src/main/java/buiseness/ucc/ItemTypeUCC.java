@@ -1,5 +1,6 @@
 package buiseness.ucc;
 
-public class ItemTypeUCC {
+public interface ItemTypeUCC {
 
+  int addItemType(String itemType);
 }

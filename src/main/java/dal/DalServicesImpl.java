@@ -23,6 +23,12 @@ public class DalServicesImpl implements DalServices, DalBackService {
   }
 
   @Override
+  public PreparedStatement getPreparedStatementWithId(String query, int idReturned)
+      throws SQLException {
+    return con.prepareStatement(query, idReturned);
+  }
+
+  @Override
   public void start() {
     try {
       con.setAutoCommit(false);

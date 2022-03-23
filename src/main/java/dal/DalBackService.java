@@ -13,4 +13,7 @@ public interface DalBackService {
    * @throws SQLException when an sql exception occurs
    */
   PreparedStatement getPreparedStatement(String query) throws SQLException;
+
+  PreparedStatement getPreparedStatementWithId(String query, int idReturned) throws SQLException;
+
 }

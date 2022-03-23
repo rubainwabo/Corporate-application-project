@@ -3,7 +3,6 @@ package buiseness.ucc;
 import buiseness.domain.bizclass.User;
 import buiseness.domain.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import java.util.List;
@@ -18,9 +17,6 @@ public class UserUCCImpl implements UserUCC {
 
   @Inject
   private UserDAO myUserDAO;
-
-  @Inject
-  private DalServices myDalService;
 
   @Inject
   private TokenService myTokenService;

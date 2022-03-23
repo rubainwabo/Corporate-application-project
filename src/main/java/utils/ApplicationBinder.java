@@ -9,6 +9,8 @@ import buiseness.ucc.UserUCCImpl;
 import dal.DalBackService;
 import dal.DalServices;
 import dal.DalServicesImpl;
+import dal.services.DateDAO;
+import dal.services.DateDAOImpl;
 import dal.services.ItemDAO;
 import dal.services.ItemDAOImpl;
 import dal.services.ItemTypeDAO;
@@ -31,6 +33,6 @@ public class ApplicationBinder extends AbstractBinder {
     bind(DalServicesImpl.class).to(DalServices.class).to(DalBackService.class).in(Singleton.class);
     bind(TokenServiceImpl.class).to(TokenService.class).in(Singleton.class);
     bind(ItemTypeDAOImpl.class).to(ItemTypeDAO.class).in(Singleton.class);
-
+    bind(DateDAOImpl.class).to(DateDAO.class).in(Singleton.class);
   }
 }

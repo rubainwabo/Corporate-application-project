@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ItemDAOImpl implements ItemDAO {
 
@@ -19,8 +20,9 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public int addItem(ItemDTO item, int offerorId) {
     // get ps to insert item
-    try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "insert into projet.items (id_item,description,url_picture,state,offeror,item_type,time_slot) VALUES (DEFAULT,?,?,?,?,?,?)")) {
+    try (PreparedStatement ps = myBackService.getPreparedStatementWithId(
+        "insert into projet.items (id_item,description,url_picture,item_condition,offeror,item_type,time_slot) VALUES (DEFAULT,?,?,?,?,?,?)",
+        Statement.RETURN_GENERATED_KEYS)) {
       // ps to find lastId insere
       ps.setString(1, item.getDescription());
       ps.setString(2, item.getUrlPicture());
@@ -37,8 +39,13 @@ public class ItemDAOImpl implements ItemDAO {
           }
         }
       }
-      // need to return the id insered ( for the moment return 1 if ok)
-      return ps.executeUpdate();
+      ps.executeUpdate();
+      ResultSet rs = ps.getGeneratedKeys();
+      int generatedKey = 0;
+      if (rs.next()) {
+        generatedKey = rs.getInt(1);
+      }
+      return generatedKey;
     } catch (Exception e) {
       e.printStackTrace();
     }

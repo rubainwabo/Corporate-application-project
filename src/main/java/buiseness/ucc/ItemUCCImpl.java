@@ -4,6 +4,7 @@ import buiseness.domain.bizclass.ItemType;
 import buiseness.domain.dto.ItemDTO;
 import buiseness.factory.BizFactory;
 import dal.DalServices;
+import dal.services.DateDAO;
 import dal.services.ItemDAO;
 import dal.services.ItemTypeDAO;
 import jakarta.inject.Inject;
@@ -19,9 +20,11 @@ public class ItemUCCImpl implements ItemUCC {
   @Inject
   private BizFactory myBizFactoService;
 
-
   @Inject
   private ItemTypeDAO myItemTypeDAOService;
+
+  @Inject
+  private DateDAO myDateDAOService;
 
   @Override
   public int addItem(ItemDTO item, int userId) {
@@ -39,6 +42,7 @@ public class ItemUCCImpl implements ItemUCC {
       if (itemId <= 0) {
         throw new IllegalArgumentException("probleme dans itemDAOImpl");
       }
+      myDateDAOService.addDate(itemId);
     } catch (Exception e) {
       myDalService.rollBack();
       e.printStackTrace();

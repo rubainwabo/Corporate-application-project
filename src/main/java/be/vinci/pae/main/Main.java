@@ -13,12 +13,12 @@ import utils.Config;
  * Main class.
  */
 public class Main {
+
   static {
     Config.load("prod.properties");
   }
 
   public static String BASE_URI = Config.getProperty("BaseUri");
-
 
   // Base URI the Grizzly HTTP server will listen on
   // public static final String BASE_URI = "http://localhost:8080/";
@@ -43,7 +43,7 @@ public class Main {
    * Main method.
    *
    * @param args .
-   * @throws IOException .
+   * @throws IOException IOexception
    */
 
 

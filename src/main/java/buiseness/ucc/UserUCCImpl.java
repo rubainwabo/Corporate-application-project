@@ -1,9 +1,11 @@
 package buiseness.ucc;
 
 import buiseness.domain.User;
+import buiseness.domain.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
+import java.util.List;
 import utils.TokenService;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
@@ -46,5 +48,15 @@ public class UserUCCImpl implements UserUCC {
     }
     var userId = myTokenService.getUserId(token);
     return myTokenService.getRefreshedTokens(userId);
+  }
+
+  @Override
+  public List<UserDTO> getUsersDenied() {
+    return myUserDAO.getAllUserByState("denied");
+  }
+
+  @Override
+  public List<UserDTO> getUserWaiting() {
+    return myUserDAO.getAllUserByState("waiting");
   }
 }

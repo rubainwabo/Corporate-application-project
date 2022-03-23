@@ -1,6 +1,7 @@
 package dal.services;
 
 import buiseness.domain.UserDTO;
+import java.util.List;
 
 public interface UserDAO {
 
@@ -12,4 +13,10 @@ public interface UserDAO {
    */
   UserDTO getOneByUsername(String username);
 
+  /**
+   * allows to retrieve all the users of the db with the state in the parameters.
+   *
+   * @return returns a list of users with the state in parameter
+   */
+  List<UserDTO> getAllUserByState(String state);
 }

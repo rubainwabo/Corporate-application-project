@@ -32,23 +32,11 @@ public class ItemUCCImpl implements ItemUCC {
     int itemId = -1;
     var myItemType = (ItemType) myBizFactoService.getItemType();
     myItemType.setItemTypeName(item.getItemtype());
-    try {
-      myDalService.start();
-      if (!myItemType.typeExist()) {
-        if (myItemTypeDAOService.addItemType(item.getItemtype()) == -1) {
-          throw new IllegalArgumentException("itemType n'a pas pu être ajouté");
-        }
-      }
-      itemId = myItemDAOService.addItem(item, userId);
-      if (itemId <= 0) {
-        throw new IllegalArgumentException("probleme dans itemDAOImpl");
-      }
-      myDateDAOService.addDate(itemId);
-    } catch (Exception e) {
-      myDalService.rollBack();
-      e.printStackTrace();
+    itemId = myItemDAOService.addItem(item, userId);
+    if (itemId <= 0) {
+      throw new IllegalArgumentException("fail insert in db : addItemItemUCC");
     }
-    myDalService.commit();
+    myDateDAOService.addDate(itemId);
     return itemId;
   }
 

@@ -120,7 +120,6 @@ public class ItemDAOImpl implements ItemDAO {
         ps.setInt(2, interestUserId);
         ps.setInt(3, idItem);
         ps.executeUpdate();
-
         try (PreparedStatement psNbrePeople = myBackService.getPreparedStatement(
             "select number_of_people_interested from projet.items where id_item = " + idItem)) {
           int nbrePeople = 0;

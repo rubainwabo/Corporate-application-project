@@ -30,6 +30,5 @@ public class ItemTypeRessource {
           .entity("itemType informations invalid").type("text/plain").build());
     }
     return myItemTypeUCC.addItemType(itemType.get("itemType").asText());
-
   }
 }

@@ -77,7 +77,6 @@ public class ItemRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public void addInterest(@PathParam("id") int itemId, ObjectNode body) {
-    // ajouter le conextManageur pour savoir qui a fait la demande et pouvoir l'utiliser dans les autrres méthode
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());

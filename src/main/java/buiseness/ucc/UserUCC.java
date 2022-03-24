@@ -30,4 +30,8 @@ public interface UserUCC {
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
   User getOneById(int id);
+
+  boolean checkAdmin(int id);
+
+  boolean checkWaitingOrDenied(int id);
 }

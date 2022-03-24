@@ -41,6 +41,9 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public ObjectNode refreshToken(String token) throws InvalidTokenException {
+    if (!myTokenService.isJWT(token) || !myTokenService.verifyRefreshToken(token)) {
+      throw new InvalidTokenException("invalid token");
+    }
     var userId = myTokenService.getUserId(token);
     return myTokenService.getRefreshedTokens(userId);
   }
@@ -48,5 +51,14 @@ public class UserUCCImpl implements UserUCC {
   @Override
   public User getOneById(int id) {
     return (User) myUserDAO.getOneById(id);
+  }
+
+  public boolean checkAdmin(int id) {
+    User myUser =(User) myUserDAO.getOneById(id);
+    return myUser.isAdmin();
+  }
+  public boolean checkWaitingOrDenied(int id){
+    User myUser =(User) myUserDAO.getOneById(id);
+    return !myUser.isWaiting() && !myUser.isDenied();
   }
 }

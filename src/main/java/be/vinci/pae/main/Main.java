@@ -3,8 +3,7 @@ package be.vinci.pae.main;
 import java.io.IOException;
 import java.net.URI;
 
-import filters.FiltersDynamicBinding;
-import filters.AuthorizationRequestFilter;
+import filters.FiltersDynamicBindingConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -35,8 +34,7 @@ public class Main {
     // create a resource config that scans for JAX-RS resources and providers
     // in be.vinci package
     final ResourceConfig rc = new ResourceConfig().packages("ihm").register(JacksonFeature.class)
-        .register(ApplicationBinder.class).register(AuthorizationRequestFilter.class).
-      register(FiltersDynamicBinding.class);
+        .register(ApplicationBinder.class).register(FiltersDynamicBindingConfig.class);
 
     // create and start a new instance of grizzly http server
     // exposing the Jersey application at BASE_URI

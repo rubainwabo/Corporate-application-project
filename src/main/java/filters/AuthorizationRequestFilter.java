@@ -1,6 +1,4 @@
 package filters;
-import java.io.IOException;
-import buiseness.domain.User;
 import buiseness.ucc.UserUCC;
 import jakarta.inject.Inject;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -13,16 +11,18 @@ import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.Provider;
 import utils.TokenService;
 
+//1 set id dans le premier seulement
+//2 vrai filter qui vérifie l'user
+
 @Singleton
 @Provider
-@Authorize
 public class AuthorizationRequestFilter implements ContainerRequestFilter {
     @Inject
     private UserUCC myUserUCC;
     @Inject
     TokenService myTokenService;
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         System.out.println("We're in AuthorizeRequestFilter");
         String token = requestContext.getHeaderString("token");
         String refreshToken = requestContext.getHeaderString("refreshToken");
@@ -32,19 +32,17 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
         } else {
             DecodedJWT decodedToken;
             try {
-                decodedToken = (token == null) ? myTokenService.getVerifyRefreshToken(refreshToken): myTokenService.getVerifyToken(token);
+                decodedToken = (refreshToken == null) ? myTokenService.getVerifyToken(token): myTokenService.getVerifyRefreshToken(refreshToken);
             } catch (Exception e) {
                 throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
                         .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
             }
-            User authenticatedUser = myUserUCC.getOneById(decodedToken.getClaim("user").asInt());
-
-            if (authenticatedUser == null || authenticatedUser.isDenied() || authenticatedUser.isWaiting()) {
+            int id = decodedToken.getClaim("user").asInt();
+            if (!myUserUCC.checkWaitingOrDenied(id)) {
                 requestContext.abortWith(Response.status(Status.FORBIDDEN)
                         .entity("You are forbidden to access this resource").build());
             }
-            requestContext.setProperty("user",
-                    myUserUCC.getOneById(decodedToken.getClaim("user").asInt()));
+            requestContext.setProperty("id", id);
         }
     }
 }

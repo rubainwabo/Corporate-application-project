@@ -60,8 +60,8 @@ public class UserDAOImpl implements UserDAO {
       user.setPassword(rs.getString(2));
       user.setUserName(rs.getString(3));
       user.setState(rs.getString(4));
-      user.setReasonForConnectionRefusal(rs.getString(5));
-      user.setRole(rs.getString(6));
+      user.setRole(rs.getString(5));
+      user.setReasonForConnectionRefusal(rs.getString(6));
       return user;
     }
   }

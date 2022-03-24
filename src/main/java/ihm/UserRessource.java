@@ -15,6 +15,10 @@ import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
 
+//To use the AdminAuthorizeFilter the name of your path methods must contain "admin"
+// (name can be changed in FiltersDynamicBindingConfig class)
+//To use the AuthorizeRequestFilter the name of path methods must contain "user"
+
 @Singleton
 @Path("/auths")
 public class UserRessource {
@@ -32,7 +36,6 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String adminPage(Object body){
-    System.out.println("here");
     return "oui";
   }
 
@@ -78,14 +81,14 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode userRefreshToken(JsonNode body) {
-    if (!body.hasNonNull("refreshToken") && !body.hasNonNull("token")) {
+    if (!body.hasNonNull("refreshToken")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a token or refreshToken is required").type("text/plain").build());
     }
     // escape characters to avoid XSS injections and transforms the received token into text
     String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
     try {
-      return myUserUCC.refreshToken(refreshToken);
+       return myUserUCC.refreshToken(refreshToken);
     } catch (InvalidTokenException e) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity(e.getMessage()).type("text/plain").build());

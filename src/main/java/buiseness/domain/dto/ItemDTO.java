@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = ItemImpl.class)
 public interface ItemDTO {
-
+  
   int getId();
 
   void setId(int id);

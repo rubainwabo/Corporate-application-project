@@ -14,5 +14,5 @@ public interface ItemUCC {
 
   void cancelOffer(int idItem, int userId);
 
-  List<ItemDTO> getLastItemsOfferedNotConnected(boolean isConnected);
+  List<ItemDTO> getLastItemsOffered(boolean isConnected);
 }

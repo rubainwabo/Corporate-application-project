@@ -196,9 +196,14 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public List<ItemDTO> getLastItemsOffered(int limit) {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
+    String limite = limit > 0 ? "LIMIT " + limit : "";
+
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_item,description,url_picture,item_type,number_of_people_interested"
-            + " from projet.items where item_condition = 'offered' LIMIT " + limit)) {
+        "select id_item, description, url_picture, item_type, number_of_people_interested,max(_date) as maxDate "
+            + "from projet.items,projet.dates "
+            + "where item_condition = 'offered' and id_item=item GROUP BY id_item ORDER BY maxDate "
+            + limite
+    )) {
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
           ItemDTO item = myBizFactoryService.getItem();

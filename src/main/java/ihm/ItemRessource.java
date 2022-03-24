@@ -96,13 +96,13 @@ public class ItemRessource {
   @Path("lastItemsOfferedNotConnected")
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> getLastItemsOfferedNotConnected() {
-    return myItemUCC.getLastItemsOfferedNotConnected(false);
+    return myItemUCC.getLastItemsOffered(false);
   }
 
   @GET
   @Path("lastItemsOfferedConnected")
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> getLastItemsOfferedConnected() {
-    return myItemUCC.getLastItemsOfferedNotConnected(true);
+    return myItemUCC.getLastItemsOffered(true);
   }
 }

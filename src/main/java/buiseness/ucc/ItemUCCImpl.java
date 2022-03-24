@@ -46,10 +46,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public List<ItemDTO> getLastItemsOfferedNotConnected(boolean isConnected) {
+  public List<ItemDTO> getLastItemsOffered(boolean isConnected) {
     if (isConnected) {
-      return myItemDAOService.getLastItemsOffered(12);
+      return myItemDAOService.getLastItemsOffered(0);
     }
-    return myItemDAOService.getLastItemsOffered(0);
+    return myItemDAOService.getLastItemsOffered(12);
   }
 }

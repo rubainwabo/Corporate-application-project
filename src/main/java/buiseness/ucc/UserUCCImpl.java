@@ -63,6 +63,7 @@ public class UserUCCImpl implements UserUCC {
   public boolean checkWaitingOrDenied(int id) {
     User myUser = (User) myUserDAO.getOneById(id);
     return !myUser.isWaiting() && !myUser.isDenied();
+  }
 
   public List<UserDTO> getUsersDenied() {
     return myUserDAO.getAllUserByState("denied");

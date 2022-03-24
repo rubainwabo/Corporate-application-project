@@ -15,13 +15,13 @@ import utils.Config;
  */
 public class Main {
 
+
   static {
     Config.load("prod.properties");
   }
 
   public static String BASE_URI = Config.getProperty("BaseUri");
 
->>>>>>> src/main/java/be/vinci/pae/main/Main.java
   // Base URI the Grizzly HTTP server will listen on
   // public static final String BASE_URI = "http://localhost:8080/";
 

@@ -81,7 +81,7 @@ public class ItemDAOImpl implements ItemDAO {
             item.setDescription(rs.getString(3));
             item.setUrlPicture(rs.getString(4));
 
-            // PS to get the string of the offeror (lastName + firstName) from the id of the previous PS
+            // PS to get first name + lastName of the offeror from the id of the previous PS
             try (PreparedStatement psOfferorAsString = myBackService.getPreparedStatement(
                 "Select last_name,first_name from projet.members where user_id = " + rs.getInt(
                     5))) {

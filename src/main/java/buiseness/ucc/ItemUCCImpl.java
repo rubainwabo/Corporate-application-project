@@ -2,17 +2,13 @@ package buiseness.ucc;
 
 import buiseness.domain.dto.ItemDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dal.DalServices;
 import dal.services.DateDAO;
 import dal.services.ItemDAO;
 import jakarta.inject.Inject;
 import java.util.List;
 
 public class ItemUCCImpl implements ItemUCC {
-
-  @Inject
-  private DalServices myDalService;
-
+  
   @Inject
   private ItemDAO myItemDAOService;
 

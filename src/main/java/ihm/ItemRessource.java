@@ -89,6 +89,9 @@ public class ItemRessource {
     var callMe = body.get("callMe").asBoolean();
     var phoneNumber = body.get("phoneNumber").asText();
     int userId = 1;
+    // user ID
+    //int userId = (int) request.getProperty("user");
+
     if (callMe && !phoneNumber.isBlank()) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
@@ -105,13 +108,14 @@ public class ItemRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public void cancelOffer(@PathParam("id") int itemId) {
-    // ajouter le conextManageur pour savoir qui a fait la demande et pouvoir l'utiliser dans les autrres méthode
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
-    //context jsp quoi vérifier que l'id est bien le même que celui recu dans le context manageur
     int userId = 1;
+    // user ID
+    //int userId = (int) request.getProperty("user");
+
     myItemUCC.cancelOffer(itemId, userId);
   }
 

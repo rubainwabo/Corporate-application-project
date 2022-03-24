@@ -1,4 +1,5 @@
 package filters;
+
 import buiseness.ucc.UserUCC;
 import jakarta.inject.Inject;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -21,6 +22,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     private UserUCC myUserUCC;
     @Inject
     TokenService myTokenService;
+
     @Override
     public void filter(ContainerRequestContext requestContext) {
         System.out.println("We're in AuthorizeRequestFilter");
@@ -32,7 +34,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
         } else {
             DecodedJWT decodedToken;
             try {
-                decodedToken = (refreshToken == null) ? myTokenService.getVerifyToken(token): myTokenService.getVerifyRefreshToken(refreshToken);
+                decodedToken = (refreshToken == null) ? myTokenService.getVerifyToken(token) : myTokenService.getVerifyRefreshToken(refreshToken);
             } catch (Exception e) {
                 throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
                         .entity("Malformed token : " + e.getMessage()).type("text/plain").build());

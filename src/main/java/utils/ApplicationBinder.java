@@ -11,7 +11,6 @@ import dal.services.UserDAOImpl;
 import filters.AdminAuthorize;
 import filters.AdminAuthorizeRequestFilter;
 import filters.AuthorizationRequestFilter;
-import filters.Authorize;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.ext.Provider;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;

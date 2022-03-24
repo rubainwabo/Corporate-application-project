@@ -15,7 +15,6 @@ import utils.Config;
  */
 public class Main {
 
-
   static {
     Config.load("prod.properties");
   }

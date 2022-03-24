@@ -2,6 +2,7 @@ package buiseness.ucc;
 
 import buiseness.domain.dto.ItemDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
 
 public interface ItemUCC {
 
@@ -12,4 +13,6 @@ public interface ItemUCC {
   void addInterest(int itemId, ObjectNode objectNode, int userId);
 
   void cancelOffer(int idItem, int userId);
+
+  List<ItemDTO> getLastItemsOfferedNotConnected(boolean isConnected);
 }

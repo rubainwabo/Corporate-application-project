@@ -6,6 +6,7 @@ import dal.DalServices;
 import dal.services.DateDAO;
 import dal.services.ItemDAO;
 import jakarta.inject.Inject;
+import java.util.List;
 
 public class ItemUCCImpl implements ItemUCC {
 
@@ -42,5 +43,13 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public void cancelOffer(int idItem, int userId) {
     myItemDAOService.cancelOffer(idItem, userId);
+  }
+
+  @Override
+  public List<ItemDTO> getLastItemsOfferedNotConnected(boolean isConnected) {
+    if (isConnected) {
+      return myItemDAOService.getLastItemsOffered(12);
+    }
+    return myItemDAOService.getLastItemsOffered(0);
   }
 }

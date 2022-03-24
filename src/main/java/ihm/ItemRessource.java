@@ -17,6 +17,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Singleton
 @Path("/items")
@@ -89,5 +90,19 @@ public class ItemRessource {
     //context jsp quoi vérifier que l'id est bien le même que celui recu dans le context manageur
     int userId = 1;
     myItemUCC.cancelOffer(itemId, userId);
+  }
+
+  @GET
+  @Path("lastItemsOfferedNotConnected")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<ItemDTO> getLastItemsOfferedNotConnected() {
+    return myItemUCC.getLastItemsOfferedNotConnected(false);
+  }
+
+  @GET
+  @Path("lastItemsOfferedConnected")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<ItemDTO> getLastItemsOfferedConnected() {
+    return myItemUCC.getLastItemsOfferedNotConnected(true);
   }
 }

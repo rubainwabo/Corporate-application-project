@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemDAOImpl implements ItemDAO {
 
@@ -56,7 +58,7 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_item,item_type,description,url_picture,offeror,time_slot,state from projet.items where id_item=?")) {
+        "select id_item,item_type,description,url_picture,offeror,time_slot,item_condition from projet.items where id_item=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
@@ -131,7 +133,8 @@ public class ItemDAOImpl implements ItemDAO {
             nbrePeople = rsNbrePeople.getInt(1);
           }
           try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
-              "update projet.items set number_of_people_interested = 1 + " + nbrePeople)) {
+              "update projet.items set number_of_people_interested = 1 + " + nbrePeople
+                  + " where id_item = " + idItem)) {
             var result = psNbrPeopleInteresed.executeUpdate();
             if (result <= 0) {
               throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
@@ -188,5 +191,37 @@ public class ItemDAOImpl implements ItemDAO {
     } catch (SQLException throwables) {
       throwables.printStackTrace();
     }
+  }
+
+  @Override
+  public List<ItemDTO> getLastItemsOffered(int limit) {
+    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "select id_item,description,url_picture,item_type,number_of_people_interested"
+            + " from projet.items where item_condition = 'offered' LIMIT " + limit)) {
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          ItemDTO item = myBizFactoryService.getItem();
+          item.setId(rs.getInt(1));
+          item.setDescription(rs.getString(2));
+          item.setUrlPicture(rs.getString(3));
+          try (PreparedStatement psTypeString = myBackService.getPreparedStatement(
+              "Select item_type_name from projet.item_type where id_item_type = " + rs.getInt(4))) {
+            try (ResultSet rsTypeString = psTypeString.executeQuery()) {
+              if (!rsTypeString.next()) {
+                return null;
+              }
+              item.setItemtype(rs.getString(4));
+            }
+          }
+          item.setNumberOfPeopleInterested(rs.getInt(5));
+          arrayItemDTO.add(item);
+        }
+      }
+      return arrayItemDTO;
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+    return new ArrayList<>();
   }
 }

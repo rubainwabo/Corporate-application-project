@@ -33,4 +33,5 @@ public interface User extends UserDTO {
 
   boolean isAdmin();
 
+
 }

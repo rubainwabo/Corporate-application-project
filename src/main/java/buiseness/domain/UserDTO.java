@@ -82,4 +82,28 @@ public interface UserDTO {
   void setRole(String role);
 
   String getRole();
+
+  String getLastName();
+
+  void setLastName(String lastName);
+
+  String getFirstName();
+
+  void setFirstName(String firstName);
+
+  String getCity();
+
+  void setCity(String city);
+
+  String getStreet();
+
+  void setStreet(String street);
+
+  String getPostCode();
+
+  void setPostCode(String postCode);
+
+  String getBuildingNumber();
+
+  void setBuildingNumber(String buildingNumber);
 }

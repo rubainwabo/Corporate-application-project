@@ -1,7 +1,9 @@
 package buiseness.ucc;
 
 import buiseness.domain.User;
+import buiseness.domain.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -17,6 +19,7 @@ public interface UserUCC {
    * @param password his password
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
+
   ObjectNode login(String username, String password, boolean rememberMe)
       throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
       UserOnHoldException, UserInvalidException;
@@ -34,4 +37,18 @@ public interface UserUCC {
   boolean checkAdmin(int id);
 
   boolean checkWaitingOrDenied(int id);
+
+  /**
+   * allows to retrieve all the users of the db with the role refused.
+   *
+   * @return a list of users with denied role
+   */
+  List<UserDTO> getUsersDenied();
+
+  /**
+   * allows to retrieve all the users of the db with the state waiting.
+   *
+   * @return a list of users with waiting state
+   */
+  List<UserDTO> getUserWaiting();
 }

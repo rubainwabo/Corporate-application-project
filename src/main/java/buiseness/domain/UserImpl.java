@@ -10,6 +10,12 @@ public class UserImpl implements User {
   private String state;
   private String reasonForConnectionRefusal;
   private String role;
+  private String lastName;
+  private String firstName;
+  private String city;
+  private String street;
+  private String postCode;
+  private String buildingNumber;
 
   public UserImpl() {
   }
@@ -85,7 +91,67 @@ public class UserImpl implements User {
 
   @Override
   public void setUsername(String username) {
-    this.username = username;
+
+  }
+
+  @Override
+  public String getLastName() {
+    return lastName;
+  }
+
+  @Override
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  @Override
+  public String getFirstName() {
+    return firstName;
+  }
+
+  @Override
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  @Override
+  public String getCity() {
+    return city;
+  }
+
+  @Override
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  @Override
+  public String getStreet() {
+    return street;
+  }
+
+  @Override
+  public void setStreet(String street) {
+    this.street = street;
+  }
+
+  @Override
+  public String getPostCode() {
+    return postCode;
+  }
+
+  @Override
+  public void setPostCode(String postCode) {
+    this.postCode = postCode;
+  }
+
+  @Override
+  public String getBuildingNumber() {
+    return buildingNumber;
+  }
+
+  @Override
+  public void setBuildingNumber(String buildingNumber) {
+    this.buildingNumber = buildingNumber;
   }
 
   @Override

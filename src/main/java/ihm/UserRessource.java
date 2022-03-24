@@ -1,11 +1,13 @@
 package ihm;
 
+import buiseness.domain.UserDTO;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -13,6 +15,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
@@ -106,5 +109,20 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity(e.getMessage()).type("text/plain").build());
     }
+  }
+
+  @GET
+  @Path("usersDenied")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<UserDTO> deniedUserList() {
+    return myUserUCC.getUsersDenied();
+
+  }
+
+  @GET
+  @Path("usersWaiting")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<UserDTO> waitingUserList() {
+    return myUserUCC.getUserWaiting();
   }
 }

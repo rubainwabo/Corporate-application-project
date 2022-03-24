@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import utils.Config;
 
-public class DalServicesImpl implements DalServices {
+public class DalServicesImpl implements DalServices, DalBackService {
 
   private Connection con = null;
   private String url = Config.getProperty("URL");
@@ -20,5 +20,33 @@ public class DalServicesImpl implements DalServices {
   @Override
   public PreparedStatement getPreparedStatement(String query) throws SQLException {
     return con.prepareStatement(query);
+  }
+
+  @Override
+  public void start() {
+    try {
+      con.setAutoCommit(false);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void commit() {
+    try {
+      con.commit();
+      con.setAutoCommit(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void rollBack() {
+    try {
+      con.rollback();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

@@ -1,9 +1,8 @@
 package be.vinci.pae.main;
 
+import filters.FiltersDynamicBindingConfig;
 import java.io.IOException;
 import java.net.URI;
-
-import filters.FiltersDynamicBindingConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -15,12 +14,12 @@ import utils.Config;
  * Main class.
  */
 public class Main {
-  static {
-    Config.load("prod.properties");
-  }
 
   public static String BASE_URI = Config.getProperty("BaseUri");
 
+  static {
+    Config.load("prod.properties");
+  }
 
   // Base URI the Grizzly HTTP server will listen on
   // public static final String BASE_URI = "http://localhost:8080/";

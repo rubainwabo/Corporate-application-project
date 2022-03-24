@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 
 public class TokenServiceImpl implements TokenService {
+
   // 2 JWT secret code to distinguish between an access and a refresh token
   private final Algorithm jwtAlgorithmAccess = Algorithm.HMAC256(Config.getProperty("JWTAccess"));
   private final Algorithm jwtAlgorithmRefresh = Algorithm.HMAC256(Config.getProperty("JWTRefresh"));
@@ -103,13 +104,14 @@ public class TokenServiceImpl implements TokenService {
   }
 
   @Override
-  public DecodedJWT getVerifyToken(String token){
-    return  JWT.require(jwtAlgorithmAccess).withIssuer("auth0").build().verify(token);
+  public DecodedJWT getVerifyToken(String token) {
+    return JWT.require(jwtAlgorithmAccess).withIssuer("auth0").build().verify(token);
   }
+
   @Override
   public DecodedJWT getVerifyRefreshToken(String token) {
     return JWT.require(jwtAlgorithmRefresh).withIssuer("auth0").
-            build().verify(token);
+        build().verify(token);
 
   }
 }

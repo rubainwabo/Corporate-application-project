@@ -31,13 +31,13 @@ public class UserImpl implements User {
   }
 
   @Override
-  public boolean isDenied(String state) {
-    return state.equals("denied");
+  public boolean isDenied() {
+    return this.state.equals("denied");
   }
 
   @Override
-  public boolean isWaiting(String state) {
-    return state.equals("waiting");
+  public boolean isWaiting() {
+    return this.state.equals("waiting");
   }
 
   @Override

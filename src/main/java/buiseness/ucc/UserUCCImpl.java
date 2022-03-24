@@ -32,10 +32,10 @@ public class UserUCCImpl implements UserUCC {
     if (!user.checkPassword(password)) {
       throw new PasswordOrUsernameException("username or password incorrect");
     }
-    if (user.isDenied(user.getState())) {
+    if (user.isDenied()) {
       throw new ReasonForConnectionRefusalException(user.getReasonForConnectionRefusal());
     }
-    if (user.isWaiting(user.getState())) {
+    if (user.isWaiting()) {
       throw new UserOnHoldException("user on hold");
     }
     return myTokenService.login(user.getId(), username, rememberMe);

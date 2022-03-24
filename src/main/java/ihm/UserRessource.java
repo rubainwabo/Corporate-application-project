@@ -45,6 +45,12 @@ public class UserRessource {
     return "oui";
   }
 
+  /**
+   * allows to connect the user.
+   *
+   * @param body the data that the user has entered put in json format
+   * @return the user
+   */
   @POST
   @Path("login")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -70,7 +76,8 @@ public class UserRessource {
     } catch (UserInvalidException e) {
       throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
           .entity(e.getMessage()).type("text/plain").build());
-    } catch (PasswordOrUsernameException | ReasonForConnectionRefusalException | UserOnHoldException e) {
+    } catch (PasswordOrUsernameException | ReasonForConnectionRefusalException
+        | UserOnHoldException e) {
       throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
           .entity(e.getMessage()).type("text/plain").build());
     }

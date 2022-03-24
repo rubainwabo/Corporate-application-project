@@ -110,8 +110,6 @@ public class TokenServiceImpl implements TokenService {
 
   @Override
   public DecodedJWT getVerifyRefreshToken(String token) {
-    return JWT.require(jwtAlgorithmRefresh).withIssuer("auth0").
-        build().verify(token);
-
+    return JWT.require(jwtAlgorithmRefresh).withIssuer("auth0").build().verify(token);
   }
 }

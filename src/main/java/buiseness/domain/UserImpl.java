@@ -89,18 +89,17 @@ public class UserImpl implements User {
   }
 
   @Override
-  public void setRole(String role) {
-    this.role = role;
-  }
-
-  @Override
   public String getRole() {
     return this.role;
   }
 
   @Override
-  public boolean isAdmin(){
-    return this.role.equals("admin");
+  public void setRole(String role) {
+    this.role = role;
   }
 
+  @Override
+  public boolean isAdmin() {
+    return this.role.equals("admin");
+  }
 }

@@ -32,7 +32,7 @@ import utils.exception.UserOnHoldException;
 public class UserRessource {
 
   @Inject
-  private UserUCC myUserUCC;
+   private UserUCC myUserUCC;
 
   /**
    * allows to connect the user.

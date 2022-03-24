@@ -42,6 +42,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
             .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
       }
       int id = decodedToken.getClaim("user").asInt();
+      System.out.println(myUserUCC.checkWaitingOrDenied(id));
       if (!myUserUCC.checkWaitingOrDenied(id)) {
         requestContext.abortWith(Response.status(Status.FORBIDDEN)
             .entity("You are forbidden to access this resource").build());

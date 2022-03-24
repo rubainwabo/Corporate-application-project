@@ -77,7 +77,7 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneById(int id) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select user_id from projet.members where user_id=?")) {
+        "select user_id, state, _role from projet.members where user_id=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();
@@ -85,6 +85,8 @@ public class UserDAOImpl implements UserDAO {
           return null;
         }
         user.setId(rs.getInt(1));
+        user.setState(rs.getString(2));
+        user.setRole(rs.getString(3));
         return user;
       }
     } catch (SQLException throwables) {

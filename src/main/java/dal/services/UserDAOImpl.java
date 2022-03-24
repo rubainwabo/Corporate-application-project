@@ -1,6 +1,6 @@
 package dal.services;
 
-import buiseness.domain.UserDTO;
+import buiseness.domain.dto.UserDTO;
 import buiseness.factory.BizFactory;
 import dal.DalBackService;
 import jakarta.inject.Inject;
@@ -48,7 +48,8 @@ public class UserDAOImpl implements UserDAO {
   public List<UserDTO> getAllUserByState(String state) {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select last_name,first_name,city,street,postCode,building_number,user_id,username from projet.members where state=?")) {
+        "select last_name,first_name,city,street,postCode,building_number,user_id,username "
+            + "from projet.members where state=?")) {
       ps.setString(1, state);
       try (ResultSet rs = ps.executeQuery()) {
         userDTOList = new ArrayList<>();
@@ -71,5 +72,53 @@ public class UserDAOImpl implements UserDAO {
       return null;
     }
     return userDTOList;
+  }
+
+  @Override
+  public UserDTO getOneById(int id) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        "select user_id from projet.members where user_id=?")) {
+      ps.setInt(1, id);
+      try (ResultSet rs = ps.executeQuery()) {
+        UserDTO user = myDomainFactory.getUser();
+        if (!rs.next()) {
+          return null;
+        }
+        user.setId(rs.getInt(1));
+        return user;
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override
+  public String getPhoneNumber(int userId) {
+    try (PreparedStatement psPhoneNumber = myDalService.getPreparedStatement(
+        "select phone_number from projet.members where user_id = " + userId)) {
+      try (ResultSet rsPhoneNumber = psPhoneNumber.executeQuery()) {
+        if (!rsPhoneNumber.next()) {
+          return "";
+        }
+        return rsPhoneNumber.getString(1);
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+    return "";
+  }
+
+  @Override
+  public void addPhoneNumber(int userId, String phoneNumber) {
+    try (PreparedStatement psAddPhone = myDalService.getPreparedStatement(
+        "update projet.members set phone_number = " + phoneNumber + " where user_id = " + userId)) {
+      var result = psAddPhone.executeUpdate();
+      if (result <= 0) {
+        throw new IllegalArgumentException("prblm dans update phone number");
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
   }
 }

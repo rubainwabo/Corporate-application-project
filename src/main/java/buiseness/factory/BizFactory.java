@@ -1,6 +1,8 @@
 package buiseness.factory;
 
-import buiseness.domain.UserDTO;
+import buiseness.domain.dto.ItemDTO;
+import buiseness.domain.dto.ItemTypeDTO;
+import buiseness.domain.dto.UserDTO;
 
 public interface BizFactory {
 
@@ -10,4 +12,19 @@ public interface BizFactory {
    * @return an empty user
    */
   UserDTO getUser();
+
+  /**
+   * creates an empty item.
+   *
+   * @return an empty item
+   */
+  ItemDTO getItem();
+
+  /**
+   * creates an empty itemType.
+   *
+   * @return an empty itemType
+   */
+  ItemTypeDTO getItemType();
+
 }

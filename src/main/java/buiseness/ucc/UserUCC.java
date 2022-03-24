@@ -1,6 +1,6 @@
 package buiseness.ucc;
 
-import buiseness.domain.UserDTO;
+import buiseness.domain.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import utils.exception.InvalidTokenException;
@@ -32,16 +32,25 @@ public interface UserUCC {
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
   /**
-   * allows to retrieve all the users of the db with the role refused.
+   * allows to retrieve all the users of the db with the state.
    *
-   * @return a list of users with denied role
+   * @return a list of users with the state in params
    */
-  List<UserDTO> getUsersDenied();
+  List<UserDTO> getUsersByState(String state);
 
   /**
-   * allows to retrieve all the users of the db with the state waiting.
+   * retrives the phone number of the user.
    *
-   * @return a list of users with waiting state
+   * @param userId the user id
+   * @return the phone number of the user
    */
-  List<UserDTO> getUserWaiting();
+  String getPhoneNumber(int userId);
+
+  /**
+   * call tha dao to insert the phone number to the specific user id.
+   *
+   * @param userId      the userId
+   * @param phoneNumber the phone number
+   */
+  void addPhoneNumber(int userId, String phoneNumber);
 }

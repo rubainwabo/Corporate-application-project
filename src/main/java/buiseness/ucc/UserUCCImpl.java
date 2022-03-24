@@ -1,7 +1,7 @@
 package buiseness.ucc;
 
-import buiseness.domain.User;
-import buiseness.domain.UserDTO;
+import buiseness.domain.bizclass.User;
+import buiseness.domain.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
@@ -32,10 +32,10 @@ public class UserUCCImpl implements UserUCC {
     if (!user.checkPassword(password)) {
       throw new PasswordOrUsernameException("username or password incorrect");
     }
-    if (user.isDenied(user.getState())) {
+    if (user.isDenied()) {
       throw new ReasonForConnectionRefusalException(user.getReasonForConnectionRefusal());
     }
-    if (user.isWaiting(user.getState())) {
+    if (user.isWaiting()) {
       throw new UserOnHoldException("user on hold");
     }
     return myTokenService.login(user.getId(), username, rememberMe);
@@ -51,12 +51,18 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public List<UserDTO> getUsersDenied() {
-    return myUserDAO.getAllUserByState("denied");
+  public List<UserDTO> getUsersByState(String state) {
+
+    return myUserDAO.getAllUserByState(state);
   }
 
   @Override
-  public List<UserDTO> getUserWaiting() {
-    return myUserDAO.getAllUserByState("waiting");
+  public String getPhoneNumber(int userId) {
+    return myUserDAO.getPhoneNumber(userId);
+  }
+
+  @Override
+  public void addPhoneNumber(int userId, String phoneNumber) {
+    myUserDAO.addPhoneNumber(userId, phoneNumber);
   }
 }

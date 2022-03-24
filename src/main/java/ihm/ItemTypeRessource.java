@@ -20,6 +20,12 @@ public class ItemTypeRessource {
   @Inject
   private ItemTypeUCC myItemTypeUCC;
 
+  /**
+   * retrives to add an itemType to the database.
+   *
+   * @param itemType the itemType
+   * @return the id returned by the insert
+   */
   @POST
   @Path("addItemType")
   @Consumes(MediaType.APPLICATION_JSON)

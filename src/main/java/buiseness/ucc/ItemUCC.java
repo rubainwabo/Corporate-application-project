@@ -41,7 +41,7 @@ public interface ItemUCC {
   void cancelOffer(int idItem, int userId);
 
   /**
-   * call the dao to get all the last items
+   * call the dao to get all the last items.
    *
    * @param isConnected true if the user is connected
    * @return list of last items

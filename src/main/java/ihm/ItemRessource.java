@@ -29,6 +29,12 @@ public class ItemRessource {
   @Inject
   private UserUCC myUserUCC;
 
+  /**
+   * retrives to add an item to the DB.
+   *
+   * @param itemDTO the item transoformed into an java object by jackson
+   * @return the id of the item insered
+   */
   @POST
   @Path("add")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -44,6 +50,12 @@ public class ItemRessource {
     return myItemUCC.addItem(itemDTO, 1);
   }
 
+  /**
+   * get details of a specific item.
+   *
+   * @param id the id of the item we want to have details
+   * @return the itemDTO find in the DB
+   */
   @GET
   @Path("itemDetails/{id}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -54,6 +66,12 @@ public class ItemRessource {
     return myItemUCC.getDetails(id);
   }
 
+  /**
+   * retrives to add an interest to a specific item.
+   *
+   * @param itemId the itemId
+   * @param body   the phone number,callMe and date where the user want to meet the offeror)
+   */
   @POST
   @Path("addInterest/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -77,6 +95,11 @@ public class ItemRessource {
     myItemUCC.addInterest(itemId, body, userId);
   }
 
+  /**
+   * retrives to cancel an offer.
+   *
+   * @param itemId the id of the item we want to cancel
+   */
   @POST
   @Path("cancelOffer/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -92,6 +115,11 @@ public class ItemRessource {
     myItemUCC.cancelOffer(itemId, userId);
   }
 
+  /**
+   * retrives to get all the list of last object added with the itemCondition 'offered'.
+   *
+   * @return a list with all the last items
+   */
   @GET
   @Path("lastItemsOfferedNotConnected")
   @Produces(MediaType.APPLICATION_JSON)
@@ -99,6 +127,11 @@ public class ItemRessource {
     return myItemUCC.getLastItemsOffered(false);
   }
 
+  /**
+   * retrives to get all the list of last object added with the itemCondition 'offered'.
+   *
+   * @return a list with all the last items
+   */
   @GET
   @Path("lastItemsOfferedConnected")
   @Produces(MediaType.APPLICATION_JSON)

@@ -48,7 +48,8 @@ public class UserDAOImpl implements UserDAO {
   public List<UserDTO> getAllUserByState(String state) {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select last_name,first_name,city,street,postCode,building_number,user_id,username from projet.members where state=?")) {
+        "select last_name,first_name,city,street,postCode,building_number,user_id,username "
+            + "from projet.members where state=?")) {
       ps.setString(1, state);
       try (ResultSet rs = ps.executeQuery()) {
         userDTOList = new ArrayList<>();

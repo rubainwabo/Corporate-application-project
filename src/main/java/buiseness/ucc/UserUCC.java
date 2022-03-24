@@ -31,18 +31,11 @@ public interface UserUCC {
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
   /**
-   * allows to retrieve all the users of the db with the role refused.
+   * allows to retrieve all the users of the db with the state.
    *
-   * @return a list of users with denied role
+   * @return a list of users with the state in params
    */
-  List<UserDTO> getUsersDenied();
-
-  /**
-   * allows to retrieve all the users of the db with the state waiting.
-   *
-   * @return a list of users with waiting state
-   */
-  List<UserDTO> getUserWaiting();
+  List<UserDTO> getUsersByState(String state);
 
   /**
    * retrives the phone number of the user.

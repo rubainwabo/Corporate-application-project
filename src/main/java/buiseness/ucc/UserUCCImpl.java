@@ -51,13 +51,9 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public List<UserDTO> getUsersDenied() {
-    return myUserDAO.getAllUserByState("denied");
-  }
+  public List<UserDTO> getUsersByState(String state) {
 
-  @Override
-  public List<UserDTO> getUserWaiting() {
-    return myUserDAO.getAllUserByState("waiting");
+    return myUserDAO.getAllUserByState(state);
   }
 
   @Override

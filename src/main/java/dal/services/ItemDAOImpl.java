@@ -24,7 +24,9 @@ public class ItemDAOImpl implements ItemDAO {
   public int addItem(ItemDTO item, int offerorId) {
 
     try (PreparedStatement ps = myBackService.getPreparedStatementWithId(
-        "insert into projet.items (id_item,description,url_picture,item_condition,offeror,item_type,time_slot) VALUES (DEFAULT,?,?,?,?,?,?)",
+        "insert into projet.items "
+            + "(id_item,description,url_picture,item_condition,offeror,item_type,time_slot) "
+            + "VALUES (DEFAULT,?,?,?,?,?,?)",
         Statement.RETURN_GENERATED_KEYS)) {
       // ps to find lastId insere
       ps.setString(1, item.getDescription());
@@ -58,7 +60,8 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_item,item_type,description,url_picture,offeror,time_slot,item_condition from projet.items where id_item=?")) {
+        "select id_item,item_type,description,url_picture,offeror,time_slot,item_condition "
+            + "from projet.items where id_item=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
@@ -93,7 +96,8 @@ public class ItemDAOImpl implements ItemDAO {
                 item.setItemCondition(rs.getString(7));
 
                 try (PreparedStatement psNbrPlpInterest = myBackService.getPreparedStatement(
-                    "Select count(member) from projet.interests where item = " + rs.getInt(1))) {
+                    "Select count(member) from projet.interests where item = "
+                        + rs.getInt(1))) {
                   try (ResultSet rsNbrPlpInterest = psNbrPlpInterest.executeQuery()) {
                     if (!rsNbrPlpInterest.next()) {
                       return null;
@@ -123,7 +127,8 @@ public class ItemDAOImpl implements ItemDAO {
         ps.setInt(3, idItem);
         ps.executeUpdate();
         try (PreparedStatement psNbrePeople = myBackService.getPreparedStatement(
-            "select number_of_people_interested from projet.items where id_item = " + idItem)) {
+            "select number_of_people_interested "
+                + "from projet.items where id_item = " + idItem)) {
           int nbrePeople = 0;
           try (ResultSet rsNbrePeople = psNbrePeople.executeQuery()) {
             if (!rsNbrePeople.next()) {
@@ -142,10 +147,12 @@ public class ItemDAOImpl implements ItemDAO {
           }
         }
         try (PreparedStatement psNotif = myBackService.getPreparedStatement(
-            "insert into projet.notifications (id_notification,is_viewed,text,person,item) VALUES (default,false,?,?,?)")) {
+            "insert into projet.notifications (id_notification,is_viewed,text,person,item) "
+                + "VALUES (default,false,?,?,?)")) {
           psNotif.setString(1, "txt en non définitif");
           try (PreparedStatement psInterestUser = myBackService.getPreparedStatement(
-              "select user_id from projet.members where user_id = (select offeror from projet.items where id_item = "
+              "select user_id from projet.members where user_id = "
+                  + "(select offeror from projet.items where id_item = "
                   + idItem + " )")) {
 
             try (ResultSet rsInterestUser = psInterestUser.executeQuery()) {
@@ -199,7 +206,8 @@ public class ItemDAOImpl implements ItemDAO {
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_item, description, url_picture, item_type, number_of_people_interested,max(_date) as maxDate "
+        "select id_item, description, url_picture, item_type, number_of_people_interested,"
+            + "max(_date) as maxDate "
             + "from projet.items,projet.dates "
             + "where item_condition = 'offered' and id_item=item GROUP BY id_item ORDER BY maxDate "
             + limite

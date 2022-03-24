@@ -10,6 +10,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
@@ -101,21 +102,27 @@ public class UserRessource {
     }
   }
 
+  /**
+   * retrives to get all the user with a specific state.
+   *
+   * @return a list of user by a specific state
+   */
   @GET
-  @Path("usersDenied")
+  @Path("list/{state}")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> deniedUserList() {
-    return myUserUCC.getUsersDenied();
-
+  public List<UserDTO> deniedUserList(@PathParam("state") String state) {
+    if (state.isBlank()) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("a state is required").type("text/plain").build());
+    }
+    return myUserUCC.getUsersByState(state);
   }
 
-  @GET
-  @Path("usersWaiting")
-  @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> waitingUserList() {
-    return myUserUCC.getUserWaiting();
-  }
-
+  /**
+   * retrives to find the phone number of the user who's sending a request to the api.
+   *
+   * @return the user phoneNumber of "" if he don't have a phone number
+   */
   @GET
   @Path("phoneNumber")
   @Produces(MediaType.APPLICATION_JSON)

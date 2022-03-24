@@ -35,6 +35,5 @@ public interface User extends UserDTO {
    * @return true if the state is waiting
    */
   boolean isWaiting(String state);
-
-
+  
 }

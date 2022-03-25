@@ -61,7 +61,7 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public ItemDTO getItemDetails(@PathParam("id") int id) {
     if (id <= 0) {
-      throw new WebApplicationException("bad request no id found in pathParams");
+      throw new WebApplicationException("bad request, no id found in pathParams");
     }
     return myItemUCC.getDetails(id);
   }
@@ -85,8 +85,14 @@ public class ItemRessource {
     LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
     var dateAvailable = dateTime.format(formatter);
     body.put("dateFormatted", dateAvailable);
-    var callMe = body.get("callMe").asBoolean();
-    var phoneNumber = body.get("phoneNumber").asText();
+    var callMe = false;
+    String phoneNumber = "";
+    if (body.hasNonNull("callMe")) {
+      callMe = body.get("callMe").asBoolean();
+    }
+    if (body.hasNonNull("phoneNumber")) {
+      phoneNumber = body.get("phoneNumber").asText();
+    }
     int userId = 1;
     // user ID
     //int userId = (int) request.getProperty("user");

@@ -39,9 +39,10 @@ public class ItemDAOImpl implements ItemDAO {
           "select id_item_type from projet.item_type where \"item_type_name\" = ? ")) {
         psIdItem.setString(1, item.getItemtype());
         try (ResultSet rsIdItem = psIdItem.executeQuery()) {
-          if (rsIdItem.next()) {
-            ps.setInt(5, rsIdItem.getInt(1));
+          if (!rsIdItem.next()) {
+            throw new IllegalArgumentException("itemType does not exist");
           }
+          ps.setInt(5, rsIdItem.getInt(1));
         }
       }
       ps.executeUpdate();
@@ -149,24 +150,31 @@ public class ItemDAOImpl implements ItemDAO {
         try (PreparedStatement psNotif = myBackService.getPreparedStatement(
             "insert into projet.notifications (id_notification,is_viewed,text,person,item) "
                 + "VALUES (default,false,?,?,?)")) {
-          psNotif.setString(1, "txt en non définitif");
-          try (PreparedStatement psInterestUser = myBackService.getPreparedStatement(
-              "select user_id from projet.members where user_id = "
-                  + "(select offeror from projet.items where id_item = "
-                  + idItem + " )")) {
-
-            try (ResultSet rsInterestUser = psInterestUser.executeQuery()) {
-              if (!rsInterestUser.next()) {
+          String urlPicture = "";
+          try (PreparedStatement psOfferor = myBackService.getPreparedStatement(
+              "select offeror,url_picture from projet.items where id_item = "
+                  + idItem)) {
+            try (ResultSet rsOfferor = psOfferor.executeQuery()) {
+              if (!rsOfferor.next()) {
                 throw new IllegalArgumentException("probleme dans la recuperation de l'offreur");
               }
-              psNotif.setInt(2, rsInterestUser.getInt(1));
+              urlPicture = rsOfferor.getString(2);
+              psNotif.setInt(2, rsOfferor.getInt(1));
             }
             psNotif.setInt(3, idItem);
-            var result = psNotif.executeUpdate();
-            if (result <= 0) {
-              throw new IllegalArgumentException("probleme insert de la notification");
+          }
+          String interestUsrName = "";
+          try (PreparedStatement psInterestUserAsString = myBackService.getPreparedStatement(
+              "Select username from projet.members where user_id = " + interestUserId)) {
+            try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
+              if (!rsInterestUserAsString.next()) {
+                throw new IllegalArgumentException("prblm interesUserAsTring");
+              }
+              interestUsrName = rsInterestUserAsString.getString(1);
             }
           }
+          psNotif.setString(1, interestUsrName + " est interessé par cette offre " + urlPicture);
+          psNotif.executeUpdate();
         }
       } catch (SQLException throwables) {
         throwables.printStackTrace();

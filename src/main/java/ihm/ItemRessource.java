@@ -76,7 +76,7 @@ public class ItemRessource {
   @Path("addInterest/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public void addInterest(@PathParam("id") int itemId, ObjectNode body) {
+  public Response addInterest(@PathParam("id") int itemId, ObjectNode body) {
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
@@ -101,6 +101,7 @@ public class ItemRessource {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
     myItemUCC.addInterest(itemId, body, userId);
+    return Response.ok().build();
   }
 
   /**
@@ -112,7 +113,7 @@ public class ItemRessource {
   @Path("cancelOffer/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public void cancelOffer(@PathParam("id") int itemId) {
+  public Response cancelOffer(@PathParam("id") int itemId) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
@@ -122,6 +123,7 @@ public class ItemRessource {
     //int userId = (int) request.getProperty("user");
 
     myItemUCC.cancelOffer(itemId, userId);
+    return Response.ok().build();
   }
 
   /**

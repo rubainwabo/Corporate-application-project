@@ -8,7 +8,7 @@ import jakarta.inject.Inject;
 import java.util.List;
 
 public class ItemUCCImpl implements ItemUCC {
-  
+
   @Inject
   private ItemDAO myItemDAOService;
 

@@ -29,6 +29,7 @@ public interface ItemUCC {
    * @param itemId     the itemID
    * @param objectNode the node getted by the front
    * @param userId     the user who's sending a request
+   * @return
    */
   void addInterest(int itemId, ObjectNode objectNode, int userId);
 

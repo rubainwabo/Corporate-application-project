@@ -49,7 +49,7 @@ public class UserDAOImpl implements UserDAO {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
-            + "state from projet.members where state=?")) {
+            + "state,phone_number from projet.members where state=?")) {
       ps.setString(1, state);
 
       try (ResultSet rs = ps.executeQuery()) {
@@ -114,11 +114,9 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public void addPhoneNumber(int userId, String phoneNumber) {
     try (PreparedStatement psAddPhone = myDalService.getPreparedStatement(
-        "update projet.members set phone_number = " + phoneNumber + " where user_id = " + userId)) {
-      var result = psAddPhone.executeUpdate();
-      if (result <= 0) {
-        throw new IllegalArgumentException("prblm dans update phone number");
-      }
+        "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
+            + userId)) {
+      psAddPhone.executeUpdate();
     } catch (SQLException throwables) {
       throwables.printStackTrace();
     }

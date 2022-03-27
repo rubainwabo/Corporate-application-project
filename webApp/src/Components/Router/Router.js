@@ -1,11 +1,13 @@
 import LoginPage from "../Pages/LoginPage";
 import HomePage from "../Pages/HomePage";
 import Logout from "../Logout/Logout";
+import Register from "../Pages/RegisterPage"
 
 // Configure your routes here
 const routes = {
   '/' : HomePage,
   "/login": LoginPage,
+  "/register":Register,
   "/logout":Logout
 };
 

@@ -54,7 +54,7 @@ if(accesToken){
 
           <div id="nav-connection"> 
             <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
-            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se connecter </a>  </div>
+            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
           </div>
         </div>
       </nav>
@@ -67,7 +67,7 @@ if(accesToken){
 
           <div id="nav-connection"> 
             <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
-            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> S'inscrire </a>  </div>
+            <div id="register"> <a class="nav-item" href="#" data-uri="/register"> S'inscrire </a>  </div>
           </div>
         </div>
       </nav>

@@ -15,8 +15,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Singleton
@@ -61,7 +59,7 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public ItemDTO getItemDetails(@PathParam("id") int id) {
     if (id <= 0) {
-      throw new WebApplicationException("bad request no id found in pathParams");
+      throw new WebApplicationException("bad request, no id found in pathParams");
     }
     return myItemUCC.getDetails(id);
   }
@@ -76,17 +74,23 @@ public class ItemRessource {
   @Path("addInterest/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public void addInterest(@PathParam("id") int itemId, ObjectNode body) {
+  public Response addInterest(@PathParam("id") int itemId, ObjectNode body) {
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
-    var dateAvailable = dateTime.format(formatter);
-    body.put("dateFormatted", dateAvailable);
-    var callMe = body.get("callMe").asBoolean();
-    var phoneNumber = body.get("phoneNumber").asText();
+    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    // LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
+    // var dateAvailable = dateTime.format(formatter);
+    // body.put("dateFormatted", dateAvailable);
+    var callMe = false;
+    String phoneNumber = "";
+    if (body.hasNonNull("callMe")) {
+      callMe = body.get("callMe").asBoolean();
+    }
+    if (body.hasNonNull("phoneNumber")) {
+      phoneNumber = body.get("phoneNumber").asText();
+    }
     int userId = 1;
     // user ID
     //int userId = (int) request.getProperty("user");
@@ -95,6 +99,7 @@ public class ItemRessource {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
     myItemUCC.addInterest(itemId, body, userId);
+    return Response.ok().build();
   }
 
   /**
@@ -106,7 +111,7 @@ public class ItemRessource {
   @Path("cancelOffer/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public void cancelOffer(@PathParam("id") int itemId) {
+  public Response cancelOffer(@PathParam("id") int itemId) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
@@ -116,6 +121,7 @@ public class ItemRessource {
     //int userId = (int) request.getProperty("user");
 
     myItemUCC.cancelOffer(itemId, userId);
+    return Response.ok().build();
   }
 
   /**

@@ -5,6 +5,7 @@ import buiseness.domain.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 import java.util.List;
 import utils.TokenService;
 import utils.exception.InvalidTokenException;
@@ -52,7 +53,10 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public List<UserDTO> getUsersByState(String state) {
-    return myUserDAO.getAllUserByState(state);
+    if (state.equals("denied") || state.equals("valid") || state.equals("waiting")) {
+      return myUserDAO.getAllUserByState(state);
+    }
+    throw new WebApplicationException("invalid State");
   }
 
   @Override

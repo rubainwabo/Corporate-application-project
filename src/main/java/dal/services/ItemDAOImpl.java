@@ -115,7 +115,7 @@ public class ItemDAOImpl implements ItemDAO {
     {
       try (PreparedStatement ps = myBackService.getPreparedStatement(
           "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
-        ps.setString(1, objectNode.get("dateFormatted").asText());
+        ps.setString(1, objectNode.get("availabilities").asText());
         ps.setInt(2, interestUserId);
         ps.setInt(3, idItem);
         ps.executeUpdate();

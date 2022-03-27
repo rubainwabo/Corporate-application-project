@@ -15,8 +15,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Singleton
@@ -81,10 +79,10 @@ public class ItemRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
-    var dateAvailable = dateTime.format(formatter);
-    body.put("dateFormatted", dateAvailable);
+    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    // LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
+    // var dateAvailable = dateTime.format(formatter);
+    // body.put("dateFormatted", dateAvailable);
     var callMe = false;
     String phoneNumber = "";
     if (body.hasNonNull("callMe")) {

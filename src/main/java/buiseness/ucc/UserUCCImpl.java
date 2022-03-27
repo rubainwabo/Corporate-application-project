@@ -52,7 +52,6 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public List<UserDTO> getUsersByState(String state) {
-
     return myUserDAO.getAllUserByState(state);
   }
 

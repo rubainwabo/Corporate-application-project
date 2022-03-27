@@ -61,52 +61,44 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_item,item_type,description,url_picture,offeror,time_slot,item_condition "
-            + "from projet.items where id_item=?")) {
+        "select i.id_item,t.item_type_name,i.description,i.url_picture,"
+            + "i.offeror,i.time_slot,i.item_condition "
+            + "from projet.items i,projet.item_type t where i.id_item=? and i.item_type = "
+            + "t.id_item_type")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
         if (!rs.next()) {
           return null;
         }
-        // PS to get the string of the item_type from the id of the previous PS
-        try (PreparedStatement psTypeString = myBackService.getPreparedStatement(
-            "Select item_type_name from projet.item_type where id_item_type = " + rs.getInt(2))) {
-          try (ResultSet rsTypeString = psTypeString.executeQuery()) {
-            if (!rsTypeString.next()) {
+        item.setId(rs.getInt(1));
+        item.setItemtype(rs.getString(2));
+        item.setDescription(rs.getString(3));
+        item.setUrlPicture(rs.getString(4));
+
+        // PS to get first name + lastName of the offeror from the id of the previous PS
+        try (PreparedStatement psOfferorAsString = myBackService.getPreparedStatement(
+            "Select last_name,first_name from projet.members where user_id = " + rs.getInt(
+                5))) {
+          try (ResultSet rsOfferorAsString = psOfferorAsString.executeQuery()) {
+            if (!rsOfferorAsString.next()) {
               return null;
             }
-            var itemTypeAsString = rsTypeString.getString(1);
-            item.setId(rs.getInt(1));
-            item.setItemtype(itemTypeAsString);
-            item.setDescription(rs.getString(3));
-            item.setUrlPicture(rs.getString(4));
+            String offeror =
+                rsOfferorAsString.getString(1) + " " + rsOfferorAsString.getString(2);
+            item.setOfferor(offeror);
+            item.setTimeSlot(rs.getString(6));
+            item.setItemCondition(rs.getString(7));
 
-            // PS to get first name + lastName of the offeror from the id of the previous PS
-            try (PreparedStatement psOfferorAsString = myBackService.getPreparedStatement(
-                "Select last_name,first_name from projet.members where user_id = " + rs.getInt(
-                    5))) {
-              try (ResultSet rsOfferorAsString = psOfferorAsString.executeQuery()) {
-                if (!rsOfferorAsString.next()) {
+            try (PreparedStatement psNbrPlpInterest = myBackService.getPreparedStatement(
+                "Select count(member) from projet.interests where item = "
+                    + rs.getInt(1))) {
+              try (ResultSet rsNbrPlpInterest = psNbrPlpInterest.executeQuery()) {
+                if (!rsNbrPlpInterest.next()) {
                   return null;
                 }
-                String offeror =
-                    rsOfferorAsString.getString(1) + " " + rsOfferorAsString.getString(2);
-                item.setOfferor(offeror);
-                item.setTimeSlot(rs.getString(6));
-                item.setItemCondition(rs.getString(7));
-
-                try (PreparedStatement psNbrPlpInterest = myBackService.getPreparedStatement(
-                    "Select count(member) from projet.interests where item = "
-                        + rs.getInt(1))) {
-                  try (ResultSet rsNbrPlpInterest = psNbrPlpInterest.executeQuery()) {
-                    if (!rsNbrPlpInterest.next()) {
-                      return null;
-                    }
-                    item.setNumberOfPeopleInterested(rsNbrPlpInterest.getInt(1));
-                    return item;
-                  }
-                }
+                item.setNumberOfPeopleInterested(rsNbrPlpInterest.getInt(1));
+                return item;
               }
             }
           }
@@ -156,7 +148,8 @@ public class ItemDAOImpl implements ItemDAO {
                   + idItem)) {
             try (ResultSet rsOfferor = psOfferor.executeQuery()) {
               if (!rsOfferor.next()) {
-                throw new IllegalArgumentException("probleme dans la recuperation de l'offreur");
+                throw new IllegalArgumentException(
+                    "probleme dans la recuperation de l'offreur");
               }
               urlPicture = rsOfferor.getString(2);
               psNotif.setInt(2, rsOfferor.getInt(1));
@@ -173,7 +166,8 @@ public class ItemDAOImpl implements ItemDAO {
               interestUsrName = rsInterestUserAsString.getString(1);
             }
           }
-          psNotif.setString(1, interestUsrName + " est interessé par cette offre " + urlPicture);
+          psNotif.setString(1,
+              interestUsrName + " est interessé par cette offre " + urlPicture);
           psNotif.executeUpdate();
         }
       } catch (SQLException throwables) {
@@ -227,7 +221,8 @@ public class ItemDAOImpl implements ItemDAO {
           item.setDescription(rs.getString(2));
           item.setUrlPicture(rs.getString(3));
           try (PreparedStatement psTypeString = myBackService.getPreparedStatement(
-              "Select item_type_name from projet.item_type where id_item_type = " + rs.getInt(4))) {
+              "Select item_type_name from projet.item_type where id_item_type = " + rs.getInt(
+                  4))) {
             try (ResultSet rsTypeString = psTypeString.executeQuery()) {
               if (!rsTypeString.next()) {
                 return null;

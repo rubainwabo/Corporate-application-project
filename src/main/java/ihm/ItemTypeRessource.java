@@ -37,4 +37,5 @@ public class ItemTypeRessource {
     }
     return myItemTypeUCC.addItemType(itemType.get("itemType").asText());
   }
+  
 }

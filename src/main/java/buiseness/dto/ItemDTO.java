@@ -1,6 +1,6 @@
-package buiseness.domain.dto;
+package buiseness.dto;
 
-import buiseness.domain.impl.ItemImpl;
+import buiseness.impl.ItemImpl;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = ItemImpl.class)

@@ -2,6 +2,7 @@ package utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Base64;
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 
 
 public class TokenServiceImpl implements TokenService {
+
   // 2 JWT secret code to distinguish between an access and a refresh token
   private final Algorithm jwtAlgorithmAccess = Algorithm.HMAC256(Config.getProperty("JWTAccess"));
   private final Algorithm jwtAlgorithmRefresh = Algorithm.HMAC256(Config.getProperty("JWTRefresh"));
@@ -99,5 +101,15 @@ public class TokenServiceImpl implements TokenService {
   @Override
   public int getUserId(String token) {
     return JWT.decode(token).getClaim("user").asInt();
+  }
+
+  @Override
+  public DecodedJWT getVerifyToken(String token) {
+    return JWT.require(jwtAlgorithmAccess).withIssuer("auth0").build().verify(token);
+  }
+
+  @Override
+  public DecodedJWT getVerifyRefreshToken(String token) {
+    return JWT.require(jwtAlgorithmRefresh).withIssuer("auth0").build().verify(token);
   }
 }

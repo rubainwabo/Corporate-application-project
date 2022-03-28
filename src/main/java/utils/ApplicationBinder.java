@@ -1,7 +1,7 @@
 package utils;
 
-import buiseness.domain.bizclass.ItemType;
-import buiseness.domain.impl.ItemTypeImpl;
+import buiseness.domain.ItemType;
+import buiseness.impl.ItemTypeImpl;
 import buiseness.factory.BizFactory;
 import buiseness.factory.BizFactoryImpl;
 import buiseness.ucc.ItemTypeUCC;

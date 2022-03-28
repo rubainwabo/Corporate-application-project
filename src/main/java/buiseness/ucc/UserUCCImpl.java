@@ -1,7 +1,7 @@
 package buiseness.ucc;
 
-import buiseness.domain.bizclass.User;
-import buiseness.domain.dto.UserDTO;
+import buiseness.domain.User;
+import buiseness.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalServices;
 import dal.services.UserDAO;
@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import java.util.List;
 import utils.TokenService;
 import utils.exception.BizzException;
+import utils.exception.InvalidStateException;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -97,6 +98,64 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.start(true);
       myUserDAO.addPhoneNumber(userId, phoneNumber);
       myDalServices.commit(true);
+    } catch(Exception e) {
+      myDalServices.rollBack();
+      throw new BizzException("Erreur lors de la connexion à la db");
+    }
+  }
+
+  public User getOneById(int id) {
+    try {
+      myDalServices.start(false);
+      var usr = (User) myUserDAO.getOneById(id);
+      myDalServices.commit(false);
+      return usr;
+    } catch(Exception e) {
+      myDalServices.commit(false);
+      throw new BizzException("Erreur lors de la connexion à la db");
+    }
+  }
+
+  public boolean checkAdmin(int id) {
+    try {
+      myDalServices.start(false);
+      User myUser = (User) myUserDAO.getOneById(id);
+      boolean isAdmin = myUser.isAdmin();
+      myDalServices.commit(false);
+      return isAdmin;
+    } catch(Exception e) {
+      myDalServices.commit(false);
+      throw new BizzException("Erreur lors de la connexion à la db");
+    }
+  }
+
+  public boolean checkWaitingOrDenied(int id) {
+    try {
+      myDalServices.start(false);
+      User myUser = (User) myUserDAO.getOneById(id);
+      boolean isValid = !myUser.isWaiting() && !myUser.isDenied();
+      myDalServices.commit(false);
+      return isValid;
+    } catch(Exception e) {
+      myDalServices.commit(false);
+      throw new BizzException("Erreur lors de la connexion à la db");
+    }
+  }
+
+  @Override
+  public boolean changeState(int id, String state, String refusalReason, boolean admin) {
+    try {
+      if (!state.equals("denied") && !state.equals("valid")) {
+        throw new InvalidStateException("Trying to insert invalid state");
+      }
+      myDalServices.start(true);
+      if (myUserDAO.getOneById(id) == null) {
+        myDalServices.commit(false);
+        return false;
+      }
+      myUserDAO.changeState(id, state, refusalReason, admin);
+      myDalServices.commit(true);
+      return true;
     } catch(Exception e) {
       myDalServices.rollBack();
       throw new BizzException("Erreur lors de la connexion à la db");

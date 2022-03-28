@@ -1,8 +1,10 @@
 package buiseness.ucc;
 
-import buiseness.domain.dto.UserDTO;
+import buiseness.domain.User;
+import buiseness.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
+import utils.exception.InvalidStateException;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -30,6 +32,14 @@ public interface UserUCC {
    * @return an acess and refresh token
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
+
+  boolean changeState(int id, String state, String refusalReason, boolean admin) throws InvalidStateException, InvalidStateException;
+
+  User getOneById(int id);
+
+  boolean checkAdmin(int id);
+
+  boolean checkWaitingOrDenied(int id);
 
   /**
    * allows to retrieve all the users of the db with the state.

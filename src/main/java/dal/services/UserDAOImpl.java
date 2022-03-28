@@ -1,6 +1,6 @@
 package dal.services;
 
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 import buiseness.factory.BizFactory;
 import dal.DalBackService;
 import jakarta.inject.Inject;
@@ -78,7 +78,7 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneById(int id) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select user_id from projet.members where user_id=?")) {
+        "select user_id, state, _role from projet.members where user_id=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();
@@ -86,6 +86,8 @@ public class UserDAOImpl implements UserDAO {
           return null;
         }
         user.setId(rs.getInt(1));
+        user.setState(rs.getString(2));
+        user.setRole(rs.getString(3));
         return user;
       }
     } catch (SQLException throwable) {
@@ -114,6 +116,28 @@ public class UserDAOImpl implements UserDAO {
         "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
             + userId)) {
       psAddPhone.executeUpdate();
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec de la query");
+    }
+  }
+  @Override
+  public void changeState(int userId, String state, String refusalReason, boolean admin) {
+    String role = admin ? "admin" : "member";
+
+    String query = refusalReason.isBlank() ? "update projet.members set state = '" + state
+        + "', _role = '" + role + (state.equals("valid")
+        ? "',reason_for_connection_refusal = null"
+        : "'") +
+        " where user_id =" + userId
+        : "update projet.members set state = '" + state
+            + "', reason_for_connection_refusal = '"
+            + refusalReason + "', _role = '" + role + (state.equals("valid")
+            ? "',reason_for_connection_refusal = null" : "'")
+            + " where user_id = " + userId;
+
+    try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
+        query)) {
+      psConfirm.executeUpdate();
     } catch (SQLException throwable) {
       throw new FatalException("Echec de la query");
     }

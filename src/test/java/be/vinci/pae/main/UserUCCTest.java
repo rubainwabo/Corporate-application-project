@@ -1,6 +1,6 @@
 package be.vinci.pae.main;
 
-import buiseness.domain.bizclass.User;
+import buiseness.domain.User;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;

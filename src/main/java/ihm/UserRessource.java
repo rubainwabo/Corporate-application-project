@@ -1,6 +1,6 @@
 package ihm;
 
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -18,6 +18,9 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
 
+// ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
+// (name can be changed in FiltersDynamicBindingConfig class)
+// ! To use the AuthorizeRequestFilter the name of path methods must contain "user" !
 
 @Singleton
 @Path("/auths")
@@ -27,10 +30,61 @@ public class UserRessource {
   private UserUCC myUserUCC;
 
   /**
-   * allows to connect the user.
+   * test.
    *
    * @param body the data that the user has entered put in json format
    * @return the token associated to the user, otherwise an error in case of failure
+   */
+  @POST
+  @Path("admin")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public String adminPage(Object body) {
+    return "oui";
+  }
+
+  /**
+   * Change the state of a certain user.
+   *
+   * @param body the data that the user has entered put in json format
+   * @return true or false if state successfully changed.
+   */
+  @POST
+  @Path("changeState")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public boolean adminChangeState(JsonNode body) {
+    if (!body.hasNonNull("change_id") || !body.hasNonNull("state")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("id field is required").type("text/plain").build());
+    }
+
+    if (!body.get("state").asText().equals("denied") && body.hasNonNull("refusalReason")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("You cannot put refusal reason on something else than refused state")
+          .type("text/plain").build());
+    }
+
+    if (body.get("state").asText().equals("denied") && (!body.hasNonNull("refusalReason")
+        || body.get("refusalReason").asText().isBlank())) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("You have to put your denial reason if you want to deny someone")
+          .type("text/plain").build());
+    }
+    if (body.hasNonNull("refusalReason")) {
+      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
+          body.get("refusalReason").asText(), body.get("admin").asBoolean());
+    } else {
+      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
+          body.get("admin").asBoolean());
+    }
+  }
+
+  /**
+   * allows to connect the user.
+   *
+   * @param body the data that the user has entered put in json format
+   * @return the user
    */
   @POST
   @Path("login")
@@ -67,10 +121,10 @@ public class UserRessource {
   @Path("refreshToken")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public ObjectNode refreshToken(JsonNode body) {
+  public ObjectNode userRefreshToken(JsonNode body) {
     if (!body.hasNonNull("refreshToken")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("a token required").type("text/plain").build());
+          .entity("a token or refreshToken is required").type("text/plain").build());
     }
     // escape characters to avoid XSS injections and transforms the received token into text
     String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
@@ -85,7 +139,7 @@ public class UserRessource {
   @GET
   @Path("list")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> deniedUserList(@QueryParam("state") String state) {
+  public List<UserDTO> userListByState(@QueryParam("state") String state) {
     if (state.isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a state is required").type("text/plain").build());

@@ -1,5 +1,6 @@
 package be.vinci.pae.main;
 
+import filters.FiltersDynamicBindingConfig;
 import java.io.IOException;
 import java.net.URI;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -34,6 +35,7 @@ public class Main {
     // in be.vinci package
     final ResourceConfig rc = new ResourceConfig().packages("ihm").register(JacksonFeature.class)
         .register(ApplicationBinder.class)
+        .register(FiltersDynamicBindingConfig.class)
         .register(WebExceptionMapper.class);
 
     // create and start a new instance of grizzly http server

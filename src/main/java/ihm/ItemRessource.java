@@ -43,8 +43,6 @@ public class ItemRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("object informations invalid").type("text/plain").build());
     }
-    // user ID
-    //int userId = (int) request.getProperty("user");
     return myItemUCC.addItem(itemDTO, 1);
   }
 
@@ -79,10 +77,6 @@ public class ItemRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
-    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    // LocalDateTime dateTime = LocalDateTime.parse(body.get("availabilities").asText(), formatter);
-    // var dateAvailable = dateTime.format(formatter);
-    // body.put("dateFormatted", dateAvailable);
     var callMe = false;
     String phoneNumber = "";
     if (body.hasNonNull("callMe")) {
@@ -92,9 +86,6 @@ public class ItemRessource {
       phoneNumber = body.get("phoneNumber").asText();
     }
     int userId = 1;
-    // user ID
-    //int userId = (int) request.getProperty("user");
-
     if (callMe && !phoneNumber.isBlank()) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
@@ -117,9 +108,6 @@ public class ItemRessource {
           .entity("information is missing").type("text/plain").build());
     }
     int userId = 1;
-    // user ID
-    //int userId = (int) request.getProperty("user");
-
     myItemUCC.cancelOffer(itemId, userId);
     return Response.ok().build();
   }

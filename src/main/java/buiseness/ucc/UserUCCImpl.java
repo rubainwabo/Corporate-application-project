@@ -78,7 +78,7 @@ public class UserUCCImpl implements UserUCC {
   @Override
   public boolean changeState(int id, String state, String refusalReason)
       throws InvalidStateException {
-    System.out.println("here" + state);
+    
     if (!state.equals("denied") && !state.equals("valid")) {
       throw new InvalidStateException("Trying to insert invalid state");
     }

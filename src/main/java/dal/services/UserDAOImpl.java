@@ -129,10 +129,12 @@ public class UserDAOImpl implements UserDAO {
     String role = admin ? "admin" : "member";
 
     String query = refusalReason.isBlank() ? "update projet.members set state = '" + state
-        + "', _role = '" + role + (state.equals("valid") ? "',reason_for_connection_refusal = null"
+        + "', _role = '" + role + (state.equals("valid")
+        ? "',reason_for_connection_refusal = null"
         : "'") +
         " where user_id =" + userId
-        : "update projet.members set state = '" + state + "', reason_for_connection_refusal = '"
+        : "update projet.members set state = '" + state
+            + "', reason_for_connection_refusal = '"
             + refusalReason + "', _role = '" + role + (state.equals("valid")
             ? "',reason_for_connection_refusal = null" : "'")
             + " where user_id = " + userId;

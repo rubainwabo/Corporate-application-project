@@ -37,7 +37,7 @@ public class UserRessource {
   private UserUCC myUserUCC;
 
   /**
-   * test
+   * test.
    *
    * @param body the data that the user has entered put in json format
    * @return the token associated to the user, otherwise an error in case of failure
@@ -51,7 +51,7 @@ public class UserRessource {
   }
 
   /**
-   * Change the state of a certain user
+   * Change the state of a certain user.
    *
    * @param body the data that the user has entered put in json format
    * @return true or false if state successfully changed.

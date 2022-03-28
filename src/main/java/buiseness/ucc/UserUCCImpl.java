@@ -7,6 +7,7 @@ import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import java.util.List;
 import utils.TokenService;
+import utils.exception.InvalidStateException;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -72,5 +73,20 @@ public class UserUCCImpl implements UserUCC {
   @Override
   public List<UserDTO> getUserWaiting() {
     return myUserDAO.getAllUserByState("waiting");
+  }
+
+  @Override
+  public boolean changeState(int id, String state, String refusalReason)
+      throws InvalidStateException {
+    System.out.println("here" + state);
+    if (!state.equals("denied") && !state.equals("valid")) {
+      throw new InvalidStateException("Trying to insert invalid state");
+    }
+
+    if (myUserDAO.getOneById(id) == null) {
+      return false;
+    }
+    myUserDAO.changeState(id, state, refusalReason);
+    return true;
   }
 }

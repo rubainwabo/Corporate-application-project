@@ -123,4 +123,23 @@ public class UserDAOImpl implements UserDAO {
       throwables.printStackTrace();
     }
   }
+
+  @Override
+  public void changeState(int userId, String state, String refusalReason) {
+    String query = refusalReason.isBlank() ? "update projet.members set state = '" + state
+        + "' where user_id =" + userId
+        : "update projet.members set state = '" + state + "', reason_for_connection_refusal = '"
+            + refusalReason + "' where user_id = " + userId;
+    System.out.println(query);
+    try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
+        query)) {
+      var result = psConfirm.executeUpdate();
+      if (result <= 0) {
+        throw new IllegalArgumentException("probleme dans update confirm inscription");
+      }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+  }
+
 }

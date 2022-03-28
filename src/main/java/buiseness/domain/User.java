@@ -20,6 +20,7 @@ public interface User extends UserDTO {
 
   /**
    * will check that the state passed in parameter is denied.
+   *
    * @return true if the state is denied
    */
   boolean isDenied();

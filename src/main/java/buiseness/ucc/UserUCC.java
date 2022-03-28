@@ -4,6 +4,7 @@ import buiseness.domain.User;
 import buiseness.domain.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
+import utils.exception.InvalidStateException;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -31,6 +32,8 @@ public interface UserUCC {
    * @return an acess and refresh token
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
+
+  boolean changeState(int id, String state, String refusalReason) throws InvalidStateException;
 
   User getOneById(int id);
 

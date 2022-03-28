@@ -17,25 +17,26 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
+import utils.exception.InvalidStateException;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
 
-//To use the AdminAuthorizeFilter the name of your path methods must contain "admin"
+// ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
 // (name can be changed in FiltersDynamicBindingConfig class)
-//To use the AuthorizeRequestFilter the name of path methods must contain "user"
+// ! To use the AuthorizeRequestFilter the name of path methods must contain "user" !
 
 @Singleton
 @Path("/auths")
 public class UserRessource {
 
   @Inject
-   private UserUCC myUserUCC;
+  private UserUCC myUserUCC;
 
   /**
-   * allows to connect the user.
+   * test
    *
    * @param body the data that the user has entered put in json format
    * @return the token associated to the user, otherwise an error in case of failure
@@ -46,6 +47,41 @@ public class UserRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public String adminPage(Object body) {
     return "oui";
+  }
+
+  /**
+   * Change the state of a certain user
+   *
+   * @param body the data that the user has entered put in json format
+   * @return true or false if state successfully changed.
+   */
+  @POST
+  @Path("changeState")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public boolean adminChangeState(JsonNode body) {
+    if (!body.hasNonNull("change_id") || !body.hasNonNull("state")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("id field is required").type("text/plain").build());
+    }
+
+    if (!body.get("state").asText().equals("denied") && body.hasNonNull("refusalReason")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("You cannot put refusal reason on something else than refused state")
+          .type("text/plain").build());
+    }
+
+    try {
+      if (body.hasNonNull("refusalReason")) {
+        return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
+            body.get("refusalReason").asText());
+      } else {
+        return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "");
+      }
+    } catch (InvalidStateException e) {
+      throw new WebApplicationException(Response.status(Status.NOT_ACCEPTABLE)
+          .entity(e.getMessage()).type("text/plain").build());
+    }
   }
 
   /**

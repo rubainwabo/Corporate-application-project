@@ -33,7 +33,7 @@ public class ItemUCCImpl implements ItemUCC {
       myDateDAOService.addDate(itemId);
       myDalServices.commit(true);
       return itemId;
-    } catch(Exception e) {
+    } catch (Exception e) {
       myDalServices.rollBack();
       throw new BizzException("Erreur lors de la connexion à la db");
     }
@@ -46,7 +46,7 @@ public class ItemUCCImpl implements ItemUCC {
       var item = myItemDAOService.getOneById(id);
       myDalServices.commit(false);
       return item;
-    } catch(Exception e) {
+    } catch (Exception e) {
       myDalServices.commit(false);
       throw new BizzException("Erreur lors de la connexion à la db");
     }
@@ -58,7 +58,7 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.start(true);
       myItemDAOService.addInterest(itemId, objectNode, userId);
       myDalServices.commit(true);
-    } catch(Exception e) {
+    } catch (Exception e) {
       myDalServices.rollBack();
       throw new BizzException("Erreur lors de la connexion à la db");
     }
@@ -70,7 +70,7 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.start(true);
       myItemDAOService.cancelOffer(idItem, userId);
       myDalServices.commit(true);
-    } catch(Exception e) {
+    } catch (Exception e) {
       myDalServices.rollBack();
       throw new BizzException("Erreur lors de la connexion à la db");
     }
@@ -89,7 +89,7 @@ public class ItemUCCImpl implements ItemUCC {
       list = myItemDAOService.getLastItemsOffered(12);
       myDalServices.commit(false);
       return list;
-    } catch(Exception e) {
+    } catch (Exception e) {
       myDalServices.commit(false);
       throw new BizzException("Erreur lors de la connexion à la db");
     }

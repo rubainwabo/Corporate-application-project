@@ -1,4 +1,4 @@
-package buiseness.domain.bizclass;
+package buiseness.domain;
 
 import buiseness.domain.dto.UserDTO;
 
@@ -33,5 +33,8 @@ public interface User extends UserDTO {
    * @return true if the state is waiting
    */
   boolean isWaiting();
+
+  boolean isAdmin();
+
 
 }

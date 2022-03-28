@@ -1,6 +1,6 @@
 package buiseness.ucc;
 
-import buiseness.domain.bizclass.User;
+import buiseness.domain.User;
 import buiseness.domain.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.services.UserDAO;
@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import java.util.List;
 import utils.TokenService;
+import utils.exception.InvalidStateException;
 import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
@@ -56,8 +57,7 @@ public class UserUCCImpl implements UserUCC {
     if (state.equals("denied") || state.equals("valid") || state.equals("waiting")) {
       return myUserDAO.getAllUserByState(state);
     }
-    throw new WebApplicationException("invalid State");
-  }
+    throw new WebApplicationException("invalid State");}
 
   @Override
   public String getPhoneNumber(int userId) {
@@ -67,5 +67,34 @@ public class UserUCCImpl implements UserUCC {
   @Override
   public void addPhoneNumber(int userId, String phoneNumber) {
     myUserDAO.addPhoneNumber(userId, phoneNumber);
+  }
+
+  public User getOneById(int id) {
+    return (User) myUserDAO.getOneById(id);
+  }
+
+  public boolean checkAdmin(int id) {
+    User myUser = (User) myUserDAO.getOneById(id);
+    return myUser.isAdmin();
+  }
+
+  public boolean checkWaitingOrDenied(int id) {
+    User myUser = (User) myUserDAO.getOneById(id);
+    return !myUser.isWaiting() && !myUser.isDenied();
+  }
+
+  @Override
+  public boolean changeState(int id, String state, String refusalReason)
+      throws InvalidStateException {
+
+    if (!state.equals("denied") && !state.equals("valid")) {
+      throw new InvalidStateException("Trying to insert invalid state");
+    }
+
+    if (myUserDAO.getOneById(id) == null) {
+      return false;
+    }
+    myUserDAO.changeState(id, state, refusalReason);
+    return true;
   }
 }

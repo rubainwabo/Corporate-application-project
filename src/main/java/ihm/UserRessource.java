@@ -110,7 +110,7 @@ public class UserRessource {
   @GET
   @Path("list")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> deniedUserList(@QueryParam("state") String state) {
+  public List<UserDTO> userListByState(@QueryParam("state") String state) {
     if (state.isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a state is required").type("text/plain").build());

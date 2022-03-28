@@ -51,5 +51,5 @@ public interface UserDAO {
    * @param newState         : state we want to put
    * @param newRefusalReason : his refusal reason
    */
-  void changeState(int userId, String newState, String newRefusalReason);
+  void changeState(int userId, String newState, String newRefusalReason, boolean admin);
 }

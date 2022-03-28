@@ -79,6 +79,10 @@ public interface UserDTO {
    */
   void setUsername(String username);
 
+  void setRole(String role);
+
+  String getRole();
+
   String getLastName();
 
   void setLastName(String lastName);

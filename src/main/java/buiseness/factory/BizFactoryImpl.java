@@ -1,11 +1,11 @@
 package buiseness.factory;
 
-import buiseness.domain.dto.ItemDTO;
-import buiseness.domain.dto.ItemTypeDTO;
-import buiseness.domain.dto.UserDTO;
-import buiseness.domain.impl.ItemImpl;
-import buiseness.domain.impl.ItemTypeImpl;
-import buiseness.domain.impl.UserImpl;
+import buiseness.dto.ItemDTO;
+import buiseness.dto.ItemTypeDTO;
+import buiseness.dto.UserDTO;
+import buiseness.impl.ItemImpl;
+import buiseness.impl.ItemTypeImpl;
+import buiseness.impl.UserImpl;
 
 public class BizFactoryImpl implements BizFactory {
 

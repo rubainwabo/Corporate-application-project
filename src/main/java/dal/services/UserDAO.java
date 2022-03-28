@@ -1,6 +1,6 @@
 package dal.services;
 
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 import java.util.List;
 
 public interface UserDAO {

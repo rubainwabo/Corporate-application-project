@@ -1,6 +1,6 @@
-package buiseness.domain.impl;
+package buiseness.impl;
 
-import buiseness.domain.bizclass.ItemType;
+import buiseness.domain.ItemType;
 
 public class ItemTypeImpl implements ItemType {
   

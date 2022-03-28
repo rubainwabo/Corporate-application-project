@@ -1,6 +1,6 @@
 package buiseness.domain;
 
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 
 public interface User extends UserDTO {
 

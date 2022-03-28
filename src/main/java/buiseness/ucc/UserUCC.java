@@ -1,7 +1,7 @@
 package buiseness.ucc;
 
 import buiseness.domain.User;
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import utils.exception.InvalidStateException;

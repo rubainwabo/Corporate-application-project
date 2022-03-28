@@ -1,4 +1,4 @@
-package buiseness.domain.dto;
+package buiseness.dto;
 
 public interface UserDTO {
 

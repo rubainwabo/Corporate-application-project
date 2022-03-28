@@ -1,6 +1,6 @@
 package ihm;
 
-import buiseness.domain.dto.ItemDTO;
+import buiseness.dto.ItemDTO;
 import buiseness.ucc.ItemUCC;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.node.ObjectNode;

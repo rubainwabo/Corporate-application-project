@@ -2,6 +2,8 @@ package be.vinci.pae.main;
 
 import buiseness.ucc.UserUCC;
 import buiseness.ucc.UserUCCImpl;
+import dal.DalServices;
+import dal.DalServicesImpl;
 import dal.services.UserDAO;
 import dal.services.UserDAOImpl;
 import jakarta.inject.Singleton;
@@ -15,6 +17,7 @@ import utils.TokenServiceImpl;
 public class TestApplicationBinder extends AbstractBinder {
 
   protected void configure() {
+    bind(Mockito.mock(DalServicesImpl.class)).to(DalServices.class);
     bind(Mockito.mock(UserDAOImpl.class)).to(UserDAO.class);
     bind(Mockito.mock(TokenServiceImpl.class)).to(TokenService.class);
     bind(UserUCCImpl.class).to(UserUCC.class).in(Singleton.class);

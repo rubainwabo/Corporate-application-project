@@ -1,8 +1,8 @@
 package buiseness.factory;
 
-import buiseness.domain.dto.ItemDTO;
-import buiseness.domain.dto.ItemTypeDTO;
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.ItemDTO;
+import buiseness.dto.ItemTypeDTO;
+import buiseness.dto.UserDTO;
 
 public interface BizFactory {
 

@@ -1,4 +1,4 @@
-package buiseness.domain.impl;
+package buiseness.impl;
 
 import buiseness.domain.User;
 import org.mindrot.jbcrypt.BCrypt;

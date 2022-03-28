@@ -62,7 +62,7 @@ public class ItemDAOImpl implements ItemDAO {
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
-            + "i.offeror,i.time_slot,i.item_condition "
+            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested "
             + "from projet.items i,projet.item_type t where i.id_item=? and i.item_type = "
             + "t.id_item_type")) {
       ps.setInt(1, id);
@@ -89,18 +89,8 @@ public class ItemDAOImpl implements ItemDAO {
             item.setOfferor(offeror);
             item.setTimeSlot(rs.getString(6));
             item.setItemCondition(rs.getString(7));
-
-            try (PreparedStatement psNbrPlpInterest = myBackService.getPreparedStatement(
-                "Select count(member) from projet.interests where item = "
-                    + rs.getInt(1))) {
-              try (ResultSet rsNbrPlpInterest = psNbrPlpInterest.executeQuery()) {
-                if (!rsNbrPlpInterest.next()) {
-                  return null;
-                }
-                item.setNumberOfPeopleInterested(rsNbrPlpInterest.getInt(1));
-                return item;
-              }
-            }
+            item.setNumberOfPeopleInterested(rs.getInt(8));
+            return item;
           }
         }
       }
@@ -227,7 +217,7 @@ public class ItemDAOImpl implements ItemDAO {
               if (!rsTypeString.next()) {
                 return null;
               }
-              item.setItemtype(rs.getString(4));
+              item.setItemtype(rsTypeString.getString(1));
             }
           }
           item.setNumberOfPeopleInterested(rs.getInt(5));

@@ -46,7 +46,7 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public List<UserDTO> getAllUserByState(String state) {
-   List<UserDTO> userDTOList;
+    List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
             + "state,phone_number from projet.members where state=?")) {
@@ -120,6 +120,7 @@ public class UserDAOImpl implements UserDAO {
       throw new FatalException("Echec de la query");
     }
   }
+
   @Override
   public void changeState(int userId, String state, String refusalReason, boolean admin) {
     String role = admin ? "admin" : "member";
@@ -127,8 +128,8 @@ public class UserDAOImpl implements UserDAO {
     String query = refusalReason.isBlank() ? "update projet.members set state = '" + state
         + "', _role = '" + role + (state.equals("valid")
         ? "',reason_for_connection_refusal = null"
-        : "'") +
-        " where user_id =" + userId
+        : "'")
+        + " where user_id =" + userId
         : "update projet.members set state = '" + state
             + "', reason_for_connection_refusal = '"
             + refusalReason + "', _role = '" + role + (state.equals("valid")

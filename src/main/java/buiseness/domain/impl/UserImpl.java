@@ -1,6 +1,6 @@
 package buiseness.domain.impl;
 
-import buiseness.domain.bizclass.User;
+import buiseness.domain.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UserImpl implements User {
@@ -10,6 +10,7 @@ public class UserImpl implements User {
   private String username;
   private String state;
   private String reasonForConnectionRefusal;
+  private String role;
   private String lastName;
   private String firstName;
   private String city;
@@ -152,5 +153,20 @@ public class UserImpl implements User {
   @Override
   public void setBuildingNumber(String buildingNumber) {
     this.buildingNumber = buildingNumber;
+  }
+
+  @Override
+  public String getRole() {
+    return this.role;
+  }
+
+  @Override
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  @Override
+  public boolean isAdmin() {
+    return this.role.equals("admin");
   }
 }

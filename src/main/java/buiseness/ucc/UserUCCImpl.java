@@ -84,7 +84,7 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public boolean changeState(int id, String state, String refusalReason)
+  public boolean changeState(int id, String state, String refusalReason, boolean admin)
       throws InvalidStateException {
 
     if (!state.equals("denied") && !state.equals("valid")) {
@@ -94,7 +94,7 @@ public class UserUCCImpl implements UserUCC {
     if (myUserDAO.getOneById(id) == null) {
       return false;
     }
-    myUserDAO.changeState(id, state, refusalReason);
+    myUserDAO.changeState(id, state, refusalReason, admin);
     return true;
   }
 }

@@ -37,7 +37,7 @@ public class UserRessource {
   private UserUCC myUserUCC;
 
   /**
-   * test
+   * test.
    *
    * @param body the data that the user has entered put in json format
    * @return the token associated to the user, otherwise an error in case of failure
@@ -51,7 +51,7 @@ public class UserRessource {
   }
 
   /**
-   * Change the state of a certain user
+   * Change the state of a certain user.
    *
    * @param body the data that the user has entered put in json format
    * @return true or false if state successfully changed.
@@ -72,12 +72,19 @@ public class UserRessource {
           .type("text/plain").build());
     }
 
+    if (body.get("state").asText().equals("denied") && (!body.hasNonNull("refusalReason")
+        || body.get("refusalReason").asText().isBlank())) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("You have to put your denial reason if you want to deny someone")
+          .type("text/plain").build());
+    }
     try {
       if (body.hasNonNull("refusalReason")) {
         return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
-            body.get("refusalReason").asText());
+            body.get("refusalReason").asText(), body.get("admin").asBoolean());
       } else {
-        return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "");
+        return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
+            body.get("admin").asBoolean());
       }
     } catch (InvalidStateException e) {
       throw new WebApplicationException(Response.status(Status.NOT_ACCEPTABLE)

@@ -33,7 +33,7 @@ public interface UserUCC {
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
-  boolean changeState(int id, String state, String refusalReason) throws InvalidStateException, InvalidStateException;
+  boolean changeState(int id, String state, String refusalReason, boolean admin) throws InvalidStateException, InvalidStateException;
 
   User getOneById(int id);
 

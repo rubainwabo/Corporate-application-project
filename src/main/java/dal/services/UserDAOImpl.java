@@ -125,12 +125,20 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void changeState(int userId, String state, String refusalReason) {
+  public void changeState(int userId, String state, String refusalReason, boolean admin) {
+    String role = admin ? "admin" : "member";
+
     String query = refusalReason.isBlank() ? "update projet.members set state = '" + state
-        + "' where user_id =" + userId
-        : "update projet.members set state = '" + state + "', reason_for_connection_refusal = '"
-            + refusalReason + "' where user_id = " + userId;
-    System.out.println(query);
+        + "', _role = '" + role + (state.equals("valid")
+        ? "',reason_for_connection_refusal = null"
+        : "'") +
+        " where user_id =" + userId
+        : "update projet.members set state = '" + state
+            + "', reason_for_connection_refusal = '"
+            + refusalReason + "', _role = '" + role + (state.equals("valid")
+            ? "',reason_for_connection_refusal = null" : "'")
+            + " where user_id = " + userId;
+
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       var result = psConfirm.executeUpdate();

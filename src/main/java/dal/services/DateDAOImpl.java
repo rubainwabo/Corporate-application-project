@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import utils.exception.FatalException;
 
 public class DateDAOImpl implements DateDAO {
 
@@ -19,7 +20,7 @@ public class DateDAOImpl implements DateDAO {
       psDate.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
       psDate.executeUpdate();
     } catch (SQLException throwables) {
-      throwables.printStackTrace();
+      throw new FatalException("Echec lors de l'ajout de la date");
     }
   }
 }

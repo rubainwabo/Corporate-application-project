@@ -15,14 +15,8 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
-import utils.exception.InvalidTokenException;
-import utils.exception.PasswordOrUsernameException;
-import utils.exception.ReasonForConnectionRefusalException;
-import utils.exception.UserInvalidException;
-import utils.exception.UserOnHoldException;
 
 
 @Singleton
@@ -60,21 +54,7 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
-    try {
-      return myUserUCC.login(username, password, rememberMe);
-    } catch (UserInvalidException e) {
-      throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-          .entity(e.getMessage()).type("text/plain").build());
-    } catch (PasswordOrUsernameException e) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    } catch (ReasonForConnectionRefusalException e) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    } catch (UserOnHoldException e) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    }
+    return myUserUCC.login(username, password, rememberMe);
   }
 
   /**
@@ -94,12 +74,7 @@ public class UserRessource {
     }
     // escape characters to avoid XSS injections and transforms the received token into text
     String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
-    try {
-      return myUserUCC.refreshToken(refreshToken);
-    } catch (InvalidTokenException e) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    }
+    return myUserUCC.refreshToken(refreshToken);
   }
 
   /**

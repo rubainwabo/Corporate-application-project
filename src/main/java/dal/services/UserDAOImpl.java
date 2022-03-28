@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import utils.exception.FatalException;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -29,7 +30,7 @@ public class UserDAOImpl implements UserDAO {
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();
         if (!rs.next()) {
-          return null;
+          throw new FatalException("Pas d'user avec cet username trouvé");
         }
         user.setId(rs.getInt(1));
         user.setPassword(rs.getString(2));
@@ -38,15 +39,14 @@ public class UserDAOImpl implements UserDAO {
         user.setReasonForConnectionRefusal(rs.getString(5));
         return user;
       }
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
-      return null;
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec de la query");
     }
   }
 
   @Override
   public List<UserDTO> getAllUserByState(String state) {
-    List<UserDTO> userDTOList;
+   List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
             + "state,phone_number from projet.members where state=?")) {
@@ -69,9 +69,8 @@ public class UserDAOImpl implements UserDAO {
           userDTOList.add(user);
         }
       }
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
-      return null;
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec de la query");
     }
     return userDTOList;
   }
@@ -89,9 +88,8 @@ public class UserDAOImpl implements UserDAO {
         user.setId(rs.getInt(1));
         return user;
       }
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
-      return null;
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec de la query");
     }
   }
 
@@ -105,10 +103,9 @@ public class UserDAOImpl implements UserDAO {
         }
         return rsPhoneNumber.getString(1);
       }
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec de la query");
     }
-    return "";
   }
 
   @Override
@@ -117,8 +114,8 @@ public class UserDAOImpl implements UserDAO {
         "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
             + userId)) {
       psAddPhone.executeUpdate();
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec de la query");
     }
   }
 }

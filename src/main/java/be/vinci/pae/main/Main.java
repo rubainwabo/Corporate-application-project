@@ -8,6 +8,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import utils.ApplicationBinder;
 import utils.Config;
+import utils.WebExceptionMapper;
 
 /**
  * Main class.
@@ -32,7 +33,8 @@ public class Main {
     // create a resource config that scans for JAX-RS resources and providers
     // in be.vinci package
     final ResourceConfig rc = new ResourceConfig().packages("ihm").register(JacksonFeature.class)
-        .register(ApplicationBinder.class);
+        .register(ApplicationBinder.class)
+        .register(WebExceptionMapper.class);
 
     // create and start a new instance of grizzly http server
     // exposing the Jersey application at BASE_URI

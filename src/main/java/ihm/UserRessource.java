@@ -1,6 +1,6 @@
 package ihm;
 
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,19 +15,14 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
-import utils.exception.InvalidStateException;
-import utils.exception.InvalidTokenException;
-import utils.exception.PasswordOrUsernameException;
-import utils.exception.ReasonForConnectionRefusalException;
-import utils.exception.UserInvalidException;
-import utils.exception.UserOnHoldException;
+import utils.exception.UsernameAlreadyExists;
 
 // ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
 // (name can be changed in FiltersDynamicBindingConfig class)
 // ! To use the AuthorizeRequestFilter the name of path methods must contain "user" !
+
 
 @Singleton
 @Path("/auths")
@@ -37,7 +32,7 @@ public class UserRessource {
   private UserUCC myUserUCC;
 
   /**
-   * test
+   * test.
    *
    * @param body the data that the user has entered put in json format
    * @return the token associated to the user, otherwise an error in case of failure
@@ -51,7 +46,7 @@ public class UserRessource {
   }
 
   /**
-   * Change the state of a certain user
+   * Change the state of a certain user.
    *
    * @param body the data that the user has entered put in json format
    * @return true or false if state successfully changed.
@@ -72,16 +67,18 @@ public class UserRessource {
           .type("text/plain").build());
     }
 
-    try {
-      if (body.hasNonNull("refusalReason")) {
-        return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
-            body.get("refusalReason").asText());
-      } else {
-        return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "");
-      }
-    } catch (InvalidStateException e) {
-      throw new WebApplicationException(Response.status(Status.NOT_ACCEPTABLE)
-          .entity(e.getMessage()).type("text/plain").build());
+    if (body.get("state").asText().equals("denied") && (!body.hasNonNull("refusalReason")
+        || body.get("refusalReason").asText().isBlank())) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("You have to put your denial reason if you want to deny someone")
+          .type("text/plain").build());
+    }
+    if (body.hasNonNull("refusalReason")) {
+      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
+          body.get("refusalReason").asText(), body.get("admin").asBoolean());
+    } else {
+      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
+          body.get("admin").asBoolean());
     }
   }
 
@@ -96,6 +93,7 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode login(JsonNode body) {
+
     if (!body.hasNonNull("username") || !body.hasNonNull("password") || !body.hasNonNull(
         "rememberMe")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -112,16 +110,7 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
-    try {
-      return myUserUCC.login(username, password, rememberMe);
-    } catch (UserInvalidException e) {
-      throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-          .entity(e.getMessage()).type("text/plain").build());
-    } catch (PasswordOrUsernameException | ReasonForConnectionRefusalException
-        | UserOnHoldException e) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    }
+    return myUserUCC.login(username, password, rememberMe);
   }
 
   /**
@@ -141,12 +130,7 @@ public class UserRessource {
     }
     // escape characters to avoid XSS injections and transforms the received token into text
     String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
-    try {
-      return myUserUCC.refreshToken(refreshToken);
-    } catch (InvalidTokenException e) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    }
+    return myUserUCC.refreshToken(refreshToken);
   }
 
   /**
@@ -176,5 +160,36 @@ public class UserRessource {
   public String getUserPhoneNumber() {
     int userId = 1;
     return myUserUCC.getPhoneNumber(userId);
+  }
+
+  /**
+   * register a user in the DB.
+   *
+   * @param user the user
+   * @return the user informations
+   */
+  @POST
+  @Path("register")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ObjectNode register(UserDTO user) {
+    // faire les verifications...
+    if (user == null || user.getUserName() == null || user.getUserName().isBlank() ||
+        user.getLastName() == null || user.getLastName().isBlank() ||
+        user.getFirstName() == null || user.getFirstName().isBlank() ||
+        user.getPassword() == null || user.getPassword().isBlank()) {
+      System.out.println("helllo");
+      throw new WebApplicationException(
+          Response.status(Response.Status.BAD_REQUEST).entity("Lacks of mandatory info")
+              .type("text/plain").build());
+    }
+
+    try {
+      return myUserUCC.register(user);
+    } catch (UsernameAlreadyExists e) {
+      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+          .entity(e.getMessage()).type("text/plain").build());
+    }
+
   }
 }

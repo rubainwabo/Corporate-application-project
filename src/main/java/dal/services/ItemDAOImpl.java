@@ -1,6 +1,6 @@
 package dal.services;
 
-import buiseness.domain.dto.ItemDTO;
+import buiseness.dto.ItemDTO;
 import buiseness.factory.BizFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalBackService;
@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import utils.exception.FatalException;
 
 public class ItemDAOImpl implements ItemDAO {
 
@@ -40,7 +41,7 @@ public class ItemDAOImpl implements ItemDAO {
         psIdItem.setString(1, item.getItemtype());
         try (ResultSet rsIdItem = psIdItem.executeQuery()) {
           if (!rsIdItem.next()) {
-            throw new IllegalArgumentException("itemType does not exist");
+            throw new FatalException("itemType does not exist");
           }
           ps.setInt(5, rsIdItem.getInt(1));
         }
@@ -53,9 +54,8 @@ public class ItemDAOImpl implements ItemDAO {
       }
       return generatedKey;
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new FatalException("Echec lors de l'ajout de l'item");
     }
-    return -1;
   }
 
   @Override
@@ -69,7 +69,7 @@ public class ItemDAOImpl implements ItemDAO {
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
         if (!rs.next()) {
-          return null;
+          throw new FatalException("Echec lors de l'exécution du rs getOneById");
         }
         item.setId(rs.getInt(1));
         item.setItemtype(rs.getString(2));
@@ -82,7 +82,7 @@ public class ItemDAOImpl implements ItemDAO {
                 5))) {
           try (ResultSet rsOfferorAsString = psOfferorAsString.executeQuery()) {
             if (!rsOfferorAsString.next()) {
-              return null;
+              throw new FatalException("Echec lors de la récupération de l'offreur");
             }
             String offeror =
                 rsOfferorAsString.getString(1) + " " + rsOfferorAsString.getString(2);
@@ -91,12 +91,12 @@ public class ItemDAOImpl implements ItemDAO {
             item.setItemCondition(rs.getString(7));
             item.setNumberOfPeopleInterested(rs.getInt(8));
             return item;
+
           }
         }
       }
     } catch (SQLException throwables) {
-      throwables.printStackTrace();
-      return null;
+      throw new FatalException("Echec de la query getOneById");
     }
   }
 
@@ -115,7 +115,7 @@ public class ItemDAOImpl implements ItemDAO {
           int nbrePeople = 0;
           try (ResultSet rsNbrePeople = psNbrePeople.executeQuery()) {
             if (!rsNbrePeople.next()) {
-              throw new IllegalArgumentException(
+              throw new FatalException(
                   "probleme dans le select du nbre de people interest");
             }
             nbrePeople = rsNbrePeople.getInt(1);
@@ -123,10 +123,7 @@ public class ItemDAOImpl implements ItemDAO {
           try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
               "update projet.items set number_of_people_interested = 1 + " + nbrePeople
                   + " where id_item = " + idItem)) {
-            var result = psNbrPeopleInteresed.executeUpdate();
-            if (result <= 0) {
-              throw new IllegalArgumentException("probleme dans l'update du phoneNumber");
-            }
+            psNbrPeopleInteresed.executeUpdate();
           }
         }
         try (PreparedStatement psNotif = myBackService.getPreparedStatement(
@@ -138,7 +135,7 @@ public class ItemDAOImpl implements ItemDAO {
                   + idItem)) {
             try (ResultSet rsOfferor = psOfferor.executeQuery()) {
               if (!rsOfferor.next()) {
-                throw new IllegalArgumentException(
+                throw new FatalException(
                     "probleme dans la recuperation de l'offreur");
               }
               urlPicture = rsOfferor.getString(2);
@@ -151,7 +148,7 @@ public class ItemDAOImpl implements ItemDAO {
               "Select username from projet.members where user_id = " + interestUserId)) {
             try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
               if (!rsInterestUserAsString.next()) {
-                throw new IllegalArgumentException("prblm interesUserAsTring");
+                throw new FatalException("prblm interesUserAsTring");
               }
               interestUsrName = rsInterestUserAsString.getString(1);
             }
@@ -160,8 +157,8 @@ public class ItemDAOImpl implements ItemDAO {
               interestUsrName + " est interessé par cette offre " + urlPicture);
           psNotif.executeUpdate();
         }
-      } catch (SQLException throwables) {
-        throwables.printStackTrace();
+      } catch (SQLException throwable) {
+        throw new FatalException("Echec lors de l'ajout de l'intérêt");
       }
     }
   }
@@ -172,23 +169,20 @@ public class ItemDAOImpl implements ItemDAO {
         "select offeror from projet.items where id_item = " + idItem)) {
       try (ResultSet rsVerifyUser = psVerifyUser.executeQuery()) {
         if (!rsVerifyUser.next()) {
-          throw new IllegalArgumentException("prblm cancelOffer user request");
+          throw new FatalException("prblm cancelOffer user request");
         }
         if (rsVerifyUser.getInt(1) != userId) {
-          throw new IllegalArgumentException(
+          throw new FatalException(
               "cet utilisateur n'a pas le droit d'éffectuer cette requete");
         }
         try (PreparedStatement psCancelOffer = myBackService.getPreparedStatement(
             "update projet.items set item_condition = 'cancelled' where id_item = "
                 + idItem)) {
-          int result = psCancelOffer.executeUpdate();
-          if (result <= 0) {
-            throw new IllegalArgumentException("prblm update cancel Offer");
-          }
+          psCancelOffer.executeUpdate();
         }
       }
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec lors de l'annulation de l'offre");
     }
   }
 
@@ -215,7 +209,7 @@ public class ItemDAOImpl implements ItemDAO {
                   4))) {
             try (ResultSet rsTypeString = psTypeString.executeQuery()) {
               if (!rsTypeString.next()) {
-                return null;
+                throw new FatalException("Echec lors de la récupération du type");
               }
               item.setItemtype(rsTypeString.getString(1));
             }
@@ -225,9 +219,8 @@ public class ItemDAOImpl implements ItemDAO {
         }
       }
       return arrayItemDTO;
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
+    } catch (SQLException throwable) {
+      throw new FatalException("Echec lors de la récupération des derniers items offerts");
     }
-    return new ArrayList<>();
   }
 }

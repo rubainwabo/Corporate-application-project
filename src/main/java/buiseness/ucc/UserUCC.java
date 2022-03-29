@@ -1,7 +1,7 @@
 package buiseness.ucc;
 
 import buiseness.domain.User;
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import utils.exception.InvalidStateException;
@@ -10,6 +10,7 @@ import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
+
 
 public interface UserUCC {
 
@@ -33,7 +34,8 @@ public interface UserUCC {
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
-  boolean changeState(int id, String state, String refusalReason) throws InvalidStateException, InvalidStateException;
+  boolean changeState(int id, String state, String refusalReason, boolean admin)
+      throws InvalidStateException, InvalidStateException;
 
   User getOneById(int id);
 
@@ -63,4 +65,6 @@ public interface UserUCC {
    * @param phoneNumber the phone number
    */
   void addPhoneNumber(int userId, String phoneNumber);
+
+  ObjectNode register(UserDTO user);
 }

@@ -1,6 +1,6 @@
 package dal.services;
 
-import buiseness.domain.dto.UserDTO;
+import buiseness.dto.UserDTO;
 import java.util.List;
 
 public interface UserDAO {
@@ -44,6 +44,8 @@ public interface UserDAO {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
+  int register(UserDTO user);
+
   /**
    * Changes the state of a user.
    *
@@ -51,5 +53,5 @@ public interface UserDAO {
    * @param newState         : state we want to put
    * @param newRefusalReason : his refusal reason
    */
-  void changeState(int userId, String newState, String newRefusalReason);
+  void changeState(int userId, String newState, String newRefusalReason, boolean admin);
 }

@@ -1,8 +1,8 @@
-package buiseness.domain.impl;
+package buiseness.impl;
 
-import buiseness.domain.bizclass.Date;
-import buiseness.domain.dto.DateDTO;
-import buiseness.domain.dto.ItemDTO;
+import buiseness.domain.Date;
+import buiseness.dto.DateDTO;
+import buiseness.dto.ItemDTO;
 
 public class DateImpl implements Date {
 

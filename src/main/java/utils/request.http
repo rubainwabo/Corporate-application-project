@@ -1,0 +1,83 @@
+### Create One film
+POST http://localhost:3000/auths/register
+Content-Type: application/json
+
+{
+  "userName": "p",
+  "lastName": "Dotche",
+  "firstName": "Daniel",
+  "state": "dendermonde",
+  "password": "motdepasse",
+  "street": "olieslagerstraat",
+  "buildingNumber": 92,
+  "unitNumber": 1,
+  "postCode": 9200,
+  "city": "dendermonde",
+  "urlPhoto": "une url"
+}
+
+### Create item
+POST http://localhost:3000/items/add
+Content-Type: application/json
+
+{
+  "description": "But I must explain to you how all this mistaken idea of ...",
+  "urlPicture": "www.velo.com",
+  "itemtype": "test",
+  "timeSlot": "12345"
+}
+
+### Create item
+POST http://localhost:3000/items/add
+Content-Type: application/json
+
+{
+  "description": "mamanie",
+  "urlPicture": "www.object.com",
+  "itemtype": "test",
+  "timeSlot": "12345"
+}
+### add item type
+
+POST http://localhost:3000/itemsType/addItemType
+Content-Type: application/json
+
+{
+  "itemType": "table"
+}
+### get an item
+
+GET http://localhost:3000/items/itemDetails/1
+
+### add interest
+POST http://localhost:3000/items/addInterest/4
+Content-Type: application/json
+
+{
+  "availabilities" : "2016-03-04 11:30",
+  "callMe" :"true",
+  "phoneNumber" : "0471717306"
+}
+
+### get last item offered
+
+GET http://localhost:3000/items/lastItemsOfferedNotConnected
+
+### Create One film
+POST http://localhost:3000/auths/register
+Content-Type: application/json
+
+{
+  "userName": "dan",
+  "lastName": "Dotche",
+  "firstName": "Daniel",
+  "password": "motdepasse",
+  "street": "olieslagerstraat",
+  "buildingNumber": 92,
+  "unitNumber": 1,
+  "postCode": 9200,
+  "city": "dendermonde",
+  "urlPhoto": "une url"
+}
+
+### test

@@ -25,6 +25,7 @@ import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
 
 
+
 @Singleton
 @Path("/auths")
 public class UserRessource {
@@ -129,5 +130,30 @@ public class UserRessource {
   public String getUserPhoneNumber() {
     int userId = 1;
     return myUserUCC.getPhoneNumber(userId);
+  }
+
+  @POST
+  @Path("register")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ObjectNode register(UserDTO user)  {
+    // faire les verifications...
+    if (user == null || user.getUserName() == null || user.getUserName().isBlank() ||
+    user.getLastName()==null || user.getLastName().isBlank() ||
+    user.getFirstName()==null || user.getFirstName().isBlank() ||
+    user.getPassword()==null || user.getPassword().isBlank()) {
+      System.out.println("helllo");
+      throw new WebApplicationException(
+          Response.status(Response.Status.BAD_REQUEST).entity("Lacks of mandatory info")
+              .type("text/plain").build());
+    }
+
+    try {
+      return myUserUCC.register(user);
+    } catch ( UserOnHoldException e) {
+      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
+          .entity(e.getMessage()).type("text/plain").build());
+    }
+
   }
 }

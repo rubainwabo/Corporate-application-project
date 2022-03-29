@@ -14,6 +14,7 @@ import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
 
+
 public class UserUCCImpl implements UserUCC {
 
   @Inject
@@ -67,5 +68,21 @@ public class UserUCCImpl implements UserUCC {
   @Override
   public void addPhoneNumber(int userId, String phoneNumber) {
     myUserDAO.addPhoneNumber(userId, phoneNumber);
+  }
+
+  @Override
+  public ObjectNode register(UserDTO user) throws UserOnHoldException {
+    User user1 = (User) user;
+    user1.setPassword(user1.hashPassword(user1.getPassword()));
+    UserDTO userExist = myUserDAO.getOneByUsername(user.getUserName());
+    System.out.println(userExist);
+    if (userExist != null) {
+      throw new UserOnHoldException("username already exists");
+    }
+    int idUser = myUserDAO.register((UserDTO) user1);
+    System.out.println(idUser);
+
+    return myTokenService.login(idUser, user.getUserName(), false);
+
   }
 }

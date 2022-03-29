@@ -44,4 +44,6 @@ public interface UserDAO {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
+  int register(UserDTO user);
+
 }

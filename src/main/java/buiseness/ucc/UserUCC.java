@@ -9,6 +9,7 @@ import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
 
+
 public interface UserUCC {
 
   /**
@@ -53,4 +54,6 @@ public interface UserUCC {
    * @param phoneNumber the phone number
    */
   void addPhoneNumber(int userId, String phoneNumber);
+
+  ObjectNode register(UserDTO user) throws UserOnHoldException;
 }

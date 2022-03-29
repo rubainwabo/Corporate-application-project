@@ -50,8 +50,8 @@ if(accesToken){
         <div id="navigation">
           <div id="menu">
             <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mon profile </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mes offres </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Mon profile </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
           </div>
          

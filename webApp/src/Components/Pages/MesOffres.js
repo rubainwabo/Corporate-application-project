@@ -6,14 +6,13 @@ import { getSessionObject,setSessionObject,removeSessionObject } from "../../uti
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
 
-const data = [{type:"meuble",description:"une table tres belle"},{type:"meuble",description:"une table tres belle"},{type:"meuble",description:"une table tres belle"}]
 /**
  * Render the LoginPage
  */
 const home = `
 <section id="home-page">
     <div id="home-page-navigation">
-        <h2 id="home-page-title"> Dernières offres</h2>
+        <h2 id="home-page-title"> Mes offres </h2>
         
     </div>
       
@@ -44,15 +43,19 @@ const HomePage = async (id) => {
 
   hello.addEventListener("click",function(e){
     e.preventDefault();
-
-    var params = [{key:"id",value:"1"}]   
-    Redirect("/item", params)
+    var params = [{key:"id",value:"1"}];   
+    Redirect("/item/itemDetails",params)
   })
   try {
-
-    const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response   
+    var options = { method: 'GET',
+               headers: {"token" : localStorage.getItem("accessToken")},
+               mode: 'cors',
+               cache: 'default'};   
+    const response = await fetch("/api/items/mesOffres", options); // fetch return a promise => we wait for the response   
     console.log("res", response);
   if(!response.ok){
+    return Redirect("/logout");
+
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
       )

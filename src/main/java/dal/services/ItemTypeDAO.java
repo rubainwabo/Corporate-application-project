@@ -1,5 +1,8 @@
 package dal.services;
 
+import buiseness.dto.ItemTypeDTO;
+import java.util.List;
+
 public interface ItemTypeDAO {
 
   /**
@@ -9,4 +12,11 @@ public interface ItemTypeDAO {
    * @return the id of the itemType added
    */
   int addItemType(String itemTypeName);
+
+  /**
+   * retrives to get all itemType as a list.
+   *
+   * @return a list of all the itemType
+   */
+  List<ItemTypeDTO> getAllItemType();
 }

@@ -1,8 +1,8 @@
-Message d'erreur : Erreur lors de la connexion à la db
+Message d'erreur : Echec de connexion à la db
 
 StackTrace : 
-buiseness.ucc.UserUCCImpl.register(UserUCCImpl.java:193)
-ihm.UserRessource.register(UserRessource.java:182)
+buiseness.ucc.ItemTypeUCCImpl.getAllItemType(ItemTypeUCCImpl.java:40)
+ihm.ItemTypeRessource.getAllItemType(ItemTypeRessource.java:53)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

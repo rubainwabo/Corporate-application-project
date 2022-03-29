@@ -1,9 +1,8 @@
-Message d'erreur : ta mère
+Message d'erreur : Erreur lors de la connexion Ã  la db
 
 StackTrace : 
-dal.services.UserDAOImpl.getAllUserByState(UserDAOImpl.java:48)
-buiseness.ucc.UserUCCImpl.getUsersByState(UserUCCImpl.java:51)
-ihm.UserRessource.deniedUserList(UserRessource.java:93)
+buiseness.ucc.UserUCCImpl.register(UserUCCImpl.java:193)
+ihm.UserRessource.register(UserRessource.java:182)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

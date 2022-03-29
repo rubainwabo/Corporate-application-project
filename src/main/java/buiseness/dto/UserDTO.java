@@ -1,5 +1,10 @@
 package buiseness.dto;
 
+
+import buiseness.impl.UserImpl;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonDeserialize(as = UserImpl.class)
 public interface UserDTO {
 
   /**
@@ -75,13 +80,13 @@ public interface UserDTO {
   /**
    * change the user's username by the one passed in parameter.
    *
-   * @param username the new user's username
+   * @param userName the new user's username
    */
-  void setUsername(String username);
-
-  void setRole(String role);
+  void setUsername(String userName);
 
   String getRole();
+
+  void setRole(String role);
 
   String getLastName();
 
@@ -99,11 +104,25 @@ public interface UserDTO {
 
   void setStreet(String street);
 
-  String getPostCode();
+  int getPostCode();
 
-  void setPostCode(String postCode);
+  void setPostCode(int postCode);
 
-  String getBuildingNumber();
+  int getBuildingNumber();
 
-  void setBuildingNumber(String buildingNumber);
+  void setBuildingNumber(int buildingNumber);
+
+  int getUnitNumber();
+
+  void setUnitNumber(int unitNumber);
+
+  String getUrlPhoto();
+
+  void setUrlPhoto(String urlPhoto);
+
+  String getPhoneNumber();
+
+  void setPhoneNumber(String phoneNumber);
+
+
 }

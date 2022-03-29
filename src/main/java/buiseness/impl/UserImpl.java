@@ -7,18 +7,31 @@ public class UserImpl implements User {
 
   private int id;
   private String password;
-  private String username;
+  private String userName;
   private String state;
   private String reasonForConnectionRefusal;
-  private String role;
   private String lastName;
   private String firstName;
   private String city;
   private String street;
-  private String postCode;
-  private String buildingNumber;
+  private int postCode;
+  private int buildingNumber;
+
+  private int unitNumber;
+  private String urlPhoto;
+  private String phoneNumber;
+
+  private String role;
 
   public UserImpl() {
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 
   @Override
@@ -42,13 +55,42 @@ public class UserImpl implements User {
   }
 
   @Override
-  public String getUserName() {
-    return username;
+  public boolean isAdmin() {
+    return this.role.equals("admin");
+  }
+
+  public int getUnitNumber() {
+    return unitNumber;
+  }
+
+  public void setUnitNumber(int unitNumber) {
+    this.unitNumber = unitNumber;
+  }
+
+  public String getUrlPhoto() {
+    return urlPhoto;
+  }
+
+  public void setUrlPhoto(String urlPhoto) {
+    this.urlPhoto = urlPhoto;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
   }
 
   @Override
-  public void setUserName(String username) {
-    this.username = username;
+  public String getUserName() {
+    return userName;
+  }
+
+  @Override
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
   @Override
@@ -136,37 +178,22 @@ public class UserImpl implements User {
   }
 
   @Override
-  public String getPostCode() {
+  public int getPostCode() {
     return postCode;
   }
 
   @Override
-  public void setPostCode(String postCode) {
+  public void setPostCode(int postCode) {
     this.postCode = postCode;
   }
 
   @Override
-  public String getBuildingNumber() {
+  public int getBuildingNumber() {
     return buildingNumber;
   }
 
   @Override
-  public void setBuildingNumber(String buildingNumber) {
+  public void setBuildingNumber(int buildingNumber) {
     this.buildingNumber = buildingNumber;
-  }
-
-  @Override
-  public String getRole() {
-    return this.role;
-  }
-
-  @Override
-  public void setRole(String role) {
-    this.role = role;
-  }
-
-  @Override
-  public boolean isAdmin() {
-    return this.role.equals("admin");
   }
 }

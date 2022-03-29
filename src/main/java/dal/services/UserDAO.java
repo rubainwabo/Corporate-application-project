@@ -44,6 +44,8 @@ public interface UserDAO {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
+  int register(UserDTO user);
+
   /**
    * Changes the state of a user.
    *

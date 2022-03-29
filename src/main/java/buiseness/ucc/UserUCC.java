@@ -10,6 +10,8 @@ import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
+import utils.exception.UsernameAlreadyExists;
+
 
 public interface UserUCC {
 
@@ -33,7 +35,8 @@ public interface UserUCC {
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
-  boolean changeState(int id, String state, String refusalReason, boolean admin) throws InvalidStateException, InvalidStateException;
+  boolean changeState(int id, String state, String refusalReason, boolean admin)
+      throws InvalidStateException, InvalidStateException;
 
   User getOneById(int id);
 
@@ -63,4 +66,6 @@ public interface UserUCC {
    * @param phoneNumber the phone number
    */
   void addPhoneNumber(int userId, String phoneNumber);
+
+  ObjectNode register(UserDTO user) throws UsernameAlreadyExists;
 }

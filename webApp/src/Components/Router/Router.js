@@ -1,14 +1,21 @@
 import LoginPage from "../Pages/LoginPage";
 import HomePage from "../Pages/HomePage";
+import ItemPage from "../Pages/ItemPage";
+import AddItemPage from "../Pages/AddItem";
+import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
-import Register from "../Pages/RegisterPage"
+
+import UserHandler from "../Pages/admin/UserHandler";
 
 // Configure your routes here
 const routes = {
   '/' : HomePage,
   "/login": LoginPage,
-  "/register":Register,
-  "/logout":Logout
+  "/logout":Logout,
+  '/item':ItemPage,
+  '/register':Register,
+  '/additem':AddItemPage,
+  '/userhandeler':UserHandler
 };
 
 /**
@@ -66,10 +73,30 @@ const Router = () => {
  * routes array of the Router
  */
 
-const Redirect = (uri) => {
+const Redirect = (uri,params) => {
   // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
-  window.history.pushState({}, uri, window.location.origin + uri);
+  console.log("redirec try")
+  if(params){
+    var url = window.location.origin + uri+"?";
+
+    var i = 0;
+    while(i<params.length){
+      url+=params[i].key+"="+params[i].value;
+      i++;
+      if(i<params.length){
+        url+="&";
+      }
+    }
+    window.history.pushState({}, uri, url);
+ 
+    
+  }else{
+    window.history.pushState({}, uri, window.location.origin + uri)
+  }
+  
+ 
   // render the requested component
+  
   const componentToRender = routes[uri];
   if (routes[uri]) {
     componentToRender();

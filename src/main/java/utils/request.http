@@ -44,7 +44,7 @@ POST http://localhost:3000/itemsType/addItemType
 Content-Type: application/json
 
 {
-  "itemType": "table"
+  "itemType": "wwwww"
 }
 
 ### get an item
@@ -81,6 +81,10 @@ Content-Type: application/json
   "city": "dendermonde",
   "urlPhoto": "une url"
 }
+
+### get all item-type
+GET http://localhost:3000/itemsType/getAll
+
 
 ### test
 ### commment

@@ -11,7 +11,7 @@ public interface ItemTypeUCC {
    * @param itemType the itemType
    * @return the itemType id added
    */
-  int addItemType(String itemType);
+  ItemTypeDTO addItemType(String itemType);
 
   /**
    * retrives to get all itemType as a list.

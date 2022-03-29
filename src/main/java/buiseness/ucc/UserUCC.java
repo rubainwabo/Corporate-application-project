@@ -13,6 +13,7 @@ import utils.exception.UserOnHoldException;
 import utils.exception.UsernameAlreadyExists;
 
 
+
 public interface UserUCC {
 
   /**
@@ -67,5 +68,5 @@ public interface UserUCC {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
-  ObjectNode register(UserDTO user) throws UsernameAlreadyExists;
+  ObjectNode register(UserDTO user) ;
 }

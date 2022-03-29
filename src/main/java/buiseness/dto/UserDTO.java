@@ -77,17 +77,6 @@ public interface UserDTO {
    */
   void setReasonForConnectionRefusal(String reasonForConnectionRefusal);
 
-  /**
-   * change the user's username by the one passed in parameter.
-   *
-   * @param userName the new user's username
-   */
-  void setUsername(String userName);
-
-  String getRole();
-
-  void setRole(String role);
-
   String getLastName();
 
   void setLastName(String lastName);
@@ -104,8 +93,6 @@ public interface UserDTO {
 
   void setStreet(String street);
 
-  int getPostCode();
-
   void setPostCode(int postCode);
 
   int getBuildingNumber();
@@ -115,14 +102,18 @@ public interface UserDTO {
   int getUnitNumber();
 
   void setUnitNumber(int unitNumber);
+  int getPostCode();
 
-  String getUrlPhoto();
+   String getUrlPhoto();
 
   void setUrlPhoto(String urlPhoto);
 
-  String getPhoneNumber();
+   String getPhoneNumber();
 
   void setPhoneNumber(String phoneNumber);
 
+  String getRole();
+
+  void setRole(String role);
 
 }

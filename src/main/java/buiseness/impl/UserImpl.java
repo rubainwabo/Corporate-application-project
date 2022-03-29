@@ -16,11 +16,9 @@ public class UserImpl implements User {
   private String street;
   private int postCode;
   private int buildingNumber;
-
   private int unitNumber;
   private String urlPhoto;
   private String phoneNumber;
-
   private String role;
 
   public UserImpl() {
@@ -130,11 +128,6 @@ public class UserImpl implements User {
   @Override
   public void setReasonForConnectionRefusal(String reasonForConnectionRefusal) {
     this.reasonForConnectionRefusal = reasonForConnectionRefusal;
-  }
-
-  @Override
-  public void setUsername(String username) {
-
   }
 
   @Override

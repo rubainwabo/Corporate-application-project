@@ -70,7 +70,7 @@ POST http://localhost:3000/auths/register
 Content-Type: application/json
 
 {
-  "userName": "tttt",
+  "userName": "dan",
   "lastName": "Dotche",
   "firstName": "Daniel",
   "password": "motdepasse",
@@ -83,3 +83,4 @@ Content-Type: application/json
 }
 
 ### test
+### commment

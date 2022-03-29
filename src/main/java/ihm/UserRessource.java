@@ -15,6 +15,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.exception.UsernameAlreadyExists;

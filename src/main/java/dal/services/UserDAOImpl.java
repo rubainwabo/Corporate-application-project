@@ -49,7 +49,7 @@ public class UserDAOImpl implements UserDAO {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
-            + "state,phone_number from projet.members where state=?")) {
+            + "state,phone_number,_role from projet.members where state=?")) {
       ps.setString(1, state);
       try (ResultSet rs = ps.executeQuery()) {
         userDTOList = new ArrayList<>();
@@ -64,6 +64,8 @@ public class UserDAOImpl implements UserDAO {
           user.setBuildingNumber(rs.getString(6));
           user.setId(rs.getInt(7));
           user.setUserName(rs.getString(8));
+          user.setState(rs.getString(9));
+          user.setRole(rs.getString(11));
           userDTOList.add(user);
         }
       }

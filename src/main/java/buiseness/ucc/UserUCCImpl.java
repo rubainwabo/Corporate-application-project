@@ -14,6 +14,8 @@ import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserOnHoldException;
+import utils.exception.UsernameAlreadyExists;
+
 
 public class UserUCCImpl implements UserUCC {
 
@@ -31,6 +33,10 @@ public class UserUCCImpl implements UserUCC {
     try {
       myDalServices.start(false);
       User user = (User) myUserDAO.getOneByUsername(username);
+      if (user == null) {
+        myDalServices.rollBack();
+        throw new PasswordOrUsernameException("username or password incorrect");
+      }
       if (!user.checkPassword(password)) {
         myDalServices.commit(false);
         throw new PasswordOrUsernameException("username or password incorrect");
@@ -160,5 +166,33 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.rollBack();
       throw new BizzException("Erreur lors de la connexion à la db");
     }
+  }
+
+  @Override
+  public ObjectNode register(UserDTO user) {
+    try {
+      myDalServices.start(true);
+
+      User user1 = (User) user;
+      user1.setPassword(user1.hashPassword(user1.getPassword()));
+
+      UserDTO userExist = myUserDAO.getOneByUsername(user.getUserName());
+
+      if (userExist != null) {
+        myDalServices.rollBack();
+        throw new UsernameAlreadyExists("username already exists");
+      }
+      System.out.println("demande de l'id");
+      int idUser = myUserDAO.register(user1);
+
+      var userConnected = myTokenService.login(idUser, user.getUserName(), false);
+      myDalServices.commit(true);
+      return userConnected;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw new BizzException("Erreur lors de la connexion à la db");
+    }
+
+
   }
 }

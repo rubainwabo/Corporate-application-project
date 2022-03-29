@@ -16,10 +16,10 @@ public class ItemTypeUCCImpl implements ItemTypeUCC {
   private DalServices myDalServices;
 
   @Override
-  public int addItemType(String itemType) {
+  public ItemTypeDTO addItemType(String itemType) {
     try {
       myDalServices.start(true);
-      int val = myItemTypeDAOService.addItemType(itemType);
+      ItemTypeDTO val = myItemTypeDAOService.addItemType(itemType);
       myDalServices.commit(true);
       return val;
     } catch (Exception e) {

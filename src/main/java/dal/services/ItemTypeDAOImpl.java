@@ -22,7 +22,7 @@ public class ItemTypeDAOImpl implements ItemTypeDAO {
 
 
   @Override
-  public int addItemType(String itemTypeName) {
+  public ItemTypeDTO addItemType(String itemTypeName) {
     try (PreparedStatement psItemType = myBackService.getPreparedStatementWithId(
         "INSERT INTO projet.item_type VALUES (DEFAULT,?)", Statement.RETURN_GENERATED_KEYS)) {
       psItemType.setString(1, itemTypeName);
@@ -32,7 +32,11 @@ public class ItemTypeDAOImpl implements ItemTypeDAO {
       if (rs.next()) {
         generatedKey = rs.getInt(1);
       }
-      return generatedKey;
+      ItemTypeDTO itemTypeDAO = myDomainFactory.getItemType();
+      itemTypeDAO.setIdItemType(generatedKey);
+      itemTypeDAO.setItemTypeName(itemTypeName);
+      return itemTypeDAO;
+
     } catch (SQLException e) {
       throw new FatalException("Echec lors de l'ajout du type de l'item");
     }

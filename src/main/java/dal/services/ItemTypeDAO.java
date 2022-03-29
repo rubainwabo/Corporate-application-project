@@ -11,7 +11,7 @@ public interface ItemTypeDAO {
    * @param itemTypeName the itemTypeName
    * @return the id of the itemType added
    */
-  int addItemType(String itemTypeName);
+  ItemTypeDTO addItemType(String itemTypeName);
 
   /**
    * retrives to get all itemType as a list.

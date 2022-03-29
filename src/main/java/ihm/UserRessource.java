@@ -172,7 +172,7 @@ public class UserRessource {
   @Path("register")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public ObjectNode register(UserDTO user) {
+  public int register(UserDTO user) {
     // faire les verifications...
     if (user == null || user.getUserName() == null || user.getUserName().isBlank() ||
         user.getLastName() == null || user.getLastName().isBlank() ||

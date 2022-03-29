@@ -211,7 +211,7 @@ public class ItemDAOImpl implements ItemDAO {
               if (!rsTypeString.next()) {
                 throw new FatalException("Echec lors de la récupération du type");
               }
-              item.setItemtype(rs.getString(4));
+              item.setItemtype(rsTypeString.getString(1));
             }
           }
           item.setNumberOfPeopleInterested(rs.getInt(5));

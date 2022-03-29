@@ -14,7 +14,7 @@ const affichage = `
       <p><input id="pseudo" type="text" placeholder="Pseudo"></p>
       <p><input  id="password" type="text" placeholder="Password"></p>
       <p> se souvenir de moi <input type="checkbox" id="rememberMe" name="rememberMe"></p>
-      <input type="submit" id="btnSubmit" value="sss">
+      <input type="submit" id="btnSubmit" value="se connecter">
     </form>
   <div>
 </section>
@@ -38,6 +38,7 @@ const LoginPage = () => {
     const username = document.getElementById("pseudo");
     const password = document.getElementById("password");
     const rememberMe = document.getElementById("rememberMe");
+
 
     try {
       const options = {
@@ -78,6 +79,7 @@ const LoginPage = () => {
       Navbar();
       Redirect("/");
     } catch (error) {
+      
       console.error("LoginPage::error: ", error);
     }
 

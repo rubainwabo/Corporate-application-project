@@ -1,7 +1,27 @@
+
+body{
+    display: flex;
+    flex-direction: column;
+}
+#page{
+    display: flex;
+    flex-direction: column;
+   /* justify-content: center;
+    align-items: center;
+    */
+    height: 90vh;
+    padding-left: 20px;
+    padding-right: 20px;
+    
+}
+/*
+nav bar
+*/
 nav{
-    margin-left: 20px;
-    margin-right: 20px;
+   background-color: #FFF59B;
     height: 10vh; 
+    padding-left: 20px;
+    padding-right: 20px;
     
 }
 a{
@@ -33,6 +53,9 @@ a{
     top:0;
     bottom:0;
 }
+#menu{
+    display: flex;
+}
 #error{
     color: red;
 }
@@ -47,6 +70,9 @@ a{
     
     
 }
+.menu-item{
+    margin-right:10px ;
+}
 form input[type=text]{
     width: 300px;
 }
@@ -56,5 +82,258 @@ form input[type=submit]{
 
 }
 #form h2{
+   
     margin-bottom: 35px;
+}
+/*
+item-page
+*/
+#item-page{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    justify-self: center; 
+    
+    width: 80%;
+    height: 90vh;
+    
+    
+}
+#item-page img{
+    height: 40vh;  
+}
+
+#item-img-description{
+    display: flex;
+   justify-content: space-between;
+   width: 100%;
+   
+  
+}
+#item-info{
+    margin-top: 20px;
+    align-self:flex-start;
+    justify-self: center;
+   
+}
+#item-description{
+    margin-left: 10vh;
+    width: 50%;
+}
+#item-show-interest{
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#FFF59B;
+    height:10px
+    
+}
+#item-show-interest p{
+   
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/*
+home page
+*/
+#home-page{
+    align-items: center;
+    align-self: center;
+    width: 70%;
+    height: 90vh;
+}
+#home-page-navigation h2{
+    margin-left: -5vh;
+}
+#all-recent-item{
+    display: inline-flex;
+    justify-content:start;
+   
+    flex-wrap:wrap;
+    gap: 3%;
+}
+
+.home-page-item-description{
+    font-size: 0.5em;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.home-page-item-image{
+    width: 100%;
+    height: 70%;
+}
+
+.home-page-item-image img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    
+}
+
+.item-box{
+    width: calc(81%/4);
+    height: 22vh;
+    margin-top: 3%;
+    box-shadow: 2px 5px 5px rgb(109, 109, 109);
+    cursor: pointer;
+    
+}
+/*
+add-item-page
+*/
+
+#add-item-page{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    justify-self: center; 
+    width: 80%;
+    height: 90vh;
+}
+#add-item-page input,select{
+    width: 300px;
+    height: 40px;
+    
+}
+#add-new-interest{
+    margin-left: 10px;
+    cursor: pointer;
+}
+#add-item-pop-up{
+    display: none;
+    position:absolute;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 60vh;
+    background-color: antiquewhite;
+}
+#add-item-page label{
+    margin-top: 20px;
+}
+#itemDescription{
+    height: 100px !important;
+}
+
+#add-item-form{
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items:flex-start;
+    
+    
+    
+}
+#add-item-page form input{
+    width: 400px;
+    
+}
+.add-item-iputs{
+    width: 400px;
+}
+
+#select-box{
+    display: flex;
+}
+
+#cancel-add{
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    padding-top: 20px;
+}
+
+#addItemButton{
+    margin-left: 10px;
+}
+#add-item-type,#cancel-add-item-type{
+    margin-top:50px;
+    width: 100px !important;
+}
+
+/*
+    register
+*/
+
+#register-page{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    justify-self: center; 
+    width: 80%;
+    height: 90vh;
+}
+#register-page input{
+    width: 300px;
+    height: 50px;
+    margin: 3px;
+}
+#register-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#register-form{
+    display: flex;
+    flex-direction: column;
+   
+    justify-content: center;   
+}
+
+#user-decision{
+    align-self: center;
+    justify-self: center;
+    
+}
+
+#form-button-box{
+    display: flex;
+    justify-content: center;
+}
+/*
+    user Hander page
+*/
+
+#user-handler-page{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    justify-self: center; 
+    width: 80%;
+    height: 90vh;
+    
+    
+}
+#switch-list-users{
+    margin-bottom: 10px;
+    align-self: flex-end;
+    
+}
+.user-to-handle{
+    display: flex;
+    width: 100vh;
+    border: 0.5px solid black;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+.is-admin-box{
+   text-align: center;
 }

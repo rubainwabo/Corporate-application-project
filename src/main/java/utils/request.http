@@ -37,6 +37,7 @@ Content-Type: application/json
   "itemtype": "test",
   "timeSlot": "12345"
 }
+
 ### add item type
 
 POST http://localhost:3000/itemsType/addItemType
@@ -45,6 +46,7 @@ Content-Type: application/json
 {
   "itemType": "table"
 }
+
 ### get an item
 
 GET http://localhost:3000/items/itemDetails/1
@@ -54,9 +56,9 @@ POST http://localhost:3000/items/addInterest/4
 Content-Type: application/json
 
 {
-  "availabilities" : "2016-03-04 11:30",
-  "callMe" :"true",
-  "phoneNumber" : "0471717306"
+  "availabilities": "2016-03-04 11:30",
+  "callMe": "true",
+  "phoneNumber": "0471717306"
 }
 
 ### get last item offered
@@ -81,3 +83,4 @@ Content-Type: application/json
 }
 
 ### test
+### commment

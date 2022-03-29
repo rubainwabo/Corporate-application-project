@@ -20,7 +20,7 @@ public class ItemTypeUCCImpl implements ItemTypeUCC {
       int val = myItemTypeDAOService.addItemType(itemType);
       myDalServices.commit(true);
       return val;
-    } catch(Exception e){
+    } catch (Exception e) {
       myDalServices.rollBack();
       throw new BizzException("Echec de connexion à la db");
     }

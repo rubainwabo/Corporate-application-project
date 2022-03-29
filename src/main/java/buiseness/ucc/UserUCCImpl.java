@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
 import java.util.List;
 import utils.TokenService;
 import utils.exception.BizzException;
@@ -32,7 +31,7 @@ public class UserUCCImpl implements UserUCC {
   @Override
   public ObjectNode login(String username, String password, boolean rememberMe) {
     try {
-       myDalServices.start(false);
+      myDalServices.start(false);
       User user = (User) myUserDAO.getOneByUsername(username);
       if (user == null) {
         myDalServices.rollBack();
@@ -170,7 +169,7 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public ObjectNode register(UserDTO user) throws UsernameAlreadyExists {
+  public ObjectNode register(UserDTO user) {
     try {
       myDalServices.start(true);
 

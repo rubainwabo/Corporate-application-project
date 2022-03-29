@@ -168,21 +168,15 @@ public class UserDAOImpl implements UserDAO {
       ps.setString(10, user.getCity());
       ps.setString(11, user.getUrlPhoto());
       ps.setInt(12, 0);
-//comment
-
       ps.executeUpdate();
       ResultSet rs = ps.getGeneratedKeys();
 
       if (!rs.next()) {
         throw new FatalException("Echec de la query");
       }
-
       return rs.getInt(1);
-
-
     } catch (SQLException throwables) {
       throw new FatalException("Echec de la query");
-
     }
   }
 }

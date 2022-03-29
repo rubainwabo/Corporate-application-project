@@ -10,8 +10,6 @@ import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserInvalidException;
 import utils.exception.UserOnHoldException;
-import utils.exception.UsernameAlreadyExists;
-
 
 
 public interface UserUCC {
@@ -68,5 +66,5 @@ public interface UserUCC {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
-  ObjectNode register(UserDTO user) ;
+  ObjectNode register(UserDTO user);
 }

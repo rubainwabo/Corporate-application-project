@@ -93,8 +93,6 @@ public interface UserDTO {
 
   void setStreet(String street);
 
-  void setPostCode(int postCode);
-
   int getBuildingNumber();
 
   void setBuildingNumber(int buildingNumber);
@@ -102,13 +100,16 @@ public interface UserDTO {
   int getUnitNumber();
 
   void setUnitNumber(int unitNumber);
+
   int getPostCode();
 
-   String getUrlPhoto();
+  void setPostCode(int postCode);
+
+  String getUrlPhoto();
 
   void setUrlPhoto(String urlPhoto);
 
-   String getPhoneNumber();
+  String getPhoneNumber();
 
   void setPhoneNumber(String phoneNumber);
 

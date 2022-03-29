@@ -27,11 +27,12 @@ public class WebExceptionMapper implements ExceptionMapper<Throwable> {
       loggerWriter.write("Message d'erreur : "
           + exception.getMessage() + "\n\nStackTrace : \n");
 
-      for(StackTraceElement s : exception.getStackTrace())
+      for (StackTraceElement s : exception.getStackTrace()) {
         loggerWriter.write(s + "\n");
+      }
 
       loggerWriter.close();
-    } catch(IOException e) {
+    } catch (IOException e) {
       System.out.println("Un problème est survénu lors de la création du logger");
       e.printStackTrace();
     }
@@ -56,5 +57,4 @@ public class WebExceptionMapper implements ExceptionMapper<Throwable> {
         .entity(exception.getMessage())
         .build();
   }
-
 }

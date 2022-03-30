@@ -48,12 +48,17 @@ if(accesToken){
   navbar = `
       <nav>
         <div id="navigation">
-          <div id="logo"> <a class="nav-item" href="#"  data-uri="/"> Donnamis </a></div>
+          <div id="menu">
+            <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Mon profile </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
+          </div>
+         
 
           <div id="username"> bonjour ${username}</div>
 
           <div id="nav-connection"> 
-            <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
             <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
           </div>
         </div>
@@ -67,7 +72,7 @@ if(accesToken){
 
           <div id="nav-connection"> 
             <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
-            <div id="register"> <a class="nav-item" href="#" data-uri="/register"> S'inscrire </a>  </div>
+            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/register"> S'inscrire </a>  </div>
           </div>
         </div>
       </nav>

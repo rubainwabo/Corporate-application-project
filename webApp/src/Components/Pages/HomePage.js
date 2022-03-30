@@ -2,60 +2,104 @@ import { isJwtExpired } from 'jwt-check-expiration';
 import { Redirect } from "../Router/Router";
 import Logout from '../Logout/Logout';
 import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
+
+
+import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+
+const data = [{type:"meuble",description:"une table tres belle"},{type:"meuble",description:"une table tres belle"},{type:"meuble",description:"une table tres belle"}]
 /**
  * Render the LoginPage
  */
 const home = `
-<div>
-  <p> Bienvue sur Donnamis </p>
-</div>
+<section id="home-page">
+    <div id="home-page-navigation">
+        <h2 id="home-page-title"> Dernières offres</h2>
+        
+    </div>
+      
+
+    <div id="all-recent-item">
+    
+       <div class="item-box" id="hello">
+          <div class="home-page-item-image">
+            <img src="${itemImg}">
+          </div>
+          <div class="home-page-item-description">
+              <p class="item-title"> Meuble</p>
+              <p class="item-description"> "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was tesfing pokqs qplsk ... </p>
+          </div>
+       </div>
+    </div>
+  
+</section>
 `;
 
-const HomePage = async () => {
-    let accessToken = getSessionObject("accessToken");
-
-    // if the user has a accesToken and the token is expired
-    if(((accessToken) && isJwtExpired(accessToken))){
-      let refreshToken = getSessionObject("tokenRefresh");
-      // if his not in possession of a refresh
-      if (!refreshToken) {
-       return  Redirect("/logout");
-      }
-      // try to get the user new tokens if his refresh token is not expired
-        if(!isJwtExpired(refreshToken)){
-          console.log("voici le refrehs bg : " +refreshToken)
-            try {
-              const options = {
-                method: "POST", // *GET, POST, PUT, DELETE, etc.
-                body: JSON.stringify({
-                  refreshToken: refreshToken,
-                }), // body data type must match "Content-Type" header
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              };
-              const response = await fetch("/api/auths/refreshToken", options); // fetch return a promise => we wait for the response
-
-              if (!response.ok) {
-                throw new Error(
-                  "fetch error : " + response.status + " : " + response.statusText
-                );
-              }
-
-              const tokens = await response.json(); // json() returns a promise => we wait for the data
-              console.log(tokens);
-              setSessionObject("accessToken", tokens.accessToken);
-              setSessionObject("tokenRefresh",tokens.tokenRefresh);
-              // call the HomePage via the Router
-            } catch (error) {
-              console.error("LoginPage::error: ", error);
-            }
-          }
-    }
+const HomePage = async (id) => {
 
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
 
+  let allRecentItem = document.getElementById("all-recent-item");
+  var hello = document.getElementById("hello");
+
+  hello.addEventListener("click",function(e){
+    e.preventDefault();
+
+    var params = [{key:"id",value:"1"}]   
+    Redirect("/item", params)
+  })
+  try {
+
+    const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response   
+    console.log("res", response);
+  if(!response.ok){
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+  }
+
+  const items = await response.json();
+
+ console.log("here", items);
+
+    items.forEach((item)=>{
+      console.log("my item" , item);
+      
+      let itemBox = document.createElement("div");
+      let homePageImageBox = document.createElement("div");
+      let itemImgDiv = document.createElement("img");
+      let descriptionBox = document.createElement("div");
+      let itemType = document.createElement("p")
+      let itemDescription = document.createElement("p");
+
+      itemBox.classList.add("item-box");
+      homePageImageBox.classList.add("home-page-item-image");
+      descriptionBox.classList.add("home-page-item-description")
+     
+      itemType.classList.add("item-title");
+      itemDescription.classList.add("item-description");
+
+      itemImgDiv.src=itemImg;
+      itemType.innerText=item.itemtype;
+      itemDescription.innerText=item.description;
+
+      descriptionBox.appendChild(itemType);
+      descriptionBox.appendChild(itemDescription);
+      homePageImageBox.appendChild(itemImgDiv);
+      itemBox.appendChild(homePageImageBox);
+      itemBox.appendChild(descriptionBox);
+      
+      itemBox.addEventListener("click",function(){
+        let params = [{key:"id",value:item.id}];
+        Redirect("/item",params);
+      })
+      allRecentItem.appendChild(itemBox);
+    })
+
+  } catch (error) {
+    
+  }
+  
 };
 
 

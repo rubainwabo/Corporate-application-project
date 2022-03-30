@@ -17,10 +17,12 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
+import utils.exception.UsernameAlreadyExists;
 
 // ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
 // (name can be changed in FiltersDynamicBindingConfig class)
 // ! To use the AuthorizeRequestFilter the name of path methods must contain "user" !
+
 
 @Singleton
 @Path("/auths")
@@ -158,5 +160,36 @@ public class UserRessource {
   public String getUserPhoneNumber() {
     int userId = 1;
     return myUserUCC.getPhoneNumber(userId);
+  }
+
+  /**
+   * register a user in the DB.
+   *
+   * @param user the user
+   * @return the user informations
+   */
+  @POST
+  @Path("register")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public int register(UserDTO user) {
+    // faire les verifications...
+    if (user == null || user.getUserName() == null || user.getUserName().isBlank() ||
+        user.getLastName() == null || user.getLastName().isBlank() ||
+        user.getFirstName() == null || user.getFirstName().isBlank() ||
+        user.getPassword() == null || user.getPassword().isBlank()) {
+      System.out.println("helllo");
+      throw new WebApplicationException(
+          Response.status(Response.Status.BAD_REQUEST).entity("Lacks of mandatory info")
+              .type("text/plain").build());
+    }
+
+    try {
+      return myUserUCC.register(user);
+    } catch (UsernameAlreadyExists e) {
+      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+          .entity(e.getMessage()).type("text/plain").build());
+    }
+
   }
 }

@@ -29,7 +29,7 @@ public class UserDAOImpl implements UserDAO {
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();
         if (!rs.next()) {
-          throw new FatalException("Pas d'user avec cet username trouvé");
+          return null;
         }
         user.setId(rs.getInt(1));
         user.setPassword(rs.getString(2));
@@ -48,7 +48,7 @@ public class UserDAOImpl implements UserDAO {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
-            + "state,phone_number from projet.members where state=?")) {
+            + "state,phone_number,_role from projet.members where state=?")) {
       ps.setString(1, state);
 
       try (ResultSet rs = ps.executeQuery()) {
@@ -60,11 +60,12 @@ public class UserDAOImpl implements UserDAO {
           user.setFirstName(rs.getString(2));
           user.setCity(rs.getString(3));
           user.setStreet(rs.getString(4));
-          user.setPostCode(rs.getString(5));
-          user.setBuildingNumber(rs.getString(6));
+          user.setPostCode(rs.getInt(5));
+          user.setBuildingNumber(rs.getInt(6));
           user.setId(rs.getInt(7));
           user.setUserName(rs.getString(8));
           user.setState(rs.getString(9));
+          user.setRole(rs.getString(11));
           userDTOList.add(user);
         }
       }
@@ -87,6 +88,7 @@ public class UserDAOImpl implements UserDAO {
         user.setId(rs.getInt(1));
         user.setState(rs.getString(2));
         user.setRole(rs.getString(3));
+
         return user;
       }
     } catch (Exception e) {
@@ -138,6 +140,40 @@ public class UserDAOImpl implements UserDAO {
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public int register(UserDTO user) {
+
+    try (PreparedStatement ps = myDalService.getPreparedStatementWithId(
+        "INSERT INTO projet.members(user_id,username,last_name, first_name,"
+            + " unit_number,state,password,street,postCode,"
+            + " building_number,city,"
+            + " url_picture,nb_of_item_not_taken) VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?) ",
+        Statement.RETURN_GENERATED_KEYS)) {
+
+      ps.setString(1, user.getUserName());
+      ps.setString(2, user.getLastName());
+      ps.setString(3, user.getFirstName());
+      ps.setInt(4, user.getUnitNumber());
+      ps.setString(5, "waiting");
+      ps.setString(6, user.getPassword());
+      ps.setString(7, user.getStreet());
+      ps.setInt(8, user.getPostCode());
+      ps.setInt(9, user.getBuildingNumber());
+      ps.setString(10, user.getCity());
+      ps.setString(11, user.getUrlPhoto());
+      ps.setInt(12, 0);
+      ps.executeUpdate();
+      ResultSet rs = ps.getGeneratedKeys();
+
+      if (!rs.next()) {
+        throw new FatalException("Echec de la query");
+      }
+      return rs.getInt(1);
     } catch (Exception e) {
       throw new FatalException(e);
     }

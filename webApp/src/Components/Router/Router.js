@@ -1,14 +1,23 @@
 import LoginPage from "../Pages/LoginPage";
 import HomePage from "../Pages/HomePage";
+import ItemPage from "../Pages/ItemPage";
+import AddItemPage from "../Pages/AddItem";
+import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
-import Register from "../Pages/RegisterPage"
+
+import UserHandler from "../Pages/admin/UserHandler";
+import MesOffres from "../Pages/MesOffres";
 
 // Configure your routes here
 const routes = {
   '/' : HomePage,
   "/login": LoginPage,
-  "/register":Register,
-  "/logout":Logout
+  "/logout":Logout,
+  '/item':ItemPage,
+  '/register':Register,
+  '/additem':AddItemPage,
+  '/userhandeler':UserHandler,
+  '/mesOffres' : MesOffres
 };
 
 /**
@@ -23,7 +32,7 @@ const Router = () => {
   navbarWrapper.addEventListener("click", (e) => {
     // To get a data attribute through the dataset object, get the property by the part of the attribute name after data- (note that dashes are converted to camelCase).
     let uri = e.target.dataset.uri;
-
+    console.log(uri);
     if (uri) {
       e.preventDefault();
       /* use Web History API to add current page URL to the user's navigation history 
@@ -66,10 +75,29 @@ const Router = () => {
  * routes array of the Router
  */
 
-const Redirect = (uri) => {
+const Redirect = (uri,params) => {
   // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
-  window.history.pushState({}, uri, window.location.origin + uri);
+  if(params){
+    var url = window.location.origin + uri+"?";
+
+    var i = 0;
+    while(i<params.length){
+      url+=params[i].key+"="+params[i].value;
+      i++;
+      if(i<params.length){
+        url+="&";
+      }
+    }
+    window.history.pushState({}, uri, url);
+ 
+    
+  }else{
+    window.history.pushState({}, uri, window.location.origin + uri)
+  }
+  
+ 
   // render the requested component
+  
   const componentToRender = routes[uri];
   if (routes[uri]) {
     componentToRender();

@@ -45,6 +45,8 @@ public interface UserDAO {
    */
   void addPhoneNumber(int userId, String phoneNumber) throws SQLException;
 
+  int register(UserDTO user);
+
   /**
    * Changes the state of a user.
    *

@@ -92,6 +92,25 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
+  public List<ItemDTO> getAllItemsOffered(int id) {
+    try {
+      myDalServices.start(false);
+      List<ItemDTO> list;
+
+      list = myItemDAOService.getAllOffered(id);
+      myDalServices.commit(false);
+      return list;
+    } catch (Exception e) {
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
+    }
+  }
+
+  @Override
   public List<ItemDTO> getLastItemsOffered(boolean isConnected) {
     try {
       myDalServices.start(false);

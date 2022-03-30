@@ -55,11 +55,12 @@ const ItemPage = async () => {
      
      let showInterest = document.getElementById("show-interest");
     
+     
      document.getElementById("item-description-p").innerText=item.description;
      document.getElementById("item-type").innerText=item.itemtype;
      document.getElementById("offeror").innerText=item.offeror;
      document.getElementById("number-interest").innerText=item.numberOfPeopleInterested;
-
+    
 
     console.log(item);
    

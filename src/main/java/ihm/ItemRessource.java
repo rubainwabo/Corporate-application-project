@@ -94,7 +94,8 @@ public class ItemRessource {
   @Path("addInterest/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userAddInterest(@PathParam("id") int itemId, ObjectNode body, @Context ContainerRequest req) {
+  public Response userAddInterest(@PathParam("id") int itemId, ObjectNode body,
+      @Context ContainerRequest req) {
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());

@@ -33,19 +33,13 @@ const home = `
 </section>
 `;
 
-const HomePage = async (id) => {
+const MesOffres = async (id) => {
 
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
 
   let allRecentItem = document.getElementById("all-recent-item");
-  var hello = document.getElementById("hello");
-
-  hello.addEventListener("click",function(e){
-    e.preventDefault();
-    var params = [{key:"id",value:"1"}];   
-    Redirect("/item/itemDetails",params)
-  })
+  
   try {
     var options = { method: 'GET',
                headers: {"token" : localStorage.getItem("accessToken")},
@@ -67,7 +61,7 @@ const HomePage = async (id) => {
 
     items.forEach((item)=>{
       console.log("my item" , item);
-      
+      //Rajouter ici les bonnes data qu'on chope
       let itemBox = document.createElement("div");
       let homePageImageBox = document.createElement("div");
       let itemImgDiv = document.createElement("img");
@@ -91,8 +85,10 @@ const HomePage = async (id) => {
       homePageImageBox.appendChild(itemImgDiv);
       itemBox.appendChild(homePageImageBox);
       itemBox.appendChild(descriptionBox);
-      
-      itemBox.addEventListener("click",function(){
+    
+      itemBox.addEventListener("click",function(e){
+          console.log("clicked");
+        e.preventDefault();
         let params = [{key:"id",value:item.id}];
         Redirect("/item",params);
       })
@@ -106,4 +102,4 @@ const HomePage = async (id) => {
 };
 
 
-export default HomePage;
+export default MesOffres;

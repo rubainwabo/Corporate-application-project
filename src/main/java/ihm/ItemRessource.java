@@ -13,9 +13,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+import org.glassfish.jersey.server.ContainerRequest;
 
 @Singleton
 @Path("/items")
@@ -27,6 +29,21 @@ public class ItemRessource {
   @Inject
   private UserUCC myUserUCC;
 
+
+  /**
+   * gets list of offers of the user
+   *
+   * @return items
+   */
+  @GET
+  @Path("mesOffres")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<ItemDTO> userMesOffres(@Context ContainerRequest req) {
+    int id = (int) req.getProperty("id");
+    return myItemUCC.getAllItemsOffered(id);
+  }
+
   /**
    * retrives to add an item to the DB.
    *
@@ -37,13 +54,14 @@ public class ItemRessource {
   @Path("add")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public int addItem(ItemDTO itemDTO) {
+  public int userAddItem(ItemDTO itemDTO, @Context ContainerRequest req) {
     if (itemDTO == null || itemDTO.getDescription().isBlank() || itemDTO.getItemtype().isBlank()
         || itemDTO.getTimeSlot().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("object informations invalid").type("text/plain").build());
     }
-    return myItemUCC.addItem(itemDTO, 1);
+    int id = (int) req.getProperty("id");
+    return myItemUCC.addItem(itemDTO, id);
   }
 
   /**
@@ -55,7 +73,7 @@ public class ItemRessource {
   @GET
   @Path("itemDetails/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public ItemDTO getItemDetails(@PathParam("id") int id) {
+  public ItemDTO userGetItemDetails(@PathParam("id") int id) {
     if (id <= 0) {
       throw new WebApplicationException("bad request, no id found in pathParams");
     }
@@ -72,20 +90,16 @@ public class ItemRessource {
   @Path("addInterest/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response addInterest(@PathParam("id") int itemId, ObjectNode body) {
+  public Response userAddInterest(@PathParam("id") int itemId, ObjectNode body,
+      @Context ContainerRequest req) {
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
-    var callMe = false;
-    String phoneNumber = "";
-    if (body.hasNonNull("callMe")) {
-      callMe = body.get("callMe").asBoolean();
-    }
-    if (body.hasNonNull("phoneNumber")) {
-      phoneNumber = body.get("phoneNumber").asText();
-    }
-    int userId = 1;
+    boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
+    String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
+
+    int userId = (int) req.getProperty("id");
     if (callMe && !phoneNumber.isBlank()) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
@@ -102,12 +116,12 @@ public class ItemRessource {
   @Path("cancelOffer/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response cancelOffer(@PathParam("id") int itemId) {
+  public Response userCancelOffer(@PathParam("id") int itemId, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
-    int userId = 1;
+    int userId = (int) req.getProperty("id");
     myItemUCC.cancelOffer(itemId, userId);
     return Response.ok().build();
   }
@@ -132,7 +146,7 @@ public class ItemRessource {
   @GET
   @Path("lastItemsOfferedConnected")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> getLastItemsOfferedConnected() {
+  public List<ItemDTO> userGetLastItemsOfferedConnected() {
     return myItemUCC.getLastItemsOffered(true);
   }
 }

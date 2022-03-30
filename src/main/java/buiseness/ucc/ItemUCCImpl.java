@@ -77,6 +77,22 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
+  public List<ItemDTO> getAllItemsOffered(int id) {
+    try {
+      myDalServices.start(false);
+      List<ItemDTO> list;
+
+      list = myItemDAOService.getAllOffered(id);
+      myDalServices.commit(false);
+      return list;
+    } catch (Exception e) {
+      myDalServices.commit(false);
+      e.printStackTrace();
+      throw new BizzException("Erreur lors de la connexion à la db");
+    }
+  }
+
+  @Override
   public List<ItemDTO> getLastItemsOffered(boolean isConnected) {
     try {
       myDalServices.start(false);
@@ -91,6 +107,7 @@ public class ItemUCCImpl implements ItemUCC {
       return list;
     } catch (Exception e) {
       myDalServices.commit(false);
+      e.printStackTrace();
       throw new BizzException("Erreur lors de la connexion à la db");
     }
   }

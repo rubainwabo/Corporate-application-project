@@ -1,4 +1,3 @@
-import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
 const addItem = `
 <section id="add-item-page">
     <form id="add-item-form">
@@ -59,9 +58,8 @@ const AddItemPage = () => {
     let addItemTypeBtn = document.getElementById("add-new-item-type-btn");
     let popUp = document.getElementById("add-item-pop-up");
     let removePopUp = document.getElementById("cancel-add-item-type");
-    
 
-    removePopUp.addEventListener("click",function(e){
+    removePopUp.addEventListener("click",function(){
         popUp.style.display="none";
     })
     addItemTypeBtn.addEventListener("click",function(e){
@@ -70,7 +68,6 @@ const AddItemPage = () => {
       popUp.style.display="flex";
     })
 
-   
 
     addItemType.addEventListener("click", async function(e){
       e.preventDefault();
@@ -93,14 +90,11 @@ const AddItemPage = () => {
           response.text().then((result)=>{
             document.getElementById("error").innerText=result;
           })
-          throw new Error(
-            "fetch error : " + response.status + " : " + response.statusText
-          );
         }
         
-        
+
         const itemType  = await response.json(); // json() returns a promise => we wait for the data
-      
+
         console.log(itemType);
 
         let selectBox = document.getElementById("items-type-selectbox");
@@ -111,7 +105,7 @@ const AddItemPage = () => {
         option.selected=true;
         selectBox.appendChild(option);
 
-        
+
         popUp.style.display="none";
         
        
@@ -149,9 +143,6 @@ const AddItemPage = () => {
               response.text().then((result)=>{
                 document.getElementById("error").innerText=result;
               })
-              throw new Error(
-                "fetch error : " + response.status + " : " + response.statusText
-              );
             }
             
             const itemType  = await response.json(); // json() returns a promise => we wait for the data
@@ -173,9 +164,7 @@ const AddItemPage = () => {
         const response = await fetch("/api/itemsType/getAll"); // fetch return a promise => we wait for the response   
 
         if(!response.ok){
-            throw new Error(
-                "fetch error : " + response.status + " : " + response.statusText
-            )
+
         }
         const itemsTypes = await response.json();
         

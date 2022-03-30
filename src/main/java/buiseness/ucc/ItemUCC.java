@@ -48,4 +48,6 @@ public interface ItemUCC {
    * @return list of last items
    */
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
+
+  List<ItemDTO> getAllItemsOffered(int id);
 }

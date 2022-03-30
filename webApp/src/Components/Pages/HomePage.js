@@ -28,18 +28,10 @@ const HomePage = async (id) => {
 
   
   let allRecentItem = document.getElementById("all-recent-item");
-  var hello = document.getElementById("hello");
-
-  hello.addEventListener("click",function(e){
-    e.preventDefault();
-
-    var params = [{key:"id",value:"1"}]   
-    Redirect("/item", params)
-  })
+  
   try {
-
     const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response   
-    console.log("res", response);
+    console.log("res", response.body);
   if(!response.ok){
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText

@@ -193,7 +193,7 @@ public class ItemDAOImpl implements ItemDAO {
     String query = "select i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name,max(d._date) as maxDate from projet.items i,"
         + "projet.item_type it, projet.dates d "
-        + "where (i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type)"
+        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type"
         + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate " + limite;
 

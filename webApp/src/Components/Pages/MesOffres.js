@@ -26,10 +26,11 @@ const MesOffres = async (id) => {
   pageDiv.innerHTML = home;
 
   let allRecentItem = document.getElementById("all-recent-item");
-  
+  let token = getSessionObject("accessToken");
+
   try {
     var options = { method: 'GET',
-               headers: {"token" : localStorage.getItem("accessToken")},
+               headers: {"token" : token},
                mode: 'cors',
                cache: 'default'};   
     const response = await fetch("/api/items/mesOffres", options); // fetch return a promise => we wait for the response   

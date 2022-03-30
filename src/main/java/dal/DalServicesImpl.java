@@ -62,6 +62,7 @@ public class DalServicesImpl implements DalServices, DalBackService {
       }
       con.close();
       mapThreadConnection.set(null);
+
     } catch (SQLException e) {
       throw new FatalException(e);
     }

@@ -32,7 +32,7 @@ const UserHandler = () => {
   };
 
   async function request (accesToken,state) {
-
+    console.log(accesToken);
     try {
         const option = {
             headers: {

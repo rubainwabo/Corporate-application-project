@@ -10,6 +10,7 @@ const Logout = () => {
     removeSessionObject("userId");
     removeSessionObject("accessToken");
     removeSessionObject("tokenRefresh");
+    removeSessionObject("role");
 
   // re-render the navbar (for a non-authenticated user)
   Navbar();

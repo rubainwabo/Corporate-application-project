@@ -19,7 +19,6 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
 import org.glassfish.jersey.server.ContainerRequest;
-import utils.exception.UsernameAlreadyExists;
 
 // ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
 // (name can be changed in FiltersDynamicBindingConfig class)
@@ -44,6 +43,7 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public boolean adminChangeState(JsonNode body) {
+    System.out.println(body.get("admin"));
     if (!body.hasNonNull("change_id") || !body.hasNonNull("state")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("id field is required").type("text/plain").build());
@@ -171,12 +171,7 @@ public class UserRessource {
               .type("text/plain").build());
     }
 
-    try {
-      return myUserUCC.register(user);
-    } catch (UsernameAlreadyExists e) {
-      throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-          .entity(e.getMessage()).type("text/plain").build());
-    }
+    return myUserUCC.register(user);
 
   }
 }

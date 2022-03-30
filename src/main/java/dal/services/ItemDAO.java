@@ -2,6 +2,7 @@ package dal.services;
 
 import buiseness.dto.ItemDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ItemDAO {
@@ -13,7 +14,7 @@ public interface ItemDAO {
    * @param userId the offeror
    * @return the id of the item added
    */
-  int addItem(ItemDTO item, int userId);
+  int addItem(ItemDTO item, int userId) throws SQLException;
 
   /**
    * retrives the item by the id in params.
@@ -21,7 +22,7 @@ public interface ItemDAO {
    * @param id the item id
    * @return the item
    */
-  ItemDTO getOneById(int id);
+  ItemDTO getOneById(int id) throws SQLException;
 
   /**
    * try to add an interest for an object.
@@ -30,7 +31,7 @@ public interface ItemDAO {
    * @param objectNode the node getted from the front
    * @param userId     the user who send the request
    */
-  void addInterest(int idItem, ObjectNode objectNode, int userId);
+  void addInterest(int idItem, ObjectNode objectNode, int userId) throws SQLException;
 
   /**
    * retrives to change the itemCondition to cancelled.
@@ -38,7 +39,7 @@ public interface ItemDAO {
    * @param idItem the idItem
    * @param userId the user who send the request
    */
-  void cancelOffer(int idItem, int userId);
+  void cancelOffer(int idItem, int userId) throws SQLException;
 
   List<ItemDTO> getAllOffered(int id);
 
@@ -48,5 +49,5 @@ public interface ItemDAO {
    * @param limit the limit of rows
    * @return a list of item
    */
-  List<ItemDTO> getLastItemsOffered(int limit);
+  List<ItemDTO> getLastItemsOffered(int limit) throws SQLException;
 }

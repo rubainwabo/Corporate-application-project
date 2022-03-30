@@ -23,8 +23,12 @@ public class ItemTypeUCCImpl implements ItemTypeUCC {
       myDalServices.commit(true);
       return val;
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Echec de connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -36,8 +40,12 @@ public class ItemTypeUCCImpl implements ItemTypeUCC {
       myDalServices.commit(false);
       return listeItemType;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      throw new BizzException("Echec de connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 }

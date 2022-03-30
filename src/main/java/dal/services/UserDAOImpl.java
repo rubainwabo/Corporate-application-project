@@ -6,7 +6,6 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +39,8 @@ public class UserDAOImpl implements UserDAO {
         user.setReasonForConnectionRefusal(rs.getString(5));
         return user;
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -71,8 +70,8 @@ public class UserDAOImpl implements UserDAO {
           userDTOList.add(user);
         }
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
     return userDTOList;
   }
@@ -93,8 +92,8 @@ public class UserDAOImpl implements UserDAO {
 
         return user;
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -108,8 +107,8 @@ public class UserDAOImpl implements UserDAO {
         }
         return rsPhoneNumber.getString(1);
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -119,8 +118,8 @@ public class UserDAOImpl implements UserDAO {
         "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
             + userId)) {
       psAddPhone.executeUpdate();
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -142,8 +141,8 @@ public class UserDAOImpl implements UserDAO {
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -176,8 +175,8 @@ public class UserDAOImpl implements UserDAO {
         throw new FatalException("Echec de la query");
       }
       return rs.getInt(1);
-    } catch (SQLException throwables) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 }

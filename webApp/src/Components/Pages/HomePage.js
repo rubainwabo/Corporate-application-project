@@ -20,7 +20,7 @@ const home = `
 
     <div id="all-recent-item">
     
-       <div class="item-box" id="hello">
+       <div class="item-box" id="hello" style = "position : relative">
           <div class="home-page-item-image">
             <img src="${itemImg}">
           </div>
@@ -39,6 +39,7 @@ const HomePage = async (id) => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
 
+  
   let allRecentItem = document.getElementById("all-recent-item");
   var hello = document.getElementById("hello");
 

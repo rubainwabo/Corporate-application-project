@@ -1,11 +1,13 @@
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import { Redirect } from '../Router/Router';
 const addItem = `
 <section id="add-item-page">
+  <p id="message"></p>
     <form id="add-item-form">
      
             <div >
                 <label for="pet-select">Type d’objet</label><br>
-                <select class="add-item-iputs" name="pets" id="items-type-selectbox">
+                <select class="add-item-iputs" name="pets" id="items-type-selectbox" required="required">
                     <option value="">--veuillez choisir un type--</option>
                     
                 </select>
@@ -14,12 +16,12 @@ const addItem = `
             
             <div>
                 <label for="availability">Plage horaire</label><br>
-                <input  class="add-item-iputs" type="text" id="availability" name="availability">
+                <input  class="add-item-iputs" type="text" id="availability" name="availability" required="required">
             </div>
   
             <div id="add-item-description">
                 <label for="itemDescription">Description</label><br>
-                <input  class="" type="text" id="itemDescription" name="itemDescription">
+                <input  class="" type="text" id="itemDescription" name="itemDescription" required="required">
             </div>
 
             <div id="cancel-add">
@@ -45,6 +47,20 @@ const addItem = `
           </div>
         </form>
     </div>
+
+    <div id="add-item-pop-up-confim">
+        <div>
+          Votre objet a été ajouté
+        </div>
+       
+        <button id="add-new">continuer</button>
+        <button id="done">OK</button>
+        </div>
+        
+        
+    </div>
+
+
    
 </section>
 `;
@@ -54,11 +70,14 @@ const AddItemPage = () => {
     const pageDiv = document.querySelector("#page");
     pageDiv.innerHTML = addItem;
     getItemsTypes();
-    let addItemButton = document.getElementById("addItemButton");
+    let addItemForm = document.getElementById("add-item-form");
     let addItemType = document.getElementById("add-item-type");
     let addItemTypeBtn = document.getElementById("add-new-item-type-btn");
     let popUp = document.getElementById("add-item-pop-up");
     let removePopUp = document.getElementById("cancel-add-item-type");
+    let addNew = document.getElementById("add-new");
+    let confirmPop = document.getElementById("add-item-pop-up-confim");
+    let done = document.getElementById("done");
     
 
     removePopUp.addEventListener("click",function(e){
@@ -66,9 +85,20 @@ const AddItemPage = () => {
     })
     addItemTypeBtn.addEventListener("click",function(e){
       e.preventDefault();
-      
       popUp.style.display="flex";
     })
+
+    addNew.addEventListener("click",function(e){
+      document.getElementById("items-type-selectbox").value="";      
+      document.getElementById("availability").value="";
+      document.getElementById("itemDescription").value="";
+      confirmPop.style.display="none";
+
+    })
+    done.addEventListener("click",function(e){
+      Redirect('/');
+    })
+    
 
    
 
@@ -121,7 +151,7 @@ const AddItemPage = () => {
 
     })
 
-    addItemButton.addEventListener("click",async function(e){
+    addItemForm.addEventListener("submit",async function(e){
       e.preventDefault();
       let description = document.getElementById("itemDescription").value;
       let urlPicture = "none";
@@ -157,7 +187,8 @@ const AddItemPage = () => {
             const itemType  = await response.json(); // json() returns a promise => we wait for the data
       
             console.log(itemType);
-
+            document.getElementById("add-item-pop-up-confim").style.display="flex";
+            
            
           } catch (error) {
             console.error("LoginPage::error: ", error);
@@ -191,12 +222,7 @@ const AddItemPage = () => {
         console.error("addItemPage::error: ", error);
       }
 
-      let option = document.createElement("option");
-      option.value="table";
-      option.innerText="table en boite";
-     
-      option.value="table";
-      selectBox.appendChild(option);
+      
       
     }
     /*

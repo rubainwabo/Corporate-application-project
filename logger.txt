@@ -1,7 +1,21 @@
-Message d'erreur : HTTP 404 Not Found
+Message d'erreur : Erreur lors de la connexion à la db
 
 StackTrace : 
-org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+buiseness.ucc.ItemUCCImpl.addInterest(ItemUCCImpl.java:63)
+ihm.ItemRessource.addInterest(ItemRessource.java:92)
+java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.base/java.lang.reflect.Method.invoke(Method.java:568)
+org.glassfish.jersey.server.model.internal.ResourceMethodInvocationHandlerFactory.lambda$static$0(ResourceMethodInvocationHandlerFactory.java:52)
+org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher$1.run(AbstractJavaResourceMethodDispatcher.java:124)
+org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.invoke(AbstractJavaResourceMethodDispatcher.java:167)
+org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$ResponseOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:176)
+org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.dispatch(AbstractJavaResourceMethodDispatcher.java:79)
+org.glassfish.jersey.server.model.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:475)
+org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:397)
+org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:81)
+org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:255)
 org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
 org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
 org.glassfish.jersey.internal.Errors.process(Errors.java:292)

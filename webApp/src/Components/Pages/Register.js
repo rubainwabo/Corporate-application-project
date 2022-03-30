@@ -8,13 +8,13 @@ const register = `
     
     <h2> Inscrivez-vous !</h2>
         <form action="#" id="register-form">
-           
+        <span id="error"></span>
             <div>
-                <input id ='username-rgst' type='text' placeholder='Username'>
+                <input id ='username-rgst' type='text' placeholder='Username' required="required">
             </div>
             <div>
-                <input id ='password-rgst' type='text' placeholder='Password'>
-                <input id ='confirm-pass-rgst' type='text' placeholder='Confirm password'>
+                <input id ='password-rgst' type='password' placeholder='Password' required="required">
+                <input id ='confirm-pass-rgst' type='password' placeholder='Confirm password'>
             </div>
             <div>
                 <input id ='last-name-rgst' type='text' placeholder='Last name'>
@@ -34,7 +34,7 @@ const register = `
 
             <div id="user-decision">
                 <div id="form-button-box">
-                    <button id="btnSubmit"> Envoyer </button>
+                    <input type="submit" value="Envoyer"> 
                 </div>
                 <div>        
                     <p>Déjà inscrit ? Connectez-vous !</p>
@@ -56,9 +56,9 @@ const Register = () => {
     const pageDiv = document.querySelector("#page");
     pageDiv.innerHTML = register;
 
-    let registerBtn = document.getElementById("btnSubmit");
+    let registerForm = document.getElementById("register-form");
 
-    registerBtn.addEventListener("click", async function(e){
+    registerForm.addEventListener("submit", async function(e){
         e.preventDefault();
 
         let username = document.getElementById("username-rgst").value;

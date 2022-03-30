@@ -101,6 +101,9 @@ item-page
     
     
 }
+#call-me-box{
+    display: none;
+}
 #item-page img{
     height: 40vh;  
 }
@@ -136,7 +139,15 @@ item-page
     padding-left: 10px;
     padding-right: 10px;
 }
-
+#add-iterest-pop-up{
+    display: none;
+    position:absolute;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 60vh;
+    background-color: antiquewhite;
+}
 /*
 home page
 */
@@ -210,6 +221,15 @@ add-item-page
     cursor: pointer;
 }
 #add-item-pop-up{
+    display: none;
+    position:absolute;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 60vh;
+    background-color: antiquewhite;
+}
+#add-item-pop-up-confim{
     display: none;
     position:absolute;
     align-items: center;

@@ -52,7 +52,7 @@ Content-Type: application/json
 GET http://localhost:3000/items/itemDetails/1
 
 ### add interest
-POST http://localhost:3000/items/addInterest/4
+POST http://localhost:3000/items/addInterest/2
 Content-Type: application/json
 
 {

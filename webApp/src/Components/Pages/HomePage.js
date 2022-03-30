@@ -20,15 +20,7 @@ const home = `
 
     <div id="all-recent-item">
     
-       <div class="item-box" id="hello">
-          <div class="home-page-item-image">
-            <img src="${itemImg}">
-          </div>
-          <div class="home-page-item-description">
-              <p class="item-title"> Meuble</p>
-              <p class="item-description"> "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was tesfing pokqs qplsk ... </p>
-          </div>
-       </div>
+       
           
     </div>
   
@@ -43,11 +35,7 @@ const HomePage = async (id) => {
   let allRecentItem = document.getElementById("all-recent-item");
   var hello = document.getElementById("hello");
 
-  hello.addEventListener("click",function(e){
-    e.preventDefault();
-    var params = [{key:"id",value:"1"}]   
-    Redirect("/item",params)
-  })
+  
   try {
      // hide data to inform if the pizza menu is already printed
      const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response   

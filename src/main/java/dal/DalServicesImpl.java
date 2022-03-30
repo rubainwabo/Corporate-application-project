@@ -55,7 +55,8 @@ public class DalServicesImpl implements DalServices, DalBackService {
         con.commit();
         con.setAutoCommit(true);
       }
-      mapThreadConnection.remove();
+      con.close();
+      mapThreadConnection.set(null);
     } catch (Exception e) {
       throw new FatalException("Echec lors de la connexion à la db");
     }
@@ -66,7 +67,8 @@ public class DalServicesImpl implements DalServices, DalBackService {
     try {
       Connection con = mapThreadConnection.get();
       con.rollback();
-      mapThreadConnection.remove();
+      con.close();
+      mapThreadConnection.set(null);
     } catch (Exception e) {
       throw new FatalException("Echec lors de la connexion à la db");
     }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Message d'erreur : Echec lors de la connexion à la db
 
 StackTrace : 
@@ -30,3 +31,5 @@ org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
 org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
 org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
 java.base/java.lang.Thread.run(Thread.java:833)
+=======
+>>>>>>> master

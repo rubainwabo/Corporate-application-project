@@ -38,15 +38,12 @@ public class UserUCCImpl implements UserUCC {
         throw new PasswordOrUsernameException("username or password incorrect");
       }
       if (!user.checkPassword(password)) {
-        myDalServices.commit(false);
         throw new PasswordOrUsernameException("username or password incorrect");
       }
       if (user.isDenied()) {
-        myDalServices.commit(false);
         throw new ReasonForConnectionRefusalException(user.getReasonForConnectionRefusal());
       }
       if (user.isWaiting()) {
-        myDalServices.commit(false);
         throw new UserOnHoldException("user on hold");
       }
       var token = myTokenService.login(user.getId(), username, rememberMe);
@@ -54,8 +51,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(false);
       return token;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -77,13 +78,15 @@ public class UserUCCImpl implements UserUCC {
         myDalServices.commit(false);
         return list;
       } else {
-        myDalServices.commit(false);
-        throw new BizzException("state invalide");
+        throw new InvalidStateException("state invalide");
       }
     } catch (Exception e) {
-
-      myDalServices.commit(false);
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -95,8 +98,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(false);
       return str;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -107,8 +114,12 @@ public class UserUCCImpl implements UserUCC {
       myUserDAO.addPhoneNumber(userId, phoneNumber);
       myDalServices.commit(true);
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -119,8 +130,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(false);
       return usr;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -132,8 +147,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(false);
       return isAdmin;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -145,8 +164,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(false);
       return isValid;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -165,8 +188,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(true);
       return true;
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -191,8 +218,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(true);
       return idUser;
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
 
 

@@ -219,12 +219,15 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public List<ItemDTO> getAllOffered(int id){
+  public List<ItemDTO> getAllOffered(int id) {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
-    String query = "select id_item, description, url_picture, item_type, number_of_people_interested, it.item_type_name "
-        + "from projet.items, projet.item_type it "
-        + "where offeror ='" + id + "'"
-        + " GROUP BY id_item, description, url_picture, item_type, number_of_people_interested, it.item_type_name";
+    String query =
+        "select id_item, description, url_picture, item_type, "
+            + "number_of_people_interested, it.item_type_name "
+            + "from projet.items, projet.item_type it "
+            + "where offeror ='" + id + "'"
+            + " GROUP BY id_item, description, url_picture, "
+            + "item_type, number_of_people_interested, it.item_type_name";
 
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query

@@ -59,41 +59,39 @@ const MesOffres = async (id) => {
 
  console.log("here", items);
 
-    items.forEach((item)=>{
-      console.log("my item" , item);
-      //Rajouter ici les bonnes data qu'on chope
-      let itemBox = document.createElement("div");
-      let homePageImageBox = document.createElement("div");
-      let itemImgDiv = document.createElement("img");
-      let descriptionBox = document.createElement("div");
-      let itemType = document.createElement("p")
-      let itemDescription = document.createElement("p");
-
-      itemBox.classList.add("item-box");
-      homePageImageBox.classList.add("home-page-item-image");
-      descriptionBox.classList.add("home-page-item-description")
-     
-      itemType.classList.add("item-title");
-      itemDescription.classList.add("item-description");
-
-      itemImgDiv.src=itemImg;
-      itemType.innerText=item.itemtype;
-      itemDescription.innerText=item.description;
-
-      descriptionBox.appendChild(itemType);
-      descriptionBox.appendChild(itemDescription);
-      homePageImageBox.appendChild(itemImgDiv);
-      itemBox.appendChild(homePageImageBox);
-      itemBox.appendChild(descriptionBox);
+ items.forEach((item)=>{
+    console.log("my item" , item);
     
-      itemBox.addEventListener("click",function(e){
-          console.log("clicked");
-        e.preventDefault();
-        let params = [{key:"id",value:item.id}];
-        Redirect("/item",params);
-      })
-      allRecentItem.appendChild(itemBox);
+    let itemBox = document.createElement("div");
+    let homePageImageBox = document.createElement("div");
+    let itemImgDiv = document.createElement("img");
+    let descriptionBox = document.createElement("div");
+    let itemType = document.createElement("p")
+    let itemDescription = document.createElement("p");
+
+    itemBox.classList.add("item-box");
+    homePageImageBox.classList.add("home-page-item-image");
+    descriptionBox.classList.add("home-page-item-description")
+   
+    itemType.classList.add("item-title");
+    itemDescription.classList.add("item-description");
+
+    itemImgDiv.src=itemImg;
+    itemType.innerText=item.itemtype;
+    itemDescription.innerText=item.description;
+
+    descriptionBox.appendChild(itemType);
+    descriptionBox.appendChild(itemDescription);
+    homePageImageBox.appendChild(itemImgDiv);
+    itemBox.appendChild(homePageImageBox);
+    itemBox.appendChild(descriptionBox);
+    
+    itemBox.addEventListener("click",function(){
+      let params = [{key:"id",value:item.id}];
+      Redirect("/item",params);
     })
+    allRecentItem.appendChild(itemBox);
+  })
 
   } catch (error) {
     

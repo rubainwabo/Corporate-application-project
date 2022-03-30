@@ -46,10 +46,7 @@ const ItemPage = async () => {
     if(!response.ok){
       
       return Redirect("/logout");
-      throw new Error(
-             "fetch error : " + response.status + " : " + response.statusText
-         )
-
+        
     }
    
      const item = await response.json();

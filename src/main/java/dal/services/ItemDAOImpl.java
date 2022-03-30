@@ -192,9 +192,8 @@ public class ItemDAOImpl implements ItemDAO {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
-    String query = "select i.id_item, i.description, i.url_picture,"
-        + "it.item_type_name,i.number_of_people_interested,max(d._date) as maxDate from projet.items i,"
-        + "projet.item_type it, projet.dates d "
+    String query = "select i.id_item, i.description, i.url_picture, it.item_type_name, "
+        + "i.number_of_people_interested,max(d._date) as maxDate from projet.items i, projet.item_type it, projet.dates d "
         + "where (i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type)"
         + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate " + limite;
@@ -206,8 +205,8 @@ public class ItemDAOImpl implements ItemDAO {
   public List<ItemDTO> getAllOffered(int id) {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     String query =
-        "select id_item, description, url_picture, item_type, "
-            + "number_of_people_interested, it.item_type_name "
+        "select id_item, description, url_picture, "
+            + " it.item_type_name,number_of_people_interested"
             + "from projet.items, projet.item_type it "
             + "where offeror ='" + id + "'"
             + " GROUP BY id_item, description, url_picture, "
@@ -227,6 +226,7 @@ public class ItemDAOImpl implements ItemDAO {
           item.setId(rs.getInt(1));
           item.setDescription(rs.getString(2));
           item.setUrlPicture(rs.getString(3));
+          item.setItemtype(rs.getString(4));
           item.setNumberOfPeopleInterested(rs.getInt(5));
           arrayItemDTO.add(item);
         }

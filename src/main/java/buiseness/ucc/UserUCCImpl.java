@@ -50,6 +50,7 @@ public class UserUCCImpl implements UserUCC {
         throw new UserOnHoldException("user on hold");
       }
       var token = myTokenService.login(user.getId(), username, rememberMe);
+      token.put("role", user.getRole());
       myDalServices.commit(false);
       return token;
     } catch (Exception e) {
@@ -80,6 +81,7 @@ public class UserUCCImpl implements UserUCC {
         throw new BizzException("state invalide");
       }
     } catch (Exception e) {
+
       myDalServices.commit(false);
       throw new BizzException("Erreur lors de la connexion à la db");
     }

@@ -70,7 +70,7 @@ const LoginPage = () => {
       setSessionObject("userPseudo", user.username);
       setSessionObject("remeberMe", user.rememberMe);
       setSessionObject("accessToken", user.accessToken);
-
+      setSessionObject("role", user.role);
       if(rememberMe.checked){
         setSessionObject("tokenRefresh", user.tokenRefresh);
       }

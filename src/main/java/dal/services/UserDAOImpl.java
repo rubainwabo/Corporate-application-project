@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
   public UserDTO getOneByUsername(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select user_id,password,username,state,"
-            + "reason_for_connection_refusal from projet.members where username=?")) {
+            + "reason_for_connection_refusal,_role from projet.members where username=?")) {
 
       ps.setString(1, username);
       try (ResultSet rs = ps.executeQuery()) {
@@ -38,6 +38,7 @@ public class UserDAOImpl implements UserDAO {
         user.setUserName(rs.getString(3));
         user.setState(rs.getString(4));
         user.setReasonForConnectionRefusal(rs.getString(5));
+        user.setRole(rs.getString(6));
         return user;
         
       }
@@ -73,6 +74,7 @@ public class UserDAOImpl implements UserDAO {
         }
       }
     } catch (SQLException throwable) {
+      throwable.printStackTrace();
       throw new FatalException("Echec de la query");
     }
     return userDTOList;

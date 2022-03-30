@@ -66,5 +66,5 @@ public interface UserUCC {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
-  ObjectNode register(UserDTO user);
+  int register(UserDTO user);
 }

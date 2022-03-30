@@ -1,6 +1,8 @@
 import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import { Redirect } from "../Router/Router";
+import Logout from "../Logout/Logout";
 const item = `
 <section id="item-page">
     <div id="item-img-description">
@@ -28,31 +30,37 @@ const item = `
 
 const ItemPage = async () => {
     let id = getId();
-
     const pageDiv = document.querySelector("#page");
-    pageDiv.innerHTML = item;
-
-    
-    
-    let showInterest = document.getElementById("show-interest");
+     pageDiv.innerHTML = item;
 
     try {
-        // hide data to inform if the pizza menu is already printed
-        const response = await fetch("/api/items/itemDetails/"+id); // fetch return a promise => we wait for the response   
+        var options = { method: 'GET',
+               headers: {"token" : localStorage.getItem("accessToken")},
+               mode: 'cors',
+               cache: 'default'};
+
+        const response = await fetch("/api/items/itemDetails/"+id, options); // fetch return a promise => we wait for the response   
    
-     if(!response.ok){
-         throw new Error(
+    if(!response.ok){
+      
+      return Redirect("/logout");
+      throw new Error(
              "fetch error : " + response.status + " : " + response.statusText
          )
-     }
+
+    }
    
      const item = await response.json();
+     console.log("MY ITEM : ", item);
+     
+     let showInterest = document.getElementById("show-interest");
+    
      
      document.getElementById("item-description-p").innerText=item.description;
      document.getElementById("item-type").innerText=item.itemtype;
      document.getElementById("offeror").innerText=item.offeror;
      document.getElementById("number-interest").innerText=item.numberOfPeopleInterested;
-
+    
 
     console.log(item);
    

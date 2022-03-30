@@ -191,12 +191,34 @@ public class ItemDAOImpl implements ItemDAO {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
+    String query = "select i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
+        + "it.item_type_name,max(d._date) as maxDate from projet.items i,"
+        + "projet.item_type it, projet.dates d "
+        + "where (i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type)"
+        + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
+        + "it.item_type_name ORDER BY maxDate " + limite;
+
+    return getItemDTOS(arrayItemDTO, query);
+  }
+
+  @Override
+  public List<ItemDTO> getAllOffered(int id) {
+    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
+    String query =
+        "select id_item, description, url_picture, item_type, "
+            + "number_of_people_interested, it.item_type_name "
+            + "from projet.items, projet.item_type it "
+            + "where offeror ='" + id + "'"
+            + " GROUP BY id_item, description, url_picture, "
+            + "item_type, number_of_people_interested, it.item_type_name";
+
+    return getItemDTOS(arrayItemDTO, query);
+
+  }
+
+  private List<ItemDTO> getItemDTOS(ArrayList<ItemDTO> arrayItemDTO, String query) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_item, description, url_picture, item_type, number_of_people_interested,"
-            + "max(_date) as maxDate "
-            + "from projet.items,projet.dates "
-            + "where item_condition = 'offered' and id_item=item GROUP BY id_item ORDER BY maxDate "
-            + limite
+        query
     )) {
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
@@ -204,23 +226,15 @@ public class ItemDAOImpl implements ItemDAO {
           item.setId(rs.getInt(1));
           item.setDescription(rs.getString(2));
           item.setUrlPicture(rs.getString(3));
-          try (PreparedStatement psTypeString = myBackService.getPreparedStatement(
-              "Select item_type_name from projet.item_type where id_item_type = " + rs.getInt(
-                  4))) {
-            try (ResultSet rsTypeString = psTypeString.executeQuery()) {
-              if (!rsTypeString.next()) {
-                throw new FatalException("Echec lors de la récupération du type");
-              }
-              item.setItemtype(rsTypeString.getString(1));
-            }
-          }
           item.setNumberOfPeopleInterested(rs.getInt(5));
           arrayItemDTO.add(item);
         }
       }
       return arrayItemDTO;
-    } catch (SQLException throwable) {
+    } catch (SQLException e) {
+      e.printStackTrace();
       throw new FatalException("Echec lors de la récupération des derniers items offerts");
     }
   }
+
 }

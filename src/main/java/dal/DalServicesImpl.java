@@ -21,6 +21,7 @@ public class DalServicesImpl implements DalServices, DalBackService {
 
   public DalServicesImpl() {
     mapThreadConnection = new ThreadLocal<>();
+    System.out.println("connected? " + ds.getUrl() + " " + ds.getUsername());
   }
 
   @Override

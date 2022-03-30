@@ -122,6 +122,7 @@ public class ItemRessource {
           .entity("information is missing").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
+    System.out.println("deleted" + itemId);
     myItemUCC.cancelOffer(itemId, userId);
     return Response.ok().build();
   }

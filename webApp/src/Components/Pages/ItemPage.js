@@ -33,9 +33,11 @@ const ItemPage = async () => {
     const pageDiv = document.querySelector("#page");
      pageDiv.innerHTML = item;
 
+     let token = getSessionObject("accessToken");
+     
     try {
         var options = { method: 'GET',
-               headers: {"token" : localStorage.getItem("accessToken")},
+               headers: {"token" : token},
                mode: 'cors',
                cache: 'default'};
 

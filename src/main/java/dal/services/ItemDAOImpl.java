@@ -188,35 +188,33 @@ public class ItemDAOImpl implements ItemDAO {
 
   @Override
   public List<ItemDTO> getLastItemsOffered(int limit) {
-    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
     String query = "select i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name,max(d._date) as maxDate from projet.items i,"
         + "projet.item_type it, projet.dates d "
-        + "where (i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type)"
+        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type"
         + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate " + limite;
 
-    return getItemDTOS(arrayItemDTO, query);
+    return getItemDTOS(query);
   }
 
   @Override
   public List<ItemDTO> getAllOffered(int id) {
-    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     String query =
         "select id_item, description, url_picture, item_type, "
             + "number_of_people_interested, it.item_type_name "
-            + "from projet.items, projet.item_type it "
-            + "where offeror ='" + id + "'"
-            + " GROUP BY id_item, description, url_picture, "
-            + "item_type, number_of_people_interested, it.item_type_name";
+            + "from projet.items i, projet.item_type it "
+            + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
+            + "and i.item_condition != 'cancelled'";
 
-    return getItemDTOS(arrayItemDTO, query);
+    return getItemDTOS(query);
 
   }
 
-  private List<ItemDTO> getItemDTOS(ArrayList<ItemDTO> arrayItemDTO, String query) {
+  private List<ItemDTO> getItemDTOS(String query) {
+    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query
     )) {
@@ -230,6 +228,7 @@ public class ItemDAOImpl implements ItemDAO {
           arrayItemDTO.add(item);
         }
       }
+
       return arrayItemDTO;
     } catch (SQLException e) {
       e.printStackTrace();

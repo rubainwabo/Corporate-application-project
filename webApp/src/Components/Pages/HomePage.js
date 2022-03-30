@@ -16,21 +16,8 @@ const home = `
         <h2 id="home-page-title"> Dernières offres</h2>
         
     </div>
-      
-
     <div id="all-recent-item">
-    
-       <div class="item-box" id="hello">
-          <div class="home-page-item-image">
-            <img src="${itemImg}">
-          </div>
-          <div class="home-page-item-description">
-              <p class="item-title"> Meuble</p>
-              <p class="item-description"> "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was tesfing pokqs qplsk ... </p>
-          </div>
-       </div>
     </div>
-  
 </section>
 `;
 
@@ -40,18 +27,10 @@ const HomePage = async (id) => {
   pageDiv.innerHTML = home;
 
   let allRecentItem = document.getElementById("all-recent-item");
-  var hello = document.getElementById("hello");
-
-  hello.addEventListener("click",function(e){
-    e.preventDefault();
-
-    var params = [{key:"id",value:"1"}]   
-    Redirect("/item", params)
-  })
+  
   try {
-
     const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response   
-    console.log("res", response);
+    console.log("res", response.body);
   if(!response.ok){
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText

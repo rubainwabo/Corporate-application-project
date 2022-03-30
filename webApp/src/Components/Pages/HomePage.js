@@ -16,21 +16,8 @@ const home = `
         <h2 id="home-page-title"> Dernières offres</h2>
         
     </div>
-      
-
     <div id="all-recent-item">
-    
-       <div class="item-box" id="hello" style = "position : relative">
-          <div class="home-page-item-image">
-            <img src="${itemImg}">
-          </div>
-          <div class="home-page-item-description">
-              <p class="item-title"> Meuble</p>
-              <p class="item-description"> "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was tesfing pokqs qplsk ... </p>
-          </div>
-       </div>
     </div>
-  
 </section>
 `;
 
@@ -58,7 +45,7 @@ const HomePage = async (id) => {
           "fetch error : " + response.status + " : " + response.statusText
       )
   }
-
+  console.log(response);
   const items = await response.json();
 
  console.log("here", items);

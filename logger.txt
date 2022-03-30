@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 Message d'erreur : Erreur lors de la connexion à la db
 
 StackTrace : 
 buiseness.ucc.ItemUCCImpl.addInterest(ItemUCCImpl.java:63)
 ihm.ItemRessource.addInterest(ItemRessource.java:92)
+=======
+<<<<<<< HEAD
+Message d'erreur : Echec lors de la connexion à la db
+
+StackTrace : 
+dal.DalServicesImpl.commit(DalServicesImpl.java:61)
+buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:57)
+ihm.UserRessource.login(UserRessource.java:101)
+>>>>>>> master
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -10,7 +20,11 @@ java.base/java.lang.reflect.Method.invoke(Method.java:568)
 org.glassfish.jersey.server.model.internal.ResourceMethodInvocationHandlerFactory.lambda$static$0(ResourceMethodInvocationHandlerFactory.java:52)
 org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher$1.run(AbstractJavaResourceMethodDispatcher.java:124)
 org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.invoke(AbstractJavaResourceMethodDispatcher.java:167)
+<<<<<<< HEAD
 org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$ResponseOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:176)
+=======
+org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$TypeOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:219)
+>>>>>>> master
 org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.dispatch(AbstractJavaResourceMethodDispatcher.java:79)
 org.glassfish.jersey.server.model.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:475)
 org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:397)
@@ -29,3 +43,5 @@ org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
 org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
 org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
 java.base/java.lang.Thread.run(Thread.java:833)
+=======
+>>>>>>> master

@@ -7,7 +7,6 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,7 @@ public class ItemDAOImpl implements ItemDAO {
       }
       return generatedKey;
     } catch (Exception e) {
-      throw new FatalException("Echec lors de l'ajout de l'item");
+      throw new FatalException(e);
     }
   }
 
@@ -95,71 +94,69 @@ public class ItemDAOImpl implements ItemDAO {
           }
         }
       }
-    } catch (SQLException throwables) {
-      throw new FatalException("Echec de la query getOneById");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
   @Override
   public void addInterest(int idItem, ObjectNode objectNode, int interestUserId) {
-    {
-      try (PreparedStatement ps = myBackService.getPreparedStatement(
-          "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
-        ps.setString(1, objectNode.get("availabilities").asText());
-        ps.setInt(2, interestUserId);
-        ps.setInt(3, idItem);
-        ps.executeUpdate();
-        try (PreparedStatement psNbrePeople = myBackService.getPreparedStatement(
-            "select number_of_people_interested "
-                + "from projet.items where id_item = " + idItem)) {
-          int nbrePeople = 0;
-          try (ResultSet rsNbrePeople = psNbrePeople.executeQuery()) {
-            if (!rsNbrePeople.next()) {
-              throw new FatalException(
-                  "probleme dans le select du nbre de people interest");
-            }
-            nbrePeople = rsNbrePeople.getInt(1);
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
+      ps.setString(1, objectNode.get("availabilities").asText());
+      ps.setInt(2, interestUserId);
+      ps.setInt(3, idItem);
+      ps.executeUpdate();
+      try (PreparedStatement psNbrePeople = myBackService.getPreparedStatement(
+          "select number_of_people_interested "
+              + "from projet.items where id_item = " + idItem)) {
+        int nbrePeople;
+        try (ResultSet rsNbrePeople = psNbrePeople.executeQuery()) {
+          if (!rsNbrePeople.next()) {
+            throw new FatalException(
+                "probleme dans le select du nbre de people interest");
           }
-          try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
-              "update projet.items set number_of_people_interested = 1 + " + nbrePeople
-                  + " where id_item = " + idItem)) {
-            psNbrPeopleInteresed.executeUpdate();
-          }
+          nbrePeople = rsNbrePeople.getInt(1);
         }
-        try (PreparedStatement psNotif = myBackService.getPreparedStatement(
-            "insert into projet.notifications (id_notification,is_viewed,text,person,item) "
-                + "VALUES (default,false,?,?,?)")) {
-          String urlPicture = "";
-          try (PreparedStatement psOfferor = myBackService.getPreparedStatement(
-              "select offeror,url_picture from projet.items where id_item = "
-                  + idItem)) {
-            try (ResultSet rsOfferor = psOfferor.executeQuery()) {
-              if (!rsOfferor.next()) {
-                throw new FatalException(
-                    "probleme dans la recuperation de l'offreur");
-              }
-              urlPicture = rsOfferor.getString(2);
-              psNotif.setInt(2, rsOfferor.getInt(1));
-            }
-            psNotif.setInt(3, idItem);
-          }
-          String interestUsrName = "";
-          try (PreparedStatement psInterestUserAsString = myBackService.getPreparedStatement(
-              "Select username from projet.members where user_id = " + interestUserId)) {
-            try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
-              if (!rsInterestUserAsString.next()) {
-                throw new FatalException("prblm interesUserAsTring");
-              }
-              interestUsrName = rsInterestUserAsString.getString(1);
-            }
-          }
-          psNotif.setString(1,
-              interestUsrName + " est interessé par cette offre " + urlPicture);
-          psNotif.executeUpdate();
+        try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
+            "update projet.items set number_of_people_interested = 1 + " + nbrePeople
+                + " where id_item = " + idItem)) {
+          psNbrPeopleInteresed.executeUpdate();
         }
-      } catch (SQLException throwable) {
-        throw new FatalException("Echec lors de l'ajout de l'intérêt");
       }
+      try (PreparedStatement psNotif = myBackService.getPreparedStatement(
+          "insert into projet.notifications (id_notification,is_viewed,text,person,item) "
+              + "VALUES (default,false,?,?,?)")) {
+        String urlPicture;
+        try (PreparedStatement psOfferor = myBackService.getPreparedStatement(
+            "select offeror,url_picture from projet.items where id_item = "
+                + idItem)) {
+          try (ResultSet rsOfferor = psOfferor.executeQuery()) {
+            if (!rsOfferor.next()) {
+              throw new FatalException(
+                  "probleme dans la recuperation de l'offreur");
+            }
+            urlPicture = rsOfferor.getString(2);
+            psNotif.setInt(2, rsOfferor.getInt(1));
+          }
+          psNotif.setInt(3, idItem);
+        }
+        String interestUsrName;
+        try (PreparedStatement psInterestUserAsString = myBackService.getPreparedStatement(
+            "Select username from projet.members where user_id = " + interestUserId)) {
+          try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
+            if (!rsInterestUserAsString.next()) {
+              throw new FatalException("prblm interesUserAsTring");
+            }
+            interestUsrName = rsInterestUserAsString.getString(1);
+          }
+        }
+        psNotif.setString(1,
+            interestUsrName + " est interessé par cette offre " + urlPicture);
+        psNotif.executeUpdate();
+      }
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -181,22 +178,41 @@ public class ItemDAOImpl implements ItemDAO {
           psCancelOffer.executeUpdate();
         }
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec lors de l'annulation de l'offre");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
   @Override
   public List<ItemDTO> getLastItemsOffered(int limit) {
-    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
+    String query = "select i.id_item, i.description, i.url_picture,it.item_type_name, "
+        + " i.number_of_people_interested,max(d._date) as maxDate from projet.items i,"
+        + "projet.item_type it, projet.dates d "
+        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type"
+        + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
+        + "it.item_type_name ORDER BY maxDate " + limite;
+
+    return getItemDTOS(query);
+  }
+
+  @Override
+  public List<ItemDTO> getAllOffered(int id) {
+    String query =
+        "select id_item, description, url_picture, "
+            + "it.item_type_name,number_of_people_interested "
+            + "from projet.items i, projet.item_type it "
+            + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
+            + "and i.item_condition != 'cancelled'";
+    return getItemDTOS(query);
+
+  }
+
+  private List<ItemDTO> getItemDTOS(String query) {
+    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_item, description, url_picture, item_type, number_of_people_interested,"
-            + "max(_date) as maxDate "
-            + "from projet.items,projet.dates "
-            + "where item_condition = 'offered' and id_item=item GROUP BY id_item ORDER BY maxDate "
-            + limite
+        query
     )) {
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
@@ -204,23 +220,16 @@ public class ItemDAOImpl implements ItemDAO {
           item.setId(rs.getInt(1));
           item.setDescription(rs.getString(2));
           item.setUrlPicture(rs.getString(3));
-          try (PreparedStatement psTypeString = myBackService.getPreparedStatement(
-              "Select item_type_name from projet.item_type where id_item_type = " + rs.getInt(
-                  4))) {
-            try (ResultSet rsTypeString = psTypeString.executeQuery()) {
-              if (!rsTypeString.next()) {
-                throw new FatalException("Echec lors de la récupération du type");
-              }
-              item.setItemtype(rsTypeString.getString(1));
-            }
-          }
+          item.setItemtype(rs.getString(4));
           item.setNumberOfPeopleInterested(rs.getInt(5));
           arrayItemDTO.add(item);
         }
       }
+
       return arrayItemDTO;
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec lors de la récupération des derniers items offerts");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
+
 }

@@ -6,7 +6,6 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
   public UserDTO getOneByUsername(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select user_id,password,username,state,"
-            + "reason_for_connection_refusal from projet.members where username=?")) {
+            + "reason_for_connection_refusal,_role from projet.members where username=?")) {
 
       ps.setString(1, username);
       try (ResultSet rs = ps.executeQuery()) {
@@ -38,10 +37,12 @@ public class UserDAOImpl implements UserDAO {
         user.setUserName(rs.getString(3));
         user.setState(rs.getString(4));
         user.setReasonForConnectionRefusal(rs.getString(5));
+        user.setRole(rs.getString(6));
         return user;
+
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -71,8 +72,8 @@ public class UserDAOImpl implements UserDAO {
           userDTOList.add(user);
         }
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
     return userDTOList;
   }
@@ -93,8 +94,8 @@ public class UserDAOImpl implements UserDAO {
 
         return user;
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -108,8 +109,8 @@ public class UserDAOImpl implements UserDAO {
         }
         return rsPhoneNumber.getString(1);
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -119,8 +120,8 @@ public class UserDAOImpl implements UserDAO {
         "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
             + userId)) {
       psAddPhone.executeUpdate();
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -142,8 +143,8 @@ public class UserDAOImpl implements UserDAO {
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -154,7 +155,7 @@ public class UserDAOImpl implements UserDAO {
         "INSERT INTO projet.members(user_id,username,last_name, first_name,"
             + " unit_number,state,password,street,postCode,"
             + " building_number,city,"
-            + " url_picture,nb_of_item_not_taken) VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?) ",
+            + " url_picture,nb_of_item_not_taken,_role) VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
         Statement.RETURN_GENERATED_KEYS)) {
 
       ps.setString(1, user.getUserName());
@@ -176,8 +177,8 @@ public class UserDAOImpl implements UserDAO {
         throw new FatalException("Echec de la query");
       }
       return rs.getInt(1);
-    } catch (SQLException throwables) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 }

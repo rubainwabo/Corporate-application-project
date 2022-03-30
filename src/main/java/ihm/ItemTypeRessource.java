@@ -33,7 +33,7 @@ public class ItemTypeRessource {
   @Path("addItemType")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public ItemTypeDTO addItemType(JsonNode itemType) {
+  public ItemTypeDTO userAddItemType(JsonNode itemType) {
     if (!itemType.hasNonNull("itemType") || itemType.get("itemType").asText().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("itemType informations invalid").type("text/plain").build());
@@ -49,7 +49,7 @@ public class ItemTypeRessource {
   @GET
   @Path("getAll")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemTypeDTO> getAllItemType() {
+  public List<ItemTypeDTO> userGetAllItemType() {
     return myItemTypeUCC.getAllItemType();
   }
 }

@@ -1,6 +1,8 @@
-import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
+import {getSessionObject} from "../../utils/session";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import { Redirect } from "../Router/Router";
+
 const item = `
 <section id="item-page">
   <p id="message"> </p>
@@ -47,152 +49,158 @@ const item = `
 `;
 
 const ItemPage = async () => {
-    let id = getId();
+  let id = getId();
+  const pageDiv = document.querySelector("#page");
+  pageDiv.innerHTML = item;
 
-    const pageDiv = document.querySelector("#page");
-    pageDiv.innerHTML = item;
+  let token = getSessionObject("accessToken");
 
-    
-    let addIterestBtn = document.getElementById("add-interest-btn");
-    let showInterest = document.getElementById("show-interest");
-    let removePopUp = document.getElementById("cancel-add-iterest");
-    let popUp = document.getElementById("add-iterest-pop-up");
 
-    removePopUp.addEventListener("click",function(e){
+
+  let addIterestBtn = document.getElementById("add-interest-btn");
+
+  let showInterest = document.getElementById("show-interest");
+  let removePopUp = document.getElementById("cancel-add-iterest");
+  let popUp = document.getElementById("add-iterest-pop-up");
+
+  removePopUp.addEventListener("click", function (e) {
+    e.preventDefault();
+    popUp.style.display = "none";
+  })
+
+  showInterest.addEventListener("click", function (e) {
+    e.preventDefault();
+    popUp.style.display = "flex";
+  })
+
+  try {
+    // hide data to inform if the pizza menu is already printed
+    const options = {
+      // body data type must match "Content-Type" header
+      headers: {
+        "token":getSessionObject("accessToken"),
+      },
+    };
+
+    const response = await fetch("/api/items/itemDetails/" + id,options); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+
+    const item = await response.json();
+
+    document.getElementById(
+        "item-description-p").innerText = item.description;
+    document.getElementById("item-type").innerText = item.itemtype;
+    document.getElementById("offeror").innerText = item.offeror;
+    document.getElementById(
+        "number-interest").innerText = item.numberOfPeopleInterested;
+
+    let callMe = document.getElementById("callMe");
+
+    callMe.addEventListener("change", function (e) {
       e.preventDefault();
-        popUp.style.display="none";
-    })
 
-    
-    showInterest.addEventListener("click",function(e){
-      e.preventDefault();
-      popUp.style.display="flex";
-    })
+      if (callMe.checked) {
+        document.getElementById("call-me-box").style.display = "block";
+      } else {
+        document.getElementById("call-me-box").style.display = "none";
+      }
 
-    try {
-        // hide data to inform if the pizza menu is already printed
-        const response = await fetch("/api/items/itemDetails/"+id); // fetch return a promise => we wait for the response   
-   
-     if(!response.ok){
-         throw new Error(
-             "fetch error : " + response.status + " : " + response.statusText
-         )
-     }
-   
-     const item = await response.json();
-     
-     document.getElementById("item-description-p").innerText=item.description;
-     document.getElementById("item-type").innerText=item.itemtype;
-     document.getElementById("offeror").innerText=item.offeror;
-     document.getElementById("number-interest").innerText=item.numberOfPeopleInterested;
-    
-     let callMe = document.getElementById("callMe");
-     
-      callMe.addEventListener("change",function(e){
-       e.preventDefault();
-       
-       if(callMe.checked){
-        document.getElementById("call-me-box").style.display="block";
-       }else{
-        document.getElementById("call-me-box").style.display="none";
-       }
-       
-     });
+    });
 
     console.log(item);
-   
-     } catch (error) {
-        console.error("LoginPage::error: ", error);
-     }
 
+  } catch (error) {
+    Redirect('/');
+    console.error("LoginPage::error: ", error);
+  }
 
-     addIterestBtn.addEventListener("click", async function(e){
-       e.preventDefault();
-        let availabilities = document.getElementById("availabilities").value;
-        let callMe = document.getElementById("callMe").checked;
-        
-        
-        try {
-          var options;
-          if(callMe){
-            let phoneNumber = document.getElementById("phone-number");
-            options = {
-              method: "POST", // *GET, POST, PUT, DELETE, etc.
-              body: JSON.stringify({
-                availabilities : availabilities,
-                callMe :callMe,
-                phoneNumber : phoneNumber
-              }), // body data type must match "Content-Type" header
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
-          }else{
-            options = {
-              method: "POST", // *GET, POST, PUT, DELETE, etc.
-              body: JSON.stringify({
-                availabilities : availabilities,
-              }), // body data type must match "Content-Type" header
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
-          }
-              
-      
-            const response = await fetch("/api/items/addInterest/"+id, options); // fetch return a promise => we wait for the response
-      
-            if (!response.ok) {
-              response.text().then((result)=>{
-                document.getElementById("error").innerText=result;
-              })
-              throw new Error(
-                "fetch error : " + response.status + " : " + response.statusText
-              );
-            }
+  addIterestBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+    let availabilities = document.getElementById("availabilities").value;
+    let callMe = document.getElementById("callMe").checked;
 
-            console.log("votre interet a été pris en compte")
-            document.getElementById("message").innerText="votre interet a été pris en compte";
-            popUp.style.display="none";
+    try {
+      let options;
+      if (callMe) {
+        let phoneNumber = document.getElementById("phone-number").value;
+        options = {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          body: JSON.stringify({
+            availabilities: availabilities,
+            callMe: callMe,
+            phoneNumber: phoneNumber
+          }), // body data type must match "Content-Type" header
+          headers: {
+            "Content-Type": "application/json",
+            "token":getSessionObject("accessToken")
+          },
+        };
+      } else {
+        options = {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          body: JSON.stringify({
+            availabilities: availabilities,
+          }), // body data type must match "Content-Type" header
+          headers: {
+            "Content-Type": "application/json",
+             "token":getSessionObject("accessToken"),
             
-            /*
-            const rep  = await response.json(); // json() returns a promise => we wait for the data
-      
-            console.log(rep);
-            */
-           
-          } catch (error) {
-            console.error("LoginPage::error: ", error);
-          }
-        
-    })
+            
+          },
+        };
+      }
 
-    console.log(id);
-    
-   
-    
-   
-  
-};
+      const response = await fetch("/api/items/addInterest/" + id, options); // fetch return a promise => we wait for the response
 
+      if (!response.ok) {
+        response.text().then((result) => {
+          document.getElementById("error").innerText = result;
+        })
+        throw new Error(
+            "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
 
-  function getId() {
-    let urlString = window.location.href;
-    let paramString = urlString.split('?')[1];
-    if(paramString){
-        let params_arr = paramString.split('&');
-        let pair = params_arr[0].split('=');
-        if(pair[1]){
-            return parseInt(pair[1]);      
-        }else{
-            return -1;
-        }  
-        
-    }else{
-        return -1;
+      console.log("votre interet a été pris en compte")
+      document.getElementById(
+          "message").innerText = "votre interet a été pris en compte";
+      popUp.style.display = "none";
+
+      /*
+      const rep  = await response.json(); // json() returns a promise => we wait for the data
+
+      console.log(rep);
+      */
+
+    } catch (error) {
+      console.error("LoginPage::error: ", error);
     }
-    
-        
-    
+
+  })
+
 }
-  export default ItemPage;
+
+function getId() {
+  let urlString = window.location.href;
+  let paramString = urlString.split('?')[1];
+  if (paramString) {
+    let params_arr = paramString.split('&');
+    let pair = params_arr[0].split('=');
+    if (pair[1]) {
+      return parseInt(pair[1]);
+    } else {
+      return -1;
+    }
+
+  } else {
+    return -1;
+  }
+
+}
+
+export default ItemPage;

@@ -198,24 +198,7 @@ public class ItemDAOImpl implements ItemDAO {
         + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate " + limite;
 
-    try (PreparedStatement ps = myBackService.getPreparedStatement(
-        query
-    )) {
-      try (ResultSet rs = ps.executeQuery()) {
-        while (rs.next()) {
-          ItemDTO item = myBizFactoryService.getItem();
-          item.setId(rs.getInt(1));
-          item.setDescription(rs.getString(2));
-          item.setUrlPicture(rs.getString(3));
-          item.setNumberOfPeopleInterested(rs.getInt(5));
-          arrayItemDTO.add(item);
-        }
-      }
-      return arrayItemDTO;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new FatalException("Echec lors de la récupération des derniers items offerts");
-    }
+    return getItemDTOS(arrayItemDTO, query);
   }
 
   @Override
@@ -229,6 +212,11 @@ public class ItemDAOImpl implements ItemDAO {
             + " GROUP BY id_item, description, url_picture, "
             + "item_type, number_of_people_interested, it.item_type_name";
 
+    return getItemDTOS(arrayItemDTO, query);
+
+  }
+
+  private List<ItemDTO> getItemDTOS(ArrayList<ItemDTO> arrayItemDTO, String query) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query
     )) {
@@ -247,7 +235,6 @@ public class ItemDAOImpl implements ItemDAO {
       e.printStackTrace();
       throw new FatalException("Echec lors de la récupération des derniers items offerts");
     }
-
   }
 
 }

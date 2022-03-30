@@ -24,8 +24,7 @@ public class ItemUCCImpl implements ItemUCC {
   public int addItem(ItemDTO item, int userId) {
     try {
       myDalServices.start(true);
-      int itemId = -1;
-      itemId = myItemDAOService.addItem(item, userId);
+      int itemId = myItemDAOService.addItem(item, userId);
       if (itemId <= 0) {
         myDalServices.rollBack();
         throw new BizzException("Echec lors de l'insertion : addItemItemUCC");
@@ -34,8 +33,12 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.commit(true);
       return itemId;
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -47,8 +50,12 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.commit(false);
       return item;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -59,8 +66,12 @@ public class ItemUCCImpl implements ItemUCC {
       myItemDAOService.addInterest(itemId, objectNode, userId);
       myDalServices.commit(true);
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -71,8 +82,12 @@ public class ItemUCCImpl implements ItemUCC {
       myItemDAOService.cancelOffer(idItem, userId);
       myDalServices.commit(true);
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -86,9 +101,12 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.commit(false);
       return list;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      e.printStackTrace();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 
@@ -106,9 +124,12 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.commit(false);
       return list;
     } catch (Exception e) {
-      myDalServices.commit(false);
-      e.printStackTrace();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
   }
 }

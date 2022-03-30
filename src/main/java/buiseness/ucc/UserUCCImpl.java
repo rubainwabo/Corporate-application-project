@@ -34,7 +34,6 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.start(false);
       User user = (User) myUserDAO.getOneByUsername(username);
       if (user == null) {
-        myDalServices.rollBack();
         throw new PasswordOrUsernameException("username or password incorrect");
       }
       if (!user.checkPassword(password)) {

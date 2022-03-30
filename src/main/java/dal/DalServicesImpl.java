@@ -27,7 +27,7 @@ public class DalServicesImpl implements DalServices, DalBackService {
     try {
       return mapThreadConnection.get().prepareStatement(query);
     } catch (SQLException e) {
-      throw new FatalException("request error");
+      throw new FatalException(e);
     }
   }
 
@@ -36,7 +36,7 @@ public class DalServicesImpl implements DalServices, DalBackService {
     try {
       return mapThreadConnection.get().prepareStatement(query, idReturned);
     } catch (SQLException e) {
-      throw new FatalException("request error");
+      throw new FatalException(e);
     }
   }
 
@@ -49,7 +49,7 @@ public class DalServicesImpl implements DalServices, DalBackService {
         con.setAutoCommit(false);
       }
     } catch (Exception e) {
-      throw new FatalException("Echec lors de la connexion à la db");
+      throw new FatalException(e);
     }
   }
 
@@ -75,7 +75,7 @@ public class DalServicesImpl implements DalServices, DalBackService {
       con.close();
       mapThreadConnection.set(null);
     } catch (SQLException e) {
-      throw new FatalException("request error");
+      throw new FatalException(e);
     }
   }
 }

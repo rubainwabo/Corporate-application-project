@@ -5,6 +5,7 @@ import AddItemPage from "../Pages/AddItem";
 import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
+import MesOffres from "../Pages/MesOffres";
 
 // Configure your routes here
 const routes = {
@@ -14,7 +15,8 @@ const routes = {
   '/item':ItemPage,
   '/register':Register,
   '/additem':AddItemPage,
-  '/userhandeler':UserHandler
+  '/userhandeler':UserHandler,
+  '/mesOffres' : MesOffres
 };
 
 /**
@@ -29,7 +31,7 @@ const Router = () => {
   navbarWrapper.addEventListener("click", (e) => {
     // To get a data attribute through the dataset object, get the property by the part of the attribute name after data- (note that dashes are converted to camelCase).
     let uri = e.target.dataset.uri;
-
+    console.log(uri);
     if (uri) {
       e.preventDefault();
       /* use Web History API to add current page URL to the user's navigation history 
@@ -74,7 +76,6 @@ const Router = () => {
 
 const Redirect = (uri,params) => {
   // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
-  console.log("redirec try")
   if(params){
     var url = window.location.origin + uri+"?";
 

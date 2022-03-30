@@ -1,5 +1,6 @@
 package filters;
 
+import ihm.ItemRessource;
 import ihm.UserRessource;
 import jakarta.ws.rs.container.DynamicFeature;
 import jakarta.ws.rs.container.ResourceInfo;
@@ -11,6 +12,8 @@ public class FiltersDynamicBindingConfig implements DynamicFeature {
   @Override
   public void configure(ResourceInfo resourceInfo, FeatureContext context) {
     if (UserRessource.class.equals(resourceInfo.getResourceClass())
+        ||
+        ItemRessource.class.equals(resourceInfo.getResourceClass())
     ) {
       if (resourceInfo.getResourceMethod().getName().contains("user")) {
         context.register(AuthorizationRequestFilter.class);

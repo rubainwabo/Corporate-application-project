@@ -1,8 +1,7 @@
-Message d'erreur : Erreur lors de la connexion à la db
+Message d'erreur : bad request, no id found in pathParams
 
-StackTrace : 
-buiseness.ucc.UserUCCImpl.getUsersByState(UserUCCImpl.java:86)
-ihm.UserRessource.userListByState(UserRessource.java:149)
+StackTrace :
+ihm.ItemRessource.userGetItemDetails(ItemRessource.java:82)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

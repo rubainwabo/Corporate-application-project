@@ -29,7 +29,6 @@ const home = `
               <p class="item-description"> "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was tesfing pokqs qplsk ... </p>
           </div>
        </div>
-          
     </div>
   
 </section>
@@ -45,13 +44,14 @@ const HomePage = async (id) => {
 
   hello.addEventListener("click",function(e){
     e.preventDefault();
+
     var params = [{key:"id",value:"1"}]   
-    Redirect("/item",params)
+    Redirect("/item", params)
   })
   try {
-     // hide data to inform if the pizza menu is already printed
-     const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response   
 
+    const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response   
+    console.log("res", response);
   if(!response.ok){
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -60,10 +60,10 @@ const HomePage = async (id) => {
 
   const items = await response.json();
 
- console.log(items);
+ console.log("here", items);
 
     items.forEach((item)=>{
-      console.log(item);
+      console.log("my item" , item);
       
       let itemBox = document.createElement("div");
       let homePageImageBox = document.createElement("div");
@@ -94,9 +94,6 @@ const HomePage = async (id) => {
         Redirect("/item",params);
       })
       allRecentItem.appendChild(itemBox);
-
-      
-
     })
 
   } catch (error) {

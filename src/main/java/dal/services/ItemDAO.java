@@ -40,6 +40,8 @@ public interface ItemDAO {
    */
   void cancelOffer(int idItem, int userId);
 
+  List<ItemDTO> getAllOffered(int id);
+
   /**
    * retrives to get all the last item with the itemCondition offered.
    *

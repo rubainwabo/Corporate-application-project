@@ -40,6 +40,7 @@ public class UserDAOImpl implements UserDAO {
         user.setReasonForConnectionRefusal(rs.getString(5));
         user.setRole(rs.getString(6));
         return user;
+        
       }
     } catch (SQLException throwable) {
       throw new FatalException("Echec de la query");

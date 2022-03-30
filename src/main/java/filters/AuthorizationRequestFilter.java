@@ -28,7 +28,12 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
   public void filter(ContainerRequestContext requestContext) {
     System.out.println("We're in AuthorizeRequestFilter");
     String token = requestContext.getHeaderString("token");
+    token = token != null ? token.substring(1, token.length() - 1) : null;
     String refreshToken = requestContext.getHeaderString("refreshToken");
+    refreshToken = refreshToken != null ?
+        refreshToken.substring(1, refreshToken.length() - 1)
+        : null;
+
     if (token == null && refreshToken == null) {
       requestContext.abortWith(Response.status(Status.UNAUTHORIZED)
           .entity("A token is needed to access this resource").build());
@@ -42,7 +47,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
             .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
       }
       int id = decodedToken.getClaim("user").asInt();
-      System.out.println(myUserUCC.checkWaitingOrDenied(id));
+
       if (!myUserUCC.checkWaitingOrDenied(id)) {
         requestContext.abortWith(Response.status(Status.FORBIDDEN)
             .entity("You are forbidden to access this resource").build());

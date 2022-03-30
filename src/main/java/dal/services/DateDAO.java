@@ -1,5 +1,7 @@
 package dal.services;
 
+import java.sql.SQLException;
+
 public interface DateDAO {
 
   /**
@@ -7,5 +9,5 @@ public interface DateDAO {
    *
    * @param itemId the itemId
    */
-  void addDate(int itemId);
+  void addDate(int itemId) throws SQLException;
 }

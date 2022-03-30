@@ -6,7 +6,6 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +36,8 @@ public class ItemTypeDAOImpl implements ItemTypeDAO {
       itemTypeDAO.setItemTypeName(itemTypeName);
       return itemTypeDAO;
 
-    } catch (SQLException e) {
-      throw new FatalException("Echec lors de l'ajout du type de l'item");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 

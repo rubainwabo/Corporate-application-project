@@ -82,5 +82,9 @@ Content-Type: application/json
   "urlPhoto": "une url"
 }
 
+### get all item-type
+GET http://localhost:3000/itemsType/getAll
+
+
 ### test
 ### commment

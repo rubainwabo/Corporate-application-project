@@ -73,6 +73,7 @@ public class UserDAOImpl implements UserDAO {
         }
       }
     } catch (SQLException throwable) {
+      throwable.printStackTrace();
       throw new FatalException("Echec de la query");
     }
     return userDTOList;

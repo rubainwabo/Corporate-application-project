@@ -81,6 +81,7 @@ public class UserUCCImpl implements UserUCC {
         throw new BizzException("state invalide");
       }
     } catch (Exception e) {
+
       myDalServices.commit(false);
       throw new BizzException("Erreur lors de la connexion à la db");
     }

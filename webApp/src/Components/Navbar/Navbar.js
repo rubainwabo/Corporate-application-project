@@ -15,6 +15,7 @@ import { getSessionObject } from "../../utils/session";
 const Navbar = () => {
   const navbarWrapper = document.querySelector("#navbarWrapper");
   let accesToken = getSessionObject("accessToken");
+  let isAdmin = getSessionObject("role");
   let username = getSessionObject("userPseudo");
   /*
   let navbar = `
@@ -44,7 +45,7 @@ const Navbar = () => {
   `;  
 */
 let navbar = "";
-if(accesToken){
+if(accesToken && isAdmin){
   navbar = `
       <nav>
         <div id="navigation">
@@ -53,6 +54,7 @@ if(accesToken){
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mon profile </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mes offres </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> liste des utilisateurs </a></div>
           </div>
          
 
@@ -64,9 +66,29 @@ if(accesToken){
         </div>
       </nav>
   `;  
-}else{
+}else {
+  if (accesToken){
    navbar = `
-      <nav>
+   <nav>
+   <div id="navigation">
+     <div id="menu">
+       <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mon profile </a></div>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mes offres </a></div>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
+     </div>
+  
+     <div id="username"> bonjour ${username}</div>
+
+     <div id="nav-connection"> 
+       <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
+     </div>
+   </div>
+ </nav>
+  `; 
+}else {
+  navbar=
+  ` <nav>
         <div id="navigation">
           <div id="logo"> <a class="nav-item" href="#"  data-uri="/"> Donnamis </a></div>
 
@@ -78,9 +100,7 @@ if(accesToken){
       </nav>
   `; 
 }
- 
-
-
+}
   navbarWrapper.innerHTML = navbar;
 };
 

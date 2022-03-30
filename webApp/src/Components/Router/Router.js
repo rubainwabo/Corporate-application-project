@@ -4,7 +4,6 @@ import ItemPage from "../Pages/ItemPage";
 import AddItemPage from "../Pages/AddItem";
 import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
-
 import UserHandler from "../Pages/admin/UserHandler";
 
 // Configure your routes here

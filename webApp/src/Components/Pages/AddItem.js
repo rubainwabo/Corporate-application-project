@@ -164,7 +164,7 @@ const AddItemPage = () => {
         const response = await fetch("/api/itemsType/getAll"); // fetch return a promise => we wait for the response   
 
         if(!response.ok){
-            
+
         }
         const itemsTypes = await response.json();
         

@@ -44,7 +44,7 @@ POST http://localhost:3000/itemsType/addItemType
 Content-Type: application/json
 
 {
-  "itemType": "table"
+  "itemType": "wwwww"
 }
 
 ### get an item

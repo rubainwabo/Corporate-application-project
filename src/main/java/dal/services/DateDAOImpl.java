@@ -3,7 +3,6 @@ package dal.services;
 import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import utils.exception.FatalException;
@@ -19,8 +18,8 @@ public class DateDAOImpl implements DateDAO {
         "insert into projet.dates (id_date,_date,item) values (DEFAULT,?,'" + itemId + "')")) {
       psDate.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
       psDate.executeUpdate();
-    } catch (SQLException throwables) {
-      throw new FatalException("Echec lors de l'ajout de la date");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 }

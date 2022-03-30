@@ -1,5 +1,7 @@
 package dal.services;
 
+import java.sql.SQLException;
+
 public interface ItemTypeDAO {
 
   /**
@@ -8,5 +10,5 @@ public interface ItemTypeDAO {
    * @param itemTypeName the itemTypeName
    * @return the id of the itemType added
    */
-  int addItemType(String itemTypeName);
+  int addItemType(String itemTypeName) throws SQLException;
 }

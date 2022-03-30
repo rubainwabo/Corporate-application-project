@@ -6,7 +6,6 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import utils.exception.FatalException;
@@ -39,8 +38,8 @@ public class UserDAOImpl implements UserDAO {
         user.setReasonForConnectionRefusal(rs.getString(5));
         return user;
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -69,8 +68,8 @@ public class UserDAOImpl implements UserDAO {
           userDTOList.add(user);
         }
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
     return userDTOList;
   }
@@ -90,8 +89,8 @@ public class UserDAOImpl implements UserDAO {
         user.setRole(rs.getString(3));
         return user;
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -105,8 +104,8 @@ public class UserDAOImpl implements UserDAO {
         }
         return rsPhoneNumber.getString(1);
       }
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -116,8 +115,8 @@ public class UserDAOImpl implements UserDAO {
         "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
             + userId)) {
       psAddPhone.executeUpdate();
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 
@@ -139,8 +138,8 @@ public class UserDAOImpl implements UserDAO {
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();
-    } catch (SQLException throwable) {
-      throw new FatalException("Echec de la query");
+    } catch (Exception e) {
+      throw new FatalException(e);
     }
   }
 }

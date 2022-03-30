@@ -18,20 +18,27 @@ public class DalServicesImpl implements DalServices, DalBackService {
     ds.setPassword(Config.getProperty("Password"));
   }
 
-
   public DalServicesImpl() {
     mapThreadConnection = new ThreadLocal<>();
+    System.out.println("connected? " + ds.getUrl() + " " + ds.getUsername());
   }
 
   @Override
-  public PreparedStatement getPreparedStatement(String query) throws SQLException {
-    return mapThreadConnection.get().prepareStatement(query);
+  public PreparedStatement getPreparedStatement(String query) {
+    try {
+      return mapThreadConnection.get().prepareStatement(query);
+    } catch (SQLException e) {
+      throw new FatalException(e);
+    }
   }
 
   @Override
-  public PreparedStatement getPreparedStatementWithId(String query, int idReturned)
-      throws SQLException {
-    return mapThreadConnection.get().prepareStatement(query, idReturned);
+  public PreparedStatement getPreparedStatementWithId(String query, int idReturned) {
+    try {
+      return mapThreadConnection.get().prepareStatement(query, idReturned);
+    } catch (SQLException e) {
+      throw new FatalException(e);
+    }
   }
 
   @Override
@@ -42,8 +49,8 @@ public class DalServicesImpl implements DalServices, DalBackService {
       if (isTransaction) {
         con.setAutoCommit(false);
       }
-    } catch (Exception e) {
-      throw new FatalException("Echec lors de la connexion à la db");
+    } catch (SQLException e) {
+      throw new FatalException(e);
     }
   }
 
@@ -53,11 +60,11 @@ public class DalServicesImpl implements DalServices, DalBackService {
       Connection con = mapThreadConnection.get();
       if (isTransaction) {
         con.commit();
-        con.setAutoCommit(true);
       }
-      mapThreadConnection.remove();
-    } catch (Exception e) {
-      throw new FatalException("Echec lors de la connexion à la db");
+      con.close();
+      mapThreadConnection.set(null);
+    } catch (SQLException e) {
+      throw new FatalException(e);
     }
   }
 
@@ -66,9 +73,10 @@ public class DalServicesImpl implements DalServices, DalBackService {
     try {
       Connection con = mapThreadConnection.get();
       con.rollback();
-      mapThreadConnection.remove();
-    } catch (Exception e) {
-      throw new FatalException("Echec lors de la connexion à la db");
+      con.close();
+      mapThreadConnection.set(null);
+    } catch (SQLException e) {
+      throw new FatalException(e);
     }
   }
 }

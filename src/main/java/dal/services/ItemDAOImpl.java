@@ -200,12 +200,11 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public List<ItemDTO> getAllOffered(int id) {
     String query =
-        "select id_item, description, url_picture, item_type, "
-            + "number_of_people_interested, it.item_type_name "
+        "select id_item, description, url_picture, "
+            + ",it.item_type_name,number_of_people_interested "
             + "from projet.items i, projet.item_type it "
             + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
             + "and i.item_condition != 'cancelled'";
-
     return getItemDTOS(query);
 
   }
@@ -221,13 +220,14 @@ public class ItemDAOImpl implements ItemDAO {
           item.setId(rs.getInt(1));
           item.setDescription(rs.getString(2));
           item.setUrlPicture(rs.getString(3));
+          item.setItemtype(rs.getString(4));
           item.setNumberOfPeopleInterested(rs.getInt(5));
           arrayItemDTO.add(item);
         }
       }
 
       return arrayItemDTO;
-    }  catch (Exception e) {
+    } catch (Exception e) {
       throw new FatalException(e);
     }
   }

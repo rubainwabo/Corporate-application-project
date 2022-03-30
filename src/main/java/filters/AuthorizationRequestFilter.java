@@ -29,6 +29,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
     System.out.println("We're in AuthorizeRequestFilter");
     String token = requestContext.getHeaderString("token");
     String refreshToken = requestContext.getHeaderString("refreshToken");
+
     if (token == null && refreshToken == null) {
       requestContext.abortWith(Response.status(Status.UNAUTHORIZED)
           .entity("A token is needed to access this resource").build());

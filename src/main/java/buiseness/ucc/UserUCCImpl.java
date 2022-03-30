@@ -46,6 +46,7 @@ public class UserUCCImpl implements UserUCC {
         throw new UserOnHoldException("user on hold");
       }
       var token = myTokenService.login(user.getId(), username, rememberMe);
+      token.put("role", user.getRole());
       myDalServices.commit(false);
       return token;
     } catch (Exception e) {

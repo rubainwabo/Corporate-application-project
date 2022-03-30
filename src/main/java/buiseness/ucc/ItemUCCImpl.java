@@ -25,10 +25,6 @@ public class ItemUCCImpl implements ItemUCC {
     try {
       myDalServices.start(true);
       int itemId = myItemDAOService.addItem(item, userId);
-      if (itemId <= 0) {
-        myDalServices.rollBack();
-        throw new BizzException("Echec lors de l'insertion : addItemItemUCC");
-      }
       myDateDAOService.addDate(itemId);
       myDalServices.commit(true);
       return itemId;

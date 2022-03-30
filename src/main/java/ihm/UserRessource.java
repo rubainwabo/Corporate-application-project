@@ -13,10 +13,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
+import org.glassfish.jersey.server.ContainerRequest;
 import utils.exception.UsernameAlreadyExists;
 
 // ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
@@ -30,20 +32,6 @@ public class UserRessource {
 
   @Inject
   private UserUCC myUserUCC;
-
-  /**
-   * test.
-   *
-   * @param body the data that the user has entered put in json format
-   * @return the token associated to the user, otherwise an error in case of failure
-   */
-  @POST
-  @Path("admin")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public String adminPage(Object body) {
-    return "oui";
-  }
 
   /**
    * Change the state of a certain user.
@@ -141,7 +129,7 @@ public class UserRessource {
   @GET
   @Path("list")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> userListByState(@QueryParam("state") String state) {
+  public List<UserDTO> adminListByState(@QueryParam("state") String state) {
     if (state.isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("a state is required").type("text/plain").build());
@@ -157,8 +145,8 @@ public class UserRessource {
   @GET
   @Path("phoneNumber")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getUserPhoneNumber() {
-    int userId = 1;
+  public String userGetUserPhoneNumber(@Context ContainerRequest req) {
+    int userId = (int) req.getProperty("id");
     return myUserUCC.getPhoneNumber(userId);
   }
 
@@ -173,7 +161,6 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public int register(UserDTO user) {
-    // faire les verifications...
     if (user == null || user.getUserName() == null || user.getUserName().isBlank() ||
         user.getLastName() == null || user.getLastName().isBlank() ||
         user.getFirstName() == null || user.getFirstName().isBlank() ||

@@ -217,8 +217,12 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit(true);
       return idUser;
     } catch (Exception e) {
-      myDalServices.rollBack();
-      throw new BizzException("Erreur lors de la connexion à la db");
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
     }
 
 

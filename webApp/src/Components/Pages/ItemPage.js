@@ -1,8 +1,8 @@
-import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
+import {getSessionObject} from "../../utils/session";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
-import { Redirect } from "../Router/Router";
-import Logout from "../Logout/Logout";
+import {Redirect} from "../Router/Router";
+
 const item = `
 <section id="item-page">
     <div id="item-img-description">
@@ -29,112 +29,103 @@ const item = `
 `;
 
 const ItemPage = async () => {
-    let id = getId();
-    const pageDiv = document.querySelector("#page");
-     pageDiv.innerHTML = item;
+  let id = getId();
+  const pageDiv = document.querySelector("#page");
+  pageDiv.innerHTML = item;
 
-     let token = getSessionObject("accessToken");
-     
-    try {
-        var options = { method: 'GET',
-<<<<<<< HEAD
-               headers: {"token" : getSessionObject("accessToken")},
-=======
-               headers: {"token" : token},
->>>>>>> master
-               mode: 'cors',
-               cache: 'default'};
+  let token = getSessionObject("accessToken");
 
-        const response = await fetch("/api/items/itemDetails/"+id, options); // fetch return a promise => we wait for the response   
-   
-    if(!response.ok){
-      
+  try {
+    var options = {
+      method: 'GET',
+
+      headers: {"token": token},
+      mode: 'cors',
+      cache: 'default'
+    };
+
+    const response = await fetch("/api/items/itemDetails/" + id, options); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+
       return Redirect("/");
     }
-   
-     const item = await response.json();
-     console.log("MY ITEM : ", item);
-     
-     let showInterest = document.getElementById("show-interest");
-    
-     
-     document.getElementById("item-description-p").innerText=item.description;
-     document.getElementById("item-type").innerText=item.itemtype;
-     document.getElementById("offeror").innerText=item.offeror;
-     document.getElementById("number-interest").innerText=item.numberOfPeopleInterested;
-    
+
+    const item = await response.json();
+    console.log("MY ITEM : ", item);
+
+    let showInterest = document.getElementById("show-interest");
+
+    document.getElementById("item-description-p").innerText = item.description;
+    document.getElementById("item-type").innerText = item.itemtype;
+    document.getElementById("offeror").innerText = item.offeror;
+    document.getElementById(
+        "number-interest").innerText = item.numberOfPeopleInterested;
 
     console.log(item);
-   
-     } catch (error) {
-        console.error("LoginPage::error: ", error);
-     }
 
+  } catch (error) {
+    console.error("LoginPage::error: ", error);
+  }
 
-    showInterest.addEventListener("click", async function(e){
-        try {
-            const options = {
-              method: "POST", // *GET, POST, PUT, DELETE, etc.
-              body: JSON.stringify({
-                availabilities : "2016-03-04 11:30",
-                callMe :true,
-                phoneNumber : "0471717306"
-              }), // body data type must match "Content-Type" header
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
-      
-            const response = await fetch("/api/items/addInterest/"+id, options); // fetch return a promise => we wait for the response
-      
-            if (!response.ok) {
-              response.text().then((result)=>{
-                document.getElementById("error").innerText=result;
-              })
-              throw new Error(
-                "fetch error : " + response.status + " : " + response.statusText
-              );
-            }
+  showInterest.addEventListener("click", async function (e) {
+    try {
+      const options = {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        body: JSON.stringify({
+          availabilities: "2016-03-04 11:30",
+          callMe: true,
+          phoneNumber: "0471717306"
+        }), // body data type must match "Content-Type" header
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-            console.log("votre interet a été pris en compte")
-            /*
-            const rep  = await response.json(); // json() returns a promise => we wait for the data
-      
-            console.log(rep);
-            */
-           
-          } catch (error) {
-            console.error("LoginPage::error: ", error);
-          }
-        
-    })
+      const response = await fetch("/api/items/addInterest/" + id, options); // fetch return a promise => we wait for the response
 
-    console.log(id);
-    
-   
-    
-   
-  
+      if (!response.ok) {
+        response.text().then((result) => {
+          document.getElementById("error").innerText = result;
+        })
+        throw new Error(
+            "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
+
+      console.log("votre interet a été pris en compte")
+      /*
+      const rep  = await response.json(); // json() returns a promise => we wait for the data
+
+      console.log(rep);
+      */
+
+    } catch (error) {
+      console.error("LoginPage::error: ", error);
+    }
+
+  })
+
+  console.log(id);
+
 };
 
-
-  function getId() {
-    let urlString = window.location.href;
-    let paramString = urlString.split('?')[1];
-    if(paramString){
-        let params_arr = paramString.split('&');
-        let pair = params_arr[0].split('=');
-        if(pair[1]){
-            return parseInt(pair[1]);      
-        }else{
-            return -1;
-        }  
-        
-    }else{
-        return -1;
+function getId() {
+  let urlString = window.location.href;
+  let paramString = urlString.split('?')[1];
+  if (paramString) {
+    let params_arr = paramString.split('&');
+    let pair = params_arr[0].split('=');
+    if (pair[1]) {
+      return parseInt(pair[1]);
+    } else {
+      return -1;
     }
-    
-        
-    
+
+  } else {
+    return -1;
+  }
+
 }
-  export default ItemPage;
+
+export default ItemPage;

@@ -136,6 +136,7 @@ public class ItemRessource {
   @Path("lastItemsOfferedNotConnected")
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> getLastItemsOfferedNotConnected() {
+    System.out.println(myItemUCC.getLastItemsOffered(false));
     return myItemUCC.getLastItemsOffered(false);
   }
 

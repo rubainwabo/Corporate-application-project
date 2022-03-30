@@ -5,7 +5,7 @@ import { setSessionObject,getSessionObject } from "../../utils/session";
 
 const register = `
 <section id="register-page">
-    <div id="register-box">
+    
     <h2> Inscrivez-vous !</h2>
         <form action="#" id="register-form">
            
@@ -41,7 +41,12 @@ const register = `
                 </div>
             </div>         
         </form>
-    <div>
+   
+
+    <div id="register-pop-up"> 
+        <p>Votre incription a été réalisé</p>
+        <button id="register-done"> Terminer </button>
+    </div>
 
 </section>
 `;
@@ -66,7 +71,13 @@ const Register = () => {
         let postCode = document.getElementById("post-code-rgst").value;
         let city = document.getElementById("city-rgst").value;
         let urlPhoto = "url_photo";
-        console.log("hello");
+        let registerDone = document.getElementById("register-done");
+
+
+        registerDone.addEventListener("click",function(e){
+          e.preventDefault();
+          Redirect("/");
+        })
         try {
             const options = {
               method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -97,20 +108,12 @@ const Register = () => {
                 "fetch error : " + response.status + " : " + response.statusText
               );
             }
-            const user = await response.json(); // json() returns a promise => we wait for the data
-            console.log(user);
-            // save the user into the localStorage
-            setSessionObject("userId", user.id );
-            setSessionObject("userPseudo", user.username);
-            setSessionObject("remeberMe", user.rememberMe);
-            setSessionObject("accessToken", user.accessToken);
+            const userId = await response.json(); // json() returns a promise => we wait for the data
             
-            console.log("user is connect")
-            
+            document.getElementById("register-pop-up").style.display="flex";  
             // call the HomePage via the Router
 
-            Navbar();
-            Redirect("/");
+            
           } catch (error) {
             console.error("LoginPage::error: ", error);
           }

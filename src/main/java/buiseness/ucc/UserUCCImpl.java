@@ -169,7 +169,7 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public ObjectNode register(UserDTO user) {
+  public int register(UserDTO user) {
     try {
       myDalServices.start(true);
 
@@ -185,9 +185,9 @@ public class UserUCCImpl implements UserUCC {
       System.out.println("demande de l'id");
       int idUser = myUserDAO.register(user1);
 
-      var userConnected = myTokenService.login(idUser, user.getUserName(), false);
+      //var userConnected = myTokenService.login(idUser, user.getUserName(), false);
       myDalServices.commit(true);
-      return userConnected;
+      return idUser;
     } catch (Exception e) {
       myDalServices.rollBack();
       throw new BizzException("Erreur lors de la connexion à la db");

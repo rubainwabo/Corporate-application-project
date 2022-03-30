@@ -45,7 +45,7 @@ const Navbar = () => {
   `;  
 */
 let navbar = "";
-if(accesToken && isAdmin){
+if(accesToken && isAdmin == "admin"){
   navbar = `
       <nav>
         <div id="navigation">

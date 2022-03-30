@@ -18,10 +18,6 @@ const userHandler = `
 
 const UserHandler = () => {
     let accesToken = getSessionObject("accessToken");
-    let isAdmin = getSessionObject("role");  
-    if (!isAdmin || !accesToken){
-        return Redirect('/');
-    }
     const pageDiv = document.querySelector("#page");
     pageDiv.innerHTML = userHandler;
     // first request for waiting user
@@ -36,19 +32,17 @@ const UserHandler = () => {
   };
 
   async function request (accesToken,state) {
+
     try {
         const option = {
             headers: {
-                "token":accesToken
-              },
-            }
+              "token":accesToken
+        }
+      }
         // hide data to inform if the pizza menu is already printed
         const response = await fetch("/api/auths/list?state="+state,option); // fetch return a promise => we wait for the response   
-   
      if(!response.ok){
-         throw new Error(
-             "fetch error : " + response.status + " : " + response.statusText
-         )
+        return Redirect("/");
      }
      const items = await response.json();
      var test = document.getElementById("test");

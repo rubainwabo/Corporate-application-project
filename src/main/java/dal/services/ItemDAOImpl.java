@@ -206,7 +206,8 @@ public class ItemDAOImpl implements ItemDAO {
         "select distinct id_item, description, url_picture, item_type, "
             + "number_of_people_interested, it.item_type_name "
             + "from projet.items i, projet.item_type it "
-            + "where offeror ='" + id + "' and i.item_type = it.id_item_type and i.item_condition != 'cancelled'";
+            + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
+            + "and i.item_condition != 'cancelled'";
 
     return getItemDTOS(query);
 

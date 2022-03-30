@@ -93,7 +93,7 @@ const MesOffres = async (id) => {
     
     cross.onclick = async () => {
         var options = { method: 'POST',
-        headers: {"token" : localStorage.getItem("accessToken")},
+        headers: {"token" : getSessionObject("accessToken")},
         mode: 'cors',
         cache: 'default',
     }; 

@@ -187,8 +187,8 @@ public class ItemDAOImpl implements ItemDAO {
   public List<ItemDTO> getLastItemsOffered(int limit) {
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
-    String query = "select i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
-        + "it.item_type_name,max(d._date) as maxDate from projet.items i,"
+    String query = "select i.id_item, i.description, i.url_picture,it.item_type_name, "
+        + " i.number_of_people_interested,max(d._date) as maxDate from projet.items i,"
         + "projet.item_type it, projet.dates d "
         + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type"
         + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
@@ -201,7 +201,7 @@ public class ItemDAOImpl implements ItemDAO {
   public List<ItemDTO> getAllOffered(int id) {
     String query =
         "select id_item, description, url_picture, "
-            + ",it.item_type_name,number_of_people_interested "
+            + "it.item_type_name,number_of_people_interested "
             + "from projet.items i, projet.item_type it "
             + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
             + "and i.item_condition != 'cancelled'";

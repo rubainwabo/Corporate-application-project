@@ -107,22 +107,10 @@ public class ItemDAOImpl implements ItemDAO {
       ps.setInt(2, interestUserId);
       ps.setInt(3, idItem);
       ps.executeUpdate();
-      try (PreparedStatement psNbrePeople = myBackService.getPreparedStatement(
-          "select number_of_people_interested "
-              + "from projet.items where id_item = " + idItem)) {
-        int nbrePeople;
-        try (ResultSet rsNbrePeople = psNbrePeople.executeQuery()) {
-          if (!rsNbrePeople.next()) {
-            throw new FatalException(
-                "probleme dans le select du nbre de people interest");
-          }
-          nbrePeople = rsNbrePeople.getInt(1);
-        }
-        try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
-            "update projet.items set number_of_people_interested = 1 + " + nbrePeople
-                + " where id_item = " + idItem)) {
-          psNbrPeopleInteresed.executeUpdate();
-        }
+      try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
+          "update projet.items set number_of_people_interested = number_of_people_interested + 1"
+              + " where id_item = " + idItem)) {
+        psNbrPeopleInteresed.executeUpdate();
       }
       try (PreparedStatement psNotif = myBackService.getPreparedStatement(
           "insert into projet.notifications (id_notification,is_viewed,text,person,item) "

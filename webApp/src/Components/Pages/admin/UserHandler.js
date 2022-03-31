@@ -72,7 +72,7 @@ const UserHandler = () => {
          spanAdminBox.innerHTML = "admin"
          divIsAdminBox.appendChild(spanAdminBox);
          divIsAdminBox.appendChild(br);
-         inputCheckBox.id="is-admin";
+         inputCheckBox.id=e.id;
          inputCheckBox.type="checkbox"
          divIsAdminBox.appendChild(inputCheckBox);
 
@@ -96,7 +96,7 @@ const UserHandler = () => {
   }
   async function  addOrRefuse(id,state,rsnRefusal,accesToken){
     try {
-        const admin = document.getElementById("is-admin");
+        const admin = document.getElementById(id);
         let body1 = rsnRefusal !=""? JSON.stringify( {
             "change_id" : id,
               "state" : state,

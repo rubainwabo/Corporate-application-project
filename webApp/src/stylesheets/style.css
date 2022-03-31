@@ -76,6 +76,7 @@ a{
 form input[type=text]{
     width: 300px;
 }
+
 form input[type=submit]{
     border: none;
     background-color: white;
@@ -366,4 +367,12 @@ add-item-page
 }
 .is-admin-box{
    text-align: center;
+}
+
+#password {
+    width: 300px;
+}
+#form-button-box{
+    border:solid 1px black;
+    border-radius: 10px;
 }

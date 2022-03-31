@@ -36,7 +36,6 @@ const register = `
                 <div id="form-button-box">
                     <input type="submit" value="Envoyer"> 
                 </div>
-                <button id="connect" > se connecter </button>
                 
             </div>         
         </form>
@@ -72,17 +71,13 @@ const Register = () => {
         let urlPhoto = "url_photo";
         let registerDone = document.getElementById("register-done");
 
-        let connect = document.getElementById("connect");
         
 
         registerDone.addEventListener("click",function(e){
           e.preventDefault();
           Redirect("/");
         })
-        connect.addEventListener("click",function(e){
-          e.preventDefault();
-          console.log("hellloo");
-        })
+       
         try {
             const options = {
               method: "POST", // *GET, POST, PUT, DELETE, etc.

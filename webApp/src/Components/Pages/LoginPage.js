@@ -12,7 +12,7 @@ const affichage = `
       <h2> Connectez-vous !</h2>
       <span id="error"></span>
       <p><input id="pseudo" type="text" placeholder="Pseudo"></p>
-      <p><input  id="password" type="text" placeholder="Password"></p>
+      <p><input  id="password" type="password" placeholder="Password"></p>
       <p> se souvenir de moi <input type="checkbox" id="rememberMe" name="rememberMe"></p>
       <input type="submit" id="btnSubmit" value="se connecter">
     </form>

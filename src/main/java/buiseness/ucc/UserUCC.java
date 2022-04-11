@@ -22,7 +22,7 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
 
-  ObjectNode login(String username, String password, boolean rememberMe)
+  UserDTO login(String username, String password, boolean rememberMe)
       throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
       UserOnHoldException, UserInvalidException;
 
@@ -49,14 +49,6 @@ public interface UserUCC {
    * @return a list of users with the state in params
    */
   List<UserDTO> getUsersByState(String state);
-
-  /**
-   * retrives the phone number of the user.
-   *
-   * @param userId the user id
-   * @return the phone number of the user
-   */
-  String getPhoneNumber(int userId);
 
   /**
    * call tha dao to insert the phone number to the specific user id.

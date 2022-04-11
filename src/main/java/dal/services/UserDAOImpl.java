@@ -139,7 +139,7 @@ public class UserDAOImpl implements UserDAO {
             + refusalReason + "', _role = '" + role + (state.equals("valid")
             ? "',reason_for_connection_refusal = null" : "'")
             + " where user_id = " + userId;
-
+    System.out.println(query);
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();

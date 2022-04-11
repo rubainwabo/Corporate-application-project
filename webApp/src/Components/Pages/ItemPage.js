@@ -33,7 +33,7 @@ const item = `
           <input type="text" id="availabilities" placeholder="vos heures de disponibilité">
         </div>
         <div>
-          <input type="checkbox" id="callMe">
+          <span>Contactez-moi</span><input type="checkbox" id="callMe"> 
         </div>
         <div id="call-me-box"> 
           <input type="text" id="phone-number" placeholder="numéro" required >

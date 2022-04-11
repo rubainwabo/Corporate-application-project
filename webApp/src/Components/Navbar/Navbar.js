@@ -2,8 +2,7 @@
 // However, the JS has still to be loaded for each Bootstrap's component that needs it.
 // Here, because our JS component 'Navbar' has the same name as Navbar Bootstrap's component
 // we change the name of the imported Bootstrap's 'Navbar' component
-import { Navbar as BootstrapNavbar} from "bootstrap";
-import { getSessionObject } from "../../utils/session";
+import {getSessionObject} from "../../utils/session";
 
 /**
  * Render the Navbar which is styled by using Bootstrap
@@ -44,9 +43,9 @@ const Navbar = () => {
       </nav>
   `;  
 */
-let navbar = "";
-if(accesToken && isAdmin == "admin"){
-  navbar = `
+  let navbar = "";
+  if (accesToken && isAdmin == "admin") {
+    navbar = `
       <nav>
         <div id="navigation">
           <div id="menu">
@@ -65,16 +64,16 @@ if(accesToken && isAdmin == "admin"){
           </div>
         </div>
       </nav>
-  `;  
-}else {
-  if (accesToken){
-   navbar = `
+  `;
+  } else {
+    if (accesToken) {
+      navbar = `
    <nav>
    <div id="navigation">
      <div id="menu">
        <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mon profile </a></div>
-       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mes offres </a></div>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
      </div>
   
@@ -85,10 +84,10 @@ if(accesToken && isAdmin == "admin"){
      </div>
    </div>
  </nav>
-  `; 
-}else {
-  navbar=
-  ` <nav>
+  `;
+    } else {
+      navbar =
+          ` <nav>
         <div id="navigation">
           <div id="logo"> <a class="nav-item" href="#"  data-uri="/"> Donnamis </a></div>
 
@@ -98,9 +97,9 @@ if(accesToken && isAdmin == "admin"){
           </div>
         </div>
       </nav>
-  `; 
-}
-}
+  `;
+    }
+  }
   navbarWrapper.innerHTML = navbar;
 };
 

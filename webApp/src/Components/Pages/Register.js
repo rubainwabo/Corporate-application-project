@@ -17,26 +17,25 @@ const register = `
                 <input id ='confirm-pass-rgst' type='password' placeholder='Confirm password'>
             </div>
             <div>
-                <input id ='last-name-rgst' type='text' placeholder='Last name'>
-                <input id ='first-name-rgst' type='text' placeholder='First name'>
+                <input id ='last-name-rgst' type='text' placeholder='Last name' required="required">
+                <input id ='first-name-rgst' type='text' placeholder='First name' required="required">
             </div>
             <div>
-                <input id ='city-rgst' type='text' placeholder='City'>
+                <input id ='city-rgst' type='text' placeholder='City' required="required">
             </div>
             <div>
-                <input id ='street-rgst' type='text' placeholder='Street'>
-                <input id ='number-of-building-rgst' type='number' placeholder='Number of building'>
+                <input id ='street-rgst' type='text' placeholder='Street' required="required">
+                <input id ='number-of-building-rgst' type='number' placeholder='Number of building' required="required">
                 <input id ='unit-number' type='number' placeholder='Unit number'>
             </div>
             <div>
-                <input id ='post-code-rgst' type='number' placeholder='Post code'>
+                <input id ='post-code-rgst' type='number' placeholder='Post code' required="required">
             </div>
 
             <div id="user-decision">
                 <div id="form-button-box">
                     <input type="submit" value="Envoyer"> 
                 </div>
-                <button id="connect" > se connecter </button>
                 
             </div>         
         </form>
@@ -72,17 +71,13 @@ const Register = () => {
         let urlPhoto = "url_photo";
         let registerDone = document.getElementById("register-done");
 
-        let connect = document.getElementById("connect");
         
 
         registerDone.addEventListener("click",function(e){
           e.preventDefault();
           Redirect("/");
         })
-        connect.addEventListener("click",function(e){
-          e.preventDefault();
-          console.log("hellloo");
-        })
+       
         try {
             const options = {
               method: "POST", // *GET, POST, PUT, DELETE, etc.

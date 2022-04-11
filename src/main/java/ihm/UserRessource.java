@@ -13,12 +13,10 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
-import org.glassfish.jersey.server.ContainerRequest;
 import utils.TokenService;
 
 // ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
@@ -142,19 +140,6 @@ public class UserRessource {
           .entity("a state is required").type("text/plain").build());
     }
     return myUserUCC.getUsersByState(state);
-  }
-
-  /**
-   * retrives to find the phone number of the user who's sending a request to the api.
-   *
-   * @return the user phoneNumber of "" if he don't have a phone number
-   */
-  @GET
-  @Path("phoneNumber")
-  @Produces(MediaType.APPLICATION_JSON)
-  public String userGetUserPhoneNumber(@Context ContainerRequest req) {
-    int userId = (int) req.getProperty("id");
-    return myUserUCC.getPhoneNumber(userId);
   }
 
   /**

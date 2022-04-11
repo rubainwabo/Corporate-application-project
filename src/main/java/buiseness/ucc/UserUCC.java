@@ -51,14 +51,6 @@ public interface UserUCC {
   List<UserDTO> getUsersByState(String state);
 
   /**
-   * retrives the phone number of the user.
-   *
-   * @param userId the user id
-   * @return the phone number of the user
-   */
-  String getPhoneNumber(int userId);
-
-  /**
    * call tha dao to insert the phone number to the specific user id.
    *
    * @param userId      the userId

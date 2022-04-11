@@ -88,23 +88,6 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public String getPhoneNumber(int userId) {
-    try {
-      myDalServices.start(false);
-      String str = myUserDAO.getPhoneNumber(userId);
-      myDalServices.commit(false);
-      return str;
-    } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
-    }
-  }
-
-  @Override
   public void addPhoneNumber(int userId, String phoneNumber) {
     try {
       myDalServices.start(true);

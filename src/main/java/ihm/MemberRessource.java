@@ -108,7 +108,7 @@ public class MemberRessource {
   @GET
   @Path("me")
   @Produces(MediaType.APPLICATION_JSON)
-  public ObjectNode userRefreshed(@Context ContainerRequest req) {
+  public ObjectNode userCheckValidity(@Context ContainerRequest req) {
     int userId = (int) req.getProperty("id");
     return req.getProperty("refresh") != null ? myTokenService.getRefreshedTokens(userId) : null;
   }

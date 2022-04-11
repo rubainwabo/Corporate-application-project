@@ -21,7 +21,6 @@ const home = `<section id="home-page">
 `;
 
 const MesOffres = async (id) => {
-
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
 

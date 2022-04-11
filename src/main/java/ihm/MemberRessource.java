@@ -13,10 +13,13 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
+import org.glassfish.jersey.server.ContainerRequest;
+import utils.TokenService;
 
 @Singleton
 @Path("/members")
@@ -24,6 +27,9 @@ public class MemberRessource {
 
   @Inject
   private UserUCC myUserUCC;
+
+  @Inject
+  private TokenService myTokenService;
 
   /**
    * retrives to get all the user with a specific state.
@@ -97,5 +103,13 @@ public class MemberRessource {
       return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
           body.get("admin").asBoolean());
     }
+  }
+
+  @GET
+  @Path("me")
+  @Produces(MediaType.APPLICATION_JSON)
+  public ObjectNode userRefreshed(@Context ContainerRequest req) {
+    int userId = (int) req.getProperty("id");
+    return req.getProperty("refresh") != null ? myTokenService.getRefreshedTokens(userId) : null;
   }
 }

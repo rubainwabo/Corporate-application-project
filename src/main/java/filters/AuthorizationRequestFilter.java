@@ -38,6 +38,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
       try {
         decodedToken = (refreshToken == null) ? myTokenService.getVerifyToken(token)
             : myTokenService.getVerifyRefreshToken(refreshToken);
+
       } catch (Exception e) {
         throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
             .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
@@ -49,6 +50,9 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
             .entity("You are forbidden to access this resource").build());
       }
       requestContext.setProperty("id", id);
+      if (refreshToken != null) {
+        requestContext.setProperty("refresh", "");
+      }
     }
   }
 }

@@ -29,7 +29,7 @@ public class UserUCCImpl implements UserUCC {
   private DalServices myDalServices;
 
   @Override
-  public ObjectNode login(String username, String password, boolean rememberMe) {
+  public UserDTO login(String username, String password, boolean rememberMe) {
     try {
       myDalServices.start(false);
       User user = (User) myUserDAO.getOneByUsername(username);
@@ -45,10 +45,8 @@ public class UserUCCImpl implements UserUCC {
       if (user.isWaiting()) {
         throw new UserOnHoldException("user on hold");
       }
-      var token = myTokenService.login(user.getId(), username, rememberMe);
-      token.put("role", user.getRole());
       myDalServices.commit(false);
-      return token;
+      return user;
     } catch (Exception e) {
       try {
         myDalServices.commit(false);

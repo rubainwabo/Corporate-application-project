@@ -19,6 +19,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
 import org.glassfish.jersey.server.ContainerRequest;
+import utils.TokenService;
 
 // ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
 // (name can be changed in FiltersDynamicBindingConfig class)
@@ -31,6 +32,9 @@ public class UserRessource {
 
   @Inject
   private UserUCC myUserUCC;
+
+  @Inject
+  private TokenService myTokenService;
 
   /**
    * Change the state of a certain user.
@@ -98,7 +102,10 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
-    return myUserUCC.login(username, password, rememberMe);
+    var user = myUserUCC.login(username, password, rememberMe);
+    var token = myTokenService.login(user.getId(), username, rememberMe);
+    token.put("role", user.getRole());
+    return token;
   }
 
   /**

@@ -22,7 +22,7 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
 
-  ObjectNode login(String username, String password, boolean rememberMe)
+  UserDTO login(String username, String password, boolean rememberMe)
       throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
       UserOnHoldException, UserInvalidException;
 

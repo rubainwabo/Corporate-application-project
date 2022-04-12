@@ -34,8 +34,12 @@ public interface UserUCC {
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
-  boolean changeState(int id, String state, String refusalReason, boolean admin)
-      throws InvalidStateException, InvalidStateException;
+  boolean changeState(int id, String state, String refusalReason, boolean admin);
+
+  boolean updateProfile(int id, String username,String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone);
+
+  boolean updatePassword(int id,String password);
 
   User getOneById(int id);
 

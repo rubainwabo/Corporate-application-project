@@ -45,6 +45,11 @@ public interface UserDAO {
    */
   void addPhoneNumber(int userId, String phoneNumber) throws SQLException;
 
+  boolean updateProfile(int id, String username,String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone);
+
+  boolean updatePassword(int id,String password);
+
   int register(UserDTO user);
 
   /**

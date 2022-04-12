@@ -5,6 +5,7 @@
 import { Navbar as BootstrapNavbar} from "bootstrap";
 import { getSessionObject } from "../../utils/session";
 
+import logo from "../../img/logo.svg"
 /**
  * Render the Navbar which is styled by using Bootstrap
  * Each item in the Navbar is tightly coupled with the Router configuration :
@@ -48,10 +49,11 @@ let navbar = "";
 if(accesToken && isAdmin == "admin"){
   navbar = `
       <nav>
-        <div id="navigation">
+        <div id="navigation" >
           <div id="menu">
+          <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
             <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Mon profile </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfile"> Mon profile </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> liste des utilisateurs </a></div>
@@ -69,12 +71,12 @@ if(accesToken && isAdmin == "admin"){
 }else {
   if (accesToken){
    navbar = `
-   <nav>
    <div id="navigation">
      <div id="menu">
-       <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mon profile </a></div>
-       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/"> Mes offres </a></div>
+     <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
+     <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfile"> Mon profile </a></div>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
      </div>
   
@@ -90,7 +92,7 @@ if(accesToken && isAdmin == "admin"){
   navbar=
   ` <nav>
         <div id="navigation">
-          <div id="logo"> <a class="nav-item" href="#"  data-uri="/"> Donnamis </a></div>
+          <img src =" ${logo}" style = "height : 90px; position : relative;"id = "logoImg"> </img>
 
           <div id="nav-connection"> 
             <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>

@@ -12,17 +12,17 @@ body{
     height: 90vh;
     padding-left: 20px;
     padding-right: 20px;
+    padding-top : 10vh;
     
 }
+
 /*
 nav bar
 */
 nav{
-   background-color: #FFF59B;
-    height: 10vh; 
     padding-left: 20px;
     padding-right: 20px;
-    
+    padding-top: 5vh;
 }
 a{
     color: black;
@@ -32,7 +32,6 @@ a{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100%;  
 }
 #nav-connection{
     display: flex;
@@ -55,6 +54,8 @@ a{
 }
 #menu{
     display: flex;
+    align-items: center;
+    padding-left: 5vw;
 }
 #error{
     color: red;
@@ -367,3 +368,26 @@ add-item-page
 .is-admin-box{
    text-align: center;
 }
+
+
+:focus{outline: none;}
+
+input {font: 15px/24px "Lato", Arial, sans-serif; color: #333; width: 100%; box-sizing: border-box; letter-spacing: 1px;}
+
+.effect-1, 
+.effect-2, 
+.effect-3{border: 0; border-bottom: 1px solid gray;}
+
+.effect-1 ~ .focus-border{position: absolute; bottom: 0; left: 5%; width: 0; height: 2px; background-color: #FFF59B; transition: 0.4s;}
+.effect-1:focus ~ .focus-border{width: 90%; transition: 0.4s;}
+
+.gradient-custom {
+    /* fallback for old browsers */
+    background: #FFF59B;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right bottom, #FFF59B, white);
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right bottom, #FFF59B,white)
+  }

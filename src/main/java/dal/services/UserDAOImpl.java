@@ -81,7 +81,9 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneById(int id) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select user_id, state, _role from projet.members where user_id=?")) {
+        "select user_id, state, _role, username, street, postcode, building_number, city"
+            + ", phone_number, unit_number, first_name, last_name"
+            + " from projet.members where user_id=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();
@@ -91,7 +93,15 @@ public class UserDAOImpl implements UserDAO {
         user.setId(rs.getInt(1));
         user.setState(rs.getString(2));
         user.setRole(rs.getString(3));
-
+        user.setUserName(rs.getString(4));
+        user.setStreet(rs.getString(5));
+        user.setPostCode(rs.getInt(6));
+        user.setBuildingNumber(rs.getInt(7));
+        user.setCity(rs.getString(8));
+        user.setPhoneNumber(rs.getString(9));
+        user.setUnitNumber(rs.getInt(10));
+        user.setFirstName(rs.getString(11));
+        user.setLastName(rs.getString(12));
         return user;
       }
     } catch (Exception e) {
@@ -112,6 +122,44 @@ public class UserDAOImpl implements UserDAO {
     } catch (Exception e) {
       throw new FatalException(e);
     }
+  }
+
+  @Override
+  public boolean updateProfile(int id, String username, String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone) {
+
+      phone = phone.length() > 0 ? "'" + phone +"'" : "DEFAULT";
+    String query = "update projet.members set username = '" + username + "'"
+        + " , last_name = '" + lastName + "'"
+        + " ,first_name = '" + firstName + "'"
+        + " ,street = '" + street + "'"
+        + ",building_number = '" + number + "'"
+        + ",postcode = '" + postcode + "'"
+        + ",unit_number = '" + box + "'"
+        + ",city = '" + city + "'"
+        + ",phone_number = " +phone
+        + " where user_id = "
+        + id;
+    return execQuery(query);
+  }
+
+  @Override
+  public boolean updatePassword(int id,String password){
+    String query = "update projet.members set password = '" + password + "' where "
+        + "user_id = " + id;
+    return execQuery(query);
+  }
+
+  private boolean execQuery(String query) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        query)) {
+      System.out.println(query);
+      ps.executeUpdate();
+    } catch (Exception e) {
+      System.out.println("error");
+      throw new FatalException(e);
+    }
+    return true;
   }
 
   @Override

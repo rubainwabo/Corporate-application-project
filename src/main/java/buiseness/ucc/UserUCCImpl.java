@@ -7,6 +7,7 @@ import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 import utils.TokenService;
 import utils.exception.BizzException;
 import utils.exception.InvalidStateException;
@@ -195,6 +196,45 @@ public class UserUCCImpl implements UserUCC {
       throw new BizzException(e);
     }
   }
+
+  @Override
+  public boolean updateProfile(int id, String username, String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone) {
+    try {
+      myDalServices.start(true);
+      boolean ret = myUserDAO.updateProfile(id, username, firstName, lastName, street, number, postcode, box,
+          city, phone);
+      myDalServices.commit(true);
+      return ret;
+    } catch (Exception e) {
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
+    }
+  }
+  @Override
+  public boolean updatePassword(int id,String password){
+    try {
+      myDalServices.start(true);
+
+      password = BCrypt.hashpw(password, BCrypt.gensalt());
+
+      boolean ret = myUserDAO.updatePassword(id,password);
+      myDalServices.commit(true);
+      return ret;
+    } catch (Exception e) {
+      try {
+        myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
+    }
+  }
+
 
   @Override
   public int register(UserDTO user) {

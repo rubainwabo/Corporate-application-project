@@ -63,7 +63,7 @@ public class WebExceptionMapper implements ExceptionMapper<Throwable> {
 
   @Override
   public Response toResponse(Throwable exception) {
-
+    exception.printStackTrace();
     try {
       String dir = "log" + File.separator;
       String filename = "log.txt";

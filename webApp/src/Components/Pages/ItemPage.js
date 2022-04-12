@@ -4,11 +4,22 @@ import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
 import { Redirect } from "../Router/Router";
 
 const item = `
+<div style="width : 100%; width : 100%, 
+width : 100%; 
+height : 100%; position : absolute; 
+left : 0px; right : 0px;
+clip-path: polygon(75% 0, 0 0, 0 25%);
+position : absolute; 
+top : 0px;
+left : 0px;
+z-index: -5;
+background-color: #FFF59B;
+"> </div>
 <section id="item-page">
   <p id="message"> </p>
     <div id="item-img-description">
         <div id="item-img">
-            <img src="${itemImg}">
+            <img id="img-id">
         </div>
         <div id="item-description">
             <p id="item-description-p"></p>
@@ -16,13 +27,13 @@ const item = `
     </div>
 
     <div id="item-info">
-        <p>Type d’objet : <span id="item-type"><span> </p> 
-        <p>Offert par : <span id="offeror"><span> </p> 
-        <p>Nombres de personnes interessées : <span id="number-interest"><span> </p> 
-        <p>Précedentes dates d’offre : <span id="offeror"> <span> </p>   
+        <p style ="font-size : 0px" id="type-objet"> Type d’objet : <span id="item-type"><span> </p> 
+        <p style ="font-size : 0px" id="Offert"> Offert par : <span id="offeror"><span> </p> 
+        <p style ="font-size : 0px" id="nb-personnes"> Nombres de personnes interessées : <span id="number-interest"><span> </p> 
+        <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="offeror"> <span> </p>   
     </div>
 
-    <div id="item-show-interest">
+    <div id="item-show-interest" style="display : none">
         <button id="show-interest">Je suis interessé</button>
     </div>
 
@@ -52,9 +63,6 @@ const ItemPage = async () => {
   let id = getId();
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = item;
-
-  let token = getSessionObject("accessToken");
-
 
 
   let addIterestBtn = document.getElementById("add-interest-btn");
@@ -99,6 +107,14 @@ const ItemPage = async () => {
     document.getElementById(
         "number-interest").innerText = item.numberOfPeopleInterested;
 
+    document.getElementById("img-id").src = itemImg;
+    document.getElementById("type-objet").style.fontSize = "12px";
+    document.getElementById("Offert").style.fontSize = "12px";
+    document.getElementById("nb-personnes").style.fontSize = "12px";
+    document.getElementById("preced").style.fontSize = "12px";
+    document.getElementById("item-show-interest").style = "display : inline"
+    
+    
     let callMe = document.getElementById("callMe");
 
     callMe.addEventListener("change", function (e) {

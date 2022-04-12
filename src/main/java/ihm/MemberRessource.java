@@ -84,6 +84,12 @@ public class MemberRessource {
     }
   }
 
+  /**
+   * check the validity of a user.
+   *
+   * @param req the user issuing a request
+   * @return 1 refresh and 1 access token, if user haven't a refresh -> return null
+   */
   @GET
   @Path("me")
   @Produces(MediaType.APPLICATION_JSON)
@@ -93,11 +99,16 @@ public class MemberRessource {
     return req.getProperty("refresh") != null ? myTokenService.getRefreshedTokens(userId) : null;
   }
 
+  /**
+   * tries to retrieve a user's data according to the id of the person making the request.
+   *
+   * @param req the user issuing a request
+   * @return user's details
+   */
   @GET
   @Path("details")
   @Produces(MediaType.APPLICATION_JSON)
   public UserDTO userGetOneById(@Context ContainerRequest req) {
-    int userId = (int) req.getProperty("id");
-    return myUserUCC.getOneById(userId);
+    return myUserUCC.getOneById((int) req.getProperty("id"));
   }
 }

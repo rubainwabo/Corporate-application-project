@@ -62,7 +62,8 @@ public class ItemDAOImpl implements ItemDAO {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
             + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested, max(d._date) "
-            + "from projet.items i,projet.item_type t,projet.dates d where i.id_item=? and i.item_type = "
+            + "from projet.items i,projet.item_type t,projet.dates d "
+            + "where i.id_item=? and i.item_type = "
             + "t.id_item_type and d.item=" + id + " GROUP BY i.id_item,t.item_type_name")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {

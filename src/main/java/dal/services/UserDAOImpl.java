@@ -155,7 +155,8 @@ public class UserDAOImpl implements UserDAO {
         "INSERT INTO projet.members(user_id,username,last_name, first_name,"
             + " unit_number,state,password,street,postCode,"
             + " building_number,city,"
-            + " url_picture,nb_of_item_not_taken,_role) VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
+            + " url_picture,nb_of_item_not_taken,_role) "
+            + "VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
         Statement.RETURN_GENERATED_KEYS)) {
 
       ps.setString(1, user.getUserName());

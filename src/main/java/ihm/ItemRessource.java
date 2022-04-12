@@ -31,7 +31,7 @@ public class ItemRessource {
 
 
   /**
-   * gets list of offers of the user
+   * gets list of offers of the user.
    *
    * @return items
    */

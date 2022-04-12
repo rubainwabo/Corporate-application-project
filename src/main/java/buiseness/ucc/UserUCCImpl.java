@@ -103,6 +103,7 @@ public class UserUCCImpl implements UserUCC {
     }
   }
 
+  @Override
   public User getOneById(int id) {
     try {
       myDalServices.start(false);
@@ -119,6 +120,7 @@ public class UserUCCImpl implements UserUCC {
     }
   }
 
+  @Override
   public boolean checkAdmin(int id) {
     try {
       myDalServices.start(false);
@@ -136,6 +138,7 @@ public class UserUCCImpl implements UserUCC {
     }
   }
 
+  @Override
   public boolean checkWaitingOrDenied(int id) {
     try {
       myDalServices.start(false);

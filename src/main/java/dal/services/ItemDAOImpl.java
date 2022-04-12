@@ -61,9 +61,10 @@ public class ItemDAOImpl implements ItemDAO {
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
-            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested "
-            + "from projet.items i,projet.item_type t where i.id_item=? and i.item_type = "
-            + "t.id_item_type")) {
+            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested, max(d._date) "
+            + "from projet.items i,projet.item_type t,projet.dates d "
+            + "where i.id_item=? and i.item_type = "
+            + "t.id_item_type and d.item=" + id + " GROUP BY i.id_item,t.item_type_name")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
@@ -89,8 +90,8 @@ public class ItemDAOImpl implements ItemDAO {
             item.setTimeSlot(rs.getString(6));
             item.setItemCondition(rs.getString(7));
             item.setNumberOfPeopleInterested(rs.getInt(8));
+            item.setLastDateOffered(rs.getTimestamp(9));
             return item;
-
           }
         }
       }

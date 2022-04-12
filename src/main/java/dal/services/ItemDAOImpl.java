@@ -125,17 +125,20 @@ public class ItemDAOImpl implements ItemDAO {
             "Select username from projet.members where user_id = " + interestUserId)) {
           try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
             if (!rsInterestUserAsString.next()) {
-              throw new FatalException("prblm interesUserAsTring");
+              throw new FatalException(
+                  "Echec de la requete : récupération du username de la personne interessé impossible");
             }
             interestUsrName = rsInterestUserAsString.getString(1);
           }
         }
         String phoneNumerStr =
             (objectNode.get("callMe").asBoolean() && !objectNode.get("phoneNumber").asText()
-                .isBlank()) ? " contactez moi au : " + objectNode.get("phoneNumber").asText() : "";
+                .isBlank()) ? ", vous pouvez la contacter sur via son numéro : " + objectNode.get(
+                    "phoneNumber")
+                .asText() + " " : " ";
 
         psNotif.setString(1,
-            interestUsrName + " est interessé par cette offre" + phoneNumerStr + " " + urlPicture);
+            interestUsrName + " est interessé par votre offre" + phoneNumerStr + urlPicture);
         psNotif.executeUpdate();
       }
     } catch (Exception e) {

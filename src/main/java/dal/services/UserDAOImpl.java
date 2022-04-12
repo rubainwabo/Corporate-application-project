@@ -128,7 +128,7 @@ public class UserDAOImpl implements UserDAO {
   public boolean updateProfile(int id, String username, String firstName, String lastName,
       String street, int number, int postcode, String box, String city, String phone) {
 
-      phone = phone.length() > 0 ? "'" + phone +"'" : "DEFAULT";
+    phone = phone.length() > 0 ? "'" + phone + "'" : "DEFAULT";
     String query = "update projet.members set username = '" + username + "'"
         + " , last_name = '" + lastName + "'"
         + " ,first_name = '" + firstName + "'"
@@ -137,14 +137,14 @@ public class UserDAOImpl implements UserDAO {
         + ",postcode = '" + postcode + "'"
         + ",unit_number = '" + box + "'"
         + ",city = '" + city + "'"
-        + ",phone_number = " +phone
+        + ",phone_number = " + phone
         + " where user_id = "
         + id;
     return execQuery(query);
   }
 
   @Override
-  public boolean updatePassword(int id,String password){
+  public boolean updatePassword(int id, String password) {
     String query = "update projet.members set password = '" + password + "' where "
         + "user_id = " + id;
     return execQuery(query);
@@ -203,7 +203,8 @@ public class UserDAOImpl implements UserDAO {
         "INSERT INTO projet.members(user_id,username,last_name, first_name,"
             + " unit_number,state,password,street,postCode,"
             + " building_number,city,"
-            + " url_picture,nb_of_item_not_taken,_role) VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
+            + " url_picture,nb_of_item_not_taken,_role) "
+            + "VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
         Statement.RETURN_GENERATED_KEYS)) {
 
       ps.setString(1, user.getUserName());

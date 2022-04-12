@@ -99,7 +99,7 @@ public class ItemDAOImpl implements ItemDAO {
       ps.setInt(3, idItem);
       ps.executeUpdate();
       try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
-          "update projet.items set number_of_people_interested = number_of_people_interested + 1"
+          "update projet.items set number_of_people_interested = 1 + number_of_people_interested"
               + " where id_item = " + idItem)) {
         psNbrPeopleInteresed.executeUpdate();
       }
@@ -130,8 +130,12 @@ public class ItemDAOImpl implements ItemDAO {
             interestUsrName = rsInterestUserAsString.getString(1);
           }
         }
+        String phoneNumerStr =
+            (objectNode.get("callMe").asBoolean() && !objectNode.get("phoneNumber").asText()
+                .isBlank()) ? " contactez moi au : " + objectNode.get("phoneNumber").asText() : "";
+
         psNotif.setString(1,
-            interestUsrName + " est interessé par cette offre " + urlPicture);
+            interestUsrName + " est interessé par cette offre" + phoneNumerStr + " " + urlPicture);
         psNotif.executeUpdate();
       }
     } catch (Exception e) {

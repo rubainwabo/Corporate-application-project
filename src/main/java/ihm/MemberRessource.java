@@ -92,4 +92,12 @@ public class MemberRessource {
     // if return smth 200, else if userIsValid return 204 else return 401
     return req.getProperty("refresh") != null ? myTokenService.getRefreshedTokens(userId) : null;
   }
+
+  @GET
+  @Path("details")
+  @Produces(MediaType.APPLICATION_JSON)
+  public UserDTO userGetOneById(@Context ContainerRequest req) {
+    int userId = (int) req.getProperty("id");
+    return myUserUCC.getOneById(userId);
+  }
 }

@@ -17,7 +17,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
-import org.apache.commons.text.StringEscapeUtils;
 import org.glassfish.jersey.server.ContainerRequest;
 import utils.TokenService;
 
@@ -45,26 +44,6 @@ public class MemberRessource {
           .entity("a state is required").type("text/plain").build());
     }
     return myUserUCC.getUsersByState(state);
-  }
-
-  /**
-   * Refresh the user token.
-   *
-   * @param body the user's data retrieved via his local storage in the front-end
-   * @return the created token, otherwise null in case of error
-   */
-  @POST
-  @Path("refreshToken")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public ObjectNode userRefreshToken(JsonNode body) {
-    if (!body.hasNonNull("refreshToken")) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("a token or refreshToken is required").type("text/plain").build());
-    }
-    // escape characters to avoid XSS injections and transforms the received token into text
-    String refreshToken = StringEscapeUtils.escapeHtml4(body.get("refreshToken").asText());
-    return myUserUCC.refreshToken(refreshToken);
   }
 
   /**
@@ -110,6 +89,7 @@ public class MemberRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode userCheckValidity(@Context ContainerRequest req) {
     int userId = (int) req.getProperty("id");
+    // if return smth 200, else if userIsValid return 204 else return 401
     return req.getProperty("refresh") != null ? myTokenService.getRefreshedTokens(userId) : null;
   }
 }

@@ -33,27 +33,41 @@ public interface UserUCC {
    */
   ObjectNode refreshToken(String token) throws InvalidTokenException;
 
+  /**
+   * changes the state of an user.
+   *
+   * @return true if correctly changed.
+   */
   boolean changeState(int id, String state, String refusalReason, boolean admin);
 
   /**
    * updates the profile of an user.
+   *
    * @return true if correctly changed.
    */
-  boolean updateProfile(int id, String username,String firstName, String lastName,
+  boolean updateProfile(int id, String username, String firstName, String lastName,
       String street, int number, int postcode, String box, String city, String phone);
 
   /**
    * updates the password of an user.
-   * @param id id of the user we want to change password.
+   *
+   * @param id       id of the user we want to change password.
    * @param password new password.
    * @return true if changed.
    */
-  boolean updatePassword(int id,String password);
+  boolean updatePassword(int id, String password);
 
+  /**
+   * returns the user.
+   *
+   * @param id id of the user we want to get.
+   * @return user we want.
+   */
   User getOneById(int id);
 
   /**
    * checks if user is admin.
+   *
    * @param id id of the user we want to check
    * @return true if admin.
    */
@@ -61,6 +75,7 @@ public interface UserUCC {
 
   /**
    * checks if user is waiting or denied.
+   *
    * @param id id of the user we want to check
    * @return true if waiting or denied.
    */

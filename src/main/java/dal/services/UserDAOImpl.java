@@ -82,7 +82,9 @@ public class UserDAOImpl implements UserDAO {
   public UserDTO getOneById(int id) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select user_id, state, _role,username,reason_for_connection_refusal,"
-            + "last_name,first_name,city,street,postCode,building_number,unit_number,url_picture,phone_number from projet.members where user_id=?")) {
+            + "last_name,first_name,city,street,postCode,building_number,"
+            + "unit_number,url_picture,phone_number from "
+            + "projet.members where user_id=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();

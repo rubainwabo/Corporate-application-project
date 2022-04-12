@@ -6,7 +6,6 @@ import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import java.util.List;
-import utils.TokenService;
 import utils.exception.BizzException;
 import utils.exception.InvalidStateException;
 import utils.exception.PasswordOrUsernameException;
@@ -19,9 +18,6 @@ public class UserUCCImpl implements UserUCC {
 
   @Inject
   private UserDAO myUserDAO;
-
-  @Inject
-  private TokenService myTokenService;
 
   @Inject
   private DalServices myDalServices;

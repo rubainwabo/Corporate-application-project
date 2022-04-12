@@ -66,7 +66,8 @@ public class ItemDAOImpl implements ItemDAO {
             + "from projet.items i,projet.item_type t,projet.dates d,projet.members m "
             + "where i.id_item=? and i.item_type = "
             + "t.id_item_type and d.item=" + id
-            + " and m.user_id = i.offeror GROUP BY i.id_item,t.item_type_name,m.last_name,m.first_name")) {
+            + " and m.user_id = i.offeror GROUP BY "
+            + "i.id_item,t.item_type_name,m.last_name,m.first_name")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
@@ -126,14 +127,15 @@ public class ItemDAOImpl implements ItemDAO {
           try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
             if (!rsInterestUserAsString.next()) {
               throw new FatalException(
-                  "Echec de la requete : récupération du username de la personne interessé impossible");
+                  "Echec de la requete : récupération du username de "
+                      + "la personne interessé impossible");
             }
             interestUsrName = rsInterestUserAsString.getString(1);
           }
         }
         String phoneNumerStr =
-            (objectNode.get("callMe").asBoolean() && !objectNode.get("phoneNumber").asText()
-                .isBlank()) ? ", vous pouvez la contacter sur via son numéro : " + objectNode.get(
+            objectNode.get("callMe").asBoolean() && !objectNode.get("phoneNumber").asText()
+                .isBlank() ? ", vous pouvez la contacter sur via son numéro : " + objectNode.get(
                     "phoneNumber")
                 .asText() + " " : " ";
 

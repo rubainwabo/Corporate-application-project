@@ -13,6 +13,20 @@ const userHandler = `
    </form>
    <div id="test">
    </div>
+
+   <div id="add-reason-refusal">
+      <form id="add-iterest-form">
+      <span id="error"></span>
+        <div>
+        <textarea id="reason" placeholder="raison du refus..."></textarea>
+        </div>
+        <div>
+          <input type="submit" value="envoyer" id="add-reason-button"> 
+        </div>
+        
+      </form>
+    </div>
+
 </section>
 `;
 
@@ -30,7 +44,7 @@ const UserHandler = () => {
         });
     })
   };
-
+  let currentUser;
   async function request (accesToken,state) {
     console.log(accesToken);
     try {
@@ -40,7 +54,7 @@ const UserHandler = () => {
         }
       }
         // hide data to inform if the pizza menu is already printed
-        const response = await fetch("/api/auths/list?state="+state,option); // fetch return a promise => we wait for the response   
+        const response = await fetch("/api/members/list?state="+state,option); // fetch return a promise => we wait for the response   
      if(!response.ok){
         return Redirect("/");
      }
@@ -86,17 +100,24 @@ const UserHandler = () => {
          divUserHandler.appendChild(divDenied)
          divDenied.appendChild(deniedBtn)
          deniedBtn.addEventListener("click",() => {
-             addOrRefuse(e.id,"denied","raison de votre refus statique",accesToken)});
+           currentUser = e.id;
+           document.getElementById("add-reason-refusal").style.display="flex";
+           document.getElementById("add-reason-button").addEventListener("click",function(e){
+            e.preventDefault();
+            let reason = document.getElementById("reason").value;
+            addOrRefuse(currentUser,"denied",reason,accesToken,inputCheckBox)
+            })
+          });
          validBtn.addEventListener("click", () => {
-             addOrRefuse(e.id,"valid","",accesToken)});
+             addOrRefuse(e.id,"valid","",accesToken,inputCheckBox)});
          test.appendChild(divUserHandler)
      })
     } catch (error) {
     } 
   }
-  async function  addOrRefuse(id,state,rsnRefusal,accesToken){
+  async function  addOrRefuse(id,state,rsnRefusal,accesToken,admin){
     try {
-        const admin = document.getElementById(id);
+       
         let body1 = rsnRefusal !=""? JSON.stringify( {
             "change_id" : id,
               "state" : state,
@@ -116,7 +137,7 @@ const UserHandler = () => {
         },
         };
         console.log(options.body)
-        const response = await fetch("/api/auths/changeState", options); // fetch return a promise => we wait for the response
+        const response = await fetch("/api/members/changeState", options); // fetch return a promise => we wait for the response
   
         if (!response.ok) {
           response.text().then((result)=>{

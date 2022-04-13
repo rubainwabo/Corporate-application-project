@@ -39,7 +39,6 @@ public class ItemRessource {
    */
   @GET
   @Path("mesOffres")
-  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> userMesOffres(@Context ContainerRequest req) {
     int id = (int) req.getProperty("id");

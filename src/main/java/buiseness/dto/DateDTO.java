@@ -1,14 +1,16 @@
 package buiseness.dto;
 
+import java.sql.Timestamp;
+
 public interface DateDTO {
 
   int getIdDate();
 
   void setIdDate(int idDate);
 
-  DateDTO getDate();
+  Timestamp getDate();
 
-  void setDate(DateDTO date);
+  void setDate(Timestamp date);
 
   int getItem();
 

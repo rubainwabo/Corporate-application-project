@@ -1,5 +1,6 @@
 package buiseness.factory;
 
+import buiseness.dto.DateDTO;
 import buiseness.dto.ItemDTO;
 import buiseness.dto.ItemTypeDTO;
 import buiseness.dto.UserDTO;
@@ -27,4 +28,5 @@ public interface BizFactory {
    */
   ItemTypeDTO getItemType();
 
+  DateDTO getDate();
 }

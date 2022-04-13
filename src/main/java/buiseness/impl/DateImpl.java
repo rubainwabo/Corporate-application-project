@@ -1,12 +1,12 @@
 package buiseness.impl;
 
 import buiseness.domain.Date;
-import buiseness.dto.DateDTO;
+import java.sql.Timestamp;
 
 public class DateImpl implements Date {
 
   private int idDate;
-  private DateDTO date;
+  private Timestamp date;
   private int item;
 
   public DateImpl() {
@@ -23,12 +23,12 @@ public class DateImpl implements Date {
   }
 
   @Override
-  public DateDTO getDate() {
+  public Timestamp getDate() {
     return date;
   }
 
   @Override
-  public void setDate(DateDTO date) {
+  public void setDate(Timestamp date) {
     this.date = date;
   }
 

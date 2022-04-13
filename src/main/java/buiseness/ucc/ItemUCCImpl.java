@@ -131,14 +131,31 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void ItemCollectedOrNot(int itemId, boolean itemCollected) {
+  public void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected, int recipient) {
     try {
       myDalServices.start(true);
-      myItemDAOService.ItemCollectedOrNot(itemId, itemCollected);
+      myItemDAOService.ItemCollectedOrNot(itemDTO, itemCollected, recipient);
       myDalServices.commit(true);
     } catch (Exception e) {
       try {
         myDalServices.rollBack();
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
+    }
+  }
+
+  @Override
+  public int checkUserEligibility(int id, int itemId) {
+    try {
+      myDalServices.start(false);
+      int eligibility = myItemDAOService.checkUserEligibility(id, itemId);
+      myDalServices.commit(false);
+      return eligibility;
+    } catch (Exception e) {
+      try {
+        myDalServices.commit(false);
       } catch (Exception ex) {
         throw new BizzException(ex);
       }

@@ -3,7 +3,6 @@ package ihm;
 import buiseness.dto.ItemDTO;
 import buiseness.ucc.ItemUCC;
 import buiseness.ucc.UserUCC;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -13,10 +12,12 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import java.util.List;
 import org.glassfish.jersey.server.ContainerRequest;
 
@@ -59,7 +60,7 @@ public class ItemRessource {
     if (itemDTO == null || itemDTO.getDescription().isBlank() || itemDTO.getItemtype().isBlank()
         || itemDTO.getTimeSlot().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("object informations invalid").type("text/plain").build());
+          .entity("info de l'objet incorrectes").type("text/plain").build());
     }
     int id = (int) req.getProperty("id");
     return myItemUCC.addItem(itemDTO, id);
@@ -76,7 +77,7 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public ItemDTO userGetItemDetails(@PathParam("id") int id) {
     if (id <= 0) {
-      throw new WebApplicationException("bad request, no id found in pathParams");
+      throw new WebApplicationException("Aucun object existant avec cet id");
     }
     return myItemUCC.getDetails(id);
   }
@@ -95,7 +96,7 @@ public class ItemRessource {
       @Context ContainerRequest req) {
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("informations manquantes").type("text/plain").build());
     }
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
@@ -121,7 +122,7 @@ public class ItemRessource {
   public Response userCancelOffer(@PathParam("id") int itemId, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("information manquante").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
     myItemUCC.cancelOffer(itemId, userId);
@@ -153,15 +154,27 @@ public class ItemRessource {
   }
 
   @POST
-  @Path("itemCollected/{id}")
+  @Path("itemCollected")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userItemCollectedOrNot(@PathParam("id") int itemId, JsonNode node) {
-    if (itemId <= 0 || !node.hasNonNull("itemCollected")) {
+  public Response userItemCollectedOrNot(@Context ContainerRequest req,
+      @QueryParam("itemId") int itemId,
+      @QueryParam("itemCollected") boolean itemCollected) {
+
+    if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("informations manquantes").type("text/plain").build());
     }
-    myItemUCC.ItemCollectedOrNot(itemId, node.get("itemCollected").asBoolean());
+    int reqUserId = (int) req.getProperty("id");
+    int realUserId = myItemUCC.checkUserEligibility(reqUserId, itemId);
+
+    if (realUserId != reqUserId) {
+      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
+          .entity("l'utilisateur effectuant cette requête n'est pas le receveur")
+          .type("text/plain").build());
+    }
+    ItemDTO item = myItemUCC.getDetails(itemId);
+    myItemUCC.ItemCollectedOrNot(item, itemCollected, reqUserId);
     return Response.ok().build();
   }
 }

@@ -7,6 +7,7 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,4 +223,80 @@ public class ItemDAOImpl implements ItemDAO {
     }
   }
 
+  @Override
+  public void ItemCollectedOrNot(ItemDTO item, boolean itemCollected, int recipient) {
+    if (!itemCollected) {
+      itemNotCollectedUpdt(item.getId());
+      try (PreparedStatement psUpdateItemNotTkn = myBackService.getPreparedStatement(
+          "update projet.members set nb_of_item_not_taken "
+              + "= nb_of_item_not_taken+1 where user_id=" + recipient
+      )) {
+        psUpdateItemNotTkn.executeUpdate();
+      } catch (SQLException e) {
+        throw new FatalException(e);
+      }
+    } else {
+      itemCollectedUpdt(item.getId());
+    }
+    try (PreparedStatement psNotif = myBackService.getPreparedStatement(
+        "insert into projet.notifications VALUES (DEFAULT,false,?,?,?)")) {
+      String notif = itemCollected ? item.getRecipient() + " à accepté votre object"
+          : item.getRecipient() + " n'a pas accépté votre object";
+      psNotif.setString(1, notif);
+      psNotif.setInt(2, getOfferorIdByItemId(item.getId()));
+      psNotif.setInt(3, item.getId());
+      psNotif.executeUpdate();
+    } catch (SQLException e) {
+      throw new FatalException(e);
+    }
+  }
+
+  public int getOfferorIdByItemId(int itemId) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "select offeror from projet.items where id_item = " + itemId)) {
+      try (ResultSet rs = ps.executeQuery()) {
+        if (!rs.next()) {
+          throw new FatalException("aucun résultat pour votre requète");
+        }
+        return rs.getInt(1);
+      }
+    } catch (SQLException e) {
+      throw new FatalException(e);
+    }
+  }
+
+  public void itemCollectedUpdt(int itemId) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "Update projet.items set item_condition='gifted' "
+            + "where id_item=" + itemId)) {
+      ps.executeUpdate();
+    } catch (SQLException e) {
+      throw new FatalException(e);
+    }
+  }
+
+  public void itemNotCollectedUpdt(int itemId) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "Update projet.items set item_condition='not collected',"
+            + "recipient=NULL where id_item=" + itemId)) {
+      ps.executeUpdate();
+    } catch (SQLException e) {
+      throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public int checkUserEligibility(int id, int itemId) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "select recipient from projet.items where id_item=" + itemId)) {
+      try (ResultSet rs = ps.executeQuery()) {
+        if (!rs.next()) {
+          throw new FatalException("Aucun résultat pour votre requête");
+        }
+        return rs.getInt(1);
+      }
+    } catch (SQLException e) {
+      throw new FatalException(e);
+    }
+  }
 }

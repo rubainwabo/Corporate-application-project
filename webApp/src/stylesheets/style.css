@@ -376,3 +376,12 @@ add-item-page
     border:solid 1px black;
     border-radius: 10px;
 }
+#add-reason-refusal{
+    display: none;
+    position:absolute;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 60vh;
+    background-color: antiquewhite;
+}

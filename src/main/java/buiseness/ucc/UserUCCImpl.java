@@ -23,7 +23,7 @@ public class UserUCCImpl implements UserUCC {
   private DalServices myDalServices;
 
   @Override
-  public UserDTO login(String username, String password, boolean rememberMe) {
+  public UserDTO login(String username, String password) {
     try {
       myDalServices.start(false);
       User user = (User) myUserDAO.getOneByUsername(username);

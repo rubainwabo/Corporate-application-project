@@ -61,13 +61,13 @@ public class ItemDAOImpl implements ItemDAO {
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
-            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested, max(d._date), "
-            + "m.last_name,m.first_name "
-            + "from projet.items i,projet.item_type t,projet.dates d,projet.members m "
+            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested,"
+            + "m.last_name,m.first_name,m2.last_name,m2.first_name "
+            + "from projet.items i LEFT JOIN projet.members m2 on i.recipient=m2.user_id,"
+            + "projet.item_type t,projet.dates d,projet.members m "
             + "where i.id_item=? and i.item_type = "
             + "t.id_item_type and d.item=" + id
-            + " and m.user_id = i.offeror GROUP BY "
-            + "i.id_item,t.item_type_name,m.last_name,m.first_name")) {
+            + " and m.user_id = i.offeror")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
@@ -81,8 +81,10 @@ public class ItemDAOImpl implements ItemDAO {
         item.setTimeSlot(rs.getString(6));
         item.setItemCondition(rs.getString(7));
         item.setNumberOfPeopleInterested(rs.getInt(8));
-        item.setLastDateOffered(rs.getTimestamp(9));
-        item.setOfferor(rs.getString(10) + " " + rs.getString(11));
+        item.setOfferor(rs.getString(9) + " " + rs.getString(10));
+        if (rs.getString(11) != null) {
+          item.setRecipient(rs.getString(11) + " " + rs.getString(12));
+        }
         return item;
       }
     } catch (Exception e) {

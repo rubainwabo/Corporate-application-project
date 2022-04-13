@@ -99,7 +99,7 @@ public class ItemRessource {
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
     String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
-    
+
     int userId = (int) req.getProperty("id");
     if (callMe && !phoneNumber.isBlank() && updateNumber) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
@@ -149,5 +149,13 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> userGetLastItemsOfferedConnected() {
     return myItemUCC.getLastItemsOffered(true);
+  }
+
+  @POST
+  @Path("")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public void userObjectAssigned() {
+    
   }
 }

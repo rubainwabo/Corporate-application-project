@@ -1,7 +1,6 @@
 package buiseness.impl;
 
 import buiseness.domain.Item;
-import java.sql.Timestamp;
 
 public class ItemImpl implements Item {
 
@@ -13,22 +12,11 @@ public class ItemImpl implements Item {
   private String itemCondition;
   private String timeSlot;
   private String offeror;
-  private int recipient;
+  private String recipient;
   private String itemType;
   private int numberOfPeopleInterested;
-  private Timestamp lastDateOffered;
 
   public ItemImpl() {
-  }
-
-  @Override
-  public Timestamp getLastDateOffered() {
-    return lastDateOffered;
-  }
-
-  @Override
-  public void setLastDateOffered(Timestamp lastDateOffered) {
-    this.lastDateOffered = lastDateOffered;
   }
 
   @Override
@@ -112,12 +100,12 @@ public class ItemImpl implements Item {
   }
 
   @Override
-  public int getRecipient() {
+  public String getRecipient() {
     return recipient;
   }
 
   @Override
-  public void setRecipient(int recipient) {
+  public void setRecipient(String recipient) {
     this.recipient = recipient;
   }
 

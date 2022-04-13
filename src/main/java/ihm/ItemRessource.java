@@ -3,6 +3,7 @@ package ihm;
 import buiseness.dto.ItemDTO;
 import buiseness.ucc.ItemUCC;
 import buiseness.ucc.UserUCC;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -152,10 +153,15 @@ public class ItemRessource {
   }
 
   @POST
-  @Path("")
+  @Path("itemCollected/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public void userObjectAssigned() {
-    
+  public Response userItemCollectedOrNot(@PathParam("id") int itemId, JsonNode node) {
+    if (itemId <= 0 || !node.hasNonNull("itemCollected")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("information is missing").type("text/plain").build());
+    }
+    myItemUCC.ItemCollectedOrNot(itemId, node.get("itemCollected").asBoolean());
+    return Response.ok().build();
   }
 }

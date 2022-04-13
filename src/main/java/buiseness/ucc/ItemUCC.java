@@ -50,4 +50,6 @@ public interface ItemUCC {
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
 
   List<ItemDTO> getAllItemsOffered(int id);
+
+  void ItemCollectedOrNot(int itemId, boolean itemCollected);
 }

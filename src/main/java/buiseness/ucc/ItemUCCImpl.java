@@ -106,6 +106,7 @@ public class ItemUCCImpl implements ItemUCC {
     }
   }
 
+
   @Override
   public List<ItemDTO> getLastItemsOffered(boolean isConnected) {
     try {
@@ -122,6 +123,22 @@ public class ItemUCCImpl implements ItemUCC {
     } catch (Exception e) {
       try {
         myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
+    }
+  }
+
+  @Override
+  public void ItemCollectedOrNot(int itemId, boolean itemCollected) {
+    try {
+      myDalServices.start(true);
+      myItemDAOService.ItemCollectedOrNot(itemId, itemCollected);
+      myDalServices.commit(true);
+    } catch (Exception e) {
+      try {
+        myDalServices.rollBack();
       } catch (Exception ex) {
         throw new BizzException(ex);
       }

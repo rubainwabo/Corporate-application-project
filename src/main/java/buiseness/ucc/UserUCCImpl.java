@@ -179,10 +179,7 @@ public class UserUCCImpl implements UserUCC {
         myDalServices.rollBack();
         throw new UsernameAlreadyExists("username already exists");
       }
-      System.out.println("demande de l'id");
       int idUser = myUserDAO.register(user1);
-
-      //var userConnected = myTokenService.login(idUser, user.getUserName(), false);
       myDalServices.commit(true);
       return idUser;
     } catch (Exception e) {
@@ -193,7 +190,5 @@ public class UserUCCImpl implements UserUCC {
       }
       throw new BizzException(e);
     }
-
-
   }
 }

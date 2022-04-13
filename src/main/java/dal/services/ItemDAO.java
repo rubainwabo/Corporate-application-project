@@ -50,4 +50,6 @@ public interface ItemDAO {
    * @return a list of item
    */
   List<ItemDTO> getLastItemsOffered(int limit) throws SQLException;
+
+  void ItemCollectedOrNot(int itemId, boolean itemCollected);
 }

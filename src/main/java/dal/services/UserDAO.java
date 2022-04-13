@@ -30,14 +30,6 @@ public interface UserDAO {
   UserDTO getOneById(int id) throws SQLException;
 
   /**
-   * retrives to get the phone number of an user.
-   *
-   * @param userId the userId
-   * @return the phoneNumber
-   */
-  String getPhoneNumber(int userId) throws SQLException;
-
-  /**
    * update the phone number of the user.
    *
    * @param userId      the userId

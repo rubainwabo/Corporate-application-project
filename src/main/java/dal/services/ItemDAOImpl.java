@@ -36,11 +36,11 @@ public class ItemDAOImpl implements ItemDAO {
       ps.setString(6, item.getTimeSlot());
 
       try (PreparedStatement psIdItem = myBackService.getPreparedStatement(
-          "select id_item_type from projet.item_type where \"item_type_name\" = ? ")) {
+          "select id_item_type from projet.item_type where item_type_name = ? ")) {
         psIdItem.setString(1, item.getItemtype());
         try (ResultSet rsIdItem = psIdItem.executeQuery()) {
           if (!rsIdItem.next()) {
-            throw new FatalException("itemType does not exist");
+            throw new FatalException("Type d'item inexistant");
           }
           ps.setInt(5, rsIdItem.getInt(1));
         }
@@ -61,10 +61,13 @@ public class ItemDAOImpl implements ItemDAO {
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
-            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested, max(d._date) "
-            + "from projet.items i,projet.item_type t,projet.dates d "
+            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested, max(d._date), "
+            + "m.last_name,m.first_name "
+            + "from projet.items i,projet.item_type t,projet.dates d,projet.members m "
             + "where i.id_item=? and i.item_type = "
-            + "t.id_item_type and d.item=" + id + " GROUP BY i.id_item,t.item_type_name")) {
+            + "t.id_item_type and d.item=" + id
+            + " and m.user_id = i.offeror GROUP BY "
+            + "i.id_item,t.item_type_name,m.last_name,m.first_name")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
@@ -75,27 +78,15 @@ public class ItemDAOImpl implements ItemDAO {
         item.setItemtype(rs.getString(2));
         item.setDescription(rs.getString(3));
         item.setUrlPicture(rs.getString(4));
-
-        // PS to get first name + lastName of the offeror from the id of the previous PS
-        try (PreparedStatement psOfferorAsString = myBackService.getPreparedStatement(
-            "Select last_name,first_name from projet.members where user_id = " + rs.getInt(
-                5))) {
-          try (ResultSet rsOfferorAsString = psOfferorAsString.executeQuery()) {
-            if (!rsOfferorAsString.next()) {
-              throw new FatalException("Echec lors de la récupération de l'offreur");
-            }
-            String offeror =
-                rsOfferorAsString.getString(1) + " " + rsOfferorAsString.getString(2);
-            item.setOfferor(offeror);
-            item.setTimeSlot(rs.getString(6));
-            item.setItemCondition(rs.getString(7));
-            item.setNumberOfPeopleInterested(rs.getInt(8));
-            item.setLastDateOffered(rs.getTimestamp(9));
-            return item;
-          }
-        }
+        item.setTimeSlot(rs.getString(6));
+        item.setItemCondition(rs.getString(7));
+        item.setNumberOfPeopleInterested(rs.getInt(8));
+        item.setLastDateOffered(rs.getTimestamp(9));
+        item.setOfferor(rs.getString(10) + " " + rs.getString(11));
+        return item;
       }
     } catch (Exception e) {
+      e.printStackTrace();
       throw new FatalException(e);
     }
   }
@@ -109,7 +100,7 @@ public class ItemDAOImpl implements ItemDAO {
       ps.setInt(3, idItem);
       ps.executeUpdate();
       try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
-          "update projet.items set number_of_people_interested = number_of_people_interested + 1"
+          "update projet.items set number_of_people_interested = 1 + number_of_people_interested"
               + " where id_item = " + idItem)) {
         psNbrPeopleInteresed.executeUpdate();
       }
@@ -135,13 +126,21 @@ public class ItemDAOImpl implements ItemDAO {
             "Select username from projet.members where user_id = " + interestUserId)) {
           try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
             if (!rsInterestUserAsString.next()) {
-              throw new FatalException("prblm interesUserAsTring");
+              throw new FatalException(
+                  "Echec de la requete : récupération du username de "
+                      + "la personne interessé impossible");
             }
             interestUsrName = rsInterestUserAsString.getString(1);
           }
         }
+        String phoneNumerStr =
+            objectNode.get("callMe").asBoolean() && !objectNode.get("phoneNumber").asText()
+                .isBlank() ? ", vous pouvez la contacter sur via son numéro : " + objectNode.get(
+                    "phoneNumber")
+                .asText() + " " : " ";
+
         psNotif.setString(1,
-            interestUsrName + " est interessé par cette offre " + urlPicture);
+            interestUsrName + " est interessé par votre offre" + phoneNumerStr + urlPicture);
         psNotif.executeUpdate();
       }
     } catch (Exception e) {
@@ -159,7 +158,7 @@ public class ItemDAOImpl implements ItemDAO {
         }
         if (rsVerifyUser.getInt(1) != userId) {
           throw new FatalException(
-              "cet utilisateur n'a pas le droit d'éffectuer cette requete");
+              "cet utilisateur n'est pas l'auteur de l'offre, il ne peut donc pas l'annuler");
         }
         try (PreparedStatement psCancelOffer = myBackService.getPreparedStatement(
             "update projet.items set item_condition = 'cancelled' where id_item = "

@@ -81,7 +81,10 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneById(int id) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select user_id, state, _role from projet.members where user_id=?")) {
+        "select user_id, state, _role,username,reason_for_connection_refusal,"
+            + "last_name,first_name,city,street,postCode,building_number,"
+            + "unit_number,url_picture,phone_number from "
+            + "projet.members where user_id=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();
@@ -91,23 +94,18 @@ public class UserDAOImpl implements UserDAO {
         user.setId(rs.getInt(1));
         user.setState(rs.getString(2));
         user.setRole(rs.getString(3));
-
+        user.setUserName(rs.getString(4));
+        user.setReasonForConnectionRefusal(rs.getString(5));
+        user.setLastName(rs.getString(6));
+        user.setFirstName(rs.getString(7));
+        user.setCity(rs.getString(8));
+        user.setStreet(rs.getString(9));
+        user.setPostCode(rs.getInt(10));
+        user.setBuildingNumber(rs.getInt(11));
+        user.setUnitNumber(rs.getInt(12));
+        user.setUrlPhoto(rs.getString(13));
+        user.setPhoneNumber(rs.getString(14));
         return user;
-      }
-    } catch (Exception e) {
-      throw new FatalException(e);
-    }
-  }
-
-  @Override
-  public String getPhoneNumber(int userId) {
-    try (PreparedStatement psPhoneNumber = myDalService.getPreparedStatement(
-        "select phone_number from projet.members where user_id = " + userId)) {
-      try (ResultSet rsPhoneNumber = psPhoneNumber.executeQuery()) {
-        if (!rsPhoneNumber.next()) {
-          return "";
-        }
-        return rsPhoneNumber.getString(1);
       }
     } catch (Exception e) {
       throw new FatalException(e);
@@ -139,7 +137,6 @@ public class UserDAOImpl implements UserDAO {
             + refusalReason + "', _role = '" + role + (state.equals("valid")
             ? "',reason_for_connection_refusal = null" : "'")
             + " where user_id = " + userId;
-    System.out.println(query);
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();

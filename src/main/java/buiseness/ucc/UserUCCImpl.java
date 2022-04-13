@@ -2,15 +2,12 @@ package buiseness.ucc;
 
 import buiseness.domain.User;
 import buiseness.dto.UserDTO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import java.util.List;
-import utils.TokenService;
 import utils.exception.BizzException;
 import utils.exception.InvalidStateException;
-import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserOnHoldException;
@@ -21,9 +18,6 @@ public class UserUCCImpl implements UserUCC {
 
   @Inject
   private UserDAO myUserDAO;
-
-  @Inject
-  private TokenService myTokenService;
 
   @Inject
   private DalServices myDalServices;
@@ -55,15 +49,6 @@ public class UserUCCImpl implements UserUCC {
       }
       throw new BizzException(e);
     }
-  }
-
-  @Override
-  public ObjectNode refreshToken(String token) {
-    if (!myTokenService.isJWT(token) || !myTokenService.verifyRefreshToken(token)) {
-      throw new InvalidTokenException("invalid token");
-    }
-    var userId = myTokenService.getUserId(token);
-    return myTokenService.getRefreshedTokens(userId);
   }
 
   @Override

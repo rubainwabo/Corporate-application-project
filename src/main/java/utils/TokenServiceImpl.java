@@ -5,10 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.util.Base64;
 import java.util.Date;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class TokenServiceImpl implements TokenService {
@@ -62,45 +59,6 @@ public class TokenServiceImpl implements TokenService {
     return jsonMapper.createObjectNode()
         .put("tokenRefresh", tokenRefresh)
         .put("accessToken", tokenAccess);
-  }
-
-  @Override
-  public boolean verifyRefreshToken(String token) {
-    try {
-      // check if the token is expired, and if it uses the right algo + the right secret JTW
-      JWT.require(jwtAlgorithmRefresh).withIssuer("auth0").build().verify(token);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
-    }
-    return true;
-  }
-
-
-  @Override
-  public boolean isJWT(String token) {
-    String[] jwtSplitted = token.split("\\.");
-    // The JWT is composed of three parts
-    if (jwtSplitted.length != 3) {
-      return false;
-    }
-    try {
-      String jsonFirstPart = new String(Base64.getDecoder().decode(jwtSplitted[0]));
-      // The first part of the JWT is a JSON
-      JSONObject firstPart = new JSONObject(jsonFirstPart);
-      // The first part has the attribute "alg"
-      if (!firstPart.has("alg")) {
-        return false;
-      }
-    } catch (JSONException err) {
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  public int getUserId(String token) {
-    return JWT.decode(token).getClaim("user").asInt();
   }
 
   @Override

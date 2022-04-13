@@ -80,7 +80,6 @@ public class UserRessource {
         || user.getLastName() == null || user.getLastName().isBlank()
         || user.getFirstName() == null || user.getFirstName().isBlank()
         || user.getPassword() == null || user.getPassword().isBlank()) {
-      System.out.println("helllo");
       throw new WebApplicationException(
           Response.status(Response.Status.BAD_REQUEST).entity("Lacks of mandatory info")
               .type("text/plain").build());

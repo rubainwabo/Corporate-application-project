@@ -2,13 +2,12 @@ package buiseness.impl;
 
 import buiseness.domain.Date;
 import buiseness.dto.DateDTO;
-import buiseness.dto.ItemDTO;
 
 public class DateImpl implements Date {
 
   private int idDate;
   private DateDTO date;
-  private ItemDTO item;
+  private int item;
 
   public DateImpl() {
   }
@@ -34,12 +33,12 @@ public class DateImpl implements Date {
   }
 
   @Override
-  public ItemDTO getItem() {
+  public int getItem() {
     return item;
   }
 
   @Override
-  public void setItem(ItemDTO item) {
+  public void setItem(int item) {
     this.item = item;
   }
 }

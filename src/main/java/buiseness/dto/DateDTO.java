@@ -10,7 +10,7 @@ public interface DateDTO {
 
   void setDate(DateDTO date);
 
-  ItemDTO getItem();
+  int getItem();
 
-  void setItem(ItemDTO item);
+  void setItem(int item);
 }

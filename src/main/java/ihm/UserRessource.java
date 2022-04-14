@@ -59,10 +59,8 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
-    var user = myUserUCC.login(username, password, rememberMe);
-    var token = myTokenService.login(user.getId(), username, rememberMe);
-    token.put("role", user.getRole());
-    return token;
+    var user = myUserUCC.login(username, password);
+    return myTokenService.login(user, rememberMe);
   }
 
   /**

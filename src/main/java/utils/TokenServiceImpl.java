@@ -1,5 +1,6 @@
 package utils;
 
+import buiseness.dto.UserDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -35,7 +36,8 @@ public class TokenServiceImpl implements TokenService {
   }
 
   @Override
-  public ObjectNode login(int id, String username, boolean rememberMe) {
+  public ObjectNode login(UserDTO user, boolean rememberMe) {
+    int id = user.getId();
     String tokenAccess = this.createToken(id, jwtAlgorithmAccess, tokenAccessLifeTime);
     String tokenRefresh = null;
     // if he wants to be remembered, we add a refresh token
@@ -47,8 +49,10 @@ public class TokenServiceImpl implements TokenService {
         .put("tokenRefresh", tokenRefresh)
         .put("accessToken", tokenAccess)
         .put("id", id)
-        .put("username", username)
-        .put("rememberMe", rememberMe);
+        .put("username", user.getUserName())
+        .put("rememberMe", rememberMe)
+        .put("role", user.getRole());
+
   }
 
   @Override

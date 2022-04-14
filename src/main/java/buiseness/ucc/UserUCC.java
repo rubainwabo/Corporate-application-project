@@ -20,10 +20,10 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
 
-  UserDTO login(String username, String password, boolean rememberMe)
+  UserDTO login(String username, String password)
       throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
       UserOnHoldException, UserInvalidException;
-  
+
   boolean changeState(int id, String state, String refusalReason, boolean admin)
       throws InvalidStateException, InvalidStateException;
 

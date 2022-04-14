@@ -1,5 +1,6 @@
 package utils;
 
+import buiseness.dto.UserDTO;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -19,12 +20,11 @@ public interface TokenService {
   /**
    * will create an objectNode containing all user information (id, token(s),username,rememberMe).
    *
-   * @param id         user id
-   * @param username   user username
+   * @param user       the user
    * @param rememberMe if he want to be remembered
    * @return an objectNode containing all user information
    */
-  ObjectNode login(int id, String username, boolean rememberMe);
+  ObjectNode login(UserDTO user, boolean rememberMe);
 
   /**
    * creates a refresh and access tokens.

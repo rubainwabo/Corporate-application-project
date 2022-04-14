@@ -105,4 +105,5 @@ target/
 
 prod.properties
 test.properties
+log/
 

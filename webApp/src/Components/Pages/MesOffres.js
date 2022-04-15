@@ -20,7 +20,7 @@ const home = `<section id="home-page">
 </section>
 `;
 
-const MesOffres = async (id) => {
+const MesOffres = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
 

@@ -288,7 +288,7 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public int checkUserEligibility(int id, int itemId) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select recipient from projet.items where id_item=" + itemId)) {
+        "select offeror from projet.items where id_item=" + itemId)) {
       try (ResultSet rs = ps.executeQuery()) {
         if (!rs.next()) {
           throw new FatalException("Aucun résultat pour votre requête");

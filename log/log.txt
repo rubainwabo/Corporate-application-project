@@ -3847,3 +3847,57 @@ org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThread
 org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
 java.base/java.lang.Thread.run(Thread.java:833)
 
+15/04/22 18:19
+Message d'erreur : HTTP 404 Not Found
+StackTrace : 
+org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+java.base/java.lang.Thread.run(Thread.java:833)
+
+15/04/22 18:21
+Message d'erreur : HTTP 404 Not Found
+StackTrace : 
+org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+java.base/java.lang.Thread.run(Thread.java:833)
+
+15/04/22 18:21
+Message d'erreur : HTTP 404 Not Found
+StackTrace : 
+org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+java.base/java.lang.Thread.run(Thread.java:833)
+

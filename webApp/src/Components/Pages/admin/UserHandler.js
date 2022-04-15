@@ -2,16 +2,22 @@ import { getSessionObject } from "../../../utils/session";
 import { Redirect } from "../../Router/Router";
 
 const userHandler = `
+<div id="switch-list-users">
+  <div id="in-toggle-list-user">
+  <div id="text-state-list-user">
+  <p id="state-user-handler">ATTENTE</p>
+  </div>
+     <label class="switch">
+     <input type="checkbox">
+     <span class="slider round" ></span>
+     </label>
+  </div>
+</div>
 <section id="user-handler-page">
-<form name="formA">
-   <div id="switch-list-users">
-        <label for="on-hold">En attente</label>
-        <input value="waiting" type="radio" name="user-state" id="on-hold" checked >
-        <label for="refusal">refusé</label>
-        <input value="denied" type="radio"  name="user-state" id="refusal" > 
-   </div>
+
+<form name="formA" style="margin-left:auto;">
    </form>
-   <div id="test">
+   <div id="user-handler-list">
    </div>
 
    <div id="add-reason-refusal">
@@ -31,38 +37,40 @@ const userHandler = `
 `;
 
 const UserHandler = () => {
+  
     let accesToken = getSessionObject("accessToken");
     const pageDiv = document.querySelector("#page");
     pageDiv.innerHTML = userHandler;
-    // first request for waiting user
-    request(accesToken,"waiting");
-    var radios = document.forms["formA"].elements["user-state"];
-    radios.forEach(element => {
-        element.addEventListener("click",async () => {
-            // call the api on every request
-            request(accesToken,element.value);
-        });
+    // default request of the page
+    gettAllByState(accesToken,"waiting");
+    const stateUserList = document.getElementById("state-user-handler")
+    document.querySelector(".slider.round").addEventListener("click", () => {
+      if (stateUserList.innerHTML == "ATTENTE"){
+        stateUserList.innerHTML="REFUSÉ"
+        gettAllByState(accesToken,"denied");
+      }else {
+        stateUserList.innerHTML="ATTENTE"
+        gettAllByState(accesToken,"waiting");
+      }
     })
   };
+
   let currentUser;
-  async function request (accesToken,state) {
-    console.log(accesToken);
+  async function gettAllByState (accesToken,state) {
     try {
         const option = {
             headers: {
               "token":accesToken
         }
       }
-        // hide data to inform if the pizza menu is already printed
         const response = await fetch("/api/members/list?state="+state,option); // fetch return a promise => we wait for the response   
      if(!response.ok){
         return Redirect("/");
      }
      const items = await response.json();
-     var test = document.getElementById("test");
-     test.innerHTML="";
+     var userHandlerList = document.getElementById("user-handler-list");
+     userHandlerList.innerHTML="";
      items.forEach((e) => {
-         console.log(e)
          const divUserHandler = document.createElement("div");
          const pFirstName = document.createElement("p");
          const pLastName = document.createElement("p");
@@ -76,6 +84,7 @@ const UserHandler = () => {
          const deniedBtn = document.createElement("button");
     
          divUserHandler.classList="user-to-handle";
+         divUserHandler.id=e.id;
          // checkbox admin + last name and first name
          divIsAdminBox.classList="is-admin-box";
          pFirstName.innerHTML=e.firstName
@@ -110,14 +119,41 @@ const UserHandler = () => {
           });
          validBtn.addEventListener("click", () => {
              addOrRefuse(e.id,"valid","",accesToken,inputCheckBox)});
-         test.appendChild(divUserHandler)
+        divUserHandler.addEventListener("click",() => {
+          getUserInformation(e.id,accesToken);
+        })
+        userHandlerList.appendChild(divUserHandler)
      })
     } catch (error) {
+
     } 
+  }
+  async function getUserInformation (id,accesToken) {
+    try {
+      const options = {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          "token":accesToken
+      },
+      };
+      const response = await fetch("/api/members/details?id="+id, options); // fetch return a promise => we wait for the response
+
+      if (!response.ok) {
+        response.text().then((result)=>{
+          document.getElementById("error").innerText=result;
+        })
+        throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
+      const user = await response.json(); // json() returns a promise => we wait for the data
+      console.log(user);
+  } catch (error) {
+      console.error("LoginPage::error: ", error);
+    }
   }
   async function  addOrRefuse(id,state,rsnRefusal,accesToken,admin){
     try {
-       
         let body1 = rsnRefusal !=""? JSON.stringify( {
             "change_id" : id,
               "state" : state,
@@ -136,7 +172,6 @@ const UserHandler = () => {
             "Content-Type": "application/json"
         },
         };
-        console.log(options.body)
         const response = await fetch("/api/members/changeState", options); // fetch return a promise => we wait for the response
   
         if (!response.ok) {
@@ -148,7 +183,6 @@ const UserHandler = () => {
           );
         }
         const user = await response.json(); // json() returns a promise => we wait for the data
-        console.log("voici ce que je cherche : " + user);
         Redirect("/userhandeler");
     } catch (error) {
         console.error("LoginPage::error: ", error);

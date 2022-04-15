@@ -6,6 +6,7 @@ import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
 import MesOffres from "../Pages/MesOffres";
+import MemberList from "../Pages/admin/MemberList";
 
 // Configure your routes here
 const routes = {
@@ -16,7 +17,8 @@ const routes = {
   '/register':Register,
   '/additem':AddItemPage,
   '/userhandeler':UserHandler,
-  '/mesOffres' : MesOffres
+  '/mesOffres' : MesOffres,
+  '/memberList' : MemberList
 };
 
 /**

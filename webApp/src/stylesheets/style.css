@@ -340,30 +340,31 @@ add-item-page
 
 #user-handler-page{
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     align-self: center;
-    justify-self: center; 
-    width: 80%;
-    height: 90vh;
-    
+    justify-self: center;
+    width: 872px;
+
     
 }
 #switch-list-users{
-    margin-bottom: 10px;
-    align-self: flex-end;
-    
+    width: 100%;  
+    padding-bottom: 2vh;
+    padding-top: 10vh;
+  
 }
 .user-to-handle{
     display: flex;
-    width: 100vh;
+    width: 100%;
     border: 0.5px solid black;
     justify-content: space-between;
     align-items: center;
     padding-left: 10px;
     padding-right: 10px;
     margin-bottom: 10px;
+    cursor:pointer;
 }
 .is-admin-box{
    text-align: center;
@@ -384,4 +385,112 @@ add-item-page
     height: 50vh;
     width: 60vh;
     background-color: antiquewhite;
+}
+
+#user-handler-list{
+    width: 100%;
+}
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    border: solid 1px black;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: black;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  #in-toggle-list-user{
+    width: 872px;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    height: 4vh;
+    justify-content: end;
+  }
+  #text-state-list-user{
+    text-align: center;
+    line-height: 28px;
+    padding-right: 20px;
+}
+#state-user-handler {
+    border: solid;
+    border-radius: 100px;
+    height: 32px;
+    width: 176px;
+}
+#member-list-checkbox-in{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-top: 10px;
+}
+#container-research-member-list{
+    display: flex;
+  
+}
+#container-research-member-list input
+{
+    width: 200px;
+    border: solid 1px grey;
+    border-radius: 2px 0px 0px 2px;
+}
+#container-i-member-list{
+    height: 100%;
+    padding-left: 2px;
+    padding-top: 3px;
+    width: 36px;
+    border: solid 1px grey;
+    text-align: center;
+    border-radius: 0px 2px 2px 0px; 
+}
+.checkbox-member-list{
+    padding-right: 5px;
 }

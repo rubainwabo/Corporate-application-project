@@ -54,6 +54,7 @@ const Navbar = () => {
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> liste des utilisateurs </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/memberList"> liste des membres </a></div>
           </div>
          
 

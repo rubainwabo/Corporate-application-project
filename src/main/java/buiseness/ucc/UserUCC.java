@@ -49,4 +49,6 @@ public interface UserUCC {
   void addPhoneNumber(int userId, String phoneNumber);
 
   int register(UserDTO user);
+
+  List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
 }

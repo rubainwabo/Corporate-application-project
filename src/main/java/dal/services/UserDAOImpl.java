@@ -6,6 +6,7 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,6 +145,41 @@ public class UserDAOImpl implements UserDAO {
       throw new FatalException(e);
     }
   }
+
+  @Override
+  public List<UserDTO> getAllUserFiltred(String name, String city, String postCode) {
+    String queryName = name.isBlank() ? "" : "last_name like '" + name + "%' ";
+    String queryCity, queryPostCode = "";
+    if (name.isBlank() && !city.isBlank()) {
+      queryCity = "city like '" + city + "%' ";
+    } else {
+      if (!name.isBlank() && !city.isBlank()) {
+        queryCity = "or city like '" + city + "%' ";
+      } else {
+        queryCity = "";
+      }
+    }
+    if (!postCode.isBlank()) {
+      if (!name.isBlank() || !city.isBlank()) {
+        queryPostCode = "or CAST(postCode AS TEXT) like '" + postCode + "%'";
+      } else {
+        queryPostCode = "CAST(postCode AS TEXT) like '" + postCode + "%'";
+      }
+    } else {
+      queryPostCode = "";
+    }
+    String query =
+        !name.isBlank() || !city.isBlank() || !postCode.isBlank()
+            ? "select * from projet.members where " + queryName + queryCity + queryPostCode
+            : "select * from projet.members";
+    System.out.println(query);
+    try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
 
   @Override
   public int register(UserDTO user) {

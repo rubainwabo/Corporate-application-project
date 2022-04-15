@@ -136,7 +136,7 @@ const UserHandler = () => {
           "token":accesToken
       },
       };
-      const response = await fetch("/api/members/details?id="+id, options); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/admins/details?id="+id, options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
         response.text().then((result)=>{
@@ -172,7 +172,7 @@ const UserHandler = () => {
             "Content-Type": "application/json"
         },
         };
-        const response = await fetch("/api/members/changeState", options); // fetch return a promise => we wait for the response
+        const response = await fetch("/api/admins/changeState", options); // fetch return a promise => we wait for the response
   
         if (!response.ok) {
           response.text().then((result)=>{

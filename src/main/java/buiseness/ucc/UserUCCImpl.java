@@ -191,4 +191,21 @@ public class UserUCCImpl implements UserUCC {
       throw new BizzException(e);
     }
   }
+
+  @Override
+  public List<UserDTO> getAllUserFiltred(String name, String city, String postCode) {
+    try {
+      myDalServices.start(false);
+      var memberFiltred = myUserDAO.getAllUserFiltred(name, city, postCode);
+      myDalServices.commit(false);
+      return memberFiltred;
+    } catch (Exception e) {
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
+    }
+  }
 }

@@ -48,4 +48,6 @@ public interface UserDAO {
    */
   void changeState(int userId, String newState, String newRefusalReason, boolean admin)
       throws SQLException;
+
+  List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
 }

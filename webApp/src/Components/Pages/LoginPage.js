@@ -2,7 +2,7 @@ import { Redirect } from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 
 import { setSessionObject,getSessionObject } from "../../utils/session";
-/**
+/** 
  * Render the LoginPage
  */
 const affichage = `

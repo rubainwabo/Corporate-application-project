@@ -345,7 +345,7 @@ add-item-page
     align-items: center;
     align-self: center;
     justify-self: center;
-    width: 872px;
+    width: 991px;
 
     
 }
@@ -448,7 +448,7 @@ add-item-page
   }
 
   #in-toggle-list-user{
-    width: 872px;
+    width: 991px;
     height: 50px;
     margin: 0 auto;
     display: flex;

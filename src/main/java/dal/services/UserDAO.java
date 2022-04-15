@@ -1,7 +1,6 @@
 package dal.services;
 
 import buiseness.dto.UserDTO;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDAO {
@@ -12,14 +11,14 @@ public interface UserDAO {
    * @param username the user username
    * @return the found user or null if it does not exist
    */
-  UserDTO getOneByUsername(String username) throws SQLException;
+  UserDTO getOneByUsername(String username);
 
   /**
    * allows to retrieve all the users of the db with the state in the parameters.
    *
    * @return returns a list of users with the state in parameter
    */
-  List<UserDTO> getAllUserByState(String state) throws SQLException;
+  List<UserDTO> getAllUserByState(String state);
 
   /**
    * retrives to get an user by the id in params.
@@ -27,7 +26,7 @@ public interface UserDAO {
    * @param id the user id
    * @return the user finded
    */
-  UserDTO getOneById(int id) throws SQLException;
+  UserDTO getOneById(int id);
 
   /**
    * update the phone number of the user.
@@ -35,7 +34,7 @@ public interface UserDAO {
    * @param userId      the userId
    * @param phoneNumber the user phoneNumber
    */
-  void addPhoneNumber(int userId, String phoneNumber) throws SQLException;
+  void addPhoneNumber(int userId, String phoneNumber);
 
   int register(UserDTO user);
 
@@ -46,6 +45,5 @@ public interface UserDAO {
    * @param newState         : state we want to put
    * @param newRefusalReason : his refusal reason
    */
-  void changeState(int userId, String newState, String newRefusalReason, boolean admin)
-      throws SQLException;
+  void changeState(int userId, String newState, String newRefusalReason, boolean admin);
 }

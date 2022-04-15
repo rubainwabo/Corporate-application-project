@@ -59,4 +59,12 @@ public interface UserUCC {
   void addPhoneNumber(int userId, String phoneNumber);
 
   int register(UserDTO user);
+
+  /**
+   * get all users who are interested in the item with the id idItem
+   *
+   * @param idItem the id of the item
+   * @return all users who are interested
+   */
+  List<UserDTO> getUsersIterest(int idItem);
 }

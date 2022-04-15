@@ -56,4 +56,12 @@ public interface UserDAO {
    */
   void changeState(int userId, String newState, String newRefusalReason, boolean admin)
       throws SQLException;
+
+  /**
+   * get all users who are interested in the item with the id idItem
+   *
+   * @param idItem the id of the item
+   * @return all users who are interested
+   */
+  List<UserDTO> getUserInterest(int idItem);
 }

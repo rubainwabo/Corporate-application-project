@@ -220,4 +220,42 @@ public class ItemDAOImpl implements ItemDAO {
     }
   }
 
+  @Override
+  public int addRecipient(int idItem, int idRecipient) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(""
+        + "update projet.items set recipient=" + idRecipient + "WHERE id_item=" + idItem)) {
+
+      ps.executeUpdate();
+
+      try (PreparedStatement psNotif = myBackService.getPreparedStatement(
+          "INSERT INTO projet.notifications (id_notification,is_viewed,text,person,item)"
+              + " VALUES (default,false,?,?,?)"
+      )) {
+        psNotif.setString(1, "hello");
+        psNotif.setInt(2, idRecipient);
+        psNotif.setInt(3, idItem);
+
+        return psNotif.executeUpdate();
+      }
+
+
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public int updateItem(ItemDTO item) {
+    try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
+        "UPDATE projet.items set description=?, url_picture=?,time_slot=? WHERE id_item="
+            + item.getId()
+    )) {
+      psUpdate.setString(1, item.getDescription());
+      psUpdate.setString(2, item.getUrlPicture());
+      psUpdate.setString(3, item.getTimeSlot());
+      return psUpdate.executeUpdate();
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
 }

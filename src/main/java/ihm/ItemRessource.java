@@ -149,4 +149,30 @@ public class ItemRessource {
   public List<ItemDTO> userGetLastItemsOfferedConnected() {
     return myItemUCC.getLastItemsOffered(true);
   }
+
+  /**
+   *
+   */
+  @POST
+  @Path("addRecipient/{idItem}/{idRecipient}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public int userAddRecipient(@PathParam("idItem") int idItem,
+      @PathParam("idRecipient") int idRecipient) {
+    if (idItem <= 0 || idRecipient <= 0) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("information is missing").type("text/plain").build());
+    }
+    return myItemUCC.addRecipient(idItem, idRecipient);
+
+  }
+
+  /**
+   * r
+   */
+  @POST
+  @Path("update")
+  @Produces(MediaType.APPLICATION_JSON)
+  public int userUpdateItem(ItemDTO item) {
+    return myItemUCC.updateItem(item);
+  }
 }

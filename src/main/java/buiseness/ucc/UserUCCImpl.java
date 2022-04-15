@@ -208,4 +208,16 @@ public class UserUCCImpl implements UserUCC {
 
 
   }
+
+  @Override
+  public List<UserDTO> getUsersIterest(int idItem) {
+    try {
+      myDalServices.start(false);
+      List<UserDTO> list = myUserDAO.getUserInterest(idItem);
+      myDalServices.commit(false);
+      return list;
+    } catch (Exception e) {
+      throw new BizzException(e);
+    }
+  }
 }

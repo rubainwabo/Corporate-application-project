@@ -7,7 +7,6 @@ import dal.services.DateDAO;
 import dal.services.ItemDAO;
 import jakarta.inject.Inject;
 import java.util.List;
-import utils.exception.BizzException;
 
 public class ItemUCCImpl implements ItemUCC {
 
@@ -23,109 +22,83 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public int addItem(ItemDTO item, int userId) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       int itemId = myItemDAOService.addItem(item, userId);
       myDateDAOService.addDate(itemId);
-      myDalServices.commit(true);
+      myDalServices.commit();
       return itemId;
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
   public ItemDTO getDetails(int id) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       var item = myItemDAOService.getOneById(id);
-      myDalServices.commit(false);
+      myDalServices.commit();
       return item;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.commit();
+      throw e;
     }
   }
 
   @Override
   public void addInterest(int itemId, ObjectNode objectNode, int userId) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       myItemDAOService.addInterest(itemId, objectNode, userId);
-      myDalServices.commit(true);
+      myDalServices.commit();
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
   public void cancelOffer(int idItem, int userId) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       myItemDAOService.cancelOffer(idItem, userId);
-      myDalServices.commit(true);
+      myDalServices.commit();
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
   public List<ItemDTO> getAllItemsOffered(int id) {
     try {
-      myDalServices.start(false);
-      List<ItemDTO> list;
-
-      list = myItemDAOService.getAllOffered(id);
-      myDalServices.commit(false);
+      myDalServices.start();
+      List<ItemDTO> list = myItemDAOService.getAllOffered(id);
+      myDalServices.commit();
       return list;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
   public List<ItemDTO> getLastItemsOffered(boolean isConnected) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       List<ItemDTO> list;
       if (isConnected) {
         list = myItemDAOService.getLastItemsOffered(0);
-        myDalServices.commit(false);
+        myDalServices.commit();
         return list;
       }
       list = myItemDAOService.getLastItemsOffered(12);
-      myDalServices.commit(false);
+      myDalServices.commit();
       return list;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 }

@@ -5,6 +5,7 @@ import buiseness.dto.UserDTO;
 import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import utils.exception.BizzException;
 import utils.exception.InvalidStateException;
@@ -199,6 +200,26 @@ public class UserUCCImpl implements UserUCC {
       var memberFiltred = myUserDAO.getAllUserFiltred(name, city, postCode);
       myDalServices.commit(false);
       return memberFiltred;
+    } catch (Exception e) {
+      try {
+        myDalServices.commit(false);
+      } catch (Exception ex) {
+        throw new BizzException(ex);
+      }
+      throw new BizzException(e);
+    }
+  }
+
+  @Override
+  public List<String> getAutocompleteList(String val) {
+    if (val.isBlank()) {
+      return new ArrayList<>();
+    }
+    try {
+      myDalServices.start(false);
+      var autocompleteList = myUserDAO.getAutocompleteList(val);
+      myDalServices.commit(false);
+      return autocompleteList;
     } catch (Exception e) {
       try {
         myDalServices.commit(false);

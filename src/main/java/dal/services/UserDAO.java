@@ -50,4 +50,6 @@ public interface UserDAO {
       throws SQLException;
 
   List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
+
+  List<String> getAutocompleteList(String val);
 }

@@ -4,7 +4,7 @@ import {Redirect} from "../../Router/Router";
 const userHandler = `
 <section id="home-page">
 <div id="home-page-navigation">
-    <h2 id="home-page-title"> Listes des membres</h2>
+    <h2 id="home-page-title"> Listes des personnes en attentes/refusées</h2>
 </div>
 </section>
 <div id="switch-list-users">

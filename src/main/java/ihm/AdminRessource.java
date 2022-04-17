@@ -26,9 +26,17 @@ public class AdminRessource {
   @GET
   @Path("list/filtred")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> adminListByFilters(@QueryParam("name") String name,
+  public List<UserDTO> adminMemberListFiltred(@QueryParam("name") String name,
       @QueryParam("city") String city, @QueryParam("postCode") String postCode) {
     return myUserUCC.getAllUserFiltred(name, city, postCode);
+  }
+
+  @GET
+  @Path("autocompleteList")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<String> adminAutoComplete(@QueryParam("value") String val) {
+
+    return myUserUCC.getAutocompleteList(val);
   }
 
 

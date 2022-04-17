@@ -51,4 +51,6 @@ public interface UserUCC {
   int register(UserDTO user);
 
   List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
+
+  List<String> getAutocompleteList(String val);
 }

@@ -92,20 +92,7 @@ public class UserDAOImpl implements UserDAO {
         if (!rs.next()) {
           return null;
         }
-        user.setId(rs.getInt(1));
-        user.setState(rs.getString(2));
-        user.setRole(rs.getString(3));
-        user.setUserName(rs.getString(4));
-        user.setReasonForConnectionRefusal(rs.getString(5));
-        user.setLastName(rs.getString(6));
-        user.setFirstName(rs.getString(7));
-        user.setCity(rs.getString(8));
-        user.setStreet(rs.getString(9));
-        user.setPostCode(rs.getInt(10));
-        user.setBuildingNumber(rs.getInt(11));
-        user.setUnitNumber(rs.getInt(12));
-        user.setUrlPhoto(rs.getString(13));
-        user.setPhoneNumber(rs.getString(14));
+        getAllUserInfo(rs, user);
         return user;
       }
     } catch (Exception e) {
@@ -170,14 +157,90 @@ public class UserDAOImpl implements UserDAO {
     }
     String query =
         !name.isBlank() || !city.isBlank() || !postCode.isBlank()
-            ? "select * from projet.members where " + queryName + queryCity + queryPostCode
-            : "select * from projet.members";
-    System.out.println(query);
+            ? "select user_id, state, _role,username,reason_for_connection_refusal,"
+            + "last_name,first_name,city,street,postCode,building_number,"
+            + "unit_number,url_picture,phone_number from projet.members where " + queryName
+            + queryCity + queryPostCode
+            : "";
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
+      ArrayList<UserDTO> userDTOS = new ArrayList<>();
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          UserDTO user = myDomainFactory.getUser();
+          getAllUserInfo(rs, user);
+          userDTOS.add(user);
+        }
+        return userDTOS;
+      }
     } catch (SQLException e) {
       e.printStackTrace();
     }
     return null;
+  }
+
+  @Override
+  public List<String> getAutocompleteList(String val) {
+    /*
+    boolean isName, isCity, isPostCode;
+    String query = "";
+    isName = !name.isBlank();
+    isCity = !city.isBlank();
+    isPostCode = !postCode.isBlank();
+    if (isName) {
+      query += "select DISTINCT last_name from projet.members where UPPER(last_name) like '"
+          + name
+          + "%'";
+    }
+    if (isCity) {
+      query += isName
+          ? " UNION select DISTINCT city from projet.members where UPPER(city) like '" + city
+          + "%'" : "select DISTINCT city from projet.members where UPPER(city) like '" + city
+          + "%'";
+    }
+    if (isPostCode) {
+      query +=
+          isName || isCity ?
+              " UNION select DISTINCT CAST(postCode as TEXT) from projet.members where CAST(postCode AS TEXT) like '"
+                  + postCode + "%'"
+              : "select DISTINCT CAST(postCode as TEXT) from projet.members where CAST(postCode AS TEXT) like '"
+                  + postCode + "%'";
+    }
+     */
+    String query = "select DISTINCT last_name from projet.members where UPPER(last_name) like '"
+        + val + "%'" + " UNION select DISTINCT city from projet.members where UPPER(city) like '"
+        + val + "%'"
+        + " UNION select DISTINCT CAST(postCode as TEXT) from projet.members where CAST(postCode AS TEXT) like '"
+        + val + "%'";
+    try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
+      ArrayList<String> stringArrayList = new ArrayList<>();
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          stringArrayList.add(rs.getString(1));
+        }
+        return stringArrayList;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+
+  private void getAllUserInfo(ResultSet rs, UserDTO user) throws SQLException {
+    user.setId(rs.getInt(1));
+    user.setState(rs.getString(2));
+    user.setRole(rs.getString(3));
+    user.setUserName(rs.getString(4));
+    user.setReasonForConnectionRefusal(rs.getString(5));
+    user.setLastName(rs.getString(6));
+    user.setFirstName(rs.getString(7));
+    user.setCity(rs.getString(8));
+    user.setStreet(rs.getString(9));
+    user.setPostCode(rs.getInt(10));
+    user.setBuildingNumber(rs.getInt(11));
+    user.setUnitNumber(rs.getInt(12));
+    user.setUrlPhoto(rs.getString(13));
+    user.setPhoneNumber(rs.getString(14));
   }
 
 

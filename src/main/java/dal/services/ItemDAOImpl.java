@@ -186,13 +186,13 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public List<ItemDTO> getAllOffered(int id) {
+  public List<ItemDTO> getMyItems(int id, String state) {
     String query =
         "select id_item, description, url_picture, "
             + "it.item_type_name,number_of_people_interested "
             + "from projet.items i, projet.item_type it "
             + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
-            + "and i.item_condition != 'cancelled'";
+            + "and i.item_condition =" + state;
     return getItemDTOS(query);
 
   }

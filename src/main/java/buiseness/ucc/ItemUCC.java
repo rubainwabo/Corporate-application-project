@@ -49,7 +49,7 @@ public interface ItemUCC {
    */
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
 
-  List<ItemDTO> getAllItemsOffered(int id);
+  List<ItemDTO> getMyItems(int id, String state);
 
   /**
    * call to add recipient to a item.

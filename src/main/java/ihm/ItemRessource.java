@@ -31,7 +31,7 @@ public class ItemRessource {
 
 
   /**
-   * gets list of offers of the user
+   * gets list of offers of the user.
    *
    * @return items
    */
@@ -97,10 +97,11 @@ public class ItemRessource {
           .entity("information is missing").type("text/plain").build());
     }
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
+    boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
     String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
-
+    
     int userId = (int) req.getProperty("id");
-    if (callMe && !phoneNumber.isBlank()) {
+    if (callMe && !phoneNumber.isBlank() && updateNumber) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
     myItemUCC.addInterest(itemId, body, userId);

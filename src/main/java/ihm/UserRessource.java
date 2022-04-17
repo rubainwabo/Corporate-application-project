@@ -59,10 +59,8 @@ public class UserRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("username or password required").type("text/plain").build());
     }
-    var user = myUserUCC.login(username, password, rememberMe);
-    var token = myTokenService.login(user.getId(), username, rememberMe);
-    token.put("role", user.getRole());
-    return token;
+    var user = myUserUCC.login(username, password);
+    return myTokenService.login(user, rememberMe);
   }
 
   /**
@@ -76,11 +74,10 @@ public class UserRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public int register(UserDTO user) {
-    if (user == null || user.getUserName() == null || user.getUserName().isBlank() ||
-        user.getLastName() == null || user.getLastName().isBlank() ||
-        user.getFirstName() == null || user.getFirstName().isBlank() ||
-        user.getPassword() == null || user.getPassword().isBlank()) {
-      System.out.println("helllo");
+    if (user == null || user.getUserName() == null || user.getUserName().isBlank()
+        || user.getLastName() == null || user.getLastName().isBlank()
+        || user.getFirstName() == null || user.getFirstName().isBlank()
+        || user.getPassword() == null || user.getPassword().isBlank()) {
       throw new WebApplicationException(
           Response.status(Response.Status.BAD_REQUEST).entity("Lacks of mandatory info")
               .type("text/plain").build());

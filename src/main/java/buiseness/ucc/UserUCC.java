@@ -2,14 +2,7 @@ package buiseness.ucc;
 
 import buiseness.domain.User;
 import buiseness.dto.UserDTO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
-import utils.exception.InvalidStateException;
-import utils.exception.InvalidTokenException;
-import utils.exception.PasswordOrUsernameException;
-import utils.exception.ReasonForConnectionRefusalException;
-import utils.exception.UserInvalidException;
-import utils.exception.UserOnHoldException;
 
 
 public interface UserUCC {
@@ -22,20 +15,9 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
 
-  UserDTO login(String username, String password, boolean rememberMe)
-      throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
-      UserOnHoldException, UserInvalidException;
+  UserDTO login(String username, String password);
 
-  /**
-   * verify the refresh token and create 2 token (1 refresh and 1 access).
-   *
-   * @param token token of the request
-   * @return an acess and refresh token
-   */
-  ObjectNode refreshToken(String token) throws InvalidTokenException;
-
-  boolean changeState(int id, String state, String refusalReason, boolean admin)
-      throws InvalidStateException, InvalidStateException;
+  boolean changeState(int id, String state, String refusalReason, boolean admin);
 
   User getOneById(int id);
 

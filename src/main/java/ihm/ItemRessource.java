@@ -36,10 +36,11 @@ public class ItemRessource {
    * @return items
    */
   @GET
-  @Path("mesOffres/{state}")
+  @Path("myItems/{state}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> myItems(@Context ContainerRequest req, @PathParam("state") String state) {
+  public List<ItemDTO> userMyItems(@Context ContainerRequest req,
+      @PathParam("state") String state) {
     int id = (int) req.getProperty("id");
     return myItemUCC.getMyItems(id, state);
   }

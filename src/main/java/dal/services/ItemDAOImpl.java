@@ -191,8 +191,9 @@ public class ItemDAOImpl implements ItemDAO {
         "select id_item, description, url_picture, "
             + "it.item_type_name,number_of_people_interested "
             + "from projet.items i, projet.item_type it "
-            + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
-            + "and i.item_condition =" + state;
+            + "where offeror =" + id + " and i.item_type = it.id_item_type "
+            + "and i.item_condition ='" + state + "'";
+    System.out.println(query);
     return getItemDTOS(query);
 
   }

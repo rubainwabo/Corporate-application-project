@@ -99,7 +99,7 @@ public class ItemRessource {
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
     String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
-    
+
     int userId = (int) req.getProperty("id");
     if (callMe && !phoneNumber.isBlank() && updateNumber) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
@@ -152,7 +152,9 @@ public class ItemRessource {
   }
 
   /**
+   * retrives to add an item it's recipient.
    *
+   * @return a list with all the users
    */
   @POST
   @Path("addRecipient/{idItem}/{idRecipient}")
@@ -168,7 +170,9 @@ public class ItemRessource {
   }
 
   /**
-   * r
+   * retrives to update an item.
+   *
+   * @return 1 if everything is correctly done
    */
   @POST
   @Path("update")

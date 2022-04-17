@@ -52,7 +52,7 @@ public interface ItemDAO {
   List<ItemDTO> getLastItemsOffered(int limit);
 
   /**
-   * add a recipient to an item
+   * retrives to add a recipient to an item
    *
    * @param idItem      the id of the item
    * @param idRecipient the id of de recipient
@@ -61,7 +61,7 @@ public interface ItemDAO {
   int addRecipient(int idItem, int idRecipient);
 
   /**
-   * update some info of an item
+   * retrives to update some info of an item
    *
    * @param item the id of the item
    * @return return 1 if the item is updated, 0 if not

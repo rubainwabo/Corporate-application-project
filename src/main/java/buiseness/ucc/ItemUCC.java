@@ -52,7 +52,7 @@ public interface ItemUCC {
   List<ItemDTO> getAllItemsOffered(int id);
 
   /**
-   * call to add recipient to a item
+   * call to add recipient to a item.
    *
    * @param idItem      the id of the item
    * @param idRecipient the id of de recipient
@@ -61,7 +61,7 @@ public interface ItemUCC {
   int addRecipient(int idItem, int idRecipient);
 
   /**
-   * call update some info of an item
+   * call update some info of an item.
    *
    * @param item the id of the item
    * @return return 1 if the item is updated, 0 if not

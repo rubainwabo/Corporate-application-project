@@ -101,7 +101,7 @@ public class MemberRessource {
   }
 
   /**
-   * retrives to get all the list of users who are interest in the item
+   * retrives to get all the list of users who are interest in the item.
    *
    * @param req    container request
    * @param itemId the id of the item

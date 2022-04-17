@@ -50,7 +50,7 @@ public interface UserDAO {
 
 
   /**
-   * retrives to get all users who are interested in the item with the id idItem
+   * retrives to get all users who are interested in the item with the id idItem.
    *
    * @param idItem the id of the item
    * @return all users who are interested

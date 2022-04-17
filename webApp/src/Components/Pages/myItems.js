@@ -11,9 +11,9 @@ const data = [{type: "meuble", description: "une table tres belle"},
  */
 const myItems = `
 <section id="my-items-page">
-
-    <div id="home-page-navigation">
-        <h2 id="home-page-title"> Dernières offres</h2>
+    <h2 id="my-items-page-title"> Dernières offres</h2>
+    <div id="">
+        
     </div>
     <div id="my-items-page-content">
         <div id="my-item-menu">
@@ -36,7 +36,7 @@ const myItems = `
         <div id="pick-recipient"> Indiquer un membre receveur</div>     
     </div>
 </section>
-<hr>
+
 `;
 
 const MyItems = async (id) => {

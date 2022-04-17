@@ -190,21 +190,21 @@ public class UserDAOImpl implements UserDAO {
             + "WHERE user_id=iterest.member AND item.id_item=iterest.item AND item.id_item="
             + idItem)) {
 
-      try (ResultSet rs = ps.executeQuery()) {
+      try (ResultSet resultSet = ps.executeQuery()) {
         userDTOList = new ArrayList<>();
         UserDTO user;
-        while (rs.next()) {
+        while (resultSet.next()) {
           user = myDomainFactory.getUser();
-          user.setLastName(rs.getString(1));
-          user.setFirstName(rs.getString(2));
-          user.setCity(rs.getString(3));
-          user.setStreet(rs.getString(4));
-          user.setPostCode(rs.getInt(5));
-          user.setBuildingNumber(rs.getInt(6));
-          user.setId(rs.getInt(7));
-          user.setUserName(rs.getString(8));
-          user.setState(rs.getString(9));
-          user.setRole(rs.getString(11));
+          user.setLastName(resultSet.getString(1));
+          user.setFirstName(resultSet.getString(2));
+          user.setCity(resultSet.getString(3));
+          user.setStreet(resultSet.getString(4));
+          user.setPostCode(resultSet.getInt(5));
+          user.setBuildingNumber(resultSet.getInt(6));
+          user.setId(resultSet.getInt(7));
+          user.setUserName(resultSet.getString(8));
+          user.setState(resultSet.getString(9));
+          user.setRole(resultSet.getString(11));
           userDTOList.add(user);
         }
         return userDTOList;

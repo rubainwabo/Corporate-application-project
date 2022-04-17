@@ -56,6 +56,5 @@ public interface UserDAO {
    * @return all users who are interested
    */
   List<UserDTO> getUserInterest(int idItem);
-
-
+  
 }

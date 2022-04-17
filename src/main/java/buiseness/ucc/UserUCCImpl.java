@@ -55,7 +55,7 @@ public class UserUCCImpl implements UserUCC {
         myDalServices.commit();
         return list;
       } else {
-        throw new InvalidStateException("state invalide");
+        throw new InvalidStateException("invalid state");
       }
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -146,7 +146,6 @@ public class UserUCCImpl implements UserUCC {
       if (userExist != null) {
         throw new UsernameAlreadyExists("username already exists");
       }
-      System.out.println("demande de l'id");
       int idUser = myUserDAO.register(user1);
       //var userConnected = myTokenService.login(idUser, user.getUserName(), false);
       myDalServices.commit();

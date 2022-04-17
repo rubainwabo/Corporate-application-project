@@ -85,6 +85,16 @@ Content-Type: application/json
 ### get all item-type
 GET http://localhost:3000/itemsType/getAll
 
+### login
+POST http://localhost:3000/auths/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test",
+  "rememberMe": true
+}
+
 
 ### test
 ### commment

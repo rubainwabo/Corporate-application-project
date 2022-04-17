@@ -101,4 +101,35 @@ public class ItemUCCImpl implements ItemUCC {
       throw e;
     }
   }
+
+  @Override
+  public int addRecipient(int idItem, int idRecipient) {
+    try {
+      myDalServices.start();
+
+      int itemId = myItemDAOService.addRecipient(idItem, idRecipient);
+      myDalServices.commit();
+      return itemId;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+
+  }
+
+  @Override
+  public int updateItem(ItemDTO item) {
+    try {
+      myDalServices.start();
+
+      int result = myItemDAOService.updateItem(item);
+      myDalServices.commit();
+      return result;
+    } catch (Exception e) {
+
+      myDalServices.rollBack();
+
+      throw e;
+    }
+  }
 }

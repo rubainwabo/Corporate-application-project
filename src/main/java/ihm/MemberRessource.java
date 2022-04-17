@@ -10,6 +10,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
@@ -100,6 +101,22 @@ public class MemberRessource {
   }
 
   /**
+   * retrives to get all the list of users who are interest in the item.
+   *
+   * @param req    container request
+   * @param itemId the id of the item
+   * @return
+   */
+  @GET
+  @Path("interest/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<UserDTO> userInterest(@Context ContainerRequest req, @PathParam("id") int itemId) {
+    return myUserUCC.getUsersIterest(itemId);
+
+  }
+
+
+  /**
    * tries to retrieve a user's data according to the id of the person making the request.
    *
    * @param req the user issuing a request
@@ -112,3 +129,4 @@ public class MemberRessource {
     return myUserUCC.getOneById((int) req.getProperty("id"));
   }
 }
+

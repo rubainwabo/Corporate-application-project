@@ -99,7 +99,7 @@ public class ItemRessource {
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
     String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
-    
+
     int userId = (int) req.getProperty("id");
     if (callMe && !phoneNumber.isBlank() && updateNumber) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
@@ -149,5 +149,35 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> userGetLastItemsOfferedConnected() {
     return myItemUCC.getLastItemsOffered(true);
+  }
+
+  /**
+   * retrives to add an item it's recipient.
+   *
+   * @return a list with all the users
+   */
+  @POST
+  @Path("addRecipient/{idItem}/{idRecipient}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public int userAddRecipient(@PathParam("idItem") int idItem,
+      @PathParam("idRecipient") int idRecipient) {
+    if (idItem <= 0 || idRecipient <= 0) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("information is missing").type("text/plain").build());
+    }
+    return myItemUCC.addRecipient(idItem, idRecipient);
+
+  }
+
+  /**
+   * retrives to update an item.
+   *
+   * @return 1 if everything is correctly done
+   */
+  @POST
+  @Path("update")
+  @Produces(MediaType.APPLICATION_JSON)
+  public int userUpdateItem(ItemDTO item) {
+    return myItemUCC.updateItem(item);
   }
 }

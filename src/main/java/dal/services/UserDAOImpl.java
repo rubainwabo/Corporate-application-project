@@ -180,4 +180,41 @@ public class UserDAOImpl implements UserDAO {
       throw new FatalException(e);
     }
   }
+
+  @Override
+  public List<UserDTO> getUserInterest(int idItem) {
+    List<UserDTO> userDTOList;
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        "select last_name,first_name,city,street,postCode,"
+            + "building_number,user_id,username, "
+            + "state,phone_number,_role from projet.members,"
+            + "projet.items item,projet.interests iterest "
+            + "WHERE user_id=iterest.member AND "
+            + "item.id_item=iterest.item AND item.id_item="
+            + idItem)) {
+
+      try (ResultSet resultSet = ps.executeQuery()) {
+        userDTOList = new ArrayList<>();
+        UserDTO user;
+        while (resultSet.next()) {
+          user = myDomainFactory.getUser();
+          user.setLastName(resultSet.getString(1));
+          user.setFirstName(resultSet.getString(2));
+          user.setCity(resultSet.getString(3));
+          user.setStreet(resultSet.getString(4));
+          user.setPostCode(resultSet.getInt(5));
+          user.setBuildingNumber(resultSet.getInt(6));
+          user.setId(resultSet.getInt(7));
+          user.setUserName(resultSet.getString(8));
+          user.setState(resultSet.getString(9));
+          user.setRole(resultSet.getString(11));
+          userDTOList.add(user);
+        }
+        return userDTOList;
+      }
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+
+  }
 }

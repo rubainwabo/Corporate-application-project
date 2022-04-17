@@ -185,9 +185,12 @@ public class UserDAOImpl implements UserDAO {
   public List<UserDTO> getUserInterest(int idItem) {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
-            + "state,phone_number,_role from projet.members,projet.items item,projet.interests iterest "
-            + "WHERE user_id=iterest.member AND item.id_item=iterest.item AND item.id_item="
+        "select last_name,first_name,city,street,postCode,"
+            + "building_number,user_id,username, "
+            + "state,phone_number,_role from projet.members,"
+            + "projet.items item,projet.interests iterest "
+            + "WHERE user_id=iterest.member AND "
+            + "item.id_item=iterest.item AND item.id_item="
             + idItem)) {
 
       try (ResultSet resultSet = ps.executeQuery()) {

@@ -1,7 +1,7 @@
 import {Redirect} from "../Router/Router";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
-import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
+import {getSessionObject} from "../../utils/session";
 
 const data = [{type: "meuble", description: "une table tres belle"},
   {type: "meuble", description: "une table tres belle"},
@@ -40,7 +40,7 @@ const myItems = `
 `;
 
 const MyItems = async (id) => {
-    let token = getSessionObject("accessToken");
+   
     const pageDiv = document.querySelector("#page");
     pageDiv.innerHTML = myItems;
     let currentItemId;
@@ -77,7 +77,7 @@ const MyItems = async (id) => {
   try {
     var options = {
             method: 'GET',
-            headers: {"token" : token},
+            headers: {"token" : getSessionObject("accessToken")},   
             };   
     const response = await fetch("/api/items/mesOffres", options); // fetch return a promise => we wait for the response   
     if (!response.ok) {
@@ -132,7 +132,7 @@ const MyItems = async (id) => {
     })
 
   } catch (error) {
-
+    console.log(error);
   }
 
 };

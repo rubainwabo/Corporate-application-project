@@ -1,12 +1,10 @@
 import { Redirect } from "../../Router/Router";
-import Logout from '../../Logout/Logout';
 import { getSessionObject,setSessionObject,removeSessionObject } from "../../../utils/session";
-
 
 /**
  * Render the MemberList
  */
-const home = `<section id="home-page">
+const pageContaint = `<section id="home-page">
 <div id="home-page-navigation">
     <h2 id="home-page-title"> Listes des membres</h2>
 </div>
@@ -35,14 +33,21 @@ const home = `<section id="home-page">
     </div>
 </div>
 </section>
+  <section id="member-list-page">
+    <div id="member-list">
+    
+    </div>
+  </section>
 `;
 
 const MemberList =  () => {
   const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = home;
+  pageDiv.innerHTML = pageContaint;
+  document.getElementById("home-page").style.height="15vh";
   let token = getSessionObject("accessToken");
   let searchInput = document.getElementById("my-input-member-list")
   autocomplete(searchInput,token);
+
   document.getElementById("container-i-member-list").addEventListener("click",async() => {
     let inputVal = searchInput.value;
     let usernameCheck = document.getElementById("user-name-member-list").checked;
@@ -62,15 +67,57 @@ const MemberList =  () => {
         return Redirect("/logout");
       }
       const filtredUserList = await response.json();
-      filtredUserList.forEach((user)=>{
-        console.log(user)
-      });
-      
+      var memberList = document.getElementById("member-list");
+      memberList.innerHTML="";
+      filtredUserList.forEach((e)=>{
+        console.log(e)
+      const divUserHandler = document.createElement("div");
+      const pFirstName = document.createElement("p");
+      const pLastName = document.createElement("p");
+      const username = document.createElement("p");
+      const state = document.createElement("p");
+      const role = document.createElement("p");
+      const phoneNumber = document.createElement("p");
+      const nb_of_item_not_taken = document.createElement("p");
+      const nb_of_item_offered = document.createElement("p");
+      const nb_of_item_gifted = document.createElement("p");
+      const nb_of_item_received = document.createElement("p");
+
+      divUserHandler.classList = "user-to-handle";
+      divUserHandler.id = e.id;
+      // checkbox admin + last name and first name
+      pFirstName.innerHTML = e.firstName
+      pLastName.innerHTML = e.lastName
+      username.innerHTML = e.userName
+      state.innerHTML=e.state
+      role.innerHTML=e.role
+      phoneNumber.innerHTML=e.phoneNumber
+      nb_of_item_not_taken.innerHTML = e.nbrItemNotTaken + " object non pris"
+      nb_of_item_offered.innerHTML = e.nbrItemOffered  + " offres"
+      nb_of_item_gifted.innerHTML = e.nbrGiftenItems + " donnés"
+      nb_of_item_received.innerHTML = e.nbrItemReceived + " réceptions"
+      divUserHandler.appendChild(pFirstName);
+      divUserHandler.appendChild(pLastName);
+      divUserHandler.appendChild(username);
+      divUserHandler.appendChild(state);
+      divUserHandler.appendChild(role);
+      divUserHandler.appendChild(phoneNumber);
+      divUserHandler.appendChild(nb_of_item_not_taken);
+      divUserHandler.appendChild(nb_of_item_offered);
+      divUserHandler.appendChild(nb_of_item_gifted);
+      divUserHandler.appendChild(nb_of_item_received);
+
+      divUserHandler.addEventListener("click", () => {
+        // show userInfo
+      })
+      memberList.appendChild(divUserHandler)
+    })      
     } catch (error) {
 
     }
   })
 };
+
 function autocomplete(inp,token) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/

@@ -338,14 +338,14 @@ add-item-page
     user Hander page
 */
 
-#user-handler-page{
+#user-handler-page,#member-list-page{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     align-self: center;
     justify-self: center;
-    width: 991px;
+    width: 70%;
 
     
 }
@@ -387,7 +387,7 @@ add-item-page
     background-color: antiquewhite;
 }
 
-#user-handler-list{
+#user-handler-list,#member-list{
     width: 100%;
 }
 
@@ -448,7 +448,7 @@ add-item-page
   }
 
   #in-toggle-list-user{
-    width: 991px;
+    width: 70%;
     height: 50px;
     margin: 0 auto;
     display: flex;

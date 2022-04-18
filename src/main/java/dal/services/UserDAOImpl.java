@@ -157,11 +157,13 @@ public class UserDAOImpl implements UserDAO {
     }
     String query =
         !name.isBlank() || !city.isBlank() || !postCode.isBlank()
-            ? "select user_id, state, _role,username,reason_for_connection_refusal,"
-            + "last_name,first_name,city,street,postCode,building_number,"
-            + "unit_number,url_picture,phone_number from projet.members where " + queryName
-            + queryCity + queryPostCode
-            : "";
+            ? "select m.user_id, m.state, m._role,m.username,m.reason_for_connection_refusal,"
+            + "m.last_name,m.first_name,m.city,m.street,m.postCode,m.building_number,"
+            + "m.unit_number,m.url_picture,m.phone_number,m.nb_of_item_offered,"
+            + "m.nb_of_item_gifted,m.nb_of_item_received,m.nb_of_item_not_taken "
+            + "from projet.members m where "
+            + queryName
+            + queryCity + queryPostCode : "";
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
       ArrayList<UserDTO> userDTOS = new ArrayList<>();
       try (ResultSet rs = ps.executeQuery()) {
@@ -180,32 +182,6 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public List<String> getAutocompleteList(String val) {
-    /*
-    boolean isName, isCity, isPostCode;
-    String query = "";
-    isName = !name.isBlank();
-    isCity = !city.isBlank();
-    isPostCode = !postCode.isBlank();
-    if (isName) {
-      query += "select DISTINCT last_name from projet.members where UPPER(last_name) like '"
-          + name
-          + "%'";
-    }
-    if (isCity) {
-      query += isName
-          ? " UNION select DISTINCT city from projet.members where UPPER(city) like '" + city
-          + "%'" : "select DISTINCT city from projet.members where UPPER(city) like '" + city
-          + "%'";
-    }
-    if (isPostCode) {
-      query +=
-          isName || isCity ?
-              " UNION select DISTINCT CAST(postCode as TEXT) from projet.members where CAST(postCode AS TEXT) like '"
-                  + postCode + "%'"
-              : "select DISTINCT CAST(postCode as TEXT) from projet.members where CAST(postCode AS TEXT) like '"
-                  + postCode + "%'";
-    }
-     */
     String query = "select DISTINCT last_name from projet.members where UPPER(last_name) like '"
         + val + "%'" + " UNION select DISTINCT city from projet.members where UPPER(city) like '"
         + val + "%'"

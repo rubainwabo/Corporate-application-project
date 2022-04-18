@@ -35,7 +35,6 @@ public class AdminRessource {
   @Path("autocompleteList")
   @Produces(MediaType.APPLICATION_JSON)
   public List<String> adminAutoComplete(@QueryParam("value") String val) {
-
     return myUserUCC.getAutocompleteList(val);
   }
 

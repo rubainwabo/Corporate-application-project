@@ -48,5 +48,24 @@ public interface ItemDAO {
    * @param limit the limit of rows
    * @return a list of item
    */
+
   List<ItemDTO> getLastItemsOffered(int limit);
+
+  /**
+   * retrives to add a recipient to an item.
+   *
+   * @param idItem      the id of the item
+   * @param idRecipient the id of de recipient
+   * @return return 1 if the recipient is added, 0 if not
+   */
+  int addRecipient(int idItem, int idRecipient);
+
+  /**
+   * retrives to update some info of an item.
+   *
+   * @param item the id of the item
+   * @return return 1 if the item is updated, 0 if not
+   */
+  int updateItem(ItemDTO item);
+
 }

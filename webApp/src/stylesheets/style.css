@@ -430,7 +430,7 @@ add-item-page
 .my-item-link{
     padding-bottom: 10%;
     padding-top: 10%;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(155, 155, 155);
    
    
 }

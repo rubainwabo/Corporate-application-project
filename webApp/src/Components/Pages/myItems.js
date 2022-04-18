@@ -17,43 +17,82 @@ const myItems = `
     </div>
     <div id="my-items-page-content">
         <div id="my-item-menu">
-            <div class="my-item-link"> <a href="#"  data-uri="/"> mes offres</a></div>
-            <div class="my-item-link"> <a  href="#"  data-uri="/mesOffres"> mes offres annulées </a></div>
-            <div class="my-item-link"> <a  href="#"  data-uri="/additem"> mes objet recu  </a></div>
-            <div class="my-item-link" > <a href="#"  data-uri="/userhandeler"> mes objet attribués </a></div>
+            <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> mes offres</a></div>
+            <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> mes offres annulées </a></div>
+            <div class="my-item-link"> <a  href="#" id="get-items-assigned" data-uri="/additem"> mes objet recu  </a></div>
+            <div class="my-item-link" > <a href="#" id="get-items-gifted"  data-uri="/userhandeler"> mes objet attribués </a></div>
         </div>
         <div id="all-recent-item">
             
         </div>
     </div>
     <div id="my-items-pop-up">
-        <div id="cancell-item"> Annuler l'offre </div>
+    
+        <div id="cancell-item" class="pop-up-option"> Annuler l'offre </div>
+
+        <div id="offer-again" style="color:green class="pop-up-option"> Offir à nouveau </div>
+
+        <div id="item-gived" style="color:green" class="pop-up-option"> Indiquer objet donné </div>
+
+        <div id="item-not-gived" style="color:red" class="pop-up-option"> Indiquer objet non pris </div>
         
-        <div id="update-item"> Mettre à jour les informations  </div>
+        <div id="update-item" class="pop-up-option"> Mettre à jour les informations  </div>
         
-        <div id="show-item"> Accéder à la publication </div>
+        <div id="show-item" class="pop-up-option"> Accéder à la publication </div>
         
-        <div id="pick-recipient"> Indiquer un membre receveur</div>     
+        <div id="pick-recipient" class="pop-up-option"> Indiquer un membre receveur</div>     
     </div>
 </section>
 
 `;
-
+let currentItemId;
+let currentState = "offered";
 const MyItems = async (id) => {
    
     const pageDiv = document.querySelector("#page");
     pageDiv.innerHTML = myItems;
-    let currentItemId;
-    let myItemsMenu = document.querySelector("#my-item-menu");
-  
-    myItemsMenu.addEventListener("click",(e)=>{
-        // To get a data attribute through the dataset object, get the property by the part of the attribute name after data- (note that dashes are converted to camelCase).
-        let uri = e.target.dataset.uri;
-        console.log(uri);
-        if (uri) {
-        Redirect(uri);
-    }
-    });
+
+    changeOptions(currentState);
+
+    document.getElementById("my-items-page").addEventListener("click",function(e){
+        console.log(e.target.id);
+        if(e.target.id=="my-items-page" || e.target.id=="all-recent-item" 
+        || e.target.id=="my-items-page-content" || e.target.id=="my-item-menu"){
+
+           let  popup = document.getElementById("my-items-pop-up");     
+            popup.style.display="none";
+            
+        }
+    })
+
+    document.getElementById("get-items-cancelled").addEventListener("click",function(e){
+        e.preventDefault();
+        currentState = "cancelled";
+        document.getElementById("all-recent-item").innerText="";
+        getMyItems(currentState);
+        changeOptions(currentState);
+    })
+    document.getElementById("get-items-assigned").addEventListener("click",function(e){
+        e.preventDefault();
+        currentState = "cancelled";
+        document.getElementById("all-recent-item").innerText="";
+
+    })
+
+    document.getElementById("get-items-offered").addEventListener("click",function(e){
+        e.preventDefault();
+        currentState = "offered";
+        document.getElementById("all-recent-item").innerText="";
+        getMyItems(currentState);
+        changeOptions(currentState);
+    })
+    document.getElementById("get-items-gifted").addEventListener("click",function(e){
+        e.preventDefault();
+        currentState = "gifted";
+        document.getElementById("all-recent-item").innerText="";
+        getMyItems(currentState);
+        changeOptions(currentState);
+    })
 
     document.getElementById("cancell-item").addEventListener("click",function(e){
         let itemR = document.getElementById(currentItemId);
@@ -72,71 +111,115 @@ const MyItems = async (id) => {
     })
   
   
-  let allRecentItem = document.getElementById("all-recent-item");
 
-  try {
-    var options = {
-            method: 'GET',
-            headers: {"token" : getSessionObject("accessToken")},   
-            };   
-    const response = await fetch("/api/items/mesOffres",options); // fetch return a promise => we wait for the response   
-    if (!response.ok) {
-      throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
-      )
-    }
-    
+    getMyItems(currentState);
 
-    const items = await response.json();
-
-    console.log("here", items);
-
-    items.forEach((item) => {
-      console.log("my item", item);
-
-      let itemBox = document.createElement("div");
-      let homePageImageBox = document.createElement("div");
-      let itemImgDiv = document.createElement("img");
-      let descriptionBox = document.createElement("div");
-      let itemType = document.createElement("p")
-      let itemDescription = document.createElement("p");
-
-      itemBox.classList.add("item-box");
-      itemBox.id=item.id;
-      homePageImageBox.classList.add("home-page-item-image");
-      descriptionBox.classList.add("home-page-item-description")
-
-      itemType.classList.add("item-title");
-      itemDescription.classList.add("item-description");
-
-      itemImgDiv.src = itemImg;
-      itemType.innerText = item.itemtype;
-      itemDescription.innerText = item.description;
-
-      descriptionBox.appendChild(itemType);
-      descriptionBox.appendChild(itemDescription);
-      homePageImageBox.appendChild(itemImgDiv);
-      itemBox.appendChild(homePageImageBox);
-      itemBox.appendChild(descriptionBox);
-
-      itemBox.addEventListener("click", function () {
-        /*
-        let params = [{key: "id", value: item.id}];
-        Redirect("/item", params);
-        */
-       document.getElementById("my-items-pop-up").style.display="flex";
-       currentItemId = item.id;
-      
-      })
-      allRecentItem.appendChild(itemBox);
-    })
-
-  } catch (error) {
-    console.log(error);
-  }
 
 };
 
+async function getMyItems(state){
+    let allRecentItem = document.getElementById("all-recent-item");
+    try {
+        var options = {
+                method: 'GET',
+                headers: {"token" : getSessionObject("accessToken")},   
+                };   
+        const response = await fetch("/api/items/myItems/"+state,options); // fetch return a promise => we wait for the response   
+        if (!response.ok) {
+          throw new Error(
+              "fetch error : " + response.status + " : " + response.statusText
+          )
+        }
+        
+    
+        const items = await response.json();
+    
+        console.log("here", items);
+    
+        items.forEach((item) => {
+          let itemBox = document.createElement("div");
+          let homePageImageBox = document.createElement("div");
+          let itemImgDiv = document.createElement("img");
+          let descriptionBox = document.createElement("div");
+          let itemType = document.createElement("p")
+          let itemDescription = document.createElement("p");
+    
+          itemBox.classList.add("item-box");
+          itemBox.id=item.id;
+          homePageImageBox.classList.add("home-page-item-image");
+          descriptionBox.classList.add("home-page-item-description")
+    
+          itemType.classList.add("item-title");
+          itemDescription.classList.add("item-description");
+    
+          itemImgDiv.src = itemImg;
+          itemType.innerText = item.itemtype;
+          itemDescription.innerText = item.description;
+    
+          descriptionBox.appendChild(itemType);
+          descriptionBox.appendChild(itemDescription);
+          homePageImageBox.appendChild(itemImgDiv);
+          itemBox.appendChild(homePageImageBox);
+          itemBox.appendChild(descriptionBox);
+    
+          itemBox.addEventListener("click", function () {
+           
+           document.getElementById("my-items-pop-up").style.display="flex";
+           
+       
+           
+           currentItemId = item.id;
+          
+          })
+          allRecentItem.appendChild(itemBox);
+        })
+    
+      } catch (error) {
+        console.log(error);
+      }
+}
+function changeOptions(state){
 
+    let cancel  = document.getElementById("cancell-item");
+    let offerAgain = document.getElementById("offer-again");
+    let itemGived = document.getElementById("item-gived");
+    let itemNotGived = document.getElementById("item-not-gived");
 
+    let update  = document.getElementById("update-item");
+    let show    = document.getElementById("show-item");
+    let pickRecipient = document.getElementById("pick-recipient");
+
+    let divs =  document.querySelectorAll("#my-items-pop-up div");
+  
+    for(let i=0;i<divs.length;i++){
+        divs[i].style.display="none";
+    }
+    let links = document.querySelectorAll("#my-item-menu div a");
+    console.log(links);
+    for(let i=0;i<links.length;i++){
+        links[i].style.fontWeight="normal";
+    }
+    
+    document.getElementById("my-items-pop-up").style.display="none"
+
+    if(state=="offered"){
+        cancel.style.display="flex";
+        update.style.display="flex";
+        show.style.display="flex";
+        pickRecipient.style="flex";
+        document.getElementById("get-items-offered").style.fontWeight="bold";
+    }else if(state=="cancelled"){
+        offerAgain.style.display="flex";
+        show.style.display="flex";
+        document.getElementById("get-items-cancelled").style.fontWeight="bold";
+    }else if(state=="gifted"){
+        itemGived.style.display="flex";
+        itemNotGived.style.display="flex";
+        
+        itemGived.style.display="flex";
+        show.style.display="flex";
+        document.getElementById("get-items-gifted").style.fontWeight="bold"
+
+    }
+}
 export default MyItems;

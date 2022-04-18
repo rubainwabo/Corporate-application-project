@@ -8,7 +8,7 @@ import { getSessionObject,setSessionObject,removeSessionObject } from "../../uti
  * Render the pick recipient page
  */
 const pickRecipient = `
-<section id="my-items-page">
+<section id="pick-recipient-page">
     <div id="recipient-page-item-infos">
         <div>
          <p id="recipient-page-item-type"></p>

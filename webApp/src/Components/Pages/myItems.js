@@ -30,7 +30,7 @@ const myItems = `
     
         <div id="cancell-item" class="pop-up-option"> Annuler l'offre </div>
 
-        <div id="offer-again" style="color:green class="pop-up-option"> Offir à nouveau </div>
+        <div id="offer-again" style="color:green; font-weight: bold" class="pop-up-option"> Offir à nouveau </div>
 
         <div id="item-gived" style="color:green" class="pop-up-option"> Indiquer objet donné </div>
 
@@ -96,7 +96,10 @@ const MyItems = async (id) => {
 
     document.getElementById("cancell-item").addEventListener("click",function(e){
         let itemR = document.getElementById(currentItemId);
-        document.getElementById("all-recent-item").removeChild(itemR);
+
+        if(cancelItem(currentItemId)){
+            document.getElementById("all-recent-item").removeChild(itemR);
+        }   
         document.getElementById("my-items-pop-up").style.display="none";
     })
 
@@ -220,6 +223,23 @@ function changeOptions(state){
         show.style.display="flex";
         document.getElementById("get-items-gifted").style.fontWeight="bold"
 
+    }
+}
+async function cancelItem(idItem){
+   try {
+        var options = { method: 'POST',
+        headers: {"token" : getSessionObject("accessToken")},
+        mode: 'cors',
+        cache: 'default',
+        }; 
+        const response = await fetch("/api/items/cancelOffer/" + idItem, options); // fetch return a promise => we wait for the response   
+
+        if (response.ok) {
+            return true;
+        } 
+    }catch(error){
+        console.log(error);
+        return false;
     }
 }
 export default MyItems;

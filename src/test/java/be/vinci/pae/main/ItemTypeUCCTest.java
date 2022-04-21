@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 
 public class ItemTypeUCCTest {
 
-  private final static String TYPE = "type";
+  private final String TYPE = "type";
 
   private static ItemTypeUCC itemTypeUCC;
   private static ServiceLocator locator;

@@ -25,12 +25,19 @@ public class ItemUCCTest {
   private ItemDAO itemDAO;
   private DateDAO dateDAO;
 
+
+  /**
+   * Init for tests.
+   */
   @BeforeAll
   public static void init() {
     locator = ServiceLocatorUtilities.bind(new TestApplicationBinder());
     itemUCC = locator.getService(ItemUCC.class);
   }
 
+  /**
+   * Set up for tests.
+   */
   @BeforeEach
   public void setup() {
     itemDAO = locator.getService(ItemDAO.class);

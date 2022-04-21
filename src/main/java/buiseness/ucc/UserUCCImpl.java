@@ -148,8 +148,8 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit();
       return ret;
     } catch (Exception e) {
-        myDalServices.rollBack();
-        throw e;
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
@@ -162,8 +162,8 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.commit();
       return ret;
     } catch (Exception e) {
-        myDalServices.rollBack();
-        throw e;
+      myDalServices.rollBack();
+      throw e;
     }
   }
 

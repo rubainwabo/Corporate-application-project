@@ -144,6 +144,12 @@ public class MemberRessource {
     return myUserUCC.getOneById((int) req.getProperty("id"));
   }
 
+  /**
+   * Updates the profile of an user.
+   * @param req request we get.
+   * @param body data we want to change.
+   * @return true if user updates successfully.
+   */
   @POST
   @Path("updateProfile")
   @Consumes(MediaType.APPLICATION_JSON)

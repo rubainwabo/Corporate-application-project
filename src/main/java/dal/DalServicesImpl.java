@@ -12,6 +12,9 @@ public class DalServicesImpl implements DalServices, DalBackService {
   private static BasicDataSource ds = new BasicDataSource();
   private static ThreadLocal<Connection> mapThreadConnection;
 
+  /**
+   * Config for DalService.
+   */
   public DalServicesImpl() {
     ds.setUrl(Config.getProperty("URL"));
     ds.setUsername(Config.getProperty("Username"));

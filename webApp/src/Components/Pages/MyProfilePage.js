@@ -72,7 +72,7 @@ const MonProfile = async () => {
       },
     };
 
-    const response = await fetch("/api/auths/myProfile", options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/members/myProfile", options); // fetch return a promise => we wait for the response
 
     const data = await response.json();
     console.log(data);
@@ -301,7 +301,7 @@ const MonProfile = async () => {
                 };
                 
                 if (pwd.value.length > 5) {  
-                const res = await fetch("/api/auths/updatePassword", options); // fetch return a promise => we wait for the response
+                const res = await fetch("/api/members/updatePassword", options); // fetch return a promise => we wait for the response
 
                 if (res.ok) {
                   setTimeout( () => {Redirect("/monProfile");}, 2000);
@@ -351,7 +351,7 @@ const MonProfile = async () => {
             },
           };
           console.log("clicked");
-          const res = await fetch("/api/auths/updateProfile", options); // fetch return a promise => we wait for the response
+          const res = await fetch("/api/members/updateProfile", options); // fetch return a promise => we wait for the response
           console.log("clicked", res.body);
           Redirect("/monProfile");
 

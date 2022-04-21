@@ -103,6 +103,15 @@ const MyItems = async (id) => {
         document.getElementById("my-items-pop-up").style.display="none";
     })
 
+    document.getElementById("offer-again").addEventListener("click",function(e){
+        let itemR = document.getElementById(currentItemId);
+
+        if(addAgain(currentItemId)){
+            document.getElementById("all-recent-item").removeChild(itemR);
+        }   
+        document.getElementById("my-items-pop-up").style.display="none";
+    })
+
     document.getElementById("update-item").addEventListener("click",function(e){
         let params = [{key: "id", value: currentItemId}];
         Redirect("/updateitem", params);
@@ -242,4 +251,21 @@ async function cancelItem(idItem){
         return false;
     }
 }
+async function addAgain(idItem){
+    try {
+         var options = { method: 'POST',
+         headers: {"token" : getSessionObject("accessToken")},
+         mode: 'cors',
+         cache: 'default',
+         }; 
+         const response = await fetch("/api/items/offer/again/" + idItem, options); // fetch return a promise => we wait for the response   
+ 
+         if (response.ok) {
+             return true;
+         } 
+     }catch(error){
+         console.log(error);
+         return false;
+     }
+ }
 export default MyItems;

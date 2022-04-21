@@ -59,10 +59,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void cancelOffer(int idItem, int userId) {
+  public void changeItemCondition(int idItem, int userId, String state) {
     try {
       myDalServices.start();
-      myItemDAOService.cancelOffer(idItem, userId);
+      myItemDAOService.changeItemCondition(idItem, userId, state);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

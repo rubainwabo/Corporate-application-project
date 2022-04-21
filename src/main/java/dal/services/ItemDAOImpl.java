@@ -149,7 +149,7 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void cancelOffer(int idItem, int userId) {
+  public void changeItemCondition(int idItem, int userId, String condition) {
     try (PreparedStatement psVerifyUser = myBackService.getPreparedStatement(
         "select offeror from projet.items where id_item = " + idItem)) {
       try (ResultSet rsVerifyUser = psVerifyUser.executeQuery()) {
@@ -160,10 +160,10 @@ public class ItemDAOImpl implements ItemDAO {
           throw new FatalException(
               "cet utilisateur n'est pas l'auteur de l'offre, il ne peut donc pas l'annuler");
         }
-        try (PreparedStatement psCancelOffer = myBackService.getPreparedStatement(
-            "update projet.items set item_condition = 'cancelled' where id_item = "
+        try (PreparedStatement psChangeCondition = myBackService.getPreparedStatement(
+            "update projet.items set item_condition ='" + condition + "' where id_item = "
                 + idItem)) {
-          psCancelOffer.executeUpdate();
+          psChangeCondition.executeUpdate();
         }
       }
     } catch (Exception e) {

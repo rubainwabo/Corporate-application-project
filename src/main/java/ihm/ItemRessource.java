@@ -115,16 +115,17 @@ public class ItemRessource {
    * @param itemId the id of the item we want to cancel
    */
   @POST
-  @Path("cancelOffer/{id}")
+  @Path("changeState/{id}/{condition}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userCancelOffer(@PathParam("id") int itemId, @Context ContainerRequest req) {
+  public Response userCancelOffer(@PathParam("id") int itemId,
+      @PathParam("condition") String condition, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
-    myItemUCC.cancelOffer(itemId, userId);
+    myItemUCC.changeItemCondition(itemId, userId, condition);
     return Response.ok().build();
   }
 

@@ -36,10 +36,11 @@ public interface ItemUCC {
   /**
    * call the DAO to change the itemCondition to cancel.
    *
-   * @param idItem the item id
-   * @param userId the userId sending a request
+   * @param idItem    the item id
+   * @param userId    the userId sending a request
+   * @param condition the new condition of the item
    */
-  void cancelOffer(int idItem, int userId);
+  void changeItemCondition(int idItem, int userId, String condition);
 
   /**
    * call the dao to get all the last items.

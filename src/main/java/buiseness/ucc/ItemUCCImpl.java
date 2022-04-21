@@ -131,5 +131,20 @@ public class ItemUCCImpl implements ItemUCC {
 
       throw e;
     }
+
+  }
+
+  @Override
+  public void offerAgain(int itemId) {
+    try {
+      myDalServices.start();
+
+      myDateDAOService.addDate(itemId);
+      myDalServices.commit();
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+
   }
 }

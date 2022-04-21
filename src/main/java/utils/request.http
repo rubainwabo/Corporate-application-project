@@ -112,3 +112,7 @@ token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY0OTk0O
 ### get my items
  GET http://localhost:3000/items/myItems/gifted
 token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyOTEzMiwidXNlciI6NH0.dwW5DPw3cYsK6b_J7g7goEnAPCZV18cAH-Ga1YOgIaE
+
+### offer again
+POST http://localhost:3000/items/offer/again/1
+

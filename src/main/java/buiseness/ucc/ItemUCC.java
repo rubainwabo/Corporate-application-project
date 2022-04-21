@@ -67,4 +67,12 @@ public interface ItemUCC {
    * @return return 1 if the item is updated, 0 if not
    */
   int updateItem(ItemDTO item);
+
+  /**
+   * call to offer again an item.
+   *
+   * @param idItem the id of the item
+   */
+  void offerAgain(int idItem);
+
 }

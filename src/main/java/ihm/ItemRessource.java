@@ -181,4 +181,18 @@ public class ItemRessource {
   public int userUpdateItem(ItemDTO item) {
     return myItemUCC.updateItem(item);
   }
+
+  /**
+   * retrives to offer again an item.
+   *
+   * @return 1 if everything is correctly done
+   */
+  @POST
+  @Path("offer/again/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public void offerAgain(@PathParam("id") int idItem) {
+    myItemUCC.offerAgain(idItem);
+  }
+
+
 }

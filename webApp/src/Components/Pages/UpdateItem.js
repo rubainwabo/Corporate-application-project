@@ -21,7 +21,7 @@ const updateItem = `
   
             <div id="add-item-description">
                 <label for="itemDescription">Description</label><br>
-                <input  class="" type="text" id="itemDescription" name="itemDescription" >
+                <input  class="" type="text" id="itemDescription" name="itemDescription"  >
             </div>
 
             <div id="cancel-add">
@@ -70,7 +70,7 @@ const UpdateItem = async () => {
     const item = await response.json();
     document.getElementById("item-type").value=item.itemtype;
     document.getElementById("availability").value = item.timeSlot;
-    document.getElementById("itemDescription").innerText = item.description;
+    document.getElementById("itemDescription").value = item.description;
     
     console.log(item);
 

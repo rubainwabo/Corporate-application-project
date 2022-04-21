@@ -106,7 +106,7 @@ const MyItems = async (id) => {
     document.getElementById("offer-again").addEventListener("click",function(e){
         let itemR = document.getElementById(currentItemId);
 
-        if(addAgain(currentItemId)){
+        if(offerAgain(currentItemId)){
             document.getElementById("all-recent-item").removeChild(itemR);
         }   
         document.getElementById("my-items-pop-up").style.display="none";
@@ -251,7 +251,7 @@ async function cancelItem(idItem){
         return false;
     }
 }
-async function addAgain(idItem){
+async function offerAgain(idItem){
     try {
          var options = { method: 'POST',
          headers: {"token" : getSessionObject("accessToken")},

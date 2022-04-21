@@ -73,7 +73,8 @@ public interface ItemUCC {
    * call to offer again an item.
    *
    * @param idItem the id of the item
+   * @param userId user who want to offer again
    */
-  void offerAgain(int idItem);
+  void offerAgain(int idItem, int userId);
 
 }

@@ -135,11 +135,11 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void offerAgain(int itemId) {
+  public void offerAgain(int itemId, int userId) {
     try {
       myDalServices.start();
-
       myDateDAOService.addDate(itemId);
+      myItemDAOService.changeItemCondition(itemId, userId, "offered");
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

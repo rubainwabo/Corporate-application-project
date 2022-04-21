@@ -191,8 +191,9 @@ public class ItemRessource {
   @POST
   @Path("offer/again/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public void offerAgain(@PathParam("id") int idItem) {
-    myItemUCC.offerAgain(idItem);
+  public void userOfferItemAgain(@PathParam("id") int idItem, @Context ContainerRequest req) {
+    int userId = (int) req.getProperty("id");
+    myItemUCC.offerAgain(idItem, userId);
   }
 
 

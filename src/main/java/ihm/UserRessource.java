@@ -84,7 +84,6 @@ public class UserRessource {
       }
       return myUserUCC.updatePassword(userId, body.get("newPassword").asText());
     }
-
   }
 
   /**

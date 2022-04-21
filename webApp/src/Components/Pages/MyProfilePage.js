@@ -357,6 +357,7 @@ const MonProfile = async () => {
 
           if (!res.ok) {
             res.text().then((result) => {
+              Redirect("/logout");
               console.log("error", result);
             });
             throw new Error(

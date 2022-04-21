@@ -23,7 +23,7 @@ const item = `
     </div>
 
     <div id="item-show-interest">
-        <button id="show-interest">Je suis interessé</button>
+       
     </div>
 
     <div id="add-iterest-pop-up">
@@ -59,7 +59,7 @@ const ItemPage = async () => {
 
   let addIterestBtn = document.getElementById("add-interest-btn");
 
-  let showInterest = document.getElementById("show-interest");
+
   let removePopUp = document.getElementById("cancel-add-iterest");
   let popUp = document.getElementById("add-iterest-pop-up");
 
@@ -68,10 +68,6 @@ const ItemPage = async () => {
     popUp.style.display = "none";
   })
 
-  showInterest.addEventListener("click", function (e) {
-    e.preventDefault();
-    popUp.style.display = "flex";
-  })
 
   try {
     // hide data to inform if the pizza menu is already printed
@@ -98,8 +94,22 @@ const ItemPage = async () => {
     document.getElementById("offeror").innerText = item.offeror;
     document.getElementById(
         "number-interest").innerText = item.numberOfPeopleInterested;
+    let addInterestBox = document.getElementById("item-show-interest");
+    
+    if(item.offerorId!=getSessionObject("userId")){
+      let button = document.createElement("button");
+      button.id="show-interest";
+      button.innerText="Je suis interessé";
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        popUp.style.display = "flex";
+      })
+      addInterestBox.appendChild(button);
+    }
 
     let callMe = document.getElementById("callMe");
+
+    
 
     callMe.addEventListener("change", function (e) {
       e.preventDefault();

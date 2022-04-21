@@ -121,6 +121,12 @@ const MyItems = async (id) => {
         let params = [{key: "id", value: currentItemId}];
         Redirect("/pickrecipient", params);
     })
+
+    document.getElementById("show-item").addEventListener("click",function(e){
+        let params = [{key: "id", value: currentItemId}];
+        Redirect("/item", params);
+    })
+
   
   
 

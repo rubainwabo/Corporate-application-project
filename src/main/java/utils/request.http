@@ -116,3 +116,5 @@ token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyO
 ### offer again
 POST http://localhost:3000/items/offer/again/1
 
+###
+GET http://localhost/items/itemDetails/{{id}}

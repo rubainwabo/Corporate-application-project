@@ -13,7 +13,9 @@ public class ItemImpl implements Item {
   private String itemCondition;
   private String timeSlot;
   private String offeror;
-  private int recipient;
+  private int offerorId;
+  private String recipient;
+  private int recipientId;
   private String itemType;
   private int numberOfPeopleInterested;
   private Timestamp lastDateOffered;
@@ -112,13 +114,33 @@ public class ItemImpl implements Item {
   }
 
   @Override
-  public int getRecipient() {
+  public String getRecipient() {
     return recipient;
   }
 
   @Override
-  public void setRecipient(int recipient) {
+  public void setRecipient(String recipient) {
     this.recipient = recipient;
+  }
+
+  @Override
+  public int getOfferorId() {
+    return offerorId;
+  }
+
+  @Override
+  public void setOfferorId(int offerorId) {
+    this.offerorId = offerorId;
+  }
+
+  @Override
+  public int getRecipientId() {
+    return recipientId;
+  }
+
+  @Override
+  public void setRecipientId(int recipientId) {
+    this.recipientId = recipientId;
   }
 
   @Override

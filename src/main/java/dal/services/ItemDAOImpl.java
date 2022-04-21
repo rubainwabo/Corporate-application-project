@@ -78,6 +78,7 @@ public class ItemDAOImpl implements ItemDAO {
         item.setItemtype(rs.getString(2));
         item.setDescription(rs.getString(3));
         item.setUrlPicture(rs.getString(4));
+        item.setOfferorId(rs.getInt(5));
         item.setTimeSlot(rs.getString(6));
         item.setItemCondition(rs.getString(7));
         item.setNumberOfPeopleInterested(rs.getInt(8));

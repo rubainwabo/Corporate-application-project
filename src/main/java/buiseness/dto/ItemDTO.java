@@ -39,9 +39,17 @@ public interface ItemDTO {
 
   void setOfferor(String offeror);
 
-  int getRecipient();
+  int getOfferorId();
 
-  void setRecipient(int recipient);
+  void setOfferorId(int offerorId);
+
+  String getRecipient();
+
+  void setRecipient(String recipient);
+
+  int getRecipientId();
+
+  void setRecipientId(int recipientId);
 
   String getItemtype();
 

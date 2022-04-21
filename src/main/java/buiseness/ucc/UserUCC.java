@@ -2,13 +2,7 @@ package buiseness.ucc;
 
 import buiseness.domain.User;
 import buiseness.dto.UserDTO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
-import utils.exception.InvalidTokenException;
-import utils.exception.PasswordOrUsernameException;
-import utils.exception.ReasonForConnectionRefusalException;
-import utils.exception.UserInvalidException;
-import utils.exception.UserOnHoldException;
 
 
 public interface UserUCC {
@@ -21,17 +15,7 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
 
-  ObjectNode login(String username, String password, boolean rememberMe)
-      throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
-      UserOnHoldException, UserInvalidException;
-
-  /**
-   * verify the refresh token and create 2 token (1 refresh and 1 access).
-   *
-   * @param token token of the request
-   * @return an acess and refresh token
-   */
-  ObjectNode refreshToken(String token) throws InvalidTokenException;
+  UserDTO login(String username, String password);
 
   /**
    * changes the state of an user.
@@ -89,14 +73,6 @@ public interface UserUCC {
   List<UserDTO> getUsersByState(String state);
 
   /**
-   * retrives the phone number of the user.
-   *
-   * @param userId the user id
-   * @return the phone number of the user
-   */
-  String getPhoneNumber(int userId);
-
-  /**
    * call tha dao to insert the phone number to the specific user id.
    *
    * @param userId      the userId
@@ -111,4 +87,12 @@ public interface UserUCC {
    * @return id of the user.
    */
   int register(UserDTO user);
+
+  /**
+   * call to get all users who are interested in the item with the id idItem.
+   *
+   * @param idItem the id of the item
+   * @return all users who are interested
+   */
+  List<UserDTO> getUsersIterest(int idItem);
 }

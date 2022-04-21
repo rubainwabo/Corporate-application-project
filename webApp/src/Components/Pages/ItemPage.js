@@ -4,8 +4,7 @@ import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
 import { Redirect } from "../Router/Router";
 
 const item = `
-<div style="width : 100%; width : 100%, 
-width : 100%; 
+<div style="width : 100%;
 height : 100%; position : absolute; 
 left : 0px; right : 0px;
 clip-path: polygon(75% 0, 0 0, 0 25%);
@@ -19,7 +18,7 @@ background-color: #FFF59B;
   <p id="message"> </p>
     <div id="item-img-description">
         <div id="item-img">
-            <img id="img-id">
+            <img id="img-id" alt="">
         </div>
         <div id="item-description">
             <p id="item-description-p"></p>
@@ -44,7 +43,7 @@ background-color: #FFF59B;
           <input type="text" id="availabilities" placeholder="vos heures de disponibilité">
         </div>
         <div>
-          <input type="checkbox" id="callMe">
+          <span>Contactez-moi</span><input type="checkbox" id="callMe"> 
         </div>
         <div id="call-me-box"> 
           <input type="text" id="phone-number" placeholder="numéro" required >
@@ -56,8 +55,8 @@ background-color: #FFF59B;
       </form>
     </div>
   
-</section>
-`;
+</section>`
+;
 
 const ItemPage = async () => {
   let id = getId();

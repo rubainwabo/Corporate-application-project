@@ -1,7 +1,5 @@
-import { isJwtExpired } from 'jwt-check-expiration';
 import { Redirect } from "../Router/Router";
-import Logout from '../Logout/Logout';
-import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
+import { getSessionObject } from "../../utils/session";
 
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
@@ -11,8 +9,7 @@ import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
  */
 const home = 
 `
-<div style="width : 100%; width : 100%, 
-width : 100%; 
+<div style="width : 100%; 
 height : 100%; position : absolute; 
 left : 0px; right : 0px;
 clip-path: polygon(75% 0, 0 0, 0 25%);
@@ -34,8 +31,7 @@ background-color: #FFF59B;
 </section>
 `;
 
-const MesOffres = async (id) => {
-
+const MesOffres = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
 

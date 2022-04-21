@@ -29,7 +29,6 @@ public interface ItemUCC {
    * @param itemId     the itemID
    * @param objectNode the node getted by the front
    * @param userId     the user who's sending a request
-   * @return
    */
   void addInterest(int itemId, ObjectNode objectNode, int userId);
 
@@ -50,4 +49,21 @@ public interface ItemUCC {
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
 
   List<ItemDTO> getAllItemsOffered(int id);
+
+  /**
+   * call to add recipient to a item.
+   *
+   * @param idItem      the id of the item
+   * @param idRecipient the id of de recipient
+   * @return return 1 if the recipient is added, 0 if not
+   */
+  int addRecipient(int idItem, int idRecipient);
+
+  /**
+   * call update some info of an item.
+   *
+   * @param item the id of the item
+   * @return return 1 if the item is updated, 0 if not
+   */
+  int updateItem(ItemDTO item);
 }

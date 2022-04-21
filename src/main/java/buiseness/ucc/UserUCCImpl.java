@@ -2,20 +2,16 @@ package buiseness.ucc;
 
 import buiseness.domain.User;
 import buiseness.dto.UserDTO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import java.util.List;
-import org.mindrot.jbcrypt.BCrypt;
-import utils.TokenService;
-import utils.exception.BizzException;
 import utils.exception.InvalidStateException;
-import utils.exception.InvalidTokenException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserOnHoldException;
 import utils.exception.UsernameAlreadyExists;
+import org.mindrot.jbcrypt.BCrypt;
 
 
 public class UserUCCImpl implements UserUCC {
@@ -24,15 +20,12 @@ public class UserUCCImpl implements UserUCC {
   private UserDAO myUserDAO;
 
   @Inject
-  private TokenService myTokenService;
-
-  @Inject
   private DalServices myDalServices;
 
   @Override
-  public ObjectNode login(String username, String password, boolean rememberMe) {
+  public UserDTO login(String username, String password) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       User user = (User) myUserDAO.getOneByUsername(username);
       if (user == null) {
         throw new PasswordOrUsernameException("username or password incorrect");
@@ -46,130 +39,81 @@ public class UserUCCImpl implements UserUCC {
       if (user.isWaiting()) {
         throw new UserOnHoldException("user on hold");
       }
-      var token = myTokenService.login(user.getId(), username, rememberMe);
-      token.put("role", user.getRole());
-      myDalServices.commit(false);
-      return token;
+      myDalServices.commit();
+      return user;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
-  }
-
-  @Override
-  public ObjectNode refreshToken(String token) {
-    if (!myTokenService.isJWT(token) || !myTokenService.verifyRefreshToken(token)) {
-      throw new InvalidTokenException("invalid token");
-    }
-    var userId = myTokenService.getUserId(token);
-    return myTokenService.getRefreshedTokens(userId);
   }
 
   @Override
   public List<UserDTO> getUsersByState(String state) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       if (state.equals("denied") || state.equals("valid") || state.equals("waiting")) {
         var list = myUserDAO.getAllUserByState(state);
-        myDalServices.commit(false);
+        myDalServices.commit();
         return list;
       } else {
-        throw new InvalidStateException("state invalide");
+        throw new InvalidStateException("invalid state");
       }
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
-    }
-  }
-
-  @Override
-  public String getPhoneNumber(int userId) {
-    try {
-      myDalServices.start(false);
-      String str = myUserDAO.getPhoneNumber(userId);
-      myDalServices.commit(false);
-      return str;
-    } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
   public void addPhoneNumber(int userId, String phoneNumber) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       myUserDAO.addPhoneNumber(userId, phoneNumber);
-      myDalServices.commit(true);
+      myDalServices.commit();
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
+  @Override
   public User getOneById(int id) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       var usr = (User) myUserDAO.getOneById(id);
-      myDalServices.commit(false);
+      myDalServices.commit();
       return usr;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
+  @Override
   public boolean checkAdmin(int id) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       User myUser = (User) myUserDAO.getOneById(id);
       boolean isAdmin = myUser.isAdmin();
-      myDalServices.commit(false);
+      myDalServices.commit();
       return isAdmin;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
+  @Override
   public boolean checkWaitingOrDenied(int id) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       User myUser = (User) myUserDAO.getOneById(id);
       boolean isValid = !myUser.isWaiting() && !myUser.isDenied();
-      myDalServices.commit(false);
+      myDalServices.commit();
       return isValid;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
@@ -179,21 +123,17 @@ public class UserUCCImpl implements UserUCC {
       if (!state.equals("denied") && !state.equals("valid")) {
         throw new InvalidStateException("Trying to insert invalid state");
       }
-      myDalServices.start(true);
+      myDalServices.start();
       if (myUserDAO.getOneById(id) == null) {
-        myDalServices.commit(false);
+        myDalServices.commit();
         return false;
       }
       myUserDAO.changeState(id, state, refusalReason, admin);
-      myDalServices.commit(true);
+      myDalServices.commit();
       return true;
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
@@ -201,39 +141,29 @@ public class UserUCCImpl implements UserUCC {
   public boolean updateProfile(int id, String username, String firstName, String lastName,
       String street, int number, int postcode, String box, String city, String phone) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       boolean ret = myUserDAO.updateProfile(id, username, firstName, lastName, street, number,
           postcode, box,
           city, phone);
-      myDalServices.commit(true);
+      myDalServices.commit();
       return ret;
     } catch (Exception e) {
-      try {
         myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+        throw e;
     }
   }
-  
+
   @Override
   public boolean updatePassword(int id, String password) {
     try {
-      myDalServices.start(true);
-
+      myDalServices.start();
       password = BCrypt.hashpw(password, BCrypt.gensalt());
-
       boolean ret = myUserDAO.updatePassword(id, password);
-      myDalServices.commit(true);
+      myDalServices.commit();
       return ret;
     } catch (Exception e) {
-      try {
         myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+        throw e;
     }
   }
 
@@ -241,32 +171,33 @@ public class UserUCCImpl implements UserUCC {
   @Override
   public int register(UserDTO user) {
     try {
-      myDalServices.start(true);
-
+      myDalServices.start();
       User user1 = (User) user;
       user1.setPassword(user1.hashPassword(user1.getPassword()));
-
       UserDTO userExist = myUserDAO.getOneByUsername(user.getUserName());
-
       if (userExist != null) {
-        myDalServices.rollBack();
         throw new UsernameAlreadyExists("username already exists");
       }
-      System.out.println("demande de l'id");
       int idUser = myUserDAO.register(user1);
-
       //var userConnected = myTokenService.login(idUser, user.getUserName(), false);
-      myDalServices.commit(true);
+      myDalServices.commit();
       return idUser;
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
+  }
 
-
+  @Override
+  public List<UserDTO> getUsersIterest(int idItem) {
+    try {
+      myDalServices.start();
+      List<UserDTO> list = myUserDAO.getUserInterest(idItem);
+      myDalServices.commit();
+      return list;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
   }
 }

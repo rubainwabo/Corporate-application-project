@@ -1,5 +1,6 @@
 package utils;
 
+import buiseness.dto.UserDTO;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -19,20 +20,11 @@ public interface TokenService {
   /**
    * will create an objectNode containing all user information (id, token(s),username,rememberMe).
    *
-   * @param id         user id
-   * @param username   user username
+   * @param user       the user
    * @param rememberMe if he want to be remembered
    * @return an objectNode containing all user information
    */
-  ObjectNode login(int id, String username, boolean rememberMe);
-
-  /**
-   * verifies the validity of the token.
-   *
-   * @param token a refresh token
-   * @return true if it is valid, else false
-   */
-  boolean verifyRefreshToken(String token);
+  ObjectNode login(UserDTO user, boolean rememberMe);
 
   /**
    * creates a refresh and access tokens.
@@ -41,22 +33,6 @@ public interface TokenService {
    * @return the created token
    */
   ObjectNode getRefreshedTokens(int id);
-
-  /**
-   * verifies if the token is a JWT.
-   *
-   * @param token a refresh token(usually)
-   * @return true if it's a JWT, else false
-   */
-  boolean isJWT(String token);
-
-  /**
-   * returns an userId.
-   *
-   * @param token a refresh token(usually)
-   * @return true if it's a JWT, else false
-   */
-  int getUserId(String token);
 
   DecodedJWT getVerifyToken(String token);
 

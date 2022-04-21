@@ -115,7 +115,7 @@ public class ItemRessource {
    * @param itemId the id of the item we want to cancel
    */
   @POST
-  @Path("changeState/{id}/{condition}")
+  @Path("changeCondition/{id}/{condition}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response userChangeItemCondition(@PathParam("id") int itemId,

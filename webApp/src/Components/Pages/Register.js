@@ -1,7 +1,5 @@
 
 import { Redirect } from "../Router/Router";
-import Navbar from "../Navbar/Navbar";
-import { setSessionObject,getSessionObject } from "../../utils/session";
 
 const register = `
 <section id="register-page">
@@ -108,8 +106,7 @@ const Register = () => {
                 "fetch error : " + response.status + " : " + response.statusText
               );
             }
-            const userId = await response.json(); // json() returns a promise => we wait for the data
-            
+
             document.getElementById("register-pop-up").style.display="flex";  
             // call the HomePage via the Router
 

@@ -241,7 +241,7 @@ async function cancelItem(idItem){
         mode: 'cors',
         cache: 'default',
         }; 
-        const response = await fetch("/api/items/changeConditionr/" + idItem+"/cancelled", options); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
+        const response = await fetch("/api/items/changeCondition/" + idItem+"/cancelled", options); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
 
         if (response.ok) {
             return true;

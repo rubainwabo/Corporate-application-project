@@ -118,7 +118,7 @@ public class ItemRessource {
   @Path("changeState/{id}/{condition}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userCancelOffer(@PathParam("id") int itemId,
+  public Response userChangeItemCondition(@PathParam("id") int itemId,
       @PathParam("condition") String condition, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)

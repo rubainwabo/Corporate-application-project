@@ -21,7 +21,7 @@ const updateItem = `
   
             <div id="add-item-description">
                 <label for="itemDescription">Description</label><br>
-                <input  class="" type="text" id="itemDescription" name="itemDescription"  >
+                <input  class="" type="text" id="itemDescription" name="itemDescription" >
             </div>
 
             <div id="cancel-add">
@@ -33,6 +33,8 @@ const updateItem = `
                 </div>
             </div>
     </form>
+    
+</div>
    
 </section>
 `;
@@ -43,10 +45,8 @@ const UpdateItem = async () => {
   pageDiv.innerHTML = updateItem;
   
   let addItemForm = document.getElementById("add-item-form");
-  let addItemType = document.getElementById("add-item-type");
-  let addItemTypeBtn = document.getElementById("add-new-item-type-btn");
-  let popUp = document.getElementById("add-item-pop-up");
-  let removePopUp = document.getElementById("cancel-add-item-type");
+  let updateButton = document.getElementById("addItemButton");
+
 
 
   
@@ -79,21 +79,19 @@ const UpdateItem = async () => {
     console.error("LoginPage::error: ", error);
   }
 
-  addItemForm.addEventListener("submit", async function (e) {
+  updateButton.addEventListener("click", async function (e) {
     e.preventDefault();
     let description = document.getElementById("itemDescription").value;
     let urlPicture = "none";
-    let itemtype = document.getElementById("items-type-selectbox").value;
-
     let timeSlot = document.getElementById("availability").value;
 
     try {
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         body: JSON.stringify({
+          id:id,
           description: description,
           urlPicture: urlPicture,
-          itemtype: itemtype,
           timeSlot: timeSlot
         }), // body data type must match "Content-Type" header
         headers: {
@@ -102,7 +100,7 @@ const UpdateItem = async () => {
         },
       };
 
-      const response = await fetch("/api/items/add", options); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/items/update", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
         response.text().then((result) => {
@@ -113,7 +111,11 @@ const UpdateItem = async () => {
       const itemType = await response.json(); // json() returns a promise => we wait for the data
 
       console.log(itemType);
-      document.getElementById("add-item-pop-up-confim").style.display = "flex";
+      let params = [{key: "id", value: id}];
+      Redirect("/item", params);
+
+     
+     
 
     } catch (error) {
       console.error("LoginPage::error: ", error);

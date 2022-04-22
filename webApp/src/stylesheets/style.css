@@ -125,7 +125,9 @@ item-page
 #item-description{
     margin-left: 10vh;
     width: 50%;
+    
 }
+
 #item-show-interest{
     align-self: center;
     display: flex;
@@ -198,6 +200,10 @@ home page
     box-shadow: 2px 5px 5px rgb(109, 109, 109);
     cursor: pointer;
     
+}
+.item-title{
+    font-weight: bold;
+    margin-top: 3px;
 }
 /*
 add-item-page

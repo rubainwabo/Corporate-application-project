@@ -172,7 +172,7 @@ async function getMyItems(state){
     
           itemImgDiv.src = itemImg;
           itemType.innerText = item.itemtype;
-          itemDescription.innerText = item.description;
+          itemDescription.innerText =  item.description.substring(0,40)+"...";
     
           descriptionBox.appendChild(itemType);
           descriptionBox.appendChild(itemDescription);

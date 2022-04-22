@@ -225,7 +225,8 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public int addRecipient(int idItem, int idRecipient) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(""
-        + "update projet.items set recipient=" + idRecipient + "WHERE id_item=" + idItem)) {
+        + "update projet.items set recipient=" + idRecipient
+        + " item_condition='Assigned' WHERE id_item=" + idItem)) {
 
       ps.executeUpdate();
 

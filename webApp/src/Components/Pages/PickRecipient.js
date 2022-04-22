@@ -22,9 +22,10 @@ const pickRecipient = `
 </section>
 
 `;
+let id = getId();
 
 const PickRecipient = async () => {
-    let id = getId();
+    
     let token = getSessionObject("accessToken");
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = pickRecipient;
@@ -62,7 +63,9 @@ const PickRecipient = async () => {
         adress.innerText=user.street+" "+user.buildingNumber+" ("+user.city+")";
 
         addButton.innerText=" Offrir";
-        
+        addButton.addEventListener("click",function(e){
+          addRecipient(user.id);
+        })
         userBox.classList.add("user-interest");
 
         userBox.appendChild(lastName);
@@ -112,6 +115,24 @@ const PickRecipient = async () => {
 
 
 };
+
+async function addRecipient(idRecipient){
+  try {
+    var options = { method: 'POST',
+    headers: {"token" : getSessionObject("accessToken")},
+    mode: 'cors',
+    cache: 'default',
+    }; 
+    const response = await fetch("/api/items/addRecipient/" + id+"/"+idRecipient, options); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
+
+    if (response.ok) {
+        return true;
+    } 
+  }catch(error){
+    console.log(error);
+    return false;
+}
+}
 
 function getId() {
     let urlString = window.location.href;

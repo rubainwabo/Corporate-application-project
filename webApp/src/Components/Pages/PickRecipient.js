@@ -17,12 +17,7 @@ const pickRecipient = `
         <div> <img src=${itemImg} ></div>
     </div>
     <div id="recipient-page-item-users">
-        <div class="user-interest">
-            <p>Dotche</p>
-            <p>Daniel</p>
-            <p>Olieslagerstraat 92</p>
-            <button> Offrir </button>
-        </div>
+        
     </div>
 </section>
 
@@ -52,7 +47,8 @@ const PickRecipient = async () => {
     const users = await response.json();
 
     if(users.length==0){
-        console.log("aucun interet pour l'instant")
+        document.getElementById("recipient-page-item-users").innerText="aucun interet pour l'instant";
+        
     }
     users .forEach(user => {
         let userBox = document.createElement("div");

@@ -35,12 +35,13 @@ public interface ItemDAO {
   /**
    * retrives to change the itemCondition to cancelled.
    *
-   * @param idItem the idItem
-   * @param userId the user who send the request
+   * @param idItem    the idItem
+   * @param userId    the user who send the request
+   * @param condition the new condition of the item
    */
-  void cancelOffer(int idItem, int userId);
+  void changeItemCondition(int idItem, int userId, String condition);
 
-  List<ItemDTO> getAllOffered(int id);
+  List<ItemDTO> getMyItems(int id, String state);
 
   /**
    * retrives to get all the last item with the itemCondition offered.

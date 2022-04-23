@@ -30,6 +30,7 @@ Content-Type: application/json
 ### Create item
 POST http://localhost:3000/items/add
 Content-Type: application/json
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyNzQ4MiwidXNlciI6NH0.F-JE1p-OFdbfWqFAw3GQ-aoceXnppXb50o4foy9E59k
 
 {
   "description": "mamanie",
@@ -88,12 +89,12 @@ GET http://localhost:3000/itemsType/getAll
 ### get users who are interest on an item
 
 GET http://localhost:3000/members/interest/7
-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY0OTg2MzY0OSwidXNlciI6NH0.6xTOyRr3sMOvM74JZKAj4kh_ZFP8wxpy0jItPOFXg_E
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyNzQ4MiwidXNlciI6NH0.F-JE1p-OFdbfWqFAw3GQ-aoceXnppXb50o4foy9E59k
 
 ### add recipient
 
 POST http://localhost:3000/items/addRecipient/7/6
-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY0OTg2NzY4MSwidXNlciI6NH0.2n63aWekRBZaF8qJ8u3v2VZaa3WDwQ2RKvDlUDb4EVo
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyNzQ4MiwidXNlciI6NH0.F-JE1p-OFdbfWqFAw3GQ-aoceXnppXb50o4foy9E59k
 
 ### update a item
 
@@ -107,3 +108,13 @@ token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY0OTk0O
   "urlPicture": "jhon",
   "timeSlot": "oui"
 }
+
+### get my items
+ GET http://localhost:3000/items/myItems/gifted
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyOTEzMiwidXNlciI6NH0.dwW5DPw3cYsK6b_J7g7goEnAPCZV18cAH-Ga1YOgIaE
+
+### offer again
+POST http://localhost:3000/items/offer/again/1
+
+###
+GET http://localhost/items/itemDetails/{{id}}

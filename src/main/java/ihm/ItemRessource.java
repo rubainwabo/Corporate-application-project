@@ -36,12 +36,13 @@ public class ItemRessource {
    * @return items
    */
   @GET
-  @Path("mesOffres")
+  @Path("myItems/{state}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> userMesOffres(@Context ContainerRequest req) {
+  public List<ItemDTO> userMyItems(@Context ContainerRequest req,
+      @PathParam("state") String state) {
     int id = (int) req.getProperty("id");
-    return myItemUCC.getAllItemsOffered(id);
+    return myItemUCC.getMyItems(id, state);
   }
 
   /**
@@ -114,16 +115,17 @@ public class ItemRessource {
    * @param itemId the id of the item we want to cancel
    */
   @POST
-  @Path("cancelOffer/{id}")
+  @Path("changeCondition/{id}/{condition}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userCancelOffer(@PathParam("id") int itemId, @Context ContainerRequest req) {
+  public Response userChangeItemCondition(@PathParam("id") int itemId,
+      @PathParam("condition") String condition, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
-    myItemUCC.cancelOffer(itemId, userId);
+    myItemUCC.changeItemCondition(itemId, userId, condition);
     return Response.ok().build();
   }
 
@@ -180,4 +182,17 @@ public class ItemRessource {
   public int userUpdateItem(ItemDTO item) {
     return myItemUCC.updateItem(item);
   }
+
+  /**
+   * retrives to offer again an item.
+   */
+  @POST
+  @Path("offer/again/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public void userOfferItemAgain(@PathParam("id") int idItem, @Context ContainerRequest req) {
+    int userId = (int) req.getProperty("id");
+    myItemUCC.offerAgain(idItem, userId);
+  }
+
+
 }

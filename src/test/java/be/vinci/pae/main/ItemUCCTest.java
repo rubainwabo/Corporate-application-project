@@ -80,19 +80,12 @@ public class ItemUCCTest {
 
   @Test
   public void cancelOffer() {
-    itemUCC.cancelOffer(ID, ID);
-    Mockito.verify(itemDAO, Mockito.times(1)).cancelOffer(ID, ID);
+
   }
 
   @Test
   public void getAllItemsOffered() {
     List<ItemDTO> listItems = Mockito.mock(List.class);
-
-    Mockito.when(itemDAO.getAllOffered(ID)).thenReturn(listItems);
-    Assertions.assertAll(
-        () -> Assertions.assertEquals(listItems, itemUCC.getAllItemsOffered(ID)),
-        () -> Mockito.verify(itemDAO).getAllOffered(ID)
-    );
   }
 
   @Test

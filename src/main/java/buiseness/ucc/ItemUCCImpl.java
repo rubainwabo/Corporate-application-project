@@ -59,10 +59,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void cancelOffer(int idItem, int userId) {
+  public void changeItemCondition(int idItem, int userId, String state) {
     try {
       myDalServices.start();
-      myItemDAOService.cancelOffer(idItem, userId);
+      myItemDAOService.changeItemCondition(idItem, userId, state);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -71,10 +71,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public List<ItemDTO> getAllItemsOffered(int id) {
+  public List<ItemDTO> getMyItems(int id, String state) {
     try {
       myDalServices.start();
-      List<ItemDTO> list = myItemDAOService.getAllOffered(id);
+      List<ItemDTO> list = myItemDAOService.getMyItems(id, state);
       myDalServices.commit();
       return list;
     } catch (Exception e) {
@@ -131,5 +131,20 @@ public class ItemUCCImpl implements ItemUCC {
 
       throw e;
     }
+
+  }
+
+  @Override
+  public void offerAgain(int itemId, int userId) {
+    try {
+      myDalServices.start();
+      myDateDAOService.addDate(itemId);
+      myItemDAOService.changeItemCondition(itemId, userId, "offered");
+      myDalServices.commit();
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+
   }
 }

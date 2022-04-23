@@ -29,16 +29,18 @@ public interface ItemUCC {
    * @param itemId     the itemID
    * @param objectNode the node getted by the front
    * @param userId     the user who's sending a request
+   * @return
    */
   void addInterest(int itemId, ObjectNode objectNode, int userId);
 
   /**
    * call the DAO to change the itemCondition to cancel.
    *
-   * @param idItem the item id
-   * @param userId the userId sending a request
+   * @param idItem    the item id
+   * @param userId    the userId sending a request
+   * @param condition the new condition of the item
    */
-  void cancelOffer(int idItem, int userId);
+  void changeItemCondition(int idItem, int userId, String condition);
 
   /**
    * call the dao to get all the last items.
@@ -48,7 +50,7 @@ public interface ItemUCC {
    */
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
 
-  List<ItemDTO> getAllItemsOffered(int id);
+  List<ItemDTO> getMyItems(int id, String state);
 
   /**
    * call to add recipient to a item.
@@ -66,4 +68,13 @@ public interface ItemUCC {
    * @return return 1 if the item is updated, 0 if not
    */
   int updateItem(ItemDTO item);
+
+  /**
+   * call to offer again an item.
+   *
+   * @param idItem the id of the item
+   * @param userId user who want to offer again
+   */
+  void offerAgain(int idItem, int userId);
+
 }

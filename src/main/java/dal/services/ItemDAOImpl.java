@@ -78,6 +78,7 @@ public class ItemDAOImpl implements ItemDAO {
         item.setItemtype(rs.getString(2));
         item.setDescription(rs.getString(3));
         item.setUrlPicture(rs.getString(4));
+        item.setOfferorId(rs.getInt(5));
         item.setTimeSlot(rs.getString(6));
         item.setItemCondition(rs.getString(7));
         item.setNumberOfPeopleInterested(rs.getInt(8));
@@ -149,7 +150,7 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void cancelOffer(int idItem, int userId) {
+  public void changeItemCondition(int idItem, int userId, String condition) {
     try (PreparedStatement psVerifyUser = myBackService.getPreparedStatement(
         "select offeror from projet.items where id_item = " + idItem)) {
       try (ResultSet rsVerifyUser = psVerifyUser.executeQuery()) {
@@ -160,10 +161,10 @@ public class ItemDAOImpl implements ItemDAO {
           throw new FatalException(
               "cet utilisateur n'est pas l'auteur de l'offre, il ne peut donc pas l'annuler");
         }
-        try (PreparedStatement psCancelOffer = myBackService.getPreparedStatement(
-            "update projet.items set item_condition = 'cancelled' where id_item = "
+        try (PreparedStatement psChangeCondition = myBackService.getPreparedStatement(
+            "update projet.items set item_condition ='" + condition + "' where id_item = "
                 + idItem)) {
-          psCancelOffer.executeUpdate();
+          psChangeCondition.executeUpdate();
         }
       }
     } catch (Exception e) {
@@ -186,13 +187,14 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public List<ItemDTO> getAllOffered(int id) {
+  public List<ItemDTO> getMyItems(int id, String state) {
     String query =
         "select id_item, description, url_picture, "
             + "it.item_type_name,number_of_people_interested "
             + "from projet.items i, projet.item_type it "
-            + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
-            + "and i.item_condition != 'cancelled'";
+            + "where offeror =" + id + " and i.item_type = it.id_item_type "
+            + "and i.item_condition ='" + state + "'";
+    System.out.println(query);
     return getItemDTOS(query);
 
   }
@@ -223,7 +225,8 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public int addRecipient(int idItem, int idRecipient) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(""
-        + "update projet.items set recipient=" + idRecipient + "WHERE id_item=" + idItem)) {
+        + "update projet.items set recipient=" + idRecipient
+        + ", item_condition='Assigned' WHERE id_item=" + idItem)) {
 
       ps.executeUpdate();
 

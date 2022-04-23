@@ -132,4 +132,5 @@ public interface UserDTO {
   int getNbrItemNotTaken();
 
   void setNbrItemNotTaken(int nbrItemNotTaken);
+
 }

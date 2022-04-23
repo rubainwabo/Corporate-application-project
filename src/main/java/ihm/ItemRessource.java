@@ -3,6 +3,7 @@ package ihm;
 import buiseness.dto.ItemDTO;
 import buiseness.ucc.ItemUCC;
 import buiseness.ucc.UserUCC;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -12,7 +13,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -30,18 +30,19 @@ public class ItemRessource {
   @Inject
   private UserUCC myUserUCC;
 
-
   /**
    * gets list of offers of the user.
    *
    * @return items
    */
   @GET
-  @Path("mesOffres")
+  @Path("myItems/{state}")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> userMesOffres(@Context ContainerRequest req) {
+  public List<ItemDTO> userMyItems(@Context ContainerRequest req,
+      @PathParam("state") String state) {
     int id = (int) req.getProperty("id");
-    return myItemUCC.getAllItemsOffered(id);
+    return myItemUCC.getMyItems(id, state);
   }
 
   /**
@@ -114,16 +115,17 @@ public class ItemRessource {
    * @param itemId the id of the item we want to cancel
    */
   @POST
-  @Path("cancelOffer/{id}")
+  @Path("changeCondition/{id}/{condition}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userCancelOffer(@PathParam("id") int itemId, @Context ContainerRequest req) {
+  public Response userChangeItemCondition(@PathParam("id") int itemId,
+      @PathParam("condition") String condition, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information manquante").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
-    myItemUCC.cancelOffer(itemId, userId);
+    myItemUCC.changeItemCondition(itemId, userId, condition);
     return Response.ok().build();
   }
 
@@ -155,18 +157,58 @@ public class ItemRessource {
   @Path("itemCollected")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userItemCollectedOrNot(@Context ContainerRequest req,
-      @QueryParam("itemId") int itemId,
-      @QueryParam("itemCollected") boolean isCollected) {
+  public Response userItemCollectedOrNot(@Context ContainerRequest req, JsonNode node) {
 
-    if (itemId <= 0) {
+    if (!node.hasNonNull("itemId") || !node.hasNonNull("itemCollected")
+        || node.get("itemId").asInt() <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }
     int reqUserId = (int) req.getProperty("id");
-    ItemDTO item = myItemUCC.getDetails(itemId);
-    // TODO check if itemOfferor == reqUserId
-    myItemUCC.ItemCollectedOrNot(item, isCollected, reqUserId);
+    int itemId = node.get("itemId").asInt();
+    boolean isCollected = node.get("itemCollected").asBoolean();
+    myItemUCC.ItemCollectedOrNot(itemId, isCollected, reqUserId);
     return Response.ok().build();
+  }
+
+  /**
+   * retrives to add an item it's recipient.
+   *
+   * @return a list with all the users
+   */
+  @POST
+  @Path("addRecipient/{idItem}/{idRecipient}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public int userAddRecipient(@PathParam("idItem") int idItem,
+      @PathParam("idRecipient") int idRecipient) {
+    if (idItem <= 0 || idRecipient <= 0) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("information is missing").type("text/plain").build());
+    }
+    return myItemUCC.addRecipient(idItem, idRecipient);
+
+  }
+
+  /**
+   * retrives to update an item.
+   *
+   * @return 1 if everything is correctly done
+   */
+  @POST
+  @Path("update")
+  @Produces(MediaType.APPLICATION_JSON)
+  public int userUpdateItem(ItemDTO item) {
+    return myItemUCC.updateItem(item);
+  }
+
+  /**
+   * retrives to offer again an item.
+   */
+  @POST
+  @Path("offer/again/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public void userOfferItemAgain(@PathParam("id") int idItem, @Context ContainerRequest req) {
+    int userId = (int) req.getProperty("id");
+    myItemUCC.offerAgain(idItem, userId);
   }
 }

@@ -36,10 +36,11 @@ public interface ItemUCC {
   /**
    * call the DAO to change the itemCondition to cancel.
    *
-   * @param idItem the item id
-   * @param userId the userId sending a request
+   * @param idItem    the item id
+   * @param userId    the userId sending a request
+   * @param condition the new condition of the item
    */
-  void cancelOffer(int idItem, int userId);
+  void changeItemCondition(int idItem, int userId, String condition);
 
   /**
    * call the dao to get all the last items.
@@ -49,9 +50,35 @@ public interface ItemUCC {
    */
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
 
-  List<ItemDTO> getAllItemsOffered(int id);
-
-  void ItemCollectedOrNot(ItemDTO item, boolean itemCollected, int reqUsrId);
+  void ItemCollectedOrNot(int itemId, boolean itemCollected, int reqUsrId);
 
   List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
+
+  List<ItemDTO> getMyItems(int id, String state);
+
+  /**
+   * call to add recipient to a item.
+   *
+   * @param idItem      the id of the item
+   * @param idRecipient the id of de recipient
+   * @return return 1 if the recipient is added, 0 if not
+   */
+  int addRecipient(int idItem, int idRecipient);
+
+  /**
+   * call update some info of an item.
+   *
+   * @param item the id of the item
+   * @return return 1 if the item is updated, 0 if not
+   */
+  int updateItem(ItemDTO item);
+
+  /**
+   * call to offer again an item.
+   *
+   * @param idItem the id of the item
+   * @param userId user who want to offer again
+   */
+  void offerAgain(int idItem, int userId);
+
 }

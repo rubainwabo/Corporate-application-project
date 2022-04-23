@@ -1,7 +1,5 @@
-import { isJwtExpired } from 'jwt-check-expiration';
 import { Redirect } from "../Router/Router";
-import Logout from '../Logout/Logout';
-import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
+import { getSessionObject } from "../../utils/session";
 
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
@@ -9,7 +7,20 @@ import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
 /**
  * Render the LoginPage
  */
-const home = `<section id="home-page">
+const home = 
+`
+<div style="width : 100%; 
+height : 100%; position : absolute; 
+left : 0px; right : 0px;
+clip-path: polygon(75% 0, 0 0, 0 25%);
+position : absolute; 
+top : 0px;
+left : 0px;
+z-index: -5;
+background-color: #FFF59B;
+"> </div>
+
+<section id="home-page">
 <div id="home-page-navigation">
     <h2 id="home-page-title"> Dernières offres</h2>
 </div>
@@ -36,10 +47,6 @@ const MesOffres = async () => {
 
     if(!response.ok){
     return Redirect("/logout");
-
-      throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
-      )
   }
 
   const items = await response.json();
@@ -49,6 +56,7 @@ const MesOffres = async () => {
  items.forEach((item)=>{
     console.log("my item" , item);
     
+
     let itemBox = document.createElement("div");
     let homePageImageBox = document.createElement("div");
     let itemImgDiv = document.createElement("img");

@@ -7,18 +7,19 @@ import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
 import MesOffres from "../Pages/MesOffres";
 import MemberList from "../Pages/admin/MemberList";
-
+import MonProfile from "../Pages/MyProfilePage";
 // Configure your routes here
 const routes = {
-  '/' : HomePage,
+  '/': HomePage,
   "/login": LoginPage,
-  "/logout":Logout,
-  '/item':ItemPage,
-  '/register':Register,
-  '/additem':AddItemPage,
-  '/userhandeler':UserHandler,
-  '/mesOffres' : MesOffres,
-  '/memberList' : MemberList
+  "/logout": Logout,
+  '/item': ItemPage,
+  '/register': Register,
+  '/additem': AddItemPage,
+  '/userhandeler': UserHandler,
+  '/mesOffres': MesOffres,
+  '/memberList': MemberList,
+  '/monProfile': MonProfile
 };
 
 /**
@@ -55,10 +56,11 @@ const Router = () => {
   /* Route the right component when the page is loaded / refreshed */
   window.addEventListener("load", (e) => {
     const componentToRender = routes[window.location.pathname];
-    if (!componentToRender)
+    if (!componentToRender) {
       throw Error(
-        "The " + window.location.pathname + " ressource does not exist."
+          "The " + window.location.pathname + " ressource does not exist."
       );
+    }
 
     componentToRender();
   });
@@ -76,29 +78,27 @@ const Router = () => {
  * routes array of the Router
  */
 
-const Redirect = (uri,params) => {
+const Redirect = (uri, params) => {
   // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
-  if(params){
-    var url = window.location.origin + uri+"?";
+  if (params) {
+    var url = window.location.origin + uri + "?";
 
     var i = 0;
-    while(i<params.length){
-      url+=params[i].key+"="+params[i].value;
+    while (i < params.length) {
+      url += params[i].key + "=" + params[i].value;
       i++;
-      if(i<params.length){
-        url+="&";
+      if (i < params.length) {
+        url += "&";
       }
     }
     window.history.pushState({}, uri, url);
- 
-    
-  }else{
+
+  } else {
     window.history.pushState({}, uri, window.location.origin + uri)
   }
-  
- 
+
   // render the requested component
-  
+
   const componentToRender = routes[uri];
   if (routes[uri]) {
     componentToRender();
@@ -107,4 +107,4 @@ const Redirect = (uri,params) => {
   }
 };
 
-export { Router, Redirect };
+export {Router, Redirect};

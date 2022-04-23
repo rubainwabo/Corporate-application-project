@@ -2,7 +2,6 @@ package dal.services;
 
 import buiseness.dto.ItemDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ItemDAO {
@@ -14,7 +13,7 @@ public interface ItemDAO {
    * @param userId the offeror
    * @return the id of the item added
    */
-  int addItem(ItemDTO item, int userId) throws SQLException;
+  int addItem(ItemDTO item, int userId);
 
   /**
    * retrives the item by the id in params.
@@ -22,7 +21,7 @@ public interface ItemDAO {
    * @param id the item id
    * @return the item
    */
-  ItemDTO getOneById(int id) throws SQLException;
+  ItemDTO getOneById(int id);
 
   /**
    * try to add an interest for an object.
@@ -31,17 +30,18 @@ public interface ItemDAO {
    * @param objectNode the node getted from the front
    * @param userId     the user who send the request
    */
-  void addInterest(int idItem, ObjectNode objectNode, int userId) throws SQLException;
+  void addInterest(int idItem, ObjectNode objectNode, int userId);
 
   /**
    * retrives to change the itemCondition to cancelled.
    *
-   * @param idItem the idItem
-   * @param userId the user who send the request
+   * @param idItem    the idItem
+   * @param userId    the user who send the request
+   * @param condition the new condition of the item
    */
-  void cancelOffer(int idItem, int userId) throws SQLException;
+  void changeItemCondition(int idItem, int userId, String condition);
 
-  List<ItemDTO> getAllOffered(int id);
+  List<ItemDTO> getMyItems(int id, String state);
 
   /**
    * retrives to get all the last item with the itemCondition offered.
@@ -49,9 +49,27 @@ public interface ItemDAO {
    * @param limit the limit of rows
    * @return a list of item
    */
-  List<ItemDTO> getLastItemsOffered(int limit) throws SQLException;
+  List<ItemDTO> getLastItemsOffered(int limit);
 
   void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected);
 
   List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
+
+  /**
+   * retrives to add a recipient to an item.
+   *
+   * @param idItem      the id of the item
+   * @param idRecipient the id of de recipient
+   * @return return 1 if the recipient is added, 0 if not
+   */
+  int addRecipient(int idItem, int idRecipient);
+
+  /**
+   * retrives to update some info of an item.
+   *
+   * @param item the id of the item
+   * @return return 1 if the item is updated, 0 if not
+   */
+  int updateItem(ItemDTO item);
+
 }

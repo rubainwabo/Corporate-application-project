@@ -79,6 +79,7 @@ public class ItemDAOImpl implements ItemDAO {
         item.setItemtype(rs.getString(2));
         item.setDescription(rs.getString(3));
         item.setUrlPicture(rs.getString(4));
+        item.setOfferorId(rs.getInt(5));
         item.setTimeSlot(rs.getString(6));
         item.setItemCondition(rs.getString(7));
         item.setNumberOfPeopleInterested(rs.getInt(8));
@@ -152,7 +153,7 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void cancelOffer(int idItem, int userId) {
+  public void changeItemCondition(int idItem, int userId, String condition) {
     try (PreparedStatement psVerifyUser = myBackService.getPreparedStatement(
         "select offeror from projet.items where id_item = " + idItem)) {
       try (ResultSet rsVerifyUser = psVerifyUser.executeQuery()) {
@@ -163,10 +164,10 @@ public class ItemDAOImpl implements ItemDAO {
           throw new FatalException(
               "cet utilisateur n'est pas l'auteur de l'offre, il ne peut donc pas l'annuler");
         }
-        try (PreparedStatement psCancelOffer = myBackService.getPreparedStatement(
-            "update projet.items set item_condition = 'cancelled' where id_item = "
+        try (PreparedStatement psChangeCondition = myBackService.getPreparedStatement(
+            "update projet.items set item_condition ='" + condition + "' where id_item = "
                 + idItem)) {
-          psCancelOffer.executeUpdate();
+          psChangeCondition.executeUpdate();
         }
       }
     } catch (Exception e) {
@@ -189,13 +190,14 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public List<ItemDTO> getAllOffered(int id) {
+  public List<ItemDTO> getMyItems(int id, String state) {
     String query =
         "select id_item, description, url_picture, "
             + "it.item_type_name,number_of_people_interested "
             + "from projet.items i, projet.item_type it "
-            + "where offeror ='" + id + "' and i.item_type = it.id_item_type "
-            + "and i.item_condition != 'cancelled'";
+            + "where offeror =" + id + " and i.item_type = it.id_item_type "
+            + "and i.item_condition ='" + state + "'";
+    System.out.println(query);
     return getItemDTOS(query);
 
   }
@@ -231,16 +233,33 @@ public class ItemDAOImpl implements ItemDAO {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query)) {
       ps.executeUpdate();
-      try (PreparedStatement psNotif = myBackService.getPreparedStatement(
-          "insert into projet.notifications VALUES (DEFAULT,false,?,?,?)")) {
-        String notif = itemCollected ? item.getRecipient() + " à accepté votre object"
-            : item.getRecipient() + " n'a pas accépté votre object";
-        psNotif.setString(1, notif);
-        //psNotif.setInt(2, item.getOfferorId());
-        psNotif.setInt(3, item.getId());
-        psNotif.executeUpdate();
+      if (!itemCollected) {
+        try (PreparedStatement psUpdtItmNotTkn = myBackService.getPreparedStatement(
+            "update projet.members set nb_of_item_not_taken= nb_of_item_not_taken "
+                + "+ 1 where user_id=" + item.getRecipientId())) {
+          psUpdtItmNotTkn.executeUpdate();
+        }
       }
     } catch (SQLException e) {
+      throw new FatalException(e);
+    }
+  }
+
+  public int addRecipient(int idItem, int idRecipient) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(""
+        + "update projet.items set recipient=" + idRecipient
+        + ", item_condition='Assigned' WHERE id_item=" + idItem)) {
+      ps.executeUpdate();
+      try (PreparedStatement psNotif = myBackService.getPreparedStatement(
+          "INSERT INTO projet.notifications (id_notification,is_viewed,text,person,item)"
+              + " VALUES (default,false,?,?,?)"
+      )) {
+        psNotif.setString(1, "hello");
+        psNotif.setInt(2, idRecipient);
+        psNotif.setInt(3, idItem);
+        return psNotif.executeUpdate();
+      }
+    } catch (Exception e) {
       throw new FatalException(e);
     }
   }
@@ -269,6 +288,20 @@ public class ItemDAOImpl implements ItemDAO {
       }
     } catch (SQLException e) {
       e.printStackTrace();
+      throw new FatalException(e);
+    }
+  }
+
+  public int updateItem(ItemDTO item) {
+    try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
+        "UPDATE projet.items set description=?, url_picture=?,time_slot=? WHERE id_item="
+            + item.getId()
+    )) {
+      psUpdate.setString(1, item.getDescription());
+      psUpdate.setString(2, item.getUrlPicture());
+      psUpdate.setString(3, item.getTimeSlot());
+      return psUpdate.executeUpdate();
+    } catch (Exception e) {
       throw new FatalException(e);
     }
   }

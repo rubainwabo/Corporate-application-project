@@ -102,6 +102,44 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public boolean updateProfile(int id, String username, String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone) {
+
+    phone = phone.length() > 0 ? "'" + phone + "'" : "DEFAULT";
+    String query = "update projet.members set username = '" + username + "'"
+        + " , last_name = '" + lastName + "'"
+        + " ,first_name = '" + firstName + "'"
+        + " ,street = '" + street + "'"
+        + ",building_number = '" + number + "'"
+        + ",postcode = '" + postcode + "'"
+        + ",unit_number = '" + box + "'"
+        + ",city = '" + city + "'"
+        + ",phone_number = " + phone
+        + " where user_id = "
+        + id;
+    return execQuery(query);
+  }
+
+  @Override
+  public boolean updatePassword(int id, String password) {
+    String query = "update projet.members set password = '" + password + "' where "
+        + "user_id = " + id;
+    return execQuery(query);
+  }
+
+  private boolean execQuery(String query) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        query)) {
+      System.out.println(query);
+      ps.executeUpdate();
+    } catch (Exception e) {
+      System.out.println("error");
+      throw new FatalException(e);
+    }
+    return true;
+  }
+
+  @Override
   public void addPhoneNumber(int userId, String phoneNumber) {
     try (PreparedStatement psAddPhone = myDalService.getPreparedStatement(
         "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
@@ -126,6 +164,7 @@ public class UserDAOImpl implements UserDAO {
             + refusalReason + "', _role = '" + role + (state.equals("valid")
             ? "',reason_for_connection_refusal = null" : "'")
             + " where user_id = " + userId;
+
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();
@@ -274,5 +313,39 @@ public class UserDAOImpl implements UserDAO {
     }
   }
 
+  @Override
+  public List<UserDTO> getUserInterest(int idItem) {
+    List<UserDTO> userDTOList;
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        "select last_name,first_name,city,street,postCode,"
+            + "building_number,user_id,username, "
+            + "state,phone_number,_role from projet.members,"
+            + "projet.items item,projet.interests iterest "
+            + "WHERE user_id=iterest.member AND "
+            + "item.id_item=iterest.item AND item.id_item="
+            + idItem)) {
 
+      try (ResultSet resultSet = ps.executeQuery()) {
+        userDTOList = new ArrayList<>();
+        UserDTO user;
+        while (resultSet.next()) {
+          user = myDomainFactory.getUser();
+          user.setLastName(resultSet.getString(1));
+          user.setFirstName(resultSet.getString(2));
+          user.setCity(resultSet.getString(3));
+          user.setStreet(resultSet.getString(4));
+          user.setPostCode(resultSet.getInt(5));
+          user.setBuildingNumber(resultSet.getInt(6));
+          user.setId(resultSet.getInt(7));
+          user.setUserName(resultSet.getString(8));
+          user.setState(resultSet.getString(9));
+          user.setRole(resultSet.getString(11));
+          userDTOList.add(user);
+        }
+        return userDTOList;
+      }
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
 }

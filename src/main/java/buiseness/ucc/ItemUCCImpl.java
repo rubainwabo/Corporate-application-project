@@ -7,7 +7,7 @@ import dal.services.DateDAO;
 import dal.services.ItemDAO;
 import jakarta.inject.Inject;
 import java.util.List;
-import utils.exception.BizzException;
+import utils.exception.UserInvalidException;
 
 public class ItemUCCImpl implements ItemUCC {
 
@@ -23,86 +23,64 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public int addItem(ItemDTO item, int userId) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       int itemId = myItemDAOService.addItem(item, userId);
       myDateDAOService.addDate(itemId);
-      myDalServices.commit(true);
+      myDalServices.commit();
       return itemId;
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
   public ItemDTO getDetails(int id) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       var item = myItemDAOService.getOneById(id);
-      myDalServices.commit(false);
+      myDalServices.commit();
       return item;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.commit();
+      throw e;
     }
   }
 
   @Override
   public void addInterest(int itemId, ObjectNode objectNode, int userId) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       myItemDAOService.addInterest(itemId, objectNode, userId);
-      myDalServices.commit(true);
+      myDalServices.commit();
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
-  public void cancelOffer(int idItem, int userId) {
+  public void changeItemCondition(int idItem, int userId, String state) {
     try {
-      myDalServices.start(true);
-      myItemDAOService.cancelOffer(idItem, userId);
-      myDalServices.commit(true);
+      myDalServices.start();
+      myItemDAOService.changeItemCondition(idItem, userId, state);
+      myDalServices.commit();
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
-  public List<ItemDTO> getAllItemsOffered(int id) {
+  public List<ItemDTO> getMyItems(int id, String state) {
     try {
-      myDalServices.start(false);
-      List<ItemDTO> list;
-
-      list = myItemDAOService.getAllOffered(id);
-      myDalServices.commit(false);
+      myDalServices.start();
+      List<ItemDTO> list = myItemDAOService.getMyItems(id, state);
+      myDalServices.commit();
       return list;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
@@ -110,43 +88,82 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public List<ItemDTO> getLastItemsOffered(boolean isConnected) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       List<ItemDTO> list;
       if (isConnected) {
         list = myItemDAOService.getLastItemsOffered(0);
-        myDalServices.commit(false);
+        myDalServices.commit();
         return list;
       }
       list = myItemDAOService.getLastItemsOffered(12);
-      myDalServices.commit(false);
+      myDalServices.commit();
       return list;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
-  public void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected, int reqUserId) {
-    /*if (reqUserId != itemDTO.getOfferorId()){
-     throw new UserInvalidException("la personne essayant de faire la requête n'est pas l'offereur de l'objet");
-    }
-     */
+  public int addRecipient(int idItem, int idRecipient) {
     try {
-      myDalServices.start(true);
-      myItemDAOService.ItemCollectedOrNot(itemDTO, itemCollected);
-      myDalServices.commit(true);
+      myDalServices.start();
+
+      int itemId = myItemDAOService.addRecipient(idItem, idRecipient);
+      myDalServices.commit();
+      return itemId;
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
+      myDalServices.rollBack();
+      throw e;
+    }
+
+  }
+
+  @Override
+  public int updateItem(ItemDTO item) {
+    try {
+      myDalServices.start();
+
+      int result = myItemDAOService.updateItem(item);
+      myDalServices.commit();
+      return result;
+    } catch (Exception e) {
+
+      myDalServices.rollBack();
+
+      throw e;
+    }
+
+  }
+
+  @Override
+  public void offerAgain(int itemId, int userId) {
+    try {
+      myDalServices.start();
+      myDateDAOService.addDate(itemId);
+      myItemDAOService.changeItemCondition(itemId, userId, "offered");
+      myDalServices.commit();
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+
+  }
+
+  @Override
+  public void ItemCollectedOrNot(int itemId, boolean itemCollected, int reqUserId) {
+    try {
+      myDalServices.start();
+      ItemDTO itemDTO = myItemDAOService.getOneById(itemId);
+      if (reqUserId != itemDTO.getOfferorId()) {
+        throw new UserInvalidException(
+            "la personne essayant de faire la requête n'est pas l'offereur de l'objet");
       }
-      throw new BizzException(e);
+      myItemDAOService.ItemCollectedOrNot(itemDTO, itemCollected);
+      myDalServices.commit();
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
@@ -154,17 +171,13 @@ public class ItemUCCImpl implements ItemUCC {
   public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
       boolean isOfferor) {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       var myItems = myItemDAOService.memberItemsByItemCondition(itemCondition, userId, isOfferor);
-      myDalServices.commit(false);
+      myDalServices.commit();
       return myItems;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 }

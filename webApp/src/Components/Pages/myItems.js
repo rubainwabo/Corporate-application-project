@@ -19,8 +19,8 @@ const myItems = `
         <div id="my-item-menu">
             <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> mes offres</a></div>
             <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> mes offres annulées </a></div>
-            <div class="my-item-link"> <a  href="#" id="get-items-assigned" data-uri="/additem"> mes objet recu  </a></div>
-            <div class="my-item-link" > <a href="#" id="get-items-gifted"  data-uri="/userhandeler"> mes objet attribués </a></div>
+            <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> mes objet attribués </a></div>
+            <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> mes objet recu  </a></div>     
         </div>
         <div id="all-recent-item">
             
@@ -74,8 +74,10 @@ const MyItems = async (id) => {
     })
     document.getElementById("get-items-assigned").addEventListener("click",function(e){
         e.preventDefault();
-        currentState = "cancelled";
+        currentState = "Assigned";
         document.getElementById("all-recent-item").innerText="";
+        getMyItems(currentState);
+        changeOptions(currentState);
 
     })
 
@@ -230,14 +232,13 @@ function changeOptions(state){
         offerAgain.style.display="flex";
         show.style.display="flex";
         document.getElementById("get-items-cancelled").style.fontWeight="bold";
-    }else if(state=="gifted"){
+    }else if(state=="Assigned"){
         itemGived.style.display="flex";
         itemNotGived.style.display="flex";
         
         itemGived.style.display="flex";
         show.style.display="flex";
-        document.getElementById("get-items-gifted").style.fontWeight="bold"
-
+        document.getElementById("get-items-assigned").style.fontWeight="bold"
     }
 }
 async function cancelItem(idItem){

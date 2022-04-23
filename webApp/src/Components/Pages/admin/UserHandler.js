@@ -54,6 +54,11 @@ const UserHandler = () => {
       stateUserList.innerHTML = "REFUSÉ"
       gettAllByState(accesToken, "denied");
     } else {
+        // click out the div and delete it TODO !
+        let myPopUpDiv = document.getElementById("add-reason-refusal");
+        if (myPopUpDiv){
+            myPopUpDiv.style.display="none"
+        }
       stateUserList.innerHTML = "ATTENTE"
       gettAllByState(accesToken, "waiting");
     }
@@ -124,6 +129,7 @@ async function gettAllByState(accesToken, state) {
               addOrRefuse(currentUser, "denied", reason, accesToken,
                   inputCheckBox)
             })
+           
       });
       validBtn.addEventListener("click", () => {
         addOrRefuse(e.id, "valid", "", accesToken, inputCheckBox)
@@ -193,8 +199,9 @@ async function addOrRefuse(id, state, rsnRefusal, accesToken, admin) {
           "fetch error : " + response.status + " : " + response.statusText
       );
     }
-    const user = await response.json(); // json() returns a promise => we wait for the data
-    Redirect("/userhandeler");
+    await response.json(); // json() returns a promise => we wait for the data
+    document.getElementById("add-reason-refusal").style.display="none";
+    document.getElementById("reason").value="";
   } catch (error) {
     console.error("LoginPage::error: ", error);
   }

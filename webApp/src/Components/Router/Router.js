@@ -7,6 +7,9 @@ import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
 import MesOffres from "../Pages/MesOffres";
 import MemberList from "../Pages/admin/MemberList";
+import MyItems from "../Pages/myItems";
+import UpdateItem from "../Pages/UpdateItem";
+import PickRecipient from "../Pages/PickRecipient";
 import MonProfile from "../Pages/MyProfilePage";
 // Configure your routes here
 const routes = {
@@ -19,7 +22,10 @@ const routes = {
   '/userhandeler': UserHandler,
   '/mesOffres': MesOffres,
   '/memberList': MemberList,
-  '/monProfile': MonProfile
+  '/monProfile': MonProfile,
+  '/myitems': MyItems,
+  '/updateitem': UpdateItem,
+  '/pickrecipient': PickRecipient,
 };
 
 /**
@@ -37,11 +43,11 @@ const Router = () => {
     console.log(uri);
     if (uri) {
       e.preventDefault();
-      /* use Web History API to add current page URL to the user's navigation history 
+      /* use Web History API to add current page URL to the user's navigation history
        & set right URL in the browser (instead of "#") */
       window.history.pushState({}, uri, window.location.origin + uri);
       /* render the requested component
-      NB : for the components that include JS, we want to assure that the JS included 
+      NB : for the components that include JS, we want to assure that the JS included
       is not runned when the JS file is charged by the browser
       therefore, those components have to be either a function or a class*/
       const componentToRender = routes[uri];

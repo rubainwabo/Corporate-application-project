@@ -89,18 +89,20 @@ GET http://localhost:3000/itemsType/getAll
 ### get users who are interest on an item
 
 GET http://localhost:3000/members/interest/7
-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyNzQ4MiwidXNlciI6NH0.F-JE1p-OFdbfWqFAw3GQ-aoceXnppXb50o4foy9E59k
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
+
 
 ### add recipient
 
 POST http://localhost:3000/items/addRecipient/7/6
-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyNzQ4MiwidXNlciI6NH0.F-JE1p-OFdbfWqFAw3GQ-aoceXnppXb50o4foy9E59k
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
+
 
 ### update a item
 
 POST http://localhost:3000/items/update
 Content-Type: application/json
-token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY0OTk0OTU5OCwidXNlciI6NH0.qDhRScwzV8QocRpZmSzBi0ISPlCGAsgb65Chv38zUes
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
 
 {
   "id": 7,

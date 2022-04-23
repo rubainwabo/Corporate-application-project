@@ -6,19 +6,30 @@ import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
 import MesOffres from "../Pages/MesOffres";
+
+import MyItems from "../Pages/myItems";
+import UpdateItem from "../Pages/UpdateItem";
+import PickRecipient from "../Pages/PickRecipient";
+
 import MonProfile from "../Pages/MyProfilePage";
 
 // Configure your routes here
 const routes = {
-  '/' : HomePage,
+  '/': HomePage,
   "/login": LoginPage,
-  "/logout":Logout,
-  '/item':ItemPage,
-  '/register':Register,
-  '/additem':AddItemPage,
-  '/userhandeler':UserHandler,
-  '/mesOffres' : MesOffres,
-  '/monProfile' : MonProfile
+  "/logout": Logout,
+  '/item': ItemPage,
+  '/register': Register,
+  '/additem': AddItemPage,
+  '/userhandeler': UserHandler,
+  '/mesOffres': MesOffres,
+
+  '/myitems': MyItems,
+  '/updateitem': UpdateItem,
+  '/pickrecipient': PickRecipient,
+
+  '/monProfile': MonProfile
+
 };
 
 /**
@@ -36,11 +47,11 @@ const Router = () => {
     console.log(uri);
     if (uri) {
       e.preventDefault();
-      /* use Web History API to add current page URL to the user's navigation history 
+      /* use Web History API to add current page URL to the user's navigation history
        & set right URL in the browser (instead of "#") */
       window.history.pushState({}, uri, window.location.origin + uri);
       /* render the requested component
-      NB : for the components that include JS, we want to assure that the JS included 
+      NB : for the components that include JS, we want to assure that the JS included
       is not runned when the JS file is charged by the browser
       therefore, those components have to be either a function or a class*/
       const componentToRender = routes[uri];
@@ -57,7 +68,7 @@ const Router = () => {
     const componentToRender = routes[window.location.pathname];
     if (!componentToRender)
       throw Error(
-        "The " + window.location.pathname + " ressource does not exist."
+          "The " + window.location.pathname + " ressource does not exist."
       );
 
     componentToRender();
@@ -76,29 +87,27 @@ const Router = () => {
  * routes array of the Router
  */
 
-const Redirect = (uri,params) => {
+const Redirect = (uri, params) => {
   // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
-  if(params){
-    var url = window.location.origin + uri+"?";
+  if (params) {
+    var url = window.location.origin + uri + "?";
 
     var i = 0;
-    while(i<params.length){
-      url+=params[i].key+"="+params[i].value;
+    while (i < params.length) {
+      url += params[i].key + "=" + params[i].value;
       i++;
-      if(i<params.length){
-        url+="&";
+      if (i < params.length) {
+        url += "&";
       }
     }
     window.history.pushState({}, uri, url);
- 
-    
-  }else{
+
+  } else {
     window.history.pushState({}, uri, window.location.origin + uri)
   }
-  
- 
+
   // render the requested component
-  
+
   const componentToRender = routes[uri];
   if (routes[uri]) {
     componentToRender();
@@ -107,4 +116,4 @@ const Redirect = (uri,params) => {
   }
 };
 
-export { Router, Redirect };
+export {Router, Redirect};

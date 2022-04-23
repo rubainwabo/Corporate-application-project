@@ -1,7 +1,7 @@
 import {getSessionObject} from "../../utils/session";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
-import { Redirect } from "../Router/Router";
+import {Redirect} from "../Router/Router";
 
 const item = `
 <div style="width : 100%;
@@ -32,8 +32,8 @@ background-color: #FFF59B;
         <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="offeror"> <span> </p>   
     </div>
 
-    <div id="item-show-interest" style="display : none">
-        <button id="show-interest">Je suis interessé</button>
+    <div id="item-show-interest">
+       
     </div>
 
     <div id="add-iterest-pop-up">
@@ -63,10 +63,8 @@ const ItemPage = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = item;
 
-
   let addIterestBtn = document.getElementById("add-interest-btn");
 
-  let showInterest = document.getElementById("show-interest");
   let removePopUp = document.getElementById("cancel-add-iterest");
   let popUp = document.getElementById("add-iterest-pop-up");
 
@@ -75,21 +73,16 @@ const ItemPage = async () => {
     popUp.style.display = "none";
   })
 
-  showInterest.addEventListener("click", function (e) {
-    e.preventDefault();
-    popUp.style.display = "flex";
-  })
-
   try {
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
       headers: {
-        "token":getSessionObject("accessToken"),
+        "token": getSessionObject("accessToken"),
       },
     };
 
-    const response = await fetch("/api/items/itemDetails/" + id,options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/itemDetails/" + id, options); // fetch return a promise => we wait for the response
 
     if (!response.ok) {
       throw new Error(
@@ -105,6 +98,18 @@ const ItemPage = async () => {
     document.getElementById("offeror").innerText = item.offeror;
     document.getElementById(
         "number-interest").innerText = item.numberOfPeopleInterested;
+    let addInterestBox = document.getElementById("item-show-interest");
+
+    if (item.offerorId != getSessionObject("userId")) {
+      let button = document.createElement("button");
+      button.id = "show-interest";
+      button.innerText = "Je suis interessé";
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        popUp.style.display = "flex";
+      })
+      addInterestBox.appendChild(button);
+    }
 
     document.getElementById("img-id").src = itemImg;
     document.getElementById("type-objet").style.fontSize = "12px";
@@ -112,8 +117,7 @@ const ItemPage = async () => {
     document.getElementById("nb-personnes").style.fontSize = "12px";
     document.getElementById("preced").style.fontSize = "12px";
     document.getElementById("item-show-interest").style = "display : inline"
-    
-    
+
     let callMe = document.getElementById("callMe");
 
     callMe.addEventListener("change", function (e) {
@@ -152,7 +156,7 @@ const ItemPage = async () => {
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
-            "token":getSessionObject("accessToken")
+            "token": getSessionObject("accessToken")
           },
         };
       } else {
@@ -163,9 +167,8 @@ const ItemPage = async () => {
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
-             "token":getSessionObject("accessToken"),
-            
-            
+            "token": getSessionObject("accessToken"),
+
           },
         };
       }

@@ -56,9 +56,7 @@ const addItem = `
        
         <button id="add-new">continuer</button>
         <button id="done">OK</button>
-        </div>
-        
-        
+        </div>   
     </div>
 
 

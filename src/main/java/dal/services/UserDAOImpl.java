@@ -176,7 +176,8 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public List<UserDTO> getAllUserFiltred(String name, String city, String postCode) {
     String queryName = name.isBlank() ? "" : "last_name like '" + name + "%' ";
-    String queryCity, queryPostCode = "";
+    String queryCity = "";
+    String queryPostCode = "";
     if (name.isBlank() && !city.isBlank()) {
       queryCity = "city like '" + city + "%' ";
     } else {
@@ -195,16 +196,19 @@ public class UserDAOImpl implements UserDAO {
     } else {
       queryPostCode = "";
     }
-
     String query =
         "select m.user_id, m.state, m._role,m.username,m.last_name,"
             + "m.first_name,m.phone_number,"
             + "COUNT(Distinct o1.id_item),COUNT(distinct o2.id_item),COUNT(distinct o3.id_item)"
             + ",COUNT(distinct o4.id_item)"
-            + "from projet.members m LEFT JOIN projet.items o1 ON m.user_id = o1.offeror AND o1.item_condition = 'offered' "
-            + "LEFT JOIN projet.items o2 ON m.user_id = o2.offeror AND o2.item_condition = 'gifted' "
-            + "LEFT JOIN projet.items o3 ON m.user_id = o3.recipient AND o3.item_condition = 'gifted' "
-            + "LEFT JOIN projet.items o4 on m.user_id = o4.recipient and o4.item_condition= 'not collected' "
+            + "from projet.members m LEFT JOIN projet.items o1 ON m.user_id = o1.offeror AND "
+            + "o1.item_condition = 'offered' "
+            + "LEFT JOIN projet.items o2 ON m.user_id = o2.offeror "
+            + "AND o2.item_condition = 'gifted' "
+            + "LEFT JOIN projet.items o3 ON m.user_id = o3.recipient "
+            + "AND o3.item_condition = 'gifted' "
+            + "LEFT JOIN projet.items o4 on m.user_id = o4.recipient "
+            + "and o4.item_condition= 'not collected' "
             + "and m.state = 'valid'";
     query +=
         !name.isBlank() || !city.isBlank() || !postCode.isBlank()
@@ -244,7 +248,8 @@ public class UserDAOImpl implements UserDAO {
     String query = "select DISTINCT last_name from projet.members where UPPER(last_name) like '"
         + val + "%'" + " UNION select DISTINCT city from projet.members where UPPER(city) like '"
         + val + "%'"
-        + " UNION select DISTINCT CAST(postCode as TEXT) from projet.members where CAST(postCode AS TEXT) like '"
+        + " UNION select DISTINCT CAST(postCode as TEXT) from projet.members where "
+        + "CAST(postCode AS TEXT) like '"
         + val + "%'";
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
       ArrayList<String> stringArrayList = new ArrayList<>();

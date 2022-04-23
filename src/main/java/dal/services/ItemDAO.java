@@ -51,7 +51,7 @@ public interface ItemDAO {
    */
   List<ItemDTO> getLastItemsOffered(int limit);
 
-  void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected);
+  void itemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected);
 
   List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
 

@@ -153,6 +153,14 @@ public class ItemRessource {
     return myItemUCC.getLastItemsOffered(true);
   }
 
+  /**
+   * is used to indicate whether a person to whom an object has been offered has come to collect it
+   * or not.
+   *
+   * @param req  the user making the request
+   * @param node containing information like the id of the object or if the person came or not.
+   * @return 200 if everything went well.
+   */
   @POST
   @Path("itemCollected")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -167,7 +175,7 @@ public class ItemRessource {
     int reqUserId = (int) req.getProperty("id");
     int itemId = node.get("itemId").asInt();
     boolean isCollected = node.get("itemCollected").asBoolean();
-    myItemUCC.ItemCollectedOrNot(itemId, isCollected, reqUserId);
+    myItemUCC.itemCollectedOrNot(itemId, isCollected, reqUserId);
     return Response.ok().build();
   }
 

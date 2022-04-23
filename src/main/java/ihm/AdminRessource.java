@@ -28,6 +28,14 @@ public class AdminRessource {
   @Inject
   private ItemUCC myItemUCC;
 
+  /**
+   * retrieves a list of users based on received filters.
+   *
+   * @param name     the name input
+   * @param city     the city input
+   * @param postCode the postcode input
+   * @return a list of users based on received filters.
+   */
   @GET
   @Path("list/filtred")
   @Produces(MediaType.APPLICATION_JSON)
@@ -36,13 +44,18 @@ public class AdminRessource {
     return myUserUCC.getAllUserFiltred(name, city, postCode);
   }
 
+  /**
+   * retrieve city,name and postCode from the database in relation to an input.
+   *
+   * @param val the input val
+   * @return a list containing the retrieved data.
+   */
   @GET
   @Path("autocompleteList")
   @Produces(MediaType.APPLICATION_JSON)
   public List<String> adminAutoComplete(@QueryParam("value") String val) {
     return myUserUCC.getAutocompleteList(val);
   }
-
 
   /**
    * retrives to get all the user with a specific state.
@@ -97,6 +110,14 @@ public class AdminRessource {
     }
   }
 
+  /**
+   * Get all members item with a specific item condition.
+   *
+   * @param itemCondition the item condition
+   * @param userId        the user we want's to get items
+   * @param isOfferor     boolean to know if he is recipient or offeror
+   * @return the list of his items.
+   */
   @GET
   @Path("memberListItems/{id}")
   @Produces(MediaType.APPLICATION_JSON)

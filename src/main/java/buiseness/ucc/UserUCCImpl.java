@@ -222,7 +222,8 @@ public class UserUCCImpl implements UserUCC {
       throw e;
     }
   }
-
+  
+  @Override
   public List<UserDTO> getUsersIterest(int reqUserId, int idItem) {
     try {
       myDalServices.start();

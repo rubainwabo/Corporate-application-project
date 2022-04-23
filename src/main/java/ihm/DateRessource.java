@@ -20,6 +20,12 @@ public class DateRessource {
   @Inject
   private DateUCC myDateUCCSerivce;
 
+  /**
+   * retrieves all offered date about a specific item.
+   *
+   * @param itemId the item id
+   * @return the list of date for this item.
+   */
   @GET
   @Path("{id}")
   @Produces(MediaType.APPLICATION_JSON)

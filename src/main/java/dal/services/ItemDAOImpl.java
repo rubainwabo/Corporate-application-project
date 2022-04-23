@@ -225,7 +225,7 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void ItemCollectedOrNot(ItemDTO item, boolean itemCollected) {
+  public void itemCollectedOrNot(ItemDTO item, boolean itemCollected) {
     String query = itemCollected ? "Update projet.items set item_condition='gifted'"
         + " where id_item=" + item.getId() :
         "Update projet.items set item_condition='not collected',"
@@ -245,6 +245,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
   }
 
+  @Override
   public int addRecipient(int idItem, int idRecipient) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(""
         + "update projet.items set recipient=" + idRecipient
@@ -292,6 +293,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
   }
 
+  @Override
   public int updateItem(ItemDTO item) {
     try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
         "UPDATE projet.items set description=?, url_picture=?,time_slot=? WHERE id_item="

@@ -45,60 +45,6 @@ public class MemberRessource {
   }
 
   /**
-   * retrives to get all the user with a specific state.
-   *
-   * @return a list of user by a specific state
-   */
-  @GET
-  @Path("list")
-  @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> adminListByState(@QueryParam("state") String state) {
-    if (state.isBlank()) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("a state is required").type("text/plain").build());
-    }
-    return myUserUCC.getUsersByState(state);
-  }
-
-  /**
-   * Change the state of a certain user.
-   *
-   * @param body the data that the user has entered put in json format
-   * @return true or false if state successfully changed.
-   */
-  @POST
-  @Path("changeState")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public boolean adminChangeState(JsonNode body) {
-    System.out.println(body.get("admin"));
-    if (!body.hasNonNull("change_id") || !body.hasNonNull("state")) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("id field is required").type("text/plain").build());
-    }
-
-    if (!body.get("state").asText().equals("denied") && body.hasNonNull("refusalReason")) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("You cannot put refusal reason on something else than refused state")
-          .type("text/plain").build());
-    }
-
-    if (body.get("state").asText().equals("denied") && (!body.hasNonNull("refusalReason")
-        || body.get("refusalReason").asText().isBlank())) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("You have to put your denial reason if you want to deny someone")
-          .type("text/plain").build());
-    }
-    if (body.hasNonNull("refusalReason")) {
-      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
-          body.get("refusalReason").asText(), body.get("admin").asBoolean());
-    } else {
-      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
-          body.get("admin").asBoolean());
-    }
-  }
-
-  /**
    * check the validity of a user.
    *
    * @param req the user issuing a request

@@ -151,7 +151,7 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void ItemCollectedOrNot(int itemId, boolean itemCollected, int reqUserId) {
+  public void itemCollectedOrNot(int itemId, boolean itemCollected, int reqUserId) {
     try {
       myDalServices.start();
       ItemDTO itemDTO = myItemDAOService.getOneById(itemId);
@@ -159,7 +159,7 @@ public class ItemUCCImpl implements ItemUCC {
         throw new UserInvalidException(
             "la personne essayant de faire la requête n'est pas l'offereur de l'objet");
       }
-      myItemDAOService.ItemCollectedOrNot(itemDTO, itemCollected);
+      myItemDAOService.itemCollectedOrNot(itemDTO, itemCollected);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

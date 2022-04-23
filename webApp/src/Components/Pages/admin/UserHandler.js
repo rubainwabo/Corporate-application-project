@@ -118,7 +118,7 @@ const UserHandler = () => {
   async function  addOrRefuse(id,state,rsnRefusal,accesToken,admin){
     try {
        
-        let body1 = rsnRefusal !=""? JSON.stringify( {
+        let body1 = rsnRefusal !==""? JSON.stringify( {
             "change_id" : id,
               "state" : state,
               "admin":admin.checked,

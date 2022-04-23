@@ -35,7 +35,7 @@ public class ItemTypeUCCImpl implements ItemTypeUCC {
       myDalServices.commit();
       return listeItemType;
     } catch (Exception e) {
-      myDalServices.commit();
+      myDalServices.rollBack();
       throw e;
     }
   }

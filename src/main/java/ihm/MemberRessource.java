@@ -32,6 +32,20 @@ public class MemberRessource {
   private TokenService myTokenService;
 
   /**
+   * Returns the user who's connected.
+   *
+   * @return true or false if state successfully changed.
+   */
+  @GET
+  @Path("myProfile")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public UserDTO userMyProfile(@Context ContainerRequest req) {
+    int userId = (int) req.getProperty("id");
+    return myUserUCC.getOneById(userId);
+  }
+
+  /**
    * retrives to get all the user with a specific state.
    *
    * @return a list of user by a specific state
@@ -95,6 +109,7 @@ public class MemberRessource {
   @Path("me")
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode userCheckValidity(@Context ContainerRequest req) {
+    System.out.println("/me");
     int userId = (int) req.getProperty("id");
     // if return smth 200, else if userIsValid return 204 else return 401
     return req.getProperty("refresh") != null ? myTokenService.getRefreshedTokens(userId) : null;
@@ -105,7 +120,7 @@ public class MemberRessource {
    *
    * @param req    container request
    * @param itemId the id of the item
-   * @return
+   * @return List of users
    */
   @GET
   @Path("interest/{id}")
@@ -128,5 +143,67 @@ public class MemberRessource {
   public UserDTO userGetOneById(@Context ContainerRequest req) {
     return myUserUCC.getOneById((int) req.getProperty("id"));
   }
+
+  /**
+   * Updates the profile of an user.
+   * @param req request we get.
+   * @param body data we want to change.
+   * @return true if user updates successfully.
+   */
+  @POST
+  @Path("updateProfile")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public boolean userUpdateProfile(@Context ContainerRequest req, JsonNode body) {
+    int userId = (int) req.getProperty("id");
+
+    if (!body.hasNonNull("phone") || !body.hasNonNull("street")
+        || !body.hasNonNull("unitNumber") || !body.hasNonNull("city")
+        || !body.hasNonNull("postcode") || !body.hasNonNull("box")
+        || !body.hasNonNull("username") || !body.hasNonNull("firstName")
+        || !body.hasNonNull("lastName")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("id field is required").type("text/plain").build());
+    } else {
+      return myUserUCC.updateProfile(
+          userId,
+          body.get("username").asText(),
+          body.get("firstName").asText(),
+          body.get("lastName").asText(),
+          body.get("street").asText(),
+          body.get("unitNumber").asInt(),
+          body.get("postcode").asInt(),
+          body.get("box").asText(),
+          body.get("city").asText(),
+          body.get("phone").asText());
+    }
+  }
+
+  /**
+   * Returns the user who's connected.
+   *
+   * @return true or false if state successfully changed.
+   */
+  @POST
+  @Path("updatePassword")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public boolean userUpdatePassword(@Context ContainerRequest req, JsonNode body) {
+
+    if (!body.hasNonNull("newPassword")) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("newPassword field is required").type("text/plain").build());
+    } else {
+      int userId = (int) req.getProperty("id");
+      if (body.get("newPassword").asText().isBlank()) {
+        throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+            .entity("newPassword field is blank").type("text/plain").build());
+      }
+      return myUserUCC.updatePassword(userId, body.get("newPassword").asText());
+    }
+
+  }
+
+
 }
 

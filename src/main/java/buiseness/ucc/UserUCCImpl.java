@@ -11,6 +11,7 @@ import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserOnHoldException;
 import utils.exception.UsernameAlreadyExists;
+import org.mindrot.jbcrypt.BCrypt;
 
 
 public class UserUCCImpl implements UserUCC {
@@ -55,7 +56,7 @@ public class UserUCCImpl implements UserUCC {
         myDalServices.commit();
         return list;
       } else {
-        throw new InvalidStateException("state invalide");
+        throw new InvalidStateException("invalid state");
       }
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -137,6 +138,37 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
+  public boolean updateProfile(int id, String username, String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone) {
+    try {
+      myDalServices.start();
+      boolean ret = myUserDAO.updateProfile(id, username, firstName, lastName, street, number,
+          postcode, box,
+          city, phone);
+      myDalServices.commit();
+      return ret;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+  }
+
+  @Override
+  public boolean updatePassword(int id, String password) {
+    try {
+      myDalServices.start();
+      password = BCrypt.hashpw(password, BCrypt.gensalt());
+      boolean ret = myUserDAO.updatePassword(id, password);
+      myDalServices.commit();
+      return ret;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+  }
+
+
+  @Override
   public int register(UserDTO user) {
     try {
       myDalServices.start();
@@ -146,7 +178,6 @@ public class UserUCCImpl implements UserUCC {
       if (userExist != null) {
         throw new UsernameAlreadyExists("username already exists");
       }
-      System.out.println("demande de l'id");
       int idUser = myUserDAO.register(user1);
       //var userConnected = myTokenService.login(idUser, user.getUserName(), false);
       myDalServices.commit();

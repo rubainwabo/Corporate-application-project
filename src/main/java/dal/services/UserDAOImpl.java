@@ -6,7 +6,6 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class UserDAOImpl implements UserDAO {
         return user;
 
       }
-    } catch (SQLException e) {
+    } catch (Exception e) {
       throw new FatalException(e);
     }
   }
@@ -114,6 +113,44 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public boolean updateProfile(int id, String username, String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone) {
+
+    phone = phone.length() > 0 ? "'" + phone + "'" : "DEFAULT";
+    String query = "update projet.members set username = '" + username + "'"
+        + " , last_name = '" + lastName + "'"
+        + " ,first_name = '" + firstName + "'"
+        + " ,street = '" + street + "'"
+        + ",building_number = '" + number + "'"
+        + ",postcode = '" + postcode + "'"
+        + ",unit_number = '" + box + "'"
+        + ",city = '" + city + "'"
+        + ",phone_number = " + phone
+        + " where user_id = "
+        + id;
+    return execQuery(query);
+  }
+
+  @Override
+  public boolean updatePassword(int id, String password) {
+    String query = "update projet.members set password = '" + password + "' where "
+        + "user_id = " + id;
+    return execQuery(query);
+  }
+
+  private boolean execQuery(String query) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        query)) {
+      System.out.println(query);
+      ps.executeUpdate();
+    } catch (Exception e) {
+      System.out.println("error");
+      throw new FatalException(e);
+    }
+    return true;
+  }
+
+  @Override
   public void addPhoneNumber(int userId, String phoneNumber) {
     try (PreparedStatement psAddPhone = myDalService.getPreparedStatement(
         "update projet.members set phone_number = '" + phoneNumber + "' where user_id = "
@@ -138,6 +175,7 @@ public class UserDAOImpl implements UserDAO {
             + refusalReason + "', _role = '" + role + (state.equals("valid")
             ? "',reason_for_connection_refusal = null" : "'")
             + " where user_id = " + userId;
+
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();

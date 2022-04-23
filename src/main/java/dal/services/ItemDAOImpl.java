@@ -216,7 +216,6 @@ public class ItemDAOImpl implements ItemDAO {
           arrayItemDTO.add(item);
         }
       }
-
       return arrayItemDTO;
     } catch (Exception e) {
       throw new FatalException(e);
@@ -224,78 +223,52 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void ItemCollectedOrNot(ItemDTO item, boolean itemCollected, int recipient) {
-    if (!itemCollected) {
-      itemNotCollectedUpdt(item.getId());
-      try (PreparedStatement psUpdateItemNotTkn = myBackService.getPreparedStatement(
-          "update projet.members set nb_of_item_not_taken "
-              + "= nb_of_item_not_taken+1 where user_id=" + recipient
-      )) {
-        psUpdateItemNotTkn.executeUpdate();
-      } catch (SQLException e) {
-        throw new FatalException(e);
-      }
-    } else {
-      itemCollectedUpdt(item.getId());
-    }
-    try (PreparedStatement psNotif = myBackService.getPreparedStatement(
-        "insert into projet.notifications VALUES (DEFAULT,false,?,?,?)")) {
-      String notif = itemCollected ? item.getRecipient() + " à accepté votre object"
-          : item.getRecipient() + " n'a pas accépté votre object";
-      psNotif.setString(1, notif);
-      psNotif.setInt(2, getOfferorIdByItemId(item.getId()));
-      psNotif.setInt(3, item.getId());
-      psNotif.executeUpdate();
-    } catch (SQLException e) {
-      throw new FatalException(e);
-    }
-  }
-
-  public int getOfferorIdByItemId(int itemId) {
-    try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select offeror from projet.items where id_item = " + itemId)) {
-      try (ResultSet rs = ps.executeQuery()) {
-        if (!rs.next()) {
-          throw new FatalException("aucun résultat pour votre requète");
-        }
-        return rs.getInt(1);
-      }
-    } catch (SQLException e) {
-      throw new FatalException(e);
-    }
-  }
-
-  public void itemCollectedUpdt(int itemId) {
-    try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "Update projet.items set item_condition='gifted' "
-            + "where id_item=" + itemId)) {
-      ps.executeUpdate();
-    } catch (SQLException e) {
-      throw new FatalException(e);
-    }
-  }
-
-  public void itemNotCollectedUpdt(int itemId) {
-    try (PreparedStatement ps = myBackService.getPreparedStatement(
+  public void ItemCollectedOrNot(ItemDTO item, boolean itemCollected) {
+    String query = itemCollected ? "Update projet.items set item_condition='gifted'"
+        + " where id_item=" + item.getId() :
         "Update projet.items set item_condition='not collected',"
-            + "recipient=NULL where id_item=" + itemId)) {
+            + "recipient=NULL where id_item=" + item.getId();
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        query)) {
       ps.executeUpdate();
+      try (PreparedStatement psNotif = myBackService.getPreparedStatement(
+          "insert into projet.notifications VALUES (DEFAULT,false,?,?,?)")) {
+        String notif = itemCollected ? item.getRecipient() + " à accepté votre object"
+            : item.getRecipient() + " n'a pas accépté votre object";
+        psNotif.setString(1, notif);
+        //psNotif.setInt(2, item.getOfferorId());
+        psNotif.setInt(3, item.getId());
+        psNotif.executeUpdate();
+      }
     } catch (SQLException e) {
       throw new FatalException(e);
     }
   }
 
   @Override
-  public int checkUserEligibility(int id, int itemId) {
-    try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select offeror from projet.items where id_item=" + itemId)) {
+  public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
+      boolean isOfferor) {
+    String query = "select i.id_item,i.url_picture,it.item_type_name,i.description from"
+        + " projet.items i,projet.item_type it "
+        + "where it.id_item_type=i.item_type and i.item_condition='"
+        + itemCondition + "' " + "and ";
+    query += isOfferor ? "i.offeror= " + userId : "i.recipient=" + userId;
+    System.out.println(query);
+    try (PreparedStatement ps = myBackService.getPreparedStatement(query)) {
+      ArrayList<ItemDTO> itemDTOS = new ArrayList<>();
       try (ResultSet rs = ps.executeQuery()) {
-        if (!rs.next()) {
-          throw new FatalException("Aucun résultat pour votre requête");
+        while (rs.next()) {
+          ItemDTO itemDTO = myBizFactoryService.getItem();
+          itemDTO.setId(rs.getInt(1));
+          itemDTO.setUrlPicture(rs.getString(2));
+          itemDTO.setItemtype(rs.getString(3));
+          itemDTO.setDescription(rs.getString(4));
+          itemDTOS.add(itemDTO);
         }
-        return rs.getInt(1);
+        return itemDTOS;
       }
     } catch (SQLException e) {
+      e.printStackTrace();
       throw new FatalException(e);
     }
   }

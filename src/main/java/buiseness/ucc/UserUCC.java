@@ -3,11 +3,6 @@ package buiseness.ucc;
 import buiseness.domain.User;
 import buiseness.dto.UserDTO;
 import java.util.List;
-import utils.exception.InvalidStateException;
-import utils.exception.PasswordOrUsernameException;
-import utils.exception.ReasonForConnectionRefusalException;
-import utils.exception.UserInvalidException;
-import utils.exception.UserOnHoldException;
 
 
 public interface UserUCC {
@@ -20,12 +15,9 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
 
-  UserDTO login(String username, String password)
-      throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
-      UserOnHoldException, UserInvalidException;
+  UserDTO login(String username, String password);
 
-  boolean changeState(int id, String state, String refusalReason, boolean admin)
-      throws InvalidStateException, InvalidStateException;
+  boolean changeState(int id, String state, String refusalReason, boolean admin);
 
   User getOneById(int id);
 
@@ -53,4 +45,5 @@ public interface UserUCC {
   List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
 
   List<String> getAutocompleteList(String val);
+
 }

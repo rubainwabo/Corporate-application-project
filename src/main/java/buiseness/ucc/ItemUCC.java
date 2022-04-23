@@ -51,7 +51,7 @@ public interface ItemUCC {
 
   List<ItemDTO> getAllItemsOffered(int id);
 
-  void ItemCollectedOrNot(ItemDTO item, boolean itemCollected, int recipient);
+  void ItemCollectedOrNot(ItemDTO item, boolean itemCollected, int reqUsrId);
 
-  int checkUserEligibility(int id, int itemId);
+  List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
 }

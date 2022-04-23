@@ -51,7 +51,7 @@ public interface ItemDAO {
    */
   List<ItemDTO> getLastItemsOffered(int limit) throws SQLException;
 
-  void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected, int recipient);
+  void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected);
 
-  int checkUserEligibility(int id, int itemId);
+  List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
 }

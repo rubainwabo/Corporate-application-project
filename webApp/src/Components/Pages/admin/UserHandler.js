@@ -6,7 +6,6 @@ const userHandler = `
 <div id="home-page-navigation">
     <h2 id="home-page-title"> Listes des personnes en attentes/refusées</h2>
 </div>
-</section>
 <div id="switch-list-users">
   <div id="in-toggle-list-user">
   <div id="text-state-list-user">
@@ -37,7 +36,7 @@ const userHandler = `
         
       </form>
     </div>
-
+    </section>
 </section>
 `;
 
@@ -70,7 +69,7 @@ async function gettAllByState(accesToken, state) {
         "token": accesToken
       }
     }
-    const response = await fetch("/api/admins/list?state=" + state, option); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/admins/listByState?state=" + state, option); // fetch return a promise => we wait for the response
     if (!response.ok) {
       return Redirect("/");
     }
@@ -147,7 +146,7 @@ async function getUserInformation(id, accesToken) {
         "token": accesToken
       },
     };
-    const response = await fetch("/api/admins/details?id=" + id, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/members/details?id=" + id, options); // fetch return a promise => we wait for the response
 
     if (!response.ok) {
       response.text().then((result) => {

@@ -52,4 +52,5 @@ public interface UserDAO {
   List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
 
   List<String> getAutocompleteList(String val);
+
 }

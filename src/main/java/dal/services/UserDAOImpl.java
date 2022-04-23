@@ -50,6 +50,7 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public List<UserDTO> getAllUserByState(String state) {
     List<UserDTO> userDTOList;
+
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
             + "state,phone_number,_role from projet.members where state=?")) {
@@ -155,21 +156,40 @@ public class UserDAOImpl implements UserDAO {
     } else {
       queryPostCode = "";
     }
+
     String query =
+        "select m.user_id, m.state, m._role,m.username,m.last_name,"
+            + "m.first_name,m.phone_number,"
+            + "COUNT(Distinct o1.id_item),COUNT(distinct o2.id_item),COUNT(distinct o3.id_item)"
+            + ",COUNT(distinct o4.id_item)"
+            + "from projet.members m LEFT JOIN projet.items o1 ON m.user_id = o1.offeror AND o1.item_condition = 'offered' "
+            + "LEFT JOIN projet.items o2 ON m.user_id = o2.offeror AND o2.item_condition = 'gifted' "
+            + "LEFT JOIN projet.items o3 ON m.user_id = o3.recipient AND o3.item_condition = 'gifted' "
+            + "LEFT JOIN projet.items o4 on m.user_id = o4.recipient and o4.item_condition= 'not collected' "
+            + "and m.state = 'valid'";
+    query +=
         !name.isBlank() || !city.isBlank() || !postCode.isBlank()
-            ? "select m.user_id, m.state, m._role,m.username,m.reason_for_connection_refusal,"
-            + "m.last_name,m.first_name,m.city,m.street,m.postCode,m.building_number,"
-            + "m.unit_number,m.url_picture,m.phone_number,m.nb_of_item_offered,"
-            + "m.nb_of_item_gifted,m.nb_of_item_received,m.nb_of_item_not_taken "
-            + "from projet.members m where "
+            ? " where "
             + queryName
-            + queryCity + queryPostCode : "";
+            + queryCity + queryPostCode :
+            "";
+    query += " group by m.user_id";
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
       ArrayList<UserDTO> userDTOS = new ArrayList<>();
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
           UserDTO user = myDomainFactory.getUser();
-          getAllUserInfo(rs, user);
+          user.setId(rs.getInt(1));
+          user.setState(rs.getString(2));
+          user.setRole(rs.getString(3));
+          user.setUserName(rs.getString(4));
+          user.setLastName(rs.getString(5));
+          user.setFirstName(rs.getString(6));
+          user.setPhoneNumber(rs.getString(7));
+          user.setNbrItemOffered(rs.getInt(8));
+          user.setNbrGiftenItems(rs.getInt(9));
+          user.setNbrItemReceived(rs.getInt(10));
+          user.setNbrItemNotTaken(rs.getInt(11));
           userDTOS.add(user);
         }
         return userDTOS;
@@ -200,7 +220,6 @@ public class UserDAOImpl implements UserDAO {
     }
     return null;
   }
-
 
   private void getAllUserInfo(ResultSet rs, UserDTO user) throws SQLException {
     user.setId(rs.getInt(1));
@@ -254,4 +273,6 @@ public class UserDAOImpl implements UserDAO {
       throw new FatalException(e);
     }
   }
+
+
 }

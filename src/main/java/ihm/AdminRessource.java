@@ -1,6 +1,8 @@
 package ihm;
 
+import buiseness.dto.ItemDTO;
 import buiseness.dto.UserDTO;
+import buiseness.ucc.ItemUCC;
 import buiseness.ucc.UserUCC;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.inject.Inject;
@@ -9,6 +11,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
@@ -22,6 +25,8 @@ public class AdminRessource {
 
   @Inject
   private UserUCC myUserUCC;
+  @Inject
+  private ItemUCC myItemUCC;
 
   @GET
   @Path("list/filtred")
@@ -45,7 +50,7 @@ public class AdminRessource {
    * @return a list of user by a specific state
    */
   @GET
-  @Path("list")
+  @Path("listByState")
   @Produces(MediaType.APPLICATION_JSON)
   public List<UserDTO> adminListByState(@QueryParam("state") String state) {
     if (state.isBlank()) {
@@ -90,5 +95,18 @@ public class AdminRessource {
       return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
           body.get("admin").asBoolean());
     }
+  }
+
+  @GET
+  @Path("memberListItems/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<ItemDTO> adminAllMemberItemsByItemCondition(
+      @QueryParam("itemCondition") String itemCondition, @PathParam("id") int userId,
+      @QueryParam("isOfferor") boolean isOfferor) {
+    if (userId <= 0 || itemCondition.isBlank()) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("Des informations sont manquantes").type("text/plain").build());
+    }
+    return myItemUCC.memberItemsByItemCondition(itemCondition, userId, isOfferor);
   }
 }

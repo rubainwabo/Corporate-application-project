@@ -17,7 +17,6 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import java.util.List;
 import org.glassfish.jersey.server.ContainerRequest;
 
@@ -158,22 +157,16 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response userItemCollectedOrNot(@Context ContainerRequest req,
       @QueryParam("itemId") int itemId,
-      @QueryParam("itemCollected") boolean itemCollected) {
+      @QueryParam("itemCollected") boolean isCollected) {
 
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }
     int reqUserId = (int) req.getProperty("id");
-    int realUserId = myItemUCC.checkUserEligibility(reqUserId, itemId);
-
-    if (realUserId != reqUserId) {
-      throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
-          .entity("l'utilisateur effectuant cette requête n'est pas le receveur")
-          .type("text/plain").build());
-    }
     ItemDTO item = myItemUCC.getDetails(itemId);
-    myItemUCC.ItemCollectedOrNot(item, itemCollected, reqUserId);
+    // TODO check if itemOfferor == reqUserId
+    myItemUCC.ItemCollectedOrNot(item, isCollected, reqUserId);
     return Response.ok().build();
   }
 }

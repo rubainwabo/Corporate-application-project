@@ -56,7 +56,8 @@ public class UserUCCImpl implements UserUCC {
   public List<UserDTO> getUsersByState(String state) {
     try {
       myDalServices.start(false);
-      if (state.equals("denied") || state.equals("valid") || state.equals("waiting")) {
+      if (state.equals("denied") || state.equals("valid") || state.equals("waiting")
+          || state.equals("")) {
         var list = myUserDAO.getAllUserByState(state);
         myDalServices.commit(false);
         return list;
@@ -229,4 +230,6 @@ public class UserUCCImpl implements UserUCC {
       throw new BizzException(e);
     }
   }
+
+
 }

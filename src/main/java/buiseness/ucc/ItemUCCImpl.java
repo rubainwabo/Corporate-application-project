@@ -131,10 +131,14 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected, int recipient) {
+  public void ItemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected, int reqUserId) {
+    /*if (reqUserId != itemDTO.getOfferorId()){
+     throw new UserInvalidException("la personne essayant de faire la requête n'est pas l'offereur de l'objet");
+    }
+     */
     try {
       myDalServices.start(true);
-      myItemDAOService.ItemCollectedOrNot(itemDTO, itemCollected, recipient);
+      myItemDAOService.ItemCollectedOrNot(itemDTO, itemCollected);
       myDalServices.commit(true);
     } catch (Exception e) {
       try {
@@ -147,12 +151,13 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public int checkUserEligibility(int id, int itemId) {
+  public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
+      boolean isOfferor) {
     try {
       myDalServices.start(false);
-      int eligibility = myItemDAOService.checkUserEligibility(id, itemId);
+      var myItems = myItemDAOService.memberItemsByItemCondition(itemCondition, userId, isOfferor);
       myDalServices.commit(false);
-      return eligibility;
+      return myItems;
     } catch (Exception e) {
       try {
         myDalServices.commit(false);

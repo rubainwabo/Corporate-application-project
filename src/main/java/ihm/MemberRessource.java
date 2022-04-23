@@ -51,4 +51,5 @@ public class MemberRessource {
   public UserDTO userGetOneById(@Context ContainerRequest req, @QueryParam("id") int id) {
     return id > 0 ? myUserUCC.getOneById(id) : myUserUCC.getOneById((int) req.getProperty("id"));
   }
+
 }

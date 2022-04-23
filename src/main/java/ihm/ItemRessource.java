@@ -185,8 +185,6 @@ public class ItemRessource {
 
   /**
    * retrives to offer again an item.
-   *
-   * @return 1 if everything is correctly done
    */
   @POST
   @Path("offer/again/{id}")

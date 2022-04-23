@@ -6,12 +6,12 @@ import dal.DalServices;
 import dal.services.UserDAO;
 import jakarta.inject.Inject;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 import utils.exception.InvalidStateException;
 import utils.exception.PasswordOrUsernameException;
 import utils.exception.ReasonForConnectionRefusalException;
 import utils.exception.UserOnHoldException;
 import utils.exception.UsernameAlreadyExists;
-import org.mindrot.jbcrypt.BCrypt;
 
 
 public class UserUCCImpl implements UserUCC {

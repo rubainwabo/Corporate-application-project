@@ -1,18 +1,30 @@
-<<<<<<< HEAD
-avr. 23, 2022 4:47:55 PM utils.WebExceptionMapper toResponse
-SEVERE: Cannot invoke "com.fasterxml.jackson.databind.JsonNode.asBoolean()" because the return value of "com.fasterxml.jackson.databind.node.ObjectNode.get(String)" is null
-utils.exception.FatalException: Cannot invoke "com.fasterxml.jackson.databind.JsonNode.asBoolean()" because the return value of "com.fasterxml.jackson.databind.node.ObjectNode.get(String)" is null
-	at dal.services.ItemDAOImpl.addInterest(ItemDAOImpl.java:151)
-	at buiseness.ucc.ItemUCCImpl.addInterest(ItemUCCImpl.java:54)
-	at ihm.ItemRessource.userAddInterest(ItemRessource.java:114)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.glassfish.jersey.server.model.internal.ResourceMethodInvocationHandlerFactory.lambda$static$0(ResourceMethodInvocationHandlerFactory.java:52)
-	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher$1.run(AbstractJavaResourceMethodDispatcher.java:124)
-	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.invoke(AbstractJavaResourceMethodDispatcher.java:167)
-	at org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$ResponseOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:176)
+avr. 23, 2022 5:55:36 PM utils.WebExceptionMapper toResponse
+SEVERE: HTTP 404 Not Found
+jakarta.ws.rs.NotFoundException: HTTP 404 Not Found
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+	at org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+	at org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+	at org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+	at org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+avr. 23, 2022 5:57:05 PM utils.WebExceptionMapper toResponse
+SEVERE: HTTP 404 Not Found
+org.glassfish.jersey.server.ParamException$PathParamException: HTTP 404 Not Found
+	at org.glassfish.jersey.server.internal.inject.PathParamValueParamProvider$PathParamValueProvider.apply(PathParamValueParamProvider.java:94)
+	at org.glassfish.jersey.server.internal.inject.PathParamValueParamProvider$PathParamValueProvider.apply(PathParamValueParamProvider.java:79)
+	at org.glassfish.jersey.server.spi.internal.ParamValueFactoryWithSource.apply(ParamValueFactoryWithSource.java:50)
+	at org.glassfish.jersey.server.spi.internal.ParameterValueHelper.getParameterValues(ParameterValueHelper.java:64)
+	at org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$AbstractMethodParamInvoker.getParamValues(JavaResourceMethodDispatcherProvider.java:109)
+	at org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$TypeOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:219)
 	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.dispatch(AbstractJavaResourceMethodDispatcher.java:79)
 	at org.glassfish.jersey.server.model.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:475)
 	at org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:397)
@@ -31,25 +43,16 @@ utils.exception.FatalException: Cannot invoke "com.fasterxml.jackson.databind.Js
 	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
 	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
 	at java.base/java.lang.Thread.run(Thread.java:833)
-
-avr. 23, 2022 4:53:05 PM utils.WebExceptionMapper toResponse
-=======
-avr. 23, 2022 3:11:27 PM utils.WebExceptionMapper toResponse
->>>>>>> master
-SEVERE: HTTP 404 Not Found
-jakarta.ws.rs.NotFoundException: HTTP 404 Not Found
-	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
-	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
-	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
-	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)
-	at org.glassfish.jersey.internal.Errors.process(Errors.java:274)
-	at org.glassfish.jersey.internal.Errors.process(Errors.java:244)
-	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
-	at org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
-	at org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
-	at org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
-	at org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
-	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
-	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
-	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.NumberFormatException: For input string: "NaN"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
+	at java.base/java.lang.Integer.parseInt(Integer.java:668)
+	at java.base/java.lang.Integer.valueOf(Integer.java:999)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.glassfish.jersey.server.internal.inject.PrimitiveValueOfExtractor.getValue(PrimitiveValueOfExtractor.java:74)
+	at org.glassfish.jersey.server.internal.inject.PrimitiveValueOfExtractor.extract(PrimitiveValueOfExtractor.java:91)
+	at org.glassfish.jersey.server.internal.inject.PathParamValueParamProvider$PathParamValueProvider.apply(PathParamValueParamProvider.java:92)
+	... 23 more
 

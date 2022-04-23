@@ -2,10 +2,11 @@ package buiseness.dto;
 
 import buiseness.impl.ItemImpl;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.sql.Timestamp;
 
 @JsonDeserialize(as = ItemImpl.class)
 public interface ItemDTO {
-  
+
   int getId();
 
   void setId(int id);
@@ -38,9 +39,17 @@ public interface ItemDTO {
 
   void setOfferor(String offeror);
 
-  int getRecipient();
+  int getOfferorId();
 
-  void setRecipient(int recipient);
+  void setOfferorId(int offerorId);
+
+  String getRecipient();
+
+  void setRecipient(String recipient);
+
+  int getRecipientId();
+
+  void setRecipientId(int recipientId);
 
   String getItemtype();
 
@@ -50,4 +59,7 @@ public interface ItemDTO {
 
   int setNumberOfPeopleInterested(int numberOfPeopleInterested);
 
+  Timestamp getLastDateOffered();
+
+  void setLastDateOffered(Timestamp lastDateOffered);
 }

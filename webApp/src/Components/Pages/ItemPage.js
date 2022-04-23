@@ -1,14 +1,24 @@
 import {getSessionObject} from "../../utils/session";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
-import { Redirect } from "../Router/Router";
+import {Redirect} from "../Router/Router";
 
 const item = `
+<div style="width : 100%;
+height : 100%; position : absolute; 
+left : 0px; right : 0px;
+clip-path: polygon(75% 0, 0 0, 0 25%);
+position : absolute; 
+top : 0px;
+left : 0px;
+z-index: -5;
+background-color: #FFF59B;
+"> </div>
 <section id="item-page">
   <p id="message"> </p>
     <div id="item-img-description">
         <div id="item-img">
-            <img src="${itemImg}">
+            <img id="img-id" alt="">
         </div>
         <div id="item-description">
             <p id="item-description-p"></p>
@@ -16,10 +26,10 @@ const item = `
     </div>
 
     <div id="item-info">
-        <p>Type d’objet : <span id="item-type"><span> </p> 
-        <p>Offert par : <span id="offeror"><span> </p> 
-        <p>Nombres de personnes interessées : <span id="number-interest"><span> </p> 
-        <p>Précedentes dates d’offre : <span id="offeror"> <span> </p>   
+        <p style ="font-size : 0px" id="type-objet"> Type d’objet : <span id="item-type"><span> </p> 
+        <p style ="font-size : 0px" id="Offert"> Offert par : <span id="offeror"><span> </p> 
+        <p style ="font-size : 0px" id="nb-personnes"> Nombres de personnes interessées : <span id="number-interest"><span> </p> 
+        <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="offeror"> <span> </p>   
     </div>
 
     <div id="item-show-interest">
@@ -45,20 +55,15 @@ const item = `
       </form>
     </div>
   
-</section>
-`;
+</section>`
+;
 
 const ItemPage = async () => {
   let id = getId();
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = item;
 
-  let token = getSessionObject("accessToken");
-
-
-
   let addIterestBtn = document.getElementById("add-interest-btn");
-
 
   let removePopUp = document.getElementById("cancel-add-iterest");
   let popUp = document.getElementById("add-iterest-pop-up");
@@ -68,17 +73,16 @@ const ItemPage = async () => {
     popUp.style.display = "none";
   })
 
-
   try {
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
       headers: {
-        "token":getSessionObject("accessToken"),
+        "token": getSessionObject("accessToken"),
       },
     };
 
-    const response = await fetch("/api/items/itemDetails/" + id,options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/itemDetails/" + id, options); // fetch return a promise => we wait for the response
 
     if (!response.ok) {
       throw new Error(
@@ -95,11 +99,11 @@ const ItemPage = async () => {
     document.getElementById(
         "number-interest").innerText = item.numberOfPeopleInterested;
     let addInterestBox = document.getElementById("item-show-interest");
-    
-    if(item.offerorId!=getSessionObject("userId")){
+
+    if (item.offerorId != getSessionObject("userId")) {
       let button = document.createElement("button");
-      button.id="show-interest";
-      button.innerText="Je suis interessé";
+      button.id = "show-interest";
+      button.innerText = "Je suis interessé";
       button.addEventListener("click", function (e) {
         e.preventDefault();
         popUp.style.display = "flex";
@@ -107,9 +111,14 @@ const ItemPage = async () => {
       addInterestBox.appendChild(button);
     }
 
-    let callMe = document.getElementById("callMe");
+    document.getElementById("img-id").src = itemImg;
+    document.getElementById("type-objet").style.fontSize = "12px";
+    document.getElementById("Offert").style.fontSize = "12px";
+    document.getElementById("nb-personnes").style.fontSize = "12px";
+    document.getElementById("preced").style.fontSize = "12px";
+    document.getElementById("item-show-interest").style = "display : inline"
 
-    
+    let callMe = document.getElementById("callMe");
 
     callMe.addEventListener("change", function (e) {
       e.preventDefault();
@@ -147,7 +156,7 @@ const ItemPage = async () => {
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
-            "token":getSessionObject("accessToken")
+            "token": getSessionObject("accessToken")
           },
         };
       } else {
@@ -158,9 +167,8 @@ const ItemPage = async () => {
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
-             "token":getSessionObject("accessToken"),
-            
-            
+            "token": getSessionObject("accessToken"),
+
           },
         };
       }

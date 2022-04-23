@@ -2,14 +2,7 @@ package buiseness.ucc;
 
 import buiseness.domain.User;
 import buiseness.dto.UserDTO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
-import utils.exception.InvalidStateException;
-import utils.exception.InvalidTokenException;
-import utils.exception.PasswordOrUsernameException;
-import utils.exception.ReasonForConnectionRefusalException;
-import utils.exception.UserInvalidException;
-import utils.exception.UserOnHoldException;
 
 
 public interface UserUCC {
@@ -22,25 +15,54 @@ public interface UserUCC {
    * @return an objectNode which will be composed of his token(s), id, username,rememberMe
    */
 
-  UserDTO login(String username, String password, boolean rememberMe)
-      throws PasswordOrUsernameException, ReasonForConnectionRefusalException,
-      UserOnHoldException, UserInvalidException;
+  UserDTO login(String username, String password);
 
   /**
-   * verify the refresh token and create 2 token (1 refresh and 1 access).
+   * changes the state of an user.
    *
-   * @param token token of the request
-   * @return an acess and refresh token
+   * @return true if correctly changed.
    */
-  ObjectNode refreshToken(String token) throws InvalidTokenException;
+  boolean changeState(int id, String state, String refusalReason, boolean admin);
 
-  boolean changeState(int id, String state, String refusalReason, boolean admin)
-      throws InvalidStateException, InvalidStateException;
+  /**
+   * updates the profile of an user.
+   *
+   * @return true if correctly changed.
+   */
+  boolean updateProfile(int id, String username, String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone);
 
+  /**
+   * updates the password of an user.
+   *
+   * @param id       id of the user we want to change password.
+   * @param password new password.
+   * @return true if changed.
+   */
+  boolean updatePassword(int id, String password);
+
+  /**
+   * returns the user.
+   *
+   * @param id id of the user we want to get.
+   * @return user we want.
+   */
   User getOneById(int id);
 
+  /**
+   * checks if user is admin.
+   *
+   * @param id id of the user we want to check
+   * @return true if admin.
+   */
   boolean checkAdmin(int id);
 
+  /**
+   * checks if user is waiting or denied.
+   *
+   * @param id id of the user we want to check
+   * @return true if waiting or denied.
+   */
   boolean checkWaitingOrDenied(int id);
 
   /**
@@ -58,10 +80,16 @@ public interface UserUCC {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
+  /**
+   * call tha dao to insert the phone number to the specific user id.
+   *
+   * @param user user we want to register.
+   * @return id of the user.
+   */
   int register(UserDTO user);
 
   /**
-   * get all users who are interested in the item with the id idItem
+   * call to get all users who are interested in the item with the id idItem.
    *
    * @param idItem the id of the item
    * @return all users who are interested

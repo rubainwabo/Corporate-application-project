@@ -12,57 +12,54 @@ public class DalServicesImpl implements DalServices, DalBackService {
   private static BasicDataSource ds = new BasicDataSource();
   private static ThreadLocal<Connection> mapThreadConnection;
 
-  static {
+  /**
+   * Config for DalService.
+   */
+  public DalServicesImpl() {
     ds.setUrl(Config.getProperty("URL"));
     ds.setUsername(Config.getProperty("Username"));
     ds.setPassword(Config.getProperty("Password"));
-  }
-
-  public DalServicesImpl() {
     mapThreadConnection = new ThreadLocal<>();
   }
 
   @Override
-  public PreparedStatement getPreparedStatement(String query) {
-    try {
-      return mapThreadConnection.get().prepareStatement(query);
-    } catch (SQLException e) {
-      throw new FatalException(e);
+  public PreparedStatement getPreparedStatement(String query) throws SQLException {
+    if (mapThreadConnection.get() == null) {
+      throw new FatalException("There is no connection available");
     }
+    return mapThreadConnection.get().prepareStatement(query);
   }
 
   @Override
-  public PreparedStatement getPreparedStatementWithId(String query, int idReturned) {
-    try {
-      return mapThreadConnection.get().prepareStatement(query, idReturned);
-    } catch (SQLException e) {
-      throw new FatalException(e);
+  public PreparedStatement getPreparedStatementWithId(String query, int idReturned)
+      throws SQLException {
+    if (mapThreadConnection.get() == null) {
+      throw new FatalException("There is no connection available");
     }
+    return mapThreadConnection.get().prepareStatement(query, idReturned);
   }
 
   @Override
-  public void start(boolean isTransaction) {
+  public void start() {
     try {
-      Connection con = ds.getConnection();
-      mapThreadConnection.set(con);
-      if (isTransaction) {
-        con.setAutoCommit(false);
+      if (mapThreadConnection.get() != null) {
+        throw new FatalException("There is a connection started");
       }
-    } catch (Exception e) {
+      Connection con = ds.getConnection();
+      con.setAutoCommit(false);
+      mapThreadConnection.set(con);
+    } catch (SQLException e) {
       throw new FatalException(e);
     }
   }
 
   @Override
-  public void commit(boolean isTransaction) {
+  public void commit() {
     try {
       Connection con = mapThreadConnection.get();
-      if (isTransaction) {
-        con.commit();
-      }
+      con.commit();
       con.close();
       mapThreadConnection.set(null);
-
     } catch (SQLException e) {
       throw new FatalException(e);
     }

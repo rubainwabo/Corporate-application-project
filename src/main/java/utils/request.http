@@ -30,6 +30,7 @@ Content-Type: application/json
 ### Create item
 POST http://localhost:3000/items/add
 Content-Type: application/json
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyNzQ4MiwidXNlciI6NH0.F-JE1p-OFdbfWqFAw3GQ-aoceXnppXb50o4foy9E59k
 
 {
   "description": "mamanie",
@@ -90,10 +91,12 @@ GET http://localhost:3000/itemsType/getAll
 GET http://localhost:3000/members/interest/7
 token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
 
+
 ### add recipient
 
 POST http://localhost:3000/items/addRecipient/7/6
 token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
+
 
 ### update a item
 
@@ -107,3 +110,13 @@ token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0M
   "urlPicture": "jhon",
   "timeSlot": "oui"
 }
+
+### get my items
+ GET http://localhost:3000/items/myItems/gifted
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyOTEzMiwidXNlciI6NH0.dwW5DPw3cYsK6b_J7g7goEnAPCZV18cAH-Ga1YOgIaE
+
+### offer again
+POST http://localhost:3000/items/offer/again/1
+
+###
+GET http://localhost/items/itemDetails/{{id}}

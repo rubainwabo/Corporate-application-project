@@ -5,7 +5,6 @@ import dal.DalServices;
 import dal.services.ItemTypeDAO;
 import jakarta.inject.Inject;
 import java.util.List;
-import utils.exception.BizzException;
 
 public class ItemTypeUCCImpl implements ItemTypeUCC {
 
@@ -18,34 +17,26 @@ public class ItemTypeUCCImpl implements ItemTypeUCC {
   @Override
   public ItemTypeDTO addItemType(String itemType) {
     try {
-      myDalServices.start(true);
+      myDalServices.start();
       ItemTypeDTO val = myItemTypeDAOService.addItemType(itemType);
-      myDalServices.commit(true);
+      myDalServices.commit();
       return val;
     } catch (Exception e) {
-      try {
-        myDalServices.rollBack();
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 
   @Override
   public List<ItemTypeDTO> getAllItemType() {
     try {
-      myDalServices.start(false);
+      myDalServices.start();
       var listeItemType = myItemTypeDAOService.getAllItemType();
-      myDalServices.commit(false);
+      myDalServices.commit();
       return listeItemType;
     } catch (Exception e) {
-      try {
-        myDalServices.commit(false);
-      } catch (Exception ex) {
-        throw new BizzException(ex);
-      }
-      throw new BizzException(e);
+      myDalServices.rollBack();
+      throw e;
     }
   }
 }

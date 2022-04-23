@@ -81,7 +81,10 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public UserDTO getOneById(int id) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select user_id, state, _role from projet.members where user_id=?")) {
+        "select user_id, state, _role,username,reason_for_connection_refusal,"
+            + "last_name,first_name,city,street,postCode,building_number,"
+            + "unit_number,url_picture,phone_number from "
+            + "projet.members where user_id=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         UserDTO user = myDomainFactory.getUser();
@@ -91,7 +94,17 @@ public class UserDAOImpl implements UserDAO {
         user.setId(rs.getInt(1));
         user.setState(rs.getString(2));
         user.setRole(rs.getString(3));
-
+        user.setUserName(rs.getString(4));
+        user.setReasonForConnectionRefusal(rs.getString(5));
+        user.setLastName(rs.getString(6));
+        user.setFirstName(rs.getString(7));
+        user.setCity(rs.getString(8));
+        user.setStreet(rs.getString(9));
+        user.setPostCode(rs.getInt(10));
+        user.setBuildingNumber(rs.getInt(11));
+        user.setUnitNumber(rs.getInt(12));
+        user.setUrlPhoto(rs.getString(13));
+        user.setPhoneNumber(rs.getString(14));
         return user;
       }
     } catch (Exception e) {
@@ -100,18 +113,41 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public String getPhoneNumber(int userId) {
-    try (PreparedStatement psPhoneNumber = myDalService.getPreparedStatement(
-        "select phone_number from projet.members where user_id = " + userId)) {
-      try (ResultSet rsPhoneNumber = psPhoneNumber.executeQuery()) {
-        if (!rsPhoneNumber.next()) {
-          return "";
-        }
-        return rsPhoneNumber.getString(1);
-      }
+  public boolean updateProfile(int id, String username, String firstName, String lastName,
+      String street, int number, int postcode, String box, String city, String phone) {
+
+    phone = phone.length() > 0 ? "'" + phone + "'" : "DEFAULT";
+    String query = "update projet.members set username = '" + username + "'"
+        + " , last_name = '" + lastName + "'"
+        + " ,first_name = '" + firstName + "'"
+        + " ,street = '" + street + "'"
+        + ",building_number = '" + number + "'"
+        + ",postcode = '" + postcode + "'"
+        + ",unit_number = '" + box + "'"
+        + ",city = '" + city + "'"
+        + ",phone_number = " + phone
+        + " where user_id = "
+        + id;
+    return execQuery(query);
+  }
+
+  @Override
+  public boolean updatePassword(int id, String password) {
+    String query = "update projet.members set password = '" + password + "' where "
+        + "user_id = " + id;
+    return execQuery(query);
+  }
+
+  private boolean execQuery(String query) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        query)) {
+      System.out.println(query);
+      ps.executeUpdate();
     } catch (Exception e) {
+      System.out.println("error");
       throw new FatalException(e);
     }
+    return true;
   }
 
   @Override
@@ -139,7 +175,7 @@ public class UserDAOImpl implements UserDAO {
             + refusalReason + "', _role = '" + role + (state.equals("valid")
             ? "',reason_for_connection_refusal = null" : "'")
             + " where user_id = " + userId;
-    System.out.println(query);
+
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       psConfirm.executeUpdate();
@@ -155,7 +191,8 @@ public class UserDAOImpl implements UserDAO {
         "INSERT INTO projet.members(user_id,username,last_name, first_name,"
             + " unit_number,state,password,street,postCode,"
             + " building_number,city,"
-            + " url_picture,nb_of_item_not_taken,_role) VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
+            + " url_picture,nb_of_item_not_taken,_role) "
+            + "VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
         Statement.RETURN_GENERATED_KEYS)) {
 
       ps.setString(1, user.getUserName());
@@ -186,26 +223,29 @@ public class UserDAOImpl implements UserDAO {
   public List<UserDTO> getUserInterest(int idItem) {
     List<UserDTO> userDTOList;
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
-            + "state,phone_number,_role from projet.members,projet.items item,projet.interests iterest "
-            + "WHERE user_id=iterest.member AND item.id_item=iterest.item AND item.id_item="
+        "select last_name,first_name,city,street,postCode,"
+            + "building_number,user_id,username, "
+            + "state,phone_number,_role from projet.members,"
+            + "projet.items item,projet.interests iterest "
+            + "WHERE user_id=iterest.member AND "
+            + "item.id_item=iterest.item AND item.id_item="
             + idItem)) {
 
-      try (ResultSet rs = ps.executeQuery()) {
+      try (ResultSet resultSet = ps.executeQuery()) {
         userDTOList = new ArrayList<>();
         UserDTO user;
-        while (rs.next()) {
+        while (resultSet.next()) {
           user = myDomainFactory.getUser();
-          user.setLastName(rs.getString(1));
-          user.setFirstName(rs.getString(2));
-          user.setCity(rs.getString(3));
-          user.setStreet(rs.getString(4));
-          user.setPostCode(rs.getInt(5));
-          user.setBuildingNumber(rs.getInt(6));
-          user.setId(rs.getInt(7));
-          user.setUserName(rs.getString(8));
-          user.setState(rs.getString(9));
-          user.setRole(rs.getString(11));
+          user.setLastName(resultSet.getString(1));
+          user.setFirstName(resultSet.getString(2));
+          user.setCity(resultSet.getString(3));
+          user.setStreet(resultSet.getString(4));
+          user.setPostCode(resultSet.getInt(5));
+          user.setBuildingNumber(resultSet.getInt(6));
+          user.setId(resultSet.getInt(7));
+          user.setUserName(resultSet.getString(8));
+          user.setState(resultSet.getString(9));
+          user.setRole(resultSet.getString(11));
           userDTOList.add(user);
         }
         return userDTOList;

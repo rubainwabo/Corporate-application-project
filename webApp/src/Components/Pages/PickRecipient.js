@@ -22,10 +22,10 @@ const pickRecipient = `
 </section>
 
 `;
-let id = getId();
+
 
 const PickRecipient = async () => {
-    
+  let id = getId();
     let token = getSessionObject("accessToken");
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = pickRecipient;
@@ -64,7 +64,7 @@ const PickRecipient = async () => {
 
         addButton.innerText=" Offrir";
         addButton.addEventListener("click",function(e){
-          addRecipient(user.id);
+          addRecipient(id,user.id);
         })
         userBox.classList.add("user-interest");
 
@@ -109,21 +109,21 @@ const PickRecipient = async () => {
     console.log(item);
 
   } catch (error) {
-    Redirect('/');
+   
     console.error("LoginPage::error: ", error);
   }
 
 
 };
 
-async function addRecipient(idRecipient){
+async function addRecipient(idItem,idRecipient){
   try {
     var options = { method: 'POST',
     headers: {"token" : getSessionObject("accessToken")},
     mode: 'cors',
     cache: 'default',
     }; 
-    const response = await fetch("/api/items/addRecipient/" + id+"/"+idRecipient, options); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
+    const response = await fetch("/api/items/addRecipient/" + idItem+"/"+idRecipient, options); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
 
     if (response.ok) {
         return true;

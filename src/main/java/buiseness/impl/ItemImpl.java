@@ -31,6 +31,7 @@ public class ItemImpl implements Item {
   @Override
   public void setLastDateOffered(Timestamp lastDateOffered) {
     this.lastDateOffered = lastDateOffered;
+    
   }
 
   @Override

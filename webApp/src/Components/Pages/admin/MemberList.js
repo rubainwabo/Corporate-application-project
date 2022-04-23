@@ -1,6 +1,7 @@
 import { Redirect } from "../../Router/Router";
 import { getSessionObject,setSessionObject,removeSessionObject } from "../../../utils/session";
 import itemImg from '../../../img/wheelbarrows-4566619_640.jpg';
+import { VerifyUser } from "../../../utils/session";
 
 /**
  * Render the MemberList
@@ -41,7 +42,8 @@ const pageContaint = `<section id="home-page">
   </section>
 `;
 
-const MemberList =  () => {
+const MemberList =  async () => {
+  await VerifyUser();
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = pageContaint;
   document.getElementById("home-page").style.height="";
@@ -50,6 +52,7 @@ const MemberList =  () => {
   getAllMemberByFilter(searchInput,token);
   autocomplete(searchInput,token);
   document.getElementById("container-i-member-list").addEventListener("click",async() => {
+    await VerifyUser();
     getAllMemberByFilter(searchInput,token)
   })
 };
@@ -319,7 +322,6 @@ async function getAllItemsByItemCondition(itemCondition,token,id,isOfferor) {
     const response = await fetch("/api/admins/memberListItems/"+id+"?itemCondition="+itemCondition+"&isOfferor="+isOfferor, options);    
 
     if(!response.ok){
-    return Redirect("/logout");
   }
   return await response.json();
 

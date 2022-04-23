@@ -197,7 +197,6 @@ public class ItemDAOImpl implements ItemDAO {
             + "from projet.items i, projet.item_type it "
             + "where offeror =" + id + " and i.item_type = it.id_item_type "
             + "and i.item_condition ='" + state + "'";
-    System.out.println(query);
     return getItemDTOS(query);
 
   }
@@ -273,7 +272,6 @@ public class ItemDAOImpl implements ItemDAO {
         + "where it.id_item_type=i.item_type and i.item_condition='"
         + itemCondition + "' " + "and ";
     query += isOfferor ? "i.offeror= " + userId : "i.recipient=" + userId;
-    System.out.println(query);
     try (PreparedStatement ps = myBackService.getPreparedStatement(query)) {
       ArrayList<ItemDTO> itemDTOS = new ArrayList<>();
       try (ResultSet rs = ps.executeQuery()) {

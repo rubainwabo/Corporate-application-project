@@ -1,5 +1,5 @@
 import { Redirect } from "../Router/Router";
-import { getSessionObject } from "../../utils/session";
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
 
@@ -62,8 +62,9 @@ background-color: #FFF59B;
 
 const MonProfile = async () => {
   const pageDiv = document.querySelector("#page");
-
+  
   try {
+    await VerifyUser();
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -301,6 +302,7 @@ const MonProfile = async () => {
                 };
                 
                 if (pwd.value.length > 5) {  
+                  await VerifyUser();
                 const res = await fetch("/api/members/updatePassword", options); // fetch return a promise => we wait for the response
 
                 if (res.ok) {
@@ -327,6 +329,7 @@ const MonProfile = async () => {
         main.appendChild(saveDiv);
 
         saveButton.onclick = async () => {
+          await VerifyUser();
           let char = nameInput.value.split(" ");
           let lName = char[0];
           let fName = char[1];
@@ -351,6 +354,7 @@ const MonProfile = async () => {
             },
           };
           console.log("clicked");
+
           const res = await fetch("/api/members/updateProfile", options); // fetch return a promise => we wait for the response
           console.log("clicked", res.body);
           Redirect("/monProfile");

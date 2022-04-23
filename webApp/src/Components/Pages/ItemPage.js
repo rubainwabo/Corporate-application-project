@@ -1,4 +1,4 @@
-import {getSessionObject} from "../../utils/session";
+import {getSessionObject, VerifyUser} from "../../utils/session";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
 import {Redirect} from "../Router/Router";
@@ -74,6 +74,7 @@ const ItemPage = async () => {
   })
 
   try {
+    await VerifyUser()
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -139,6 +140,7 @@ const ItemPage = async () => {
   }
 
   addIterestBtn.addEventListener("click", async function (e) {
+    await VerifyUser()
     e.preventDefault();
     let availabilities = document.getElementById("availabilities").value;
     let callMe = document.getElementById("callMe").checked;

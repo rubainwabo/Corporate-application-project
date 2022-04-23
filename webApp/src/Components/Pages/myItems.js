@@ -1,7 +1,7 @@
 import {Redirect} from "../Router/Router";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
-import {getSessionObject} from "../../utils/session";
+import {getSessionObject, VerifyUser} from "../../utils/session";
 
 const data = [{type: "meuble", description: "une table tres belle"},
   {type: "meuble", description: "une table tres belle"},
@@ -138,6 +138,7 @@ const MyItems = async (id) => {
 };
 
 async function getMyItems(state){
+    await VerifyUser()
     let allRecentItem = document.getElementById("all-recent-item");
     try {
         var options = {
@@ -242,6 +243,7 @@ function changeOptions(state){
     }
 }
 async function cancelItem(idItem){
+    await VerifyUser();
    try {
         var options = { method: 'POST',
         headers: {"token" : getSessionObject("accessToken")},
@@ -259,6 +261,7 @@ async function cancelItem(idItem){
     }
 }
 async function offerAgain(idItem){
+    await VerifyUser()
     try {
          var options = { method: 'POST',
          headers: {"token" : getSessionObject("accessToken")},

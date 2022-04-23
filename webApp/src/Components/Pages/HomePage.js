@@ -1,6 +1,7 @@
 import {Redirect} from "../Router/Router";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 /**
  * Render the LoginPage
@@ -36,9 +37,16 @@ const HomePage = async (id) => {
   pageDiv.innerHTML = home;
 
   let allRecentItem = document.getElementById("all-recent-item");
-
+  await VerifyUser();
+  let fetchMethodName = getSessionObject("accessToken") ? "lastItemsOfferedConnected" : "lastItemsOfferedNotConnected";
+  let token = getSessionObject("accessToken");
   try {
-    const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response
+    var options = {
+        method: 'GET',
+        headers: {
+          "token" : token}
+    };  
+    const response = await fetch("/api/items/"+fetchMethodName,options); // fetch return a promise => we wait for the response
     console.log("res", response.body);
     if (!response.ok) {
       throw new Error(

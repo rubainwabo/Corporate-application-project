@@ -4,6 +4,9 @@ import { VerifyUser } from "../../../utils/session";
 
 const userHandler = `
 <section id="home-page">
+<div id="container-user-info">
+
+</div>
 <div id="home-page-navigation">
     <h2 id="home-page-title"> Listes des personnes en attentes/refusées</h2>
 </div>
@@ -46,20 +49,16 @@ const UserHandler = () => {
   let accesToken = getSessionObject("accessToken");
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = userHandler;
-  document.getElementById("home-page").style.height="1vh";
   // default request of the page
   gettAllByState(accesToken, "waiting");
   const stateUserList = document.getElementById("state-user-handler")
   document.querySelector(".slider.round").addEventListener("click", () => {
     if (stateUserList.innerHTML == "ATTENTE") {
+      
       stateUserList.innerHTML = "REFUSÉ"
       gettAllByState(accesToken, "denied");
     } else {
         // click out the div and delete it TODO !
-        let myPopUpDiv = document.getElementById("add-reason-refusal");
-        if (myPopUpDiv){
-            myPopUpDiv.style.display="none"
-        }
       stateUserList.innerHTML = "ATTENTE"
       gettAllByState(accesToken, "waiting");
     }
@@ -92,13 +91,14 @@ async function gettAllByState(accesToken, state) {
       const inputCheckBox = document.createElement("input");
       const divValid = document.createElement("div");
       const divDenied = document.createElement("div");
-      const validBtn = document.createElement("button");
-      const deniedBtn = document.createElement("button");
+      const validBtn = document.createElement("a");
+      const deniedBtn = document.createElement("a");
 
       divUserHandler.classList = "user-to-handle";
       divUserHandler.id = e.id;
-      // checkbox admin + last name and first name
       divIsAdminBox.classList = "is-admin-box";
+      deniedBtn.classList="user-handler-denied-btn"
+      validBtn.classList="user-handler-accepted-btn"
       pFirstName.innerHTML = e.firstName
       pLastName.innerHTML = e.lastName
       divUserHandler.appendChild(pFirstName);
@@ -134,9 +134,12 @@ async function gettAllByState(accesToken, state) {
       });
       validBtn.addEventListener("click", () => {
         addOrRefuse(e.id, "valid", "", accesToken, inputCheckBox)
+        document.getElementById(e.id).remove();
       });
-      divUserHandler.addEventListener("click", () => {
+      divUserHandler.addEventListener("click", (target) => {
+        if (target.target.innerHTML!= "refusé" && target.target.innerHTML!="accepté"){
         getUserInformation(e.id, accesToken);
+        }
       })
       userHandlerList.appendChild(divUserHandler)
     })
@@ -164,8 +167,109 @@ async function getUserInformation(id, accesToken) {
           "fetch error : " + response.status + " : " + response.statusText
       );
     }
-    const user = await response.json(); // json() returns a promise => we wait for the data
-    console.log(user);
+    const data = await response.json(); // json() returns a promise => we wait for the data
+    const formDiv = document.getElementById("container-user-info");
+    formDiv.innerHTML = `
+  <div id="main-container" class="container py-5">
+    <div class="row d-flex justify-content-center align-items-center ">
+      <div id="user-handler-info" class="col col-lg-6 mb-4 mb-lg-0">
+        <div class="card mb-3" style="border-radius: .5rem;">
+          <div class="row g-0">
+            <div id="name-container" class="col-md-4 gradient-custom text-center text-black" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                alt="Avatar"
+                class="img-fluid my-5"
+                style="width: 80px;"
+              />
+              <h5 id="name">${data.lastName + " " + data.firstName}</h5>
+              <p id="user"> ${data.userName} </p>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body p-4">
+                <h6>Information</h6>
+                <hr class="mt-0 mb-4">
+                <div class="row pt-1">
+                  <div id="role-container" class="col-6 mb-3">
+                    <h6>Role</h6>
+                    <p id="role" class="text-muted"> ${data.role} </p>
+                  </div>
+                  <div id="phone-container" class="col-6 mb-3">
+                    <h6>Phone</h6>
+                    <p id="phone" class="text-muted">${
+                      data.phoneNumber == null ? "/" : data.phoneNumber
+                    }</p>
+                  </div>
+                </div>
+                <hr class="mt-0 mb-4">
+                <div class="row pt-1">
+                  <div class="col-6 mb-3">  
+                  <h6>Adresse</h6>
+                    <div class="row">
+                        <div class="col-3" style="padding-right : 0px">
+                            Rue
+                        </div>
+                        <div id="street-container" class="col-9">    
+                            <p id="street" class="text-muted"> ${
+                              data.street
+                            } </p>
+
+                        </div>
+                        <div class="col-3" style="padding-right : 0px">
+                            N°
+                        </div>
+                        <div id="numero-container" class="col-9">    
+                            <p id="numero" class="text-muted"> ${
+                              data.buildingNumber
+                            } </p>
+                        </div>
+                        <div class="col-3" style="padding-right : 0px">
+                            Ville
+                        </div>
+                        <div id="city-container" class="col-9">    
+                            <p id="city" class="text-muted"> ${data.city}</p>
+                        </div>
+
+                    </div>
+                </div>
+                  <div class="col-6 mb-3">
+                  <div class="row pt-4">
+                  <div class="col-7" style="padding-right : 0px">
+                  Code postal :
+                    </div>
+                    <div id="postcode-container" class="col-5">    
+                    <p id="postcode" class="text-muted"> ${data.postCode}</p>
+                    </div>
+                    <div class="col-4" style="padding-right : 0px">
+                        Boite :
+                    </div>
+                    <div id="unit-container" class="col-8">
+                    <p id="unit" class="text-muted"> ${
+                      data.unitNumber == null ? "/" : data.unitNumber
+                    }</p>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+    document.querySelector("#page").appendChild(formDiv);
+    document.addEventListener("click",(e) => {
+      // click out the div and delete it TODO !
+      let myPopUpDiv = document.querySelector(".card.mb-3");
+      if (myPopUpDiv){
+        if (!myPopUpDiv.contains(e.target)) {
+          myPopUpDiv.remove();
+        }
+      }
+    })
+
   } catch (error) {
     console.error("LoginPage::error: ", error);
   }

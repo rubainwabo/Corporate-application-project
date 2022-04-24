@@ -206,15 +206,15 @@ public class UserDAOImpl implements UserDAO {
             + "LEFT JOIN projet.items o3 ON m.user_id = o3.recipient "
             + "AND o3.item_condition = 'gifted' "
             + "LEFT JOIN projet.items o4 on m.user_id = o4.recipient "
-            + "and o4.item_condition= 'not collected' "
-            + "and m.state = 'valid'";
+            + "and o4.item_condition= 'not collected' where m.state='valid'";
     query +=
         !name.isBlank() || !city.isBlank() || !postCode.isBlank()
-            ? " where "
+            ? " and "
             + queryName
             + queryCity + queryPostCode :
             "";
     query += " group by m.user_id";
+    System.out.println(query);
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
       ArrayList<UserDTO> userDTOS = new ArrayList<>();
       try (ResultSet rs = ps.executeQuery()) {

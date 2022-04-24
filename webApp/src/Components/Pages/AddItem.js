@@ -5,7 +5,7 @@ const addItem = `
 <section id="add-item-page">
   <p id="message"></p>
     <form id="add-item-form">
-     
+        <input name="file" type= "file" /> <br/><br/>
             <div >
                 <label for="pet-select">Type d’objet</label><br>
                 <select class="add-item-iputs" name="pets" id="items-type-selectbox" required="required">
@@ -175,6 +175,16 @@ const AddItemPage = () => {
       }
 
       const itemType = await response.json(); // json() returns a promise => we wait for the data
+
+      const fileInput = document.querySelector('input[name=file]');
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      console.log(fileInput);
+      const optionsimg = {
+        method: 'POST',
+        body: formData
+      };
+      await fetch('api/items/upload', optionsimg);
 
       console.log(itemType);
       document.getElementById("add-item-pop-up-confim").style.display = "flex";

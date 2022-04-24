@@ -17,8 +17,15 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.ContainerRequest;
+import utils.Config;
 
 @Singleton
 @Path("/items")
@@ -219,4 +226,21 @@ public class ItemRessource {
     int userId = (int) req.getProperty("id");
     myItemUCC.offerAgain(idItem, userId);
   }
+
+  @POST
+  @Path("upload")
+  @Consumes(MediaType.MULTIPART_FORM_DATA)
+  public Response uploadFile(@FormDataParam("file") InputStream file,
+      @FormDataParam("file") FormDataContentDisposition fileDisposition) {
+    String fileName = fileDisposition.getFileName();
+    String path = Config.getProperty("ImgPath");
+    try {
+      Files.copy(file, Paths.get(path, fileName));
+    } catch (IOException e) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("no image uploaded").type("text/plain").build());
+    }
+    return Response.ok(fileName).header("Access-Control-Allow-Origin", "*").build();
+  }
+
 }

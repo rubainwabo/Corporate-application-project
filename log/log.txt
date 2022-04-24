@@ -1,7 +1,21 @@
-avr. 23, 2022 6:05:31 PM utils.WebExceptionMapper toResponse
-SEVERE: HTTP 404 Not Found
-jakarta.ws.rs.NotFoundException: HTTP 404 Not Found
-	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+avr. 24, 2022 8:25:49 PM utils.WebExceptionMapper toResponse
+SEVERE: username or password incorrect
+utils.exception.PasswordOrUsernameException: username or password incorrect
+	at buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:38)
+	at ihm.UserRessource.login(UserRessource.java:62)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.glassfish.jersey.server.model.internal.ResourceMethodInvocationHandlerFactory.lambda$static$0(ResourceMethodInvocationHandlerFactory.java:52)
+	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher$1.run(AbstractJavaResourceMethodDispatcher.java:124)
+	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.invoke(AbstractJavaResourceMethodDispatcher.java:167)
+	at org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$TypeOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:219)
+	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.dispatch(AbstractJavaResourceMethodDispatcher.java:79)
+	at org.glassfish.jersey.server.model.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:475)
+	at org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:397)
+	at org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:81)
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:255)
 	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
 	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
 	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)

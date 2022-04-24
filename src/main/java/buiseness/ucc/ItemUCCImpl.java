@@ -7,6 +7,7 @@ import dal.services.DateDAO;
 import dal.services.ItemDAO;
 import jakarta.inject.Inject;
 import java.util.List;
+import utils.exception.UserInvalidException;
 
 public class ItemUCCImpl implements ItemUCC {
 
@@ -83,6 +84,7 @@ public class ItemUCCImpl implements ItemUCC {
     }
   }
 
+
   @Override
   public List<ItemDTO> getLastItemsOffered(boolean isConnected) {
     try {
@@ -146,5 +148,36 @@ public class ItemUCCImpl implements ItemUCC {
       throw e;
     }
 
+  }
+
+  @Override
+  public void itemCollectedOrNot(int itemId, boolean itemCollected, int reqUserId) {
+    try {
+      myDalServices.start();
+      ItemDTO itemDTO = myItemDAOService.getOneById(itemId);
+      if (reqUserId != itemDTO.getOfferorId()) {
+        throw new UserInvalidException(
+            "la personne essayant de faire la requête n'est pas l'offereur de l'objet");
+      }
+      myItemDAOService.itemCollectedOrNot(itemDTO, itemCollected);
+      myDalServices.commit();
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+  }
+
+  @Override
+  public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
+      boolean isOfferor) {
+    try {
+      myDalServices.start();
+      var myItems = myItemDAOService.memberItemsByItemCondition(itemCondition, userId, isOfferor);
+      myDalServices.commit();
+      return myItems;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
   }
 }

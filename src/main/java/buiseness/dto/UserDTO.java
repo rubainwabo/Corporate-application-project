@@ -117,5 +117,20 @@ public interface UserDTO {
 
   void setRole(String role);
 
+  int getNbrItemOffered();
+
+  void setNbrItemOffered(int nbrItemOffrered);
+
+  int getNbrGiftenItems();
+
+  void setNbrGiftenItems(int nbrGiftenItems);
+
+  int getNbrItemReceived();
+
+  void setNbrItemReceived(int nbrItemReceived);
+
+  int getNbrItemNotTaken();
+
+  void setNbrItemNotTaken(int nbrItemNotTaken);
 
 }

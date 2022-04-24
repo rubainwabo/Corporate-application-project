@@ -49,8 +49,11 @@ public interface ItemDAO {
    * @param limit the limit of rows
    * @return a list of item
    */
-
   List<ItemDTO> getLastItemsOffered(int limit);
+
+  void itemCollectedOrNot(ItemDTO itemDTO, boolean itemCollected);
+
+  List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
 
   /**
    * retrives to add a recipient to an item.

@@ -4,6 +4,8 @@ import buiseness.domain.ItemType;
 import buiseness.factory.BizFactory;
 import buiseness.factory.BizFactoryImpl;
 import buiseness.impl.ItemTypeImpl;
+import buiseness.ucc.DateUCC;
+import buiseness.ucc.DateUCCImpl;
 import buiseness.ucc.ItemTypeUCC;
 import buiseness.ucc.ItemTypeUCCImpl;
 import buiseness.ucc.ItemUCC;
@@ -40,6 +42,7 @@ public class ApplicationBinder extends AbstractBinder {
     bind(DateDAOImpl.class).to(DateDAO.class).in(Singleton.class);
     bind(ItemTypeImpl.class).to(ItemType.class).in(Singleton.class);
     bind(ItemTypeUCCImpl.class).to(ItemTypeUCC.class).in(Singleton.class);
-
+    bind(DateDAOImpl.class).to(DateDAO.class).in(Singleton.class);
+    bind(DateUCCImpl.class).to(DateUCC.class).in(Singleton.class);
   }
 }

@@ -6,13 +6,11 @@ import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
 import MesOffres from "../Pages/MesOffres";
-
+import MemberList from "../Pages/admin/MemberList";
 import MyItems from "../Pages/myItems";
 import UpdateItem from "../Pages/UpdateItem";
 import PickRecipient from "../Pages/PickRecipient";
-
 import MonProfile from "../Pages/MyProfilePage";
-
 // Configure your routes here
 const routes = {
   '/': HomePage,
@@ -23,13 +21,11 @@ const routes = {
   '/additem': AddItemPage,
   '/userhandeler': UserHandler,
   '/mesOffres': MesOffres,
-
+  '/memberList': MemberList,
+  '/monProfile': MonProfile,
   '/myitems': MyItems,
   '/updateitem': UpdateItem,
   '/pickrecipient': PickRecipient,
-
-  '/monProfile': MonProfile
-
 };
 
 /**
@@ -66,10 +62,11 @@ const Router = () => {
   /* Route the right component when the page is loaded / refreshed */
   window.addEventListener("load", (e) => {
     const componentToRender = routes[window.location.pathname];
-    if (!componentToRender)
+    if (!componentToRender) {
       throw Error(
           "The " + window.location.pathname + " ressource does not exist."
       );
+    }
 
     componentToRender();
   });

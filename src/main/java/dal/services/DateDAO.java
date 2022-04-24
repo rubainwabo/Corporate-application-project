@@ -1,5 +1,8 @@
 package dal.services;
 
+import buiseness.dto.DateDTO;
+import java.util.List;
+
 public interface DateDAO {
 
   /**
@@ -8,4 +11,7 @@ public interface DateDAO {
    * @param itemId the itemId
    */
   void addDate(int itemId);
+
+  List<DateDTO> getAllDateItem(int itemId);
+
 }

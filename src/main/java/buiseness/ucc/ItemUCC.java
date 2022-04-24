@@ -50,6 +50,10 @@ public interface ItemUCC {
    */
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
 
+  void itemCollectedOrNot(int itemId, boolean itemCollected, int reqUsrId);
+
+  List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
+
   List<ItemDTO> getMyItems(int id, String state);
 
   /**

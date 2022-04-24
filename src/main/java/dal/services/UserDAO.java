@@ -36,10 +36,10 @@ public interface UserDAO {
    */
   void addPhoneNumber(int userId, String phoneNumber);
 
-  boolean updateProfile(int id, String username,String firstName, String lastName,
+  boolean updateProfile(int id, String username, String firstName, String lastName,
       String street, int number, int postcode, String box, String city, String phone);
 
-  boolean updatePassword(int id,String password);
+  boolean updatePassword(int id, String password);
 
   int register(UserDTO user);
 
@@ -50,9 +50,11 @@ public interface UserDAO {
    * @param newState         : state we want to put
    * @param newRefusalReason : his refusal reason
    */
-
   void changeState(int userId, String newState, String newRefusalReason, boolean admin);
 
+  List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
+
+  List<String> getAutocompleteList(String val);
 
   /**
    * retrives to get all users who are interested in the item with the id idItem.
@@ -61,5 +63,4 @@ public interface UserDAO {
    * @return all users who are interested
    */
   List<UserDTO> getUserInterest(int idItem);
-
 }

@@ -38,65 +38,10 @@ public class MemberRessource {
    */
   @GET
   @Path("myProfile")
-  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public UserDTO userMyProfile(@Context ContainerRequest req) {
     int userId = (int) req.getProperty("id");
     return myUserUCC.getOneById(userId);
-  }
-
-  /**
-   * retrives to get all the user with a specific state.
-   *
-   * @return a list of user by a specific state
-   */
-  @GET
-  @Path("list")
-  @Produces(MediaType.APPLICATION_JSON)
-  public List<UserDTO> adminListByState(@QueryParam("state") String state) {
-    if (state.isBlank()) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("a state is required").type("text/plain").build());
-    }
-    return myUserUCC.getUsersByState(state);
-  }
-
-  /**
-   * Change the state of a certain user.
-   *
-   * @param body the data that the user has entered put in json format
-   * @return true or false if state successfully changed.
-   */
-  @POST
-  @Path("changeState")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public boolean adminChangeState(JsonNode body) {
-    System.out.println(body.get("admin"));
-    if (!body.hasNonNull("change_id") || !body.hasNonNull("state")) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("id field is required").type("text/plain").build());
-    }
-
-    if (!body.get("state").asText().equals("denied") && body.hasNonNull("refusalReason")) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("You cannot put refusal reason on something else than refused state")
-          .type("text/plain").build());
-    }
-
-    if (body.get("state").asText().equals("denied") && (!body.hasNonNull("refusalReason")
-        || body.get("refusalReason").asText().isBlank())) {
-      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("You have to put your denial reason if you want to deny someone")
-          .type("text/plain").build());
-    }
-    if (body.hasNonNull("refusalReason")) {
-      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
-          body.get("refusalReason").asText(), body.get("admin").asBoolean());
-    } else {
-      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
-          body.get("admin").asBoolean());
-    }
   }
 
   /**
@@ -126,10 +71,8 @@ public class MemberRessource {
   @Path("interest/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public List<UserDTO> userInterest(@Context ContainerRequest req, @PathParam("id") int itemId) {
-    return myUserUCC.getUsersIterest(itemId);
-
+    return myUserUCC.getUsersIterest((int) req.getProperty("id"), itemId);
   }
-
 
   /**
    * tries to retrieve a user's data according to the id of the person making the request.
@@ -140,13 +83,14 @@ public class MemberRessource {
   @GET
   @Path("details")
   @Produces(MediaType.APPLICATION_JSON)
-  public UserDTO userGetOneById(@Context ContainerRequest req) {
-    return myUserUCC.getOneById((int) req.getProperty("id"));
+  public UserDTO userGetOneById(@Context ContainerRequest req, @QueryParam("id") int id) {
+    return id > 0 ? myUserUCC.getOneById(id) : myUserUCC.getOneById((int) req.getProperty("id"));
   }
 
   /**
    * Updates the profile of an user.
-   * @param req request we get.
+   *
+   * @param req  request we get.
    * @param body data we want to change.
    * @return true if user updates successfully.
    */
@@ -189,7 +133,6 @@ public class MemberRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public boolean userUpdatePassword(@Context ContainerRequest req, JsonNode body) {
-
     if (!body.hasNonNull("newPassword")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("newPassword field is required").type("text/plain").build());
@@ -201,9 +144,5 @@ public class MemberRessource {
       }
       return myUserUCC.updatePassword(userId, body.get("newPassword").asText());
     }
-
   }
-
-
 }
-

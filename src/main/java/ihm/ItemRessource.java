@@ -3,6 +3,7 @@ package ihm;
 import buiseness.dto.ItemDTO;
 import buiseness.ucc.ItemUCC;
 import buiseness.ucc.UserUCC;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -28,7 +29,6 @@ public class ItemRessource {
 
   @Inject
   private UserUCC myUserUCC;
-
 
   /**
    * gets list of offers of the user.
@@ -59,7 +59,7 @@ public class ItemRessource {
     if (itemDTO == null || itemDTO.getDescription().isBlank() || itemDTO.getItemtype().isBlank()
         || itemDTO.getTimeSlot().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("object informations invalid").type("text/plain").build());
+          .entity("info de l'objet incorrectes").type("text/plain").build());
     }
     int id = (int) req.getProperty("id");
     return myItemUCC.addItem(itemDTO, id);
@@ -76,7 +76,7 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public ItemDTO userGetItemDetails(@PathParam("id") int id) {
     if (id <= 0) {
-      throw new WebApplicationException("bad request, no id found in pathParams");
+      throw new WebApplicationException("Aucun object existant avec cet id");
     }
     return myItemUCC.getDetails(id);
   }
@@ -95,7 +95,7 @@ public class ItemRessource {
       @Context ContainerRequest req) {
     if (!body.hasNonNull("availabilities") || itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("informations manquantes").type("text/plain").build());
     }
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
@@ -122,7 +122,7 @@ public class ItemRessource {
       @PathParam("condition") String condition, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("information manquante").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
     myItemUCC.changeItemCondition(itemId, userId, condition);
@@ -151,6 +151,32 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> userGetLastItemsOfferedConnected() {
     return myItemUCC.getLastItemsOffered(true);
+  }
+
+  /**
+   * is used to indicate whether a person to whom an object has been offered has come to collect it
+   * or not.
+   *
+   * @param req  the user making the request
+   * @param node containing information like the id of the object or if the person came or not.
+   * @return 200 if everything went well.
+   */
+  @POST
+  @Path("itemCollected")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response userItemCollectedOrNot(@Context ContainerRequest req, JsonNode node) {
+
+    if (!node.hasNonNull("itemId") || !node.hasNonNull("itemCollected")
+        || node.get("itemId").asInt() <= 0) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("informations manquantes").type("text/plain").build());
+    }
+    int reqUserId = (int) req.getProperty("id");
+    int itemId = node.get("itemId").asInt();
+    boolean isCollected = node.get("itemCollected").asBoolean();
+    myItemUCC.itemCollectedOrNot(itemId, isCollected, reqUserId);
+    return Response.ok().build();
   }
 
   /**
@@ -193,6 +219,4 @@ public class ItemRessource {
     int userId = (int) req.getProperty("id");
     myItemUCC.offerAgain(idItem, userId);
   }
-
-
 }

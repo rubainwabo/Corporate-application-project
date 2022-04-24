@@ -20,14 +20,60 @@ public class UserImpl implements User {
   private String urlPhoto;
   private String phoneNumber;
   private String role;
+  private int nbrItemOffered;
+  private int nbrGiftenItems;
+  private int nbrItemReceived;
+  private int nbrItemNotTaken;
 
   public UserImpl() {
   }
 
+  @Override
+  public int getNbrItemNotTaken() {
+    return nbrItemNotTaken;
+  }
+
+  @Override
+  public void setNbrItemNotTaken(int nbrItemNotTaken) {
+    this.nbrItemNotTaken = nbrItemNotTaken;
+  }
+
+  @Override
+  public int getNbrItemOffered() {
+    return nbrItemOffered;
+  }
+
+  @Override
+  public void setNbrItemOffered(int nbrItemOffered) {
+    this.nbrItemOffered = nbrItemOffered;
+  }
+
+  @Override
+  public int getNbrGiftenItems() {
+    return nbrGiftenItems;
+  }
+
+  @Override
+  public void setNbrGiftenItems(int nbrGiftenItems) {
+    this.nbrGiftenItems = nbrGiftenItems;
+  }
+
+  @Override
+  public int getNbrItemReceived() {
+    return nbrItemReceived;
+  }
+
+  @Override
+  public void setNbrItemReceived(int nbrItemReceived) {
+    this.nbrItemReceived = nbrItemReceived;
+  }
+
+  @Override
   public String getRole() {
     return role;
   }
 
+  @Override
   public void setRole(String role) {
     this.role = role;
   }

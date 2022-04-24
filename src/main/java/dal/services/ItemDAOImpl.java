@@ -7,6 +7,7 @@ import dal.DalBackService;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,13 +62,13 @@ public class ItemDAOImpl implements ItemDAO {
   public ItemDTO getOneById(int id) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
-            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested, max(d._date), "
-            + "m.last_name,m.first_name "
-            + "from projet.items i,projet.item_type t,projet.dates d,projet.members m "
+            + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested,"
+            + "m.last_name,m.first_name,m2.last_name,m2.first_name "
+            + "from projet.items i LEFT JOIN projet.members m2 on i.recipient=m2.user_id,"
+            + "projet.item_type t,projet.dates d,projet.members m "
             + "where i.id_item=? and i.item_type = "
             + "t.id_item_type and d.item=" + id
-            + " and m.user_id = i.offeror GROUP BY "
-            + "i.id_item,t.item_type_name,m.last_name,m.first_name")) {
+            + " and m.user_id = i.offeror")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
         ItemDTO item = myBizFactoryService.getItem();
@@ -82,8 +83,10 @@ public class ItemDAOImpl implements ItemDAO {
         item.setTimeSlot(rs.getString(6));
         item.setItemCondition(rs.getString(7));
         item.setNumberOfPeopleInterested(rs.getInt(8));
-        item.setLastDateOffered(rs.getTimestamp(9));
-        item.setOfferor(rs.getString(10) + " " + rs.getString(11));
+        item.setOfferor(rs.getString(9) + " " + rs.getString(10));
+        if (rs.getString(11) != null) {
+          item.setRecipient(rs.getString(11) + " " + rs.getString(12));
+        }
         return item;
       }
     } catch (Exception e) {
@@ -215,9 +218,29 @@ public class ItemDAOImpl implements ItemDAO {
           arrayItemDTO.add(item);
         }
       }
-
       return arrayItemDTO;
     } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public void itemCollectedOrNot(ItemDTO item, boolean itemCollected) {
+    String query = itemCollected ? "Update projet.items set item_condition='gifted'"
+        + " where id_item=" + item.getId() :
+        "Update projet.items set item_condition='not collected',"
+            + "recipient=NULL where id_item=" + item.getId();
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        query)) {
+      ps.executeUpdate();
+      if (!itemCollected) {
+        try (PreparedStatement psUpdtItmNotTkn = myBackService.getPreparedStatement(
+            "update projet.members set nb_of_item_not_taken= nb_of_item_not_taken "
+                + "+ 1 where user_id=" + item.getRecipientId())) {
+          psUpdtItmNotTkn.executeUpdate();
+        }
+      }
+    } catch (SQLException e) {
       throw new FatalException(e);
     }
   }
@@ -227,9 +250,7 @@ public class ItemDAOImpl implements ItemDAO {
     try (PreparedStatement ps = myBackService.getPreparedStatement(""
         + "update projet.items set recipient=" + idRecipient
         + ", item_condition='Assigned' WHERE id_item=" + idItem)) {
-
       ps.executeUpdate();
-
       try (PreparedStatement psNotif = myBackService.getPreparedStatement(
           "INSERT INTO projet.notifications (id_notification,is_viewed,text,person,item)"
               + " VALUES (default,false,?,?,?)"
@@ -237,12 +258,37 @@ public class ItemDAOImpl implements ItemDAO {
         psNotif.setString(1, "hello");
         psNotif.setInt(2, idRecipient);
         psNotif.setInt(3, idItem);
-
         return psNotif.executeUpdate();
       }
-
-
     } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
+      boolean isOfferor) {
+    String query = "select i.id_item,i.url_picture,it.item_type_name,i.description from"
+        + " projet.items i,projet.item_type it "
+        + "where it.id_item_type=i.item_type and i.item_condition='"
+        + itemCondition + "' " + "and ";
+    query += isOfferor ? "i.offeror= " + userId : "i.recipient=" + userId;
+    System.out.println(query);
+    try (PreparedStatement ps = myBackService.getPreparedStatement(query)) {
+      ArrayList<ItemDTO> itemDTOS = new ArrayList<>();
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          ItemDTO itemDTO = myBizFactoryService.getItem();
+          itemDTO.setId(rs.getInt(1));
+          itemDTO.setUrlPicture(rs.getString(2));
+          itemDTO.setItemtype(rs.getString(3));
+          itemDTO.setDescription(rs.getString(4));
+          itemDTOS.add(itemDTO);
+        }
+        return itemDTOS;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
       throw new FatalException(e);
     }
   }

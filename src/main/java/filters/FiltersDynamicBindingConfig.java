@@ -1,5 +1,7 @@
 package filters;
 
+import ihm.AdminRessource;
+import ihm.DateRessource;
 import ihm.ItemRessource;
 import ihm.ItemTypeRessource;
 import ihm.MemberRessource;
@@ -16,7 +18,9 @@ public class FiltersDynamicBindingConfig implements DynamicFeature {
     if (UserRessource.class.equals(resourceInfo.getResourceClass())
         || ItemRessource.class.equals(resourceInfo.getResourceClass())
         || ItemTypeRessource.class.equals(resourceInfo.getResourceClass())
-        || MemberRessource.class.equals(resourceInfo.getResourceClass())) {
+        || MemberRessource.class.equals(resourceInfo.getResourceClass())
+        || DateRessource.class.equals(resourceInfo.getResourceClass())
+        || AdminRessource.class.equals(resourceInfo.getResourceClass())) {
       if (resourceInfo.getResourceMethod().getName().contains("user")) {
         context.register(AuthorizationRequestFilter.class);
       }

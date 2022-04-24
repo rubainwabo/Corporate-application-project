@@ -52,7 +52,6 @@ public class TokenServiceImpl implements TokenService {
         .put("username", user.getUserName())
         .put("rememberMe", rememberMe)
         .put("role", user.getRole());
-
   }
 
   @Override

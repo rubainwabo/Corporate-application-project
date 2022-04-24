@@ -109,11 +109,8 @@ item-page
   align-items: center;
   align-self: center;
   justify-self: center;
-
   width: 80%;
-  height: 90vh;
-
-
+  height: 100%;
 }
 
 #call-me-box {
@@ -1014,7 +1011,6 @@ input:checked + .slider:before {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .member-list-item-img {
@@ -1022,32 +1018,9 @@ input:checked + .slider:before {
   max-height: 100%;
 }
 
-.member-list-polygon-left-top{
-  width: 100%;
-  height: 100%;
-  clip-path: polygon(8% 0%, 0 0, 0 74%);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -5;
-  background-color: #FFF59B;
-}
-
-.member-list-polygon-right-bot{
-  width: 100%;
-  height: 100%;
-  clip-path: polygon(100% 2%, 100% 100%, 95% 100%);
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  z-index: -5;
-  background-color: #FFF59B;
-}
-
 #user-handler-info{
   position: fixed;
   top: 50%;
   left: 50%;
-  /* bring your own prefixes */
   transform: translate(-50%, -50%);
 }

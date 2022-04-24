@@ -61,7 +61,7 @@ const UserHandler = () => {
         // click out the div and delete it TODO !
       stateUserList.innerHTML = "ATTENTE"
       gettAllByState(accesToken, "waiting");
-    }
+    } 
   })
 };
 
@@ -173,7 +173,7 @@ async function getUserInformation(id, accesToken) {
   <div id="main-container" class="container py-5">
     <div class="row d-flex justify-content-center align-items-center ">
       <div id="user-handler-info" class="col col-lg-6 mb-4 mb-lg-0">
-        <div class="card mb-3" style="border-radius: .5rem;">
+        <div id="card-mb-3" class="card mb-3" style="border-radius: .5rem;">
           <div class="row g-0">
             <div id="name-container" class="col-md-4 gradient-custom text-center text-black" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
               <img
@@ -262,7 +262,7 @@ async function getUserInformation(id, accesToken) {
     document.querySelector("#page").appendChild(formDiv);
     document.addEventListener("click",(e) => {
       // click out the div and delete it TODO !
-      let myPopUpDiv = document.querySelector(".card.mb-3");
+      let myPopUpDiv = document.getElementById("card-mb-3");
       if (myPopUpDiv){
         if (!myPopUpDiv.contains(e.target)) {
           myPopUpDiv.remove();

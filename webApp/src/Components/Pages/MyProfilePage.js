@@ -81,7 +81,7 @@ const MonProfile = async () => {
     pageDiv.innerHTML = monProfile;
 
     const formDiv = document.createElement("div");
-    formDiv.innerHTML = `<section class="vh-100" style="background-color: white;">
+    formDiv.innerHTML = `
   <div id="main-container" class="container py-5">
     <div class="row d-flex justify-content-center align-items-center ">
       <div class="col col-lg-6 mb-4 mb-lg-0">
@@ -172,7 +172,6 @@ const MonProfile = async () => {
       </div>
     </div>
   </div>
-</section>
 `;
     pageDiv.appendChild(formDiv);
 

@@ -130,10 +130,8 @@ public class UserDAOImpl implements UserDAO {
   private boolean execQuery(String query) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         query)) {
-      System.out.println(query);
       ps.executeUpdate();
     } catch (Exception e) {
-      System.out.println("error");
       throw new FatalException(e);
     }
     return true;

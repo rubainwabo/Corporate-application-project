@@ -1,7 +1,85 @@
-avr. 23, 2022 6:05:31 PM utils.WebExceptionMapper toResponse
-SEVERE: HTTP 404 Not Found
-jakarta.ws.rs.NotFoundException: HTTP 404 Not Found
-	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+avr. 23, 2022 10:50:56 PM utils.WebExceptionMapper toResponse
+SEVERE: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+	at dal.DalServicesImpl.rollBack(DalServicesImpl.java:72)
+	at buiseness.ucc.UserUCCImpl.checkWaitingOrDenied(UserUCCImpl.java:122)
+	at filters.AuthorizationRequestFilter.filter(AuthorizationRequestFilter.java:48)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:108)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:44)
+	at org.glassfish.jersey.process.internal.Stages.process(Stages.java:173)
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:247)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+	at org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+	at org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+	at org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+	at org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+avr. 23, 2022 10:50:56 PM utils.WebExceptionMapper toResponse
+SEVERE: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+	at dal.DalServicesImpl.rollBack(DalServicesImpl.java:72)
+	at buiseness.ucc.UserUCCImpl.checkWaitingOrDenied(UserUCCImpl.java:122)
+	at filters.AuthorizationRequestFilter.filter(AuthorizationRequestFilter.java:48)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:108)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:44)
+	at org.glassfish.jersey.process.internal.Stages.process(Stages.java:173)
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:247)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+	at org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+	at org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+	at org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+	at org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+avr. 23, 2022 10:50:56 PM utils.WebExceptionMapper toResponse
+SEVERE: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+	at dal.DalServicesImpl.rollBack(DalServicesImpl.java:72)
+	at buiseness.ucc.UserUCCImpl.checkWaitingOrDenied(UserUCCImpl.java:122)
+	at filters.AuthorizationRequestFilter.filter(AuthorizationRequestFilter.java:48)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:108)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:44)
+	at org.glassfish.jersey.process.internal.Stages.process(Stages.java:173)
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:247)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+	at org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+	at org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+	at org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+	at org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+avr. 23, 2022 10:51:06 PM utils.WebExceptionMapper toResponse
+SEVERE: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.rollback()" because "con" is null
+	at dal.DalServicesImpl.rollBack(DalServicesImpl.java:72)
+	at buiseness.ucc.UserUCCImpl.checkWaitingOrDenied(UserUCCImpl.java:122)
+	at filters.AuthorizationRequestFilter.filter(AuthorizationRequestFilter.java:48)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:108)
+	at org.glassfish.jersey.server.ContainerFilteringStage.apply(ContainerFilteringStage.java:44)
+	at org.glassfish.jersey.process.internal.Stages.process(Stages.java:173)
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:247)
 	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
 	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
 	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)

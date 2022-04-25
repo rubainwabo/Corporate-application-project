@@ -1,4 +1,4 @@
-import { getSessionObject } from '../../utils/session';
+import { getSessionObject, VerifyUser } from '../../utils/session';
 import {Redirect} from '../Router/Router';
 
 const updateItem = `
@@ -51,6 +51,7 @@ const UpdateItem = async () => {
 
   
   try {
+    await VerifyUser();
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -81,6 +82,7 @@ const UpdateItem = async () => {
 
   updateButton.addEventListener("click", async function (e) {
     e.preventDefault();
+    await VerifyUser();
     let description = document.getElementById("itemDescription").value;
     let urlPicture = "none";
     let timeSlot = document.getElementById("availability").value;

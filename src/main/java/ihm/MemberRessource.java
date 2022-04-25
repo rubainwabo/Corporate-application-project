@@ -54,7 +54,6 @@ public class MemberRessource {
   @Path("me")
   @Produces(MediaType.APPLICATION_JSON)
   public ObjectNode userCheckValidity(@Context ContainerRequest req) {
-    System.out.println("/me");
     int userId = (int) req.getProperty("id");
     // if return smth 200, else if userIsValid return 204 else return 401
     return req.getProperty("refresh") != null ? myTokenService.getRefreshedTokens(userId) : null;

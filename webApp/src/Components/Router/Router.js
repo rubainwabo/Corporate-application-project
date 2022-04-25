@@ -84,6 +84,8 @@ const Router = () => {
  * routes array of the Router
  */
 
+
+
 const Redirect = (uri, params) => {
   // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
   if (params) {

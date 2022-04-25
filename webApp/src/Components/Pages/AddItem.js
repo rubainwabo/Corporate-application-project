@@ -1,4 +1,4 @@
-import { getSessionObject } from '../../utils/session';
+import { getSessionObject, VerifyUser } from '../../utils/session';
 import {Redirect} from '../Router/Router';
 
 const addItem = `
@@ -100,7 +100,7 @@ const AddItemPage = () => {
 
   addItemType.addEventListener("click", async function (e) {
     e.preventDefault();
-
+    await VerifyUser()
     let itemTypeName = document.getElementById("item-type-name").value;
     try {
       const options = {
@@ -145,6 +145,7 @@ const AddItemPage = () => {
 
   addItemForm.addEventListener("submit", async function (e) {
     e.preventDefault();
+    await VerifyUser()
     let description = document.getElementById("itemDescription").value;
     let urlPicture = "none";
     let itemtype = document.getElementById("items-type-selectbox").value;
@@ -186,9 +187,8 @@ const AddItemPage = () => {
   })
 
   async function getItemsTypes() {
-
+    await VerifyUser()
     let selectBox = document.getElementById("items-type-selectbox");
-
     try {
       const options = {
         // body data type must match "Content-Type" header

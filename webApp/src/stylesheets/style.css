@@ -109,11 +109,8 @@ item-page
   align-items: center;
   align-self: center;
   justify-self: center;
-
   width: 80%;
-  height: 90vh;
-
-
+  height: 100%;
 }
 
 #call-me-box {
@@ -178,7 +175,7 @@ home page
   align-items: center;
   align-self: center;
   width: 70%;
-  height: 90vh;
+  height: 100%;
 }
 
 #home-page-navigation h2 {
@@ -241,7 +238,6 @@ add-item-page
   align-self: center;
   justify-self: center;
   width: 80%;
-  height: 90vh;
 }
 
 #add-item-page input, select {
@@ -381,6 +377,30 @@ add-item-page
 /*
     user Hander page
 */
+.user-handler-denied-btn,.user-handler-accepted-btn{
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  padding-bottom: 0.5rem;
+}
+
+.user-handler-denied-btn:hover,.user-handler-accepted-btn:hover{
+  color: #000;
+}
+
+.user-handler-denied-btn::after,.user-handler-accepted-btn::after{
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: rgb(253,168,207);
+  background: radial-gradient(circle, rgba(255,245,155,1) 0%,  rgba(253,168,207,1) 100%);
+  transition: width .2s ease-in;
+}
+.user-handler-denied-btn:hover::after,.user-handler-accepted-btn:hover::after {
+  color: inherit;
+  width: 100%;
+}
 
 #user-handler-page, #member-list-page {
   display: flex;
@@ -395,20 +415,7 @@ add-item-page
 #switch-list-users {
   width: 100%;
   padding-bottom: 2vh;
-  padding-top: 10vh;
-
-}
-
-.user-to-handle {
-  display: flex;
-  width: 100%;
-  border: 0.5px solid black;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  padding-top: 40px;
 }
 
 .is-admin-box {
@@ -450,15 +457,15 @@ add-item-page
   border-radius: 10px;
 }
 
-#add-reason-refusal {
-  display: none;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-  height: 50vh;
-  width: 60vh;
-  background-color: antiquewhite;
-}
+  #add-reason-refusal {
+    display: none;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 60vh;
+    background-color: antiquewhite;
+  }
 
 /*
  My items page
@@ -659,15 +666,120 @@ input {
 }
 
 .user-to-handle {
+  position: relative;
+  height: 9vh;
+  padding-top: 10px;
+  border-radius: 75px;
   display: flex;
   width: 100%;
-  border: 0.5px solid black;
+  border: #e9e5e1 1px solid;
   justify-content: space-between;
   align-items: center;
   padding-left: 10px;
   padding-right: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 3vh;
   cursor: pointer;
+  transition: 1s box-shadow;
+  background-color: white;
+
+}
+
+.user-to-handle:hover{
+  box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
+}
+
+.user-to-handle:hover::before, .user-to-handle:hover::after {
+  display: block;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #FDA8CF;
+  border-radius: 75px;
+  animation: 1s clockwise infinite;
+  z-index: -1;
+}
+
+.user-to-handle:hover:after{
+  background: #FFF59B;
+  animation: 2s counterclockwise infinite;
+}
+@keyframes clockwise {
+  0% {
+    top: -5px;
+    left: 0;
+  }
+  12% {
+    top: -2px;
+    left: 2px;
+  }
+  25% {
+    top: 0;
+    left: 5px;    
+  }
+  37% {
+    top: 2px;
+    left: 2px;
+  }
+  50% {
+    top: 5px;
+    left: 0;    
+  }
+  62% {
+    top: 2px;
+    left: -2px;
+  }
+  75% {
+    top: 0;
+    left: -5px;
+  }
+  87% {
+    top: -2px;
+    left: -2px;
+  }
+  100% {
+    top: -5px;
+    left: 0;    
+  }
+}
+
+@keyframes counterclockwise {
+  0% {
+    top: -5px;
+    right: 0;
+  }
+  12% {
+    top: -2px;
+    right: 2px;
+  }
+  25% {
+    top: 0;
+    right: 5px;    
+  }
+  37% {
+    top: 2px;
+    right: 2px;
+  }
+  50% {
+    top: 5px;
+    right: 0;    
+  }
+  62% {
+    top: 2px;
+    right: -2px;
+  }
+  75% {
+    top: 0;
+    right: -5px;
+  }
+  87% {
+    top: -2px;
+    right: -2px;
+  }
+  100% {
+    top: -5px;
+    right: 0;    
+  }
 }
 
 .is-admin-box {
@@ -681,16 +793,6 @@ input {
 #form-button-box {
   border: solid 1px black;
   border-radius: 10px;
-}
-
-#add-reason-refusal {
-  display: none;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-  height: 50vh;
-  width: 60vh;
-  background-color: antiquewhite;
 }
 
 #user-handler-list, #member-list {
@@ -842,12 +944,11 @@ input:checked + .slider:before {
 }
 
 #member-list-all-my-item {
-  position: absolute;
-  margin: auto;
-  top: 100px;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
   width: 70vw;
   height: 70vh;
   border: solid 1px black;
@@ -910,10 +1011,16 @@ input:checked + .slider:before {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .member-list-item-img {
   max-width: 100%;
   max-height: 100%;
+}
+
+#user-handler-info{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

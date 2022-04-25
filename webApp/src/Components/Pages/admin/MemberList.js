@@ -46,11 +46,21 @@ const MemberList =  async () => {
   await VerifyUser();
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = pageContaint;
+  
   document.getElementById("home-page").style.height="";
   let token = getSessionObject("accessToken");
   let searchInput = document.getElementById("my-input-member-list")
   getAllMemberByFilter(searchInput,token);
   autocomplete(searchInput,token);
+  document.addEventListener("click",(e) => {
+    // click out the div and delete it TODO !
+    let myPopUpDiv = document.getElementById("member-list-all-my-item");
+    if (myPopUpDiv){
+      if (!myPopUpDiv.contains(e.target)) {
+        myPopUpDiv.remove();
+      }
+    }
+  })
   document.getElementById("container-i-member-list").addEventListener("click",async() => {
     await VerifyUser();
     getAllMemberByFilter(searchInput,token)
@@ -91,7 +101,12 @@ async function getAllMemberByFilter(searchInput,token){
     const nb_of_item_offered = document.createElement("p");
     const nb_of_item_gifted = document.createElement("p");
     const nb_of_item_received = document.createElement("p");
-    
+    const divPolygonLeft = document.createElement("div");
+    const divPolygonRight = document.createElement("div");
+
+
+    //divPolygonLeft.classList="member-list-polygon-left-top";
+    //divPolygonRight.classList="member-list-polygon-right-bot";
     divUserHandler.classList = "user-to-handle";
     divUserHandler.id = e.id;
 
@@ -106,6 +121,8 @@ async function getAllMemberByFilter(searchInput,token){
     nb_of_item_gifted.innerHTML = e.nbrGiftenItems + " donnés"
     nb_of_item_received.innerHTML = e.nbrItemReceived + " réceptions"
 
+   // divUserHandler.appendChild(divPolygonLeft)
+    //divUserHandler.appendChild(divPolygonRight)
     divUserHandler.appendChild(pFirstName);
     divUserHandler.appendChild(pLastName);
     divUserHandler.appendChild(username);
@@ -157,15 +174,7 @@ async function getAllMemberByFilter(searchInput,token){
       divMyItems.appendChild(left)
       divMyItems.appendChild(right)
       document.querySelector("#page").appendChild(divMyItems);
-      document.addEventListener("click",(e) => {
-        // click out the div and delete it TODO !
-        let myPopUpDiv = document.getElementById("member-list-all-my-item");
-        if (myPopUpDiv){
-          if (!myPopUpDiv.contains(e.target)) {
-            myPopUpDiv.remove();
-          }
-        }
-      })
+      
     })
     memberList.appendChild(divUserHandler)
   })    

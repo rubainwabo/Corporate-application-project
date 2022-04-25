@@ -381,7 +381,7 @@ add-item-page
   display: inline-block;
   text-decoration: none;
   color: inherit;
-  padding-bottom: 0.5rem;
+
 }
 
 .user-handler-denied-btn:hover,.user-handler-accepted-btn:hover{
@@ -403,12 +403,6 @@ add-item-page
 }
 
 #user-handler-page, #member-list-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-self: center;
-  justify-self: center;
   padding-top: 2vh;
 }
 
@@ -431,17 +425,6 @@ add-item-page
   float: left;
   height: 100%;
   width: 50%;
-}
-
-.member-list-right-items {
-  float: right;
-  background-color: white;
-  height: 100%;
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
 }
 
 #user-handler-list, #member-list {
@@ -668,7 +651,6 @@ input {
 .user-to-handle {
   position: relative;
   height: 9vh;
-  padding-top: 10px;
   border-radius: 75px;
   display: flex;
   width: 100%;
@@ -782,7 +764,7 @@ input {
   }
 }
 
-.is-admin-box {
+#is-admin-box {
   text-align: center;
 }
 
@@ -952,23 +934,22 @@ input:checked + .slider:before {
   width: 70vw;
   height: 70vh;
   border: solid 1px black;
-  border-radius: 10px;
+  border-radius: 2px;
   background-color: white;
 }
 
 #member-list-left {
-  padding-left: 10px;
   float: left;
   height: 100%;
   width: 50%;
   overflow-y: scroll; /* Add the ability to scroll */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  border-right: #000 solid 1px;
 
 }
 
 #member-list-right {
-  padding-left: 10px;
   float: right;
   height: 100%;
   width: 50%;
@@ -983,13 +964,20 @@ input:checked + .slider:before {
 }
 
 .member-list-pop-up-items {
-  padding-top: 2vh;
-  padding-bottom: 23px;
-  text-align: center;
+  position: fixed;
+    padding-top: 2vh;
+    background: white;
+    width: 50%;
+    padding-bottom: 2vh;
+    text-align: center;
+    margin-bottom: 23px;
+    border-bottom: 1px solid black;
+
 }
 
 .member-list-offered-items {
-  text-align: center;
+  padding-left: 5px;
+  padding-top: 90px;
 }
 
 .member-list-container-item {
@@ -1005,12 +993,12 @@ input:checked + .slider:before {
 
 .member-list-right-items {
   float: right;
-  background-color: white;
-  height: 100%;
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    background-color: white;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    padding-left: 22px;
 }
 
 .member-list-item-img {
@@ -1023,4 +1011,15 @@ input:checked + .slider:before {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.col-2,.col-1,.col-3{
+  text-align: center;
+}
+p{
+  color: black;
+  font-weight: lighter;
+}
+h6{
+  color: #292929;
+  font-weight: normal;
 }

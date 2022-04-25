@@ -47,7 +47,6 @@ const HomePage = async (id) => {
           "token" : token}
     };  
     const response = await fetch("/api/items/"+fetchMethodName,options); // fetch return a promise => we wait for the response
-    console.log("res", response.body);
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText

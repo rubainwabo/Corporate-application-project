@@ -14,6 +14,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -229,13 +230,22 @@ public class ItemRessource {
 
   @POST
   @Path("upload")
+
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   public Response uploadFile(@FormDataParam("file") InputStream file,
-      @FormDataParam("file") FormDataContentDisposition fileDisposition) {
+      @FormDataParam("file") FormDataContentDisposition fileDisposition,@FormDataParam("itemId") int itemId) {
+
+    System.out.println(itemId);
     String fileName = fileDisposition.getFileName();
     String path = Config.getProperty("ImgPath");
     try {
+      System.out.println("bullshoy" +path);
       Files.copy(file, Paths.get(path, fileName));
+      myItemUCC.updateItemUrl(itemId,fileName);
+      /*
+      String[] cmd = new String[]{"/bin/sh", "/Users/danieldotche/Documents/backup/prog.sh"+ fileName};
+       Runtime.getRuntime().exec(cmd);
+       */
     } catch (IOException e) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("no image uploaded").type("text/plain").build());

@@ -66,8 +66,8 @@ const HomePage = async (id) => {
 
       itemType.classList.add("item-title");
       itemDescription.classList.add("item-description");
-
-      itemImgDiv.src = itemImg;
+      
+      itemImgDiv.src = item.urlPicture;
       itemType.innerText = item.itemtype;
       itemDescription.innerText = item.description;
 

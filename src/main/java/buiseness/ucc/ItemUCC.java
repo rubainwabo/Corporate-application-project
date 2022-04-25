@@ -81,4 +81,6 @@ public interface ItemUCC {
    */
   void offerAgain(int idItem, int userId);
 
+  void updateItemUrl(int itemId,String img);
+
 }

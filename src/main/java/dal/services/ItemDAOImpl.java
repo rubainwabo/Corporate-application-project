@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import utils.Config;
 import utils.exception.FatalException;
 
 public class ItemDAOImpl implements ItemDAO {
@@ -180,7 +181,7 @@ public class ItemDAOImpl implements ItemDAO {
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
     String query = "select i.id_item, i.description, i.url_picture,it.item_type_name, "
-        + " i.number_of_people_interested,max(d._date) as maxDate from projet.items i,"
+        + " i.number_of_people_interested,max(d._date) as maxDate,i.url_picture  from projet.items i,"
         + "projet.item_type it, projet.dates d "
         + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type"
         + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
@@ -203,6 +204,7 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   private List<ItemDTO> getItemDTOS(String query) {
+    String path = Config.getProperty("ImgPath");
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query
@@ -215,6 +217,7 @@ public class ItemDAOImpl implements ItemDAO {
           item.setUrlPicture(rs.getString(3));
           item.setItemtype(rs.getString(4));
           item.setNumberOfPeopleInterested(rs.getInt(5));
+          item.setUrlPicture(path+"/"+rs.getString(7));
           arrayItemDTO.add(item);
         }
       }

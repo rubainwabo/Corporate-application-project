@@ -174,11 +174,12 @@ const AddItemPage = () => {
         })
       }
 
-      const itemType = await response.json(); // json() returns a promise => we wait for the data
+      const itemId = await response.json(); // json() returns a promise => we wait for the data
 
       const fileInput = document.querySelector('input[name=file]');
       const formData = new FormData();
       formData.append('file', fileInput.files[0]);
+      formData.append("itemId",itemId);
       console.log(fileInput);
       const optionsimg = {
         method: 'POST',
@@ -186,7 +187,7 @@ const AddItemPage = () => {
       };
       await fetch('api/items/upload', optionsimg);
 
-      console.log(itemType);
+
       document.getElementById("add-item-pop-up-confim").style.display = "flex";
 
     } catch (error) {

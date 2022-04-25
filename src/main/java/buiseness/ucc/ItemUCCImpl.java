@@ -167,6 +167,7 @@ public class ItemUCCImpl implements ItemUCC {
     }
   }
 
+
   @Override
   public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
       boolean isOfferor) {
@@ -180,4 +181,18 @@ public class ItemUCCImpl implements ItemUCC {
       throw e;
     }
   }
+  @Override
+  public void updateItemUrl(int itemId,String urlImg) {
+    try {
+      myDalServices.start();
+      var item = myItemDAOService.getOneById(itemId);
+      item.setUrlPicture(urlImg);
+      myItemDAOService.updateItem(item);
+      myDalServices.commit();
+    }catch (Exception e){
+      myDalServices.rollBack();
+      throw e;
+    }
+  }
+
 }

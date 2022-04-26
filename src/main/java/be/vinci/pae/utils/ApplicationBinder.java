@@ -10,6 +10,8 @@ import be.vinci.pae.buiseness.ucc.ItemTypeUCC;
 import be.vinci.pae.buiseness.ucc.ItemTypeUCCImpl;
 import be.vinci.pae.buiseness.ucc.ItemUCC;
 import be.vinci.pae.buiseness.ucc.ItemUCCImpl;
+import be.vinci.pae.buiseness.ucc.NotificationUCC;
+import be.vinci.pae.buiseness.ucc.NotificationUCCImpl;
 import be.vinci.pae.buiseness.ucc.UserUCC;
 import be.vinci.pae.buiseness.ucc.UserUCCImpl;
 import be.vinci.pae.dal.DalBackService;
@@ -21,6 +23,8 @@ import be.vinci.pae.dal.services.ItemDAO;
 import be.vinci.pae.dal.services.ItemDAOImpl;
 import be.vinci.pae.dal.services.ItemTypeDAO;
 import be.vinci.pae.dal.services.ItemTypeDAOImpl;
+import be.vinci.pae.dal.services.NotificationDAO;
+import be.vinci.pae.dal.services.NotificationDAOImpl;
 import be.vinci.pae.dal.services.UserDAO;
 import be.vinci.pae.dal.services.UserDAOImpl;
 import jakarta.inject.Singleton;
@@ -44,5 +48,7 @@ public class ApplicationBinder extends AbstractBinder {
     bind(ItemTypeUCCImpl.class).to(ItemTypeUCC.class).in(Singleton.class);
     bind(DateDAOImpl.class).to(DateDAO.class).in(Singleton.class);
     bind(DateUCCImpl.class).to(DateUCC.class).in(Singleton.class);
+    bind(NotificationUCCImpl.class).to(NotificationUCC.class).in(Singleton.class);
+    bind(NotificationDAOImpl.class).to(NotificationDAO.class).in(Singleton.class);
   }
 }

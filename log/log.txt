@@ -1,10 +1,8 @@
-avr. 26, 2022 5:05:52 PM be.vinci.pae.utils.WebExceptionMapper toResponse
-SEVERE: null
-java.lang.IllegalArgumentException
-	at java.sql/java.sql.Time.valueOf(Time.java:109)
-	at be.vinci.pae.utils.TokenServiceImpl.createToken(TokenServiceImpl.java:28)
-	at be.vinci.pae.utils.TokenServiceImpl.login(TokenServiceImpl.java:44)
-	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:63)
+avr. 26, 2022 8:24:11 PM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: username or password incorrect
+be.vinci.pae.utils.exception.PasswordOrUsernameException: username or password incorrect
+	at be.vinci.pae.buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:38)
+	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:62)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -32,13 +30,11 @@ java.lang.IllegalArgumentException
 	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
 	at java.base/java.lang.Thread.run(Thread.java:833)
 
-avr. 26, 2022 5:06:05 PM be.vinci.pae.utils.WebExceptionMapper toResponse
-SEVERE: null
-java.lang.IllegalArgumentException
-	at java.sql/java.sql.Time.valueOf(Time.java:109)
-	at be.vinci.pae.utils.TokenServiceImpl.createToken(TokenServiceImpl.java:28)
-	at be.vinci.pae.utils.TokenServiceImpl.login(TokenServiceImpl.java:44)
-	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:63)
+avr. 26, 2022 8:24:14 PM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: user on hold
+be.vinci.pae.utils.exception.UserOnHoldException: user on hold
+	at be.vinci.pae.buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:47)
+	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:62)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

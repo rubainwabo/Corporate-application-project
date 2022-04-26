@@ -5,6 +5,7 @@ import be.vinci.pae.ihm.DateRessource;
 import be.vinci.pae.ihm.ItemRessource;
 import be.vinci.pae.ihm.ItemTypeRessource;
 import be.vinci.pae.ihm.MemberRessource;
+import be.vinci.pae.ihm.NotificationRessource;
 import be.vinci.pae.ihm.UserRessource;
 import jakarta.ws.rs.container.DynamicFeature;
 import jakarta.ws.rs.container.ResourceInfo;
@@ -20,7 +21,8 @@ public class FiltersDynamicBindingConfig implements DynamicFeature {
         || ItemTypeRessource.class.equals(resourceInfo.getResourceClass())
         || MemberRessource.class.equals(resourceInfo.getResourceClass())
         || DateRessource.class.equals(resourceInfo.getResourceClass())
-        || AdminRessource.class.equals(resourceInfo.getResourceClass())) {
+        || AdminRessource.class.equals(resourceInfo.getResourceClass())
+        || NotificationRessource.class.equals(resourceInfo.getResourceClass())) {
       if (resourceInfo.getResourceMethod().getName().contains("user")) {
         context.register(AuthorizationRequestFilter.class);
       }

@@ -26,8 +26,8 @@ public class ItemDAOImpl implements ItemDAO {
 
     try (PreparedStatement ps = myBackService.getPreparedStatementWithId(
         "insert into projet.items "
-            + "(id_item,description,url_picture,item_condition,offeror,item_type,time_slot) "
-            + "VALUES (DEFAULT,?,?,?,?,?,?)",
+            + "(id_item,description,url_picture,item_condition,offeror,item_type,time_slot,number_of_people_interested) "
+            + "VALUES (DEFAULT,?,?,?,?,?,?,0)",
         Statement.RETURN_GENERATED_KEYS)) {
       // ps to find lastId insere
       ps.setString(1, item.getDescription());
@@ -35,7 +35,6 @@ public class ItemDAOImpl implements ItemDAO {
       ps.setString(3, "offered");
       ps.setInt(4, offerorId);
       ps.setString(6, item.getTimeSlot());
-
       try (PreparedStatement psIdItem = myBackService.getPreparedStatement(
           "select id_item_type from projet.item_type where item_type_name = ? ")) {
         psIdItem.setString(1, item.getItemtype());
@@ -111,40 +110,29 @@ public class ItemDAOImpl implements ItemDAO {
       try (PreparedStatement psNotif = myBackService.getPreparedStatement(
           "insert into projet.notifications (id_notification,is_viewed,text,person,item) "
               + "VALUES (default,false,?,?,?)")) {
-        String urlPicture;
+        String interestUsrName = "";
         try (PreparedStatement psOfferor = myBackService.getPreparedStatement(
-            "select offeror,url_picture from projet.items where id_item = "
-                + idItem)) {
+            "select offeror i,m.username from projet.items i,projet.members m"
+                + " where id_item = " + idItem + " and m.user_id=" + interestUserId)) {
           try (ResultSet rsOfferor = psOfferor.executeQuery()) {
             if (!rsOfferor.next()) {
               throw new FatalException(
-                  "probleme dans la recuperation de l'offreur");
+                  "probleme dans la recuperation de l'offreur ou de "
+                      + "l'username de la personne interessé");
             }
-            urlPicture = rsOfferor.getString(2);
             psNotif.setInt(2, rsOfferor.getInt(1));
+            interestUsrName = rsOfferor.getString(2);
           }
           psNotif.setInt(3, idItem);
         }
-        String interestUsrName;
-        try (PreparedStatement psInterestUserAsString = myBackService.getPreparedStatement(
-            "Select username from projet.members where user_id = " + interestUserId)) {
-          try (ResultSet rsInterestUserAsString = psInterestUserAsString.executeQuery()) {
-            if (!rsInterestUserAsString.next()) {
-              throw new FatalException(
-                  "Echec de la requete : récupération du username de "
-                      + "la personne interessé impossible");
-            }
-            interestUsrName = rsInterestUserAsString.getString(1);
-          }
-        }
         String phoneNumerStr =
             objectNode.get("callMe").asBoolean() && !objectNode.get("phoneNumber").asText()
-                .isBlank() ? ", vous pouvez la contacter sur via son numéro : " + objectNode.get(
+                .isBlank() ? ", vous pouvez la contacter via son numéro : " + objectNode.get(
                     "phoneNumber")
-                .asText() + " " : " ";
+                .asText() + " " : "";
 
         psNotif.setString(1,
-            interestUsrName + " est interessé par votre offre" + phoneNumerStr + urlPicture);
+            interestUsrName + " est interessé par votre offre" + phoneNumerStr);
         psNotif.executeUpdate();
       }
     } catch (Exception e) {

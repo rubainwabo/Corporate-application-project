@@ -61,7 +61,28 @@ if(accesToken && isAdmin == "admin"){
           </div>
          
 
-          <div id="username"> bonjour ${username}</div>
+          <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
+          <div class="notifications" id="box">
+          <div class="notifications-item"> <img src="https://i.imgur.com/uIgDDDd.jpg" alt="img">
+              <div class="text">
+                  <h4>Samso aliao</h4>
+                  <p>Samso Nagaro Like your home work</p>
+              </div>
+          </div>
+          <div class="notifications-item"> <img src="https://img.icons8.com/flat_round/64/000000/vote-badge.png" alt="img">
+              <div class="text">
+                  <h4>John Silvester</h4>
+                  <p>+20 vista badge earned</p>
+              </div>
+          </div>
+                  <div class="notifications-item"> <img src="https://img.icons8.com/flat_round/64/000000/vote-badge.png" alt="img">
+              <div class="text">
+                  <h4>John Silvester</h4>
+                  <p>+20 vista badge earned</p>
+              </div>
+          </div>
+  
+      </div>
 
           <div id="nav-connection"> 
             <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>

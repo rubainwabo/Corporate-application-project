@@ -3,6 +3,7 @@ package be.vinci.pae.buiseness.factory;
 import be.vinci.pae.buiseness.dto.DateDTO;
 import be.vinci.pae.buiseness.dto.ItemDTO;
 import be.vinci.pae.buiseness.dto.ItemTypeDTO;
+import be.vinci.pae.buiseness.dto.NotificationDTO;
 import be.vinci.pae.buiseness.dto.UserDTO;
 
 
@@ -30,4 +31,6 @@ public interface BizFactory {
   ItemTypeDTO getItemType();
 
   DateDTO getDate();
+
+  NotificationDTO getNotif();
 }

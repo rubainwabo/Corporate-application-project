@@ -3,9 +3,10 @@
 // Here, because our JS component 'Navbar' has the same name as Navbar Bootstrap's component
 // we change the name of the imported Bootstrap's 'Navbar' component
 import { Navbar as BootstrapNavbar} from "bootstrap";
-import { getSessionObject } from "../../utils/session";
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 import logo from "../../img/logo.svg"
+
 /**
  * Render the Navbar which is styled by using Bootstrap
  * Each item in the Navbar is tightly coupled with the Router configuration :
@@ -17,7 +18,6 @@ const Navbar = () => {
   const navbarWrapper = document.querySelector("#navbarWrapper");
   let accesToken = getSessionObject("accessToken");
   let isAdmin = getSessionObject("role");
-  let username = getSessionObject("userPseudo");
   /*
   let navbar = `
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -59,30 +59,9 @@ if(accesToken && isAdmin == "admin"){
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> liste des utilisateurs </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/memberList"> liste des membres </a></div>
           </div>
-         
-
+        
           <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
-          <div class="notifications" id="box">
-          <div class="notifications-item"> <img src="https://i.imgur.com/uIgDDDd.jpg" alt="img">
-              <div class="text">
-                  <h4>Samso aliao</h4>
-                  <p>Samso Nagaro Like your home work</p>
-              </div>
-          </div>
-          <div class="notifications-item"> <img src="https://img.icons8.com/flat_round/64/000000/vote-badge.png" alt="img">
-              <div class="text">
-                  <h4>John Silvester</h4>
-                  <p>+20 vista badge earned</p>
-              </div>
-          </div>
-                  <div class="notifications-item"> <img src="https://img.icons8.com/flat_round/64/000000/vote-badge.png" alt="img">
-              <div class="text">
-                  <h4>John Silvester</h4>
-                  <p>+20 vista badge earned</p>
-              </div>
-          </div>
-  
-      </div>
+          <div class="notifications" id="box"></div>
 
           <div id="nav-connection"> 
             <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
@@ -93,6 +72,7 @@ if(accesToken && isAdmin == "admin"){
 }else {
   if (accesToken){
    navbar = `
+   <nav>
    <div id="navigation">
      <div id="menu">
      <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
@@ -102,7 +82,8 @@ if(accesToken && isAdmin == "admin"){
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
      </div>
   
-     <div id="username"> bonjour ${username}</div>
+     <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
+     <div class="notifications" id="box"></div>
 
      <div id="nav-connection"> 
        <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
@@ -126,6 +107,59 @@ if(accesToken && isAdmin == "admin"){
 }
 }
   navbarWrapper.innerHTML = navbar;
+  const bellIconDiv = document.getElementById("icon-bell");
+  const boxDiv = document.getElementById("box");
+  let isClicked = false;
+  if (bellIconDiv){
+    bellIconDiv.addEventListener("click", async () => {
+      await VerifyUser();
+      if (!isClicked){
+
+      try {
+        var options = {
+           method: 'GET',
+          headers: {
+            "token" : accesToken
+          }
+      };   
+        const response = await fetch("/api/members/notifications/"+getSessionObject("userId"), options); 
+
+        if(!response.ok){
+        }
+      const notificationsList = await response.json();
+      
+      notificationsList.forEach((item) => {
+        console.log(item)
+        let notificationItemDiv = document.createElement("div");
+        let textDiv = document.createElement("div");
+        let h4ItemType = document.createElement("h4");
+        let pDescription = document.createElement("p")
+        let itemImg = document.createElement("img");
+
+        notificationItemDiv.classList="notifications-item";
+        textDiv.classList="text";
+        itemImg.src=logo;
+        
+        h4ItemType.innerHTML=item.itemType
+        pDescription.innerHTML=item.txt
+
+        notificationItemDiv.appendChild(itemImg);
+        textDiv.appendChild(h4ItemType);
+        textDiv.appendChild(pDescription);
+        notificationItemDiv.appendChild(textDiv);
+        boxDiv.appendChild(notificationItemDiv);
+      });
+      boxDiv.style.opacity="1";
+      isClicked=true;
+    }
+       catch (error) {
+      }
+    }else {
+      boxDiv.innerHTML="";
+        isClicked=false;
+      }
+  });
+  };
 };
 
 export default Navbar;

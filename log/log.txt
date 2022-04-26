@@ -1,9 +1,10 @@
-avr. 25, 2022 9:48:45 PM be.vinci.pae.utils.WebExceptionMapper toResponse
-SEVERE: Cannot invoke "com.fasterxml.jackson.databind.JsonNode.asBoolean()" because the return value of "com.fasterxml.jackson.databind.node.ObjectNode.get(String)" is null
-be.vinci.pae.utils.exception.FatalException: Cannot invoke "com.fasterxml.jackson.databind.JsonNode.asBoolean()" because the return value of "com.fasterxml.jackson.databind.node.ObjectNode.get(String)" is null
-	at be.vinci.pae.dal.services.ItemDAOImpl.addInterest(ItemDAOImpl.java:151)
-	at be.vinci.pae.buiseness.ucc.ItemUCCImpl.addInterest(ItemUCCImpl.java:54)
-	at be.vinci.pae.ihm.ItemRessource.userAddInterest(ItemRessource.java:108)
+avr. 26, 2022 5:05:52 PM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: null
+java.lang.IllegalArgumentException
+	at java.sql/java.sql.Time.valueOf(Time.java:109)
+	at be.vinci.pae.utils.TokenServiceImpl.createToken(TokenServiceImpl.java:28)
+	at be.vinci.pae.utils.TokenServiceImpl.login(TokenServiceImpl.java:44)
+	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:63)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -11,7 +12,7 @@ be.vinci.pae.utils.exception.FatalException: Cannot invoke "com.fasterxml.jackso
 	at org.glassfish.jersey.server.model.internal.ResourceMethodInvocationHandlerFactory.lambda$static$0(ResourceMethodInvocationHandlerFactory.java:52)
 	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher$1.run(AbstractJavaResourceMethodDispatcher.java:124)
 	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.invoke(AbstractJavaResourceMethodDispatcher.java:167)
-	at org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$ResponseOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:176)
+	at org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$TypeOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:219)
 	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.dispatch(AbstractJavaResourceMethodDispatcher.java:79)
 	at org.glassfish.jersey.server.model.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:475)
 	at org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:397)
@@ -31,10 +32,13 @@ be.vinci.pae.utils.exception.FatalException: Cannot invoke "com.fasterxml.jackso
 	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
 	at java.base/java.lang.Thread.run(Thread.java:833)
 
-avr. 25, 2022 9:48:51 PM be.vinci.pae.utils.WebExceptionMapper toResponse
-SEVERE: Aucun object existant avec cet id
-jakarta.ws.rs.WebApplicationException: Aucun object existant avec cet id
-	at be.vinci.pae.ihm.ItemRessource.userGetItemDetails(ItemRessource.java:79)
+avr. 26, 2022 5:06:05 PM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: null
+java.lang.IllegalArgumentException
+	at java.sql/java.sql.Time.valueOf(Time.java:109)
+	at be.vinci.pae.utils.TokenServiceImpl.createToken(TokenServiceImpl.java:28)
+	at be.vinci.pae.utils.TokenServiceImpl.login(TokenServiceImpl.java:44)
+	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:63)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

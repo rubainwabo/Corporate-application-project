@@ -18,15 +18,21 @@ import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import javax.imageio.ImageIO;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.server.ContainerRequest;
 import utils.Config;
+import utils.exception.FatalException;
 
 @Singleton
 @Path("/items")
@@ -230,27 +236,56 @@ public class ItemRessource {
 
   @POST
   @Path("upload")
-
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   public Response uploadFile(@FormDataParam("file") InputStream file,
       @FormDataParam("file") FormDataContentDisposition fileDisposition,@FormDataParam("itemId") int itemId) {
 
     System.out.println(itemId);
     String fileName = fileDisposition.getFileName();
+    System.out.println(fileName);
     String path = Config.getProperty("ImgPath");
     try {
-      System.out.println("bullshoy" +path);
       Files.copy(file, Paths.get(path, fileName));
       myItemUCC.updateItemUrl(itemId,fileName);
-      /*
-      String[] cmd = new String[]{"/bin/sh", "/Users/danieldotche/Documents/backup/prog.sh"+ fileName};
-       Runtime.getRuntime().exec(cmd);
-       */
     } catch (IOException e) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("no image uploaded").type("text/plain").build());
     }
     return Response.ok(fileName).header("Access-Control-Allow-Origin", "*").build();
   }
+
+  @GET
+  @Path("picture/{id}")
+  @Produces({"image/png","image/jpg","image/jpeg"})
+  public Response getPicture(@PathParam("id") int itemId){
+    ItemDTO item = myItemUCC.getDetails(itemId);
+
+    try {
+      String drivePath = Config.getProperty("ImgPath");
+      String imagePath;
+      if(item.getUrlPicture()==null || item.getUrlPicture()=="none"){
+        imagePath = drivePath+"/"+"image_not_available.png";
+      }else{
+        imagePath = drivePath+"/"+item.getUrlPicture();
+      }
+      Image picture = ImageIO.read(new File(imagePath));
+      return Response.ok(picture).build();
+    } catch (IOException e) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("impossible de recuperer les images").type("text/plain").build());
+    }
+
+
+
+    /*
+    ItemDTO item = myItemUCC.getDetails(itemId);
+    if(item.getUrlPicture()!=null || item.getUrlPicture()!="none"){
+        System.out.println("hello");
+    }
+    String path = Config.getProperty("ImgPath");
+   */
+  }
+
+
 
 }

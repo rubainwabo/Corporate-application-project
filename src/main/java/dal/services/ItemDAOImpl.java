@@ -180,11 +180,13 @@ public class ItemDAOImpl implements ItemDAO {
   public List<ItemDTO> getLastItemsOffered(int limit) {
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
-    String query = "select i.id_item, i.description, i.url_picture,it.item_type_name, "
-        + " i.number_of_people_interested,max(d._date) as maxDate,i.url_picture  from projet.items i,"
+    String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
+        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, i.recipient, i.number_of_people_interested, "
+        + "i.number_of_people_interested,max(d._date) as maxDate "
+        + "from projet.items i, "
         + "projet.item_type it, projet.dates d "
-        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type"
-        + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
+        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type "
+        + "GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate " + limite;
 
     return getItemDTOS(query);
@@ -192,18 +194,30 @@ public class ItemDAOImpl implements ItemDAO {
 
   @Override
   public List<ItemDTO> getMyItems(int id, String state) {
+    /*
     String query =
-        "select id_item, description, url_picture, "
-            + "it.item_type_name,number_of_people_interested "
+        "select id_item, description, url_picture,rating,comment,"
+            + "item_condition,time_slot,offeror,it.item_type_name,recipient,"
+            + "number_of_people_interested"
             + "from projet.items i, projet.item_type it "
             + "where offeror =" + id + " and i.item_type = it.id_item_type "
             + "and i.item_condition ='" + state + "'";
+
+    String query =
+        "select id_item from projet.itemswhere offeror ='" + id + "' and item_condition ='" + state + "'";
+ */
+    String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
+        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, i.recipient, i.number_of_people_interested, "
+        + "i.number_of_people_interested "
+        + "from projet.items i,"
+        + "projet.item_type it "
+        + "where i.item_type=it.id_item_type "
+        + "and i.offeror="+id+" and i.item_condition='"+state+"'";
     return getItemDTOS(query);
 
   }
 
   private List<ItemDTO> getItemDTOS(String query) {
-    String path = Config.getProperty("ImgPath");
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query
@@ -212,11 +226,20 @@ public class ItemDAOImpl implements ItemDAO {
         while (rs.next()) {
           ItemDTO item = myBizFactoryService.getItem();
           item.setId(rs.getInt(1));
+
           item.setDescription(rs.getString(2));
           item.setUrlPicture(rs.getString(3));
-          item.setItemtype(rs.getString(4));
-          item.setNumberOfPeopleInterested(rs.getInt(5));
-          item.setUrlPicture(path+"/"+rs.getString(7));
+          item.setRating(rs.getInt(4));
+
+          item.setComment(rs.getString(5));
+          item.setItemCondition(rs.getString(6));
+          item.setTimeSlot(rs.getString(7));
+
+          item.setOfferorId(rs.getInt(8));
+          item.setItemtype(rs.getString(9));
+          item.setRecipientId(rs.getInt(10));
+          item.setNumberOfPeopleInterested(rs.getInt(11));
+
           arrayItemDTO.add(item);
         }
       }

@@ -1,6 +1,6 @@
 import {Redirect} from "../Router/Router";
 
-import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import itemImg from '../../img/image_not_available.png';
 import {getSessionObject, VerifyUser} from "../../utils/session";
 
 const data = [{type: "meuble", description: "une table tres belle"},
@@ -173,7 +173,8 @@ async function getMyItems(state){
           itemType.classList.add("item-title");
           itemDescription.classList.add("item-description");
     
-          itemImgDiv.src = itemImg;
+          //itemImgDiv.src = itemImg;
+          getPicture(item.id,itemImgDiv);
           itemType.innerText = item.itemtype;
           itemDescription.innerText =  item.description.substring(0,40)+"...";
     
@@ -278,4 +279,31 @@ async function offerAgain(idItem){
          return false;
      }
  }
+
+ async function getPicture(itemId,imgDiv){
+    try{
+      console.log(imgDiv);
+    const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
+    
+    if (!response.ok) {
+      imgDiv.src=itemImg;
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+    if(response.ok){
+  
+      const imageBlob = await response.blob();
+          const imageObjectURL = URL.createObjectURL(imageBlob);
+          console.log(imageObjectURL);
+          imgDiv.src=imageObjectURL
+          
+    }
+   
+  
+    }catch(error){
+      console.log(error)
+    }
+  }
+  
 export default MyItems;

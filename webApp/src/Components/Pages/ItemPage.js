@@ -1,6 +1,6 @@
 import {getSessionObject, VerifyUser} from "../../utils/session";
 
-import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import itemImg from '../../img/image_not_available.png';
 import {Redirect} from "../Router/Router";
 
 const item = `
@@ -112,7 +112,8 @@ const ItemPage = async () => {
       addInterestBox.appendChild(button);
     }
 
-    document.getElementById("img-id").src = itemImg;
+    getPicture(id,document.getElementById("img-id"))
+   
     document.getElementById("type-objet").style.fontSize = "12px";
     document.getElementById("Offert").style.fontSize = "12px";
     document.getElementById("nb-personnes").style.fontSize = "12px";
@@ -222,5 +223,32 @@ function getId() {
   }
 
 }
+
+async function getPicture(itemId,imgDiv){
+  try{
+    console.log(imgDiv);
+  const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
+  
+  if (!response.ok) {
+    imgDiv.src=itemImg;
+    throw new Error(
+        "fetch error : " + response.status + " : " + response.statusText
+    )
+  }
+  if(response.ok){
+
+    const imageBlob = await response.blob();
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        console.log(imageObjectURL);
+        imgDiv.src=imageObjectURL
+        
+  }
+ 
+
+  }catch(error){
+    console.log(error)
+  }
+}
+
 
 export default ItemPage;

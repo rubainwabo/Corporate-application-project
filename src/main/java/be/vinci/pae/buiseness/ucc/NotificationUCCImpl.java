@@ -3,7 +3,6 @@ package be.vinci.pae.buiseness.ucc;
 import be.vinci.pae.buiseness.dto.NotificationDTO;
 import be.vinci.pae.dal.DalServices;
 import be.vinci.pae.dal.services.NotificationDAO;
-import be.vinci.pae.utils.exception.UserInvalidException;
 import jakarta.inject.Inject;
 import java.util.List;
 
@@ -16,16 +15,24 @@ public class NotificationUCCImpl implements NotificationUCC {
   private DalServices myDalServices;
 
   @Override
-  public List<NotificationDTO> getAllMyNotif(int id, int userId) {
-    if (id != userId) {
-      throw new UserInvalidException(
-          "la personne essayant de faire la requête ne peut pas accéder à cette ressource");
-    }
+  public List<NotificationDTO> getAllMyNotif(int userId, boolean allNotif) {
     try {
       myDalServices.start();
-      var notificationDTOList = myNotifDaoService.getAllMyNotif(userId);
+      var notificationDTOList = myNotifDaoService.getAllMyNotif(userId, allNotif);
       myDalServices.commit();
       return notificationDTOList;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+  }
+
+  @Override
+  public void UpdateAllNotifToViewed(int userId) {
+    try {
+      myDalServices.start();
+      myNotifDaoService.UpdateAllNotifToViewed(userId);
+      myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();
       throw e;

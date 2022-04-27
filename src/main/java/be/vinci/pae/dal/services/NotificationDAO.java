@@ -5,5 +5,7 @@ import java.util.List;
 
 public interface NotificationDAO {
 
-  List<NotificationDTO> getAllMyNotif(int userId);
+  List<NotificationDTO> getAllMyNotif(int userId, boolean allNotif);
+
+  void UpdateAllNotifToViewed(int userId);
 }

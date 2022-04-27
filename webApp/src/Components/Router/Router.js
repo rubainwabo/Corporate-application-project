@@ -40,7 +40,6 @@ const Router = () => {
   navbarWrapper.addEventListener("click", (e) => {
     // To get a data attribute through the dataset object, get the property by the part of the attribute name after data- (note that dashes are converted to camelCase).
     let uri = e.target.dataset.uri;
-    console.log(uri);
     if (uri) {
       e.preventDefault();
       /* use Web History API to add current page URL to the user's navigation history

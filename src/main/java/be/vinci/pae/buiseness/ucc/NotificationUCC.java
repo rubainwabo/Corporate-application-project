@@ -5,5 +5,7 @@ import java.util.List;
 
 public interface NotificationUCC {
 
-  List<NotificationDTO> getAllMyNotif(int id, int userId);
+  List<NotificationDTO> getAllMyNotif(int userId, boolean allNotif);
+
+  void UpdateAllNotifToViewed(int userId);
 }

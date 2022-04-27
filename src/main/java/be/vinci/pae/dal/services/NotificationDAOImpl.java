@@ -19,13 +19,16 @@ public class NotificationDAOImpl implements NotificationDAO {
   private DalBackService myDalService;
 
   @Override
-  public List<NotificationDTO> getAllMyNotif(int userId) {
+  public List<NotificationDTO> getAllMyNotif(int userId, boolean allNotif) {
+    String query = "select n.id_notification,n.text,n.item,i.description,it.item_type_name"
+        + " from projet.notifications n,"
+        + "projet.items i,projet.item_type it where person=" + userId +
+        " and n.item=i.id_item and i.item_type="
+        + "it.id_item_type";
+    query += allNotif ? "" : " and n.is_viewed=false";
+
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select n.id_notification,n.text,n.item,i.description,i.url_picture,it.item_type_name"
-            + " from projet.notifications n,"
-            + "projet.items i,projet.item_type it where person=" + userId +
-            " and n.is_viewed=false and n.item=i.id_item and i.item_type="
-            + "it.id_item_type")) {
+        query)) {
       try (ResultSet rs = ps.executeQuery()) {
         ArrayList<NotificationDTO> notificationDTOS = new ArrayList<>();
         while (rs.next()) {
@@ -34,13 +37,23 @@ public class NotificationDAOImpl implements NotificationDAO {
           myNotif.setTxt(rs.getString(2));
           myNotif.setItemId(rs.getInt(3));
           myNotif.setItemDescritpion(rs.getString(4));
-          myNotif.setUrl_picture(rs.getString(5));
-          myNotif.setItemType(rs.getString(6));
+          myNotif.setItemType(rs.getString(5));
           myNotif.setMemberId(userId);
           notificationDTOS.add(myNotif);
         }
         return notificationDTOS;
       }
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public void UpdateAllNotifToViewed(int userId) {
+    try (PreparedStatement ps = myDalService.getPreparedStatement(
+        "update projet.notifications set is_viewed=true where"
+            + " is_viewed=false and person=" + userId)) {
+      ps.executeUpdate();
     } catch (Exception e) {
       throw new FatalException(e);
     }

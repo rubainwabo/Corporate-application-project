@@ -120,3 +120,6 @@ POST http://localhost:3000/items/offer/again/1
 
 ###
 GET http://localhost/items/itemDetails/{{id}}
+
+###
+GET http://localhost:3000/items/picture/7

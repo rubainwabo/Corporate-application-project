@@ -64,8 +64,9 @@ const PickRecipient = async () => {
         adress.innerText=user.street+" "+user.buildingNumber+" ("+user.city+")";
 
         addButton.innerText=" Offrir";
-        addButton.addEventListener("click",function(e){
-          addRecipient(id,user.id);
+        addButton.addEventListener("click",async function(e){
+         await addRecipient(id,user.id);
+          Redirect("/myitems");
         })
         userBox.classList.add("user-interest");
 

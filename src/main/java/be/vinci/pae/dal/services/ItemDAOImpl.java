@@ -26,7 +26,8 @@ public class ItemDAOImpl implements ItemDAO {
 
     try (PreparedStatement ps = myBackService.getPreparedStatementWithId(
         "insert into projet.items "
-            + "(id_item,description,url_picture,item_condition,offeror,item_type,time_slot,number_of_people_interested) "
+            + "(id_item,description,url_picture,item_condition,offeror,"
+            + "item_type,time_slot,number_of_people_interested) "
             + "VALUES (DEFAULT,?,?,?,?,?,?,0)",
         Statement.RETURN_GENERATED_KEYS)) {
       // ps to find lastId insere
@@ -169,7 +170,8 @@ public class ItemDAOImpl implements ItemDAO {
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
     String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
-        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, i.recipient, i.number_of_people_interested, "
+        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, i.recipient, "
+        + "i.number_of_people_interested, "
         + "i.number_of_people_interested,max(d._date) as maxDate "
         + "from projet.items i, "
         + "projet.item_type it, projet.dates d "
@@ -183,7 +185,8 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public List<ItemDTO> getMyItems(int id, String state, boolean mine) {
     String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
-        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, i.recipient, i.number_of_people_interested, "
+        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, "
+        + "i.recipient, i.number_of_people_interested, "
         + "i.number_of_people_interested "
         + "from projet.items i,"
         + "projet.item_type it "

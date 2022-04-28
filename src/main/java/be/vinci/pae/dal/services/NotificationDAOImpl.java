@@ -22,8 +22,8 @@ public class NotificationDAOImpl implements NotificationDAO {
   public List<NotificationDTO> getAllMyNotif(int userId, boolean allNotif) {
     String query = "select n.id_notification,n.text,n.item,i.description,it.item_type_name"
         + " from projet.notifications n,"
-        + "projet.items i,projet.item_type it where person=" + userId +
-        " and n.item=i.id_item and i.item_type="
+        + "projet.items i,projet.item_type it where person=" +
+        userId + " and n.item=i.id_item and i.item_type="
         + "it.id_item_type";
     query += allNotif ? "" : " and n.is_viewed=false";
 

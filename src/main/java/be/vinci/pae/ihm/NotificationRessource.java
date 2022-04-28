@@ -23,6 +23,12 @@ public class NotificationRessource {
   @Inject
   private NotificationUCC myNotifService;
 
+  /**
+   *
+   * @param req the request contex
+   * @param allNotif allNotif
+   * @return
+   */
   @GET
   @Path("{id}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -32,6 +38,12 @@ public class NotificationRessource {
     return myNotifService.getAllMyNotif(userId, allNotif);
   }
 
+  /**
+   * allows you to change all unseen notifications to seen.
+   *
+   * @param req the request context
+   * @return if all went well returns an answer 200.
+   */
   @PUT
   @Path("update/notViewed/{id}")
   @Produces(MediaType.APPLICATION_JSON)

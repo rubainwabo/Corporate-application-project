@@ -40,7 +40,7 @@ background-color: #FFF59B;
       <form id="add-iterest-form">
       <span id="error"></span>
         <div>
-          <input type="text" id="availabilities" placeholder="vos heures de disponibilité">
+          <input type="text" required id="availabilities" placeholder="vos heures de disponibilité">
         </div>
         <div>
           <span>Contactez-moi</span><input type="checkbox" id="callMe"> 
@@ -146,14 +146,22 @@ const ItemPage = async () => {
     let availabilities = document.getElementById("availabilities").value;
     let callMe = document.getElementById("callMe").checked;
 
+
+
     try {
       let options;
       if (callMe) {
+        let oldPhone = await getPhoneNumber(getSessionObject("userId"));
+
         let phoneNumber = document.getElementById("phone-number").value;
+        
+        let updateNumer = oldPhone!=phoneNumber;
+
         options = {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           body: JSON.stringify({
             availabilities: availabilities,
+            updateNumber:updateNumer,
             callMe: callMe,
             phoneNumber: phoneNumber
           }), // body data type must match "Content-Type" header
@@ -167,6 +175,9 @@ const ItemPage = async () => {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           body: JSON.stringify({
             availabilities: availabilities,
+            updateNumber:"false",
+            callMe: callMe,
+            phoneNumber: ""
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
@@ -191,6 +202,7 @@ const ItemPage = async () => {
       document.getElementById(
           "message").innerText = "votre interet a été pris en compte";
       popUp.style.display = "none";
+      document.getElementById("show-interest").style.display="none";
 
       /*
       const rep  = await response.json(); // json() returns a promise => we wait for the data
@@ -206,6 +218,25 @@ const ItemPage = async () => {
 
 }
 
+async function getPhoneNumber(idUser){
+  try{
+    const response = await fetch("/api/members/details/"+idUser); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+
+    let user = await response.json();
+    console.log(user);
+    return user.phoneNumber;
+    
+
+    }catch(error){
+      console.log(error)
+    }
+}
 function getId() {
   let urlString = window.location.href;
   let paramString = urlString.split('?')[1];

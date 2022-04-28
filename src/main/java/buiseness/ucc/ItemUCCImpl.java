@@ -7,6 +7,7 @@ import dal.services.DateDAO;
 import dal.services.ItemDAO;
 import jakarta.inject.Inject;
 import java.util.List;
+import utils.exception.BizzException;
 import utils.exception.UserInvalidException;
 
 public class ItemUCCImpl implements ItemUCC {
@@ -72,10 +73,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public List<ItemDTO> getMyItems(int id, String state) {
+  public List<ItemDTO> getMyItems(int id, String state, boolean mine) {
     try {
       myDalServices.start();
-      List<ItemDTO> list = myItemDAOService.getMyItems(id, state);
+      List<ItemDTO> list = myItemDAOService.getMyItems(id, state, mine);
       myDalServices.commit();
       return list;
     } catch (Exception e) {
@@ -120,10 +121,13 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public int updateItem(ItemDTO item) {
+  public int updateItem(ItemDTO item, int userId) {
     try {
       myDalServices.start();
-
+      System.out.println(item.getOfferorId() + " ettttt " + userId);
+      if (item.getOfferorId() != userId) {
+        throw new BizzException("vous n'avez pas le droit de faire cette action");
+      }
       int result = myItemDAOService.updateItem(item);
       myDalServices.commit();
       return result;
@@ -140,6 +144,10 @@ public class ItemUCCImpl implements ItemUCC {
   public void offerAgain(int itemId, int userId) {
     try {
       myDalServices.start();
+      ItemDTO item = myItemDAOService.getOneById(itemId);
+      if (item.getOfferorId() != userId) {
+        throw new BizzException("vous n'avez pas le droit de modifier l'offre");
+      }
       myDateDAOService.addDate(itemId);
       myItemDAOService.changeItemCondition(itemId, userId, "offered");
       myDalServices.commit();
@@ -172,6 +180,7 @@ public class ItemUCCImpl implements ItemUCC {
   public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
       boolean isOfferor) {
     try {
+
       myDalServices.start();
       var myItems = myItemDAOService.memberItemsByItemCondition(itemCondition, userId, isOfferor);
       myDalServices.commit();
@@ -181,18 +190,30 @@ public class ItemUCCImpl implements ItemUCC {
       throw e;
     }
   }
+
   @Override
-  public void updateItemUrl(int itemId,String urlImg) {
+  public void updateItemUrl(int itemId, String urlImg) {
     try {
       myDalServices.start();
       var item = myItemDAOService.getOneById(itemId);
       item.setUrlPicture(urlImg);
       myItemDAOService.updateItem(item);
       myDalServices.commit();
-    }catch (Exception e){
+    } catch (Exception e) {
       myDalServices.rollBack();
       throw e;
     }
   }
 
+  @Override
+  public void rateItem(int itemId, String comment) {
+    try {
+      myDalServices.start();
+      myItemDAOService.rateItem(itemId, comment);
+      myDalServices.commit();
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+  }
 }

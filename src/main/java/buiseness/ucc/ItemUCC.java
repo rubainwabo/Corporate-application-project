@@ -54,7 +54,7 @@ public interface ItemUCC {
 
   List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
 
-  List<ItemDTO> getMyItems(int id, String state);
+  List<ItemDTO> getMyItems(int id, String state, boolean mine);
 
   /**
    * call to add recipient to a item.
@@ -68,10 +68,12 @@ public interface ItemUCC {
   /**
    * call update some info of an item.
    *
-   * @param item the id of the item
+   * @param item   the id of the item
+   * @param userId user who wants to update
    * @return return 1 if the item is updated, 0 if not
    */
-  int updateItem(ItemDTO item);
+  int updateItem(ItemDTO item, int userId);
+
 
   /**
    * call to offer again an item.
@@ -81,6 +83,8 @@ public interface ItemUCC {
    */
   void offerAgain(int idItem, int userId);
 
-  void updateItemUrl(int itemId,String img);
+  void updateItemUrl(int itemId, String img);
+
+  void rateItem(int itemId, String comment);
 
 }

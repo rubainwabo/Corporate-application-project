@@ -20,7 +20,7 @@ public class ItemImpl implements Item {
 
   public ItemImpl() {
   }
-  
+
   @Override
   public int getId() {
     return id;

@@ -11,7 +11,7 @@ public class MyLogger {
   private static Logger logger;
 
   /**
-   * Initializes the file to log errors and infos
+   * Initializes the file to log errors and infos.
    */
   public static void init() {
     logger = Logger.getLogger("Log");

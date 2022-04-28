@@ -23,15 +23,28 @@ public class NotificationRessource {
   @Inject
   private NotificationUCC myNotifService;
 
+  /**
+   * retrieve all notifications for a certain user.
+   *
+   * @param req      the request context
+   * @param isViewed a boolean allowing to filter by notification which are seen or not.
+   * @return a list of notifications.
+   */
   @GET
   @Path("{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public List<NotificationDTO> userGetAllMyNotification(@Context ContainerRequest req,
-      @QueryParam("all") boolean allNotif) {
+      @QueryParam("all") boolean isViewed) {
     int userId = (int) req.getProperty("id");
-    return myNotifService.getAllMyNotif(userId, allNotif);
+    return myNotifService.getAllMyNotif(userId, isViewed);
   }
 
+  /**
+   * allows you to change all unseen notifications to seen.
+   *
+   * @param req the request context
+   * @return if all went well returns an answer 200.
+   */
   @PUT
   @Path("update/notViewed/{id}")
   @Produces(MediaType.APPLICATION_JSON)

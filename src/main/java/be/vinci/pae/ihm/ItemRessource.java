@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
 import java.util.List;
 import javax.imageio.ImageIO;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -263,7 +262,7 @@ public class ItemRessource {
   public Response uploadFile(@FormDataParam("file") InputStream file,
       @FormDataParam("file") FormDataContentDisposition fileDisposition,
       @FormDataParam("itemId") int itemId) {
-    
+
     String fileName = fileDisposition.getFileName();
 
     String path = Config.getProperty("ImgPath");

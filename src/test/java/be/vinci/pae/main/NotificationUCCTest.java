@@ -20,11 +20,19 @@ public class NotificationUCCTest {
   private static ServiceLocator locator;
   private static NotificationDAO notificationDAO;
 
+  /**
+   * Init for tests.
+   */
+  
   @BeforeAll
   public static void init() {
     locator = ServiceLocatorUtilities.bind(new TestApplicationBinder());
     notificationUCC = locator.getService(NotificationUCC.class);
   }
+
+  /**
+   * Set up for tests.
+   */
 
   @BeforeEach
   public void setup() {

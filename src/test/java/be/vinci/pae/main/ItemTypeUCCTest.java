@@ -20,12 +20,18 @@ public class ItemTypeUCCTest {
   private final String type = "type";
   private ItemTypeDAO itemTypeDAO;
 
+  /**
+   * Init for tests.
+   */
   @BeforeAll
   public static void init() {
     locator = ServiceLocatorUtilities.bind(new TestApplicationBinder());
     itemTypeUCC = locator.getService(ItemTypeUCC.class);
   }
 
+  /**
+   * Set up for tests.
+   */
   @BeforeEach
   public void setup() {
     itemTypeDAO = locator.getService(ItemTypeDAO.class);

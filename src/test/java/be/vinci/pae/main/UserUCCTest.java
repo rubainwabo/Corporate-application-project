@@ -38,12 +38,18 @@ public class UserUCCTest {
   private User userWaiting;
   private User user;
 
+  /**
+   * Init for tests.
+   */
   @BeforeAll
   public static void init() {
     locator = ServiceLocatorUtilities.bind(new TestApplicationBinder());
     userUCC = locator.getService(UserUCC.class);
   }
 
+  /**
+   * Set up for tests.
+   */
   @BeforeEach
   public void setup() {
     userDAO = locator.getService(UserDAO.class);

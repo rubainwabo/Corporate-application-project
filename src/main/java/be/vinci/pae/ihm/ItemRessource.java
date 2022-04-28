@@ -263,9 +263,7 @@ public class ItemRessource {
   public Response uploadFile(@FormDataParam("file") InputStream file,
       @FormDataParam("file") FormDataContentDisposition fileDisposition,
       @FormDataParam("itemId") int itemId) {
-
-    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
+    
     String fileName = fileDisposition.getFileName();
 
     String path = Config.getProperty("ImgPath");

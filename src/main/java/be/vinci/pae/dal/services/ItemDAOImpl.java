@@ -191,7 +191,7 @@ public class ItemDAOImpl implements ItemDAO {
         + "from projet.items i,"
         + "projet.item_type it "
         + "where i.item_type=it.id_item_type "
-        + ((mine) ? "and i.offeror=" : "and i.recipient=") + id + " and i.item_condition='" + state
+        + (mine ? "and i.offeror=" : "and i.recipient=") + id + " and i.item_condition='" + state
         + "'";
 
     return getItemDTOS(query);

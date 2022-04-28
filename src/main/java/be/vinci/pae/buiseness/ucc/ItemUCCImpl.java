@@ -43,7 +43,7 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.commit();
       return item;
     } catch (Exception e) {
-      myDalServices.commit();
+      myDalServices.rollBack();
       throw e;
     }
   }
@@ -124,7 +124,6 @@ public class ItemUCCImpl implements ItemUCC {
   public int updateItem(ItemDTO item, int userId) {
     try {
       myDalServices.start();
-      System.out.println(item.getOfferorId() + " ettttt " + userId);
       if (item.getOfferorId() != userId) {
         throw new BizzException("vous n'avez pas le droit de faire cette action");
       }
@@ -132,9 +131,7 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.commit();
       return result;
     } catch (Exception e) {
-
       myDalServices.rollBack();
-
       throw e;
     }
 
@@ -180,7 +177,6 @@ public class ItemUCCImpl implements ItemUCC {
   public List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId,
       boolean isOfferor) {
     try {
-
       myDalServices.start();
       var myItems = myItemDAOService.memberItemsByItemCondition(itemCondition, userId, isOfferor);
       myDalServices.commit();

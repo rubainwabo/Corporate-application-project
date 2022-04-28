@@ -41,7 +41,7 @@ public class AdminRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public List<UserDTO> adminMemberListFiltred(@QueryParam("name") String name,
       @QueryParam("city") String city, @QueryParam("postCode") String postCode) {
-    return myUserUCC.getAllUserFiltred(name, city, postCode);
+    return myUserUCC.getAllUsersFiltered(name, city, postCode);
   }
 
   /**

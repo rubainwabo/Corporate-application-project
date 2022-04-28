@@ -3,6 +3,7 @@ package be.vinci.pae.main;
 import be.vinci.pae.filters.FiltersDynamicBindingConfig;
 import be.vinci.pae.utils.ApplicationBinder;
 import be.vinci.pae.utils.Config;
+import be.vinci.pae.utils.MyLogger;
 import be.vinci.pae.utils.WebExceptionMapper;
 import java.io.IOException;
 import java.net.URI;
@@ -17,10 +18,11 @@ import org.glassfish.jersey.server.ResourceConfig;
  */
 public class Main {
 
+  public static String BASE_URI = Config.getProperty("BaseUri");
+
   static {
     Config.load("prod.properties");
   }
-  public static String BASE_URI = Config.getProperty("BaseUri");
 
   // Base URI the Grizzly HTTP server will listen on
   // public static final String BASE_URI = "http://localhost:8080/";
@@ -39,6 +41,7 @@ public class Main {
         .register(ApplicationBinder.class)
         .register(FiltersDynamicBindingConfig.class)
         .register(WebExceptionMapper.class).register(MultiPartFeature.class);
+    MyLogger.init();
 
     // create and start a new instance of grizzly http server
     // exposing the Jersey application at BASE_URI

@@ -1,8 +1,25 @@
-avr. 27, 2022 10:49:03 AM be.vinci.pae.utils.WebExceptionMapper toResponse
-SEVERE: username or password incorrect
-be.vinci.pae.utils.exception.PasswordOrUsernameException: username or password incorrect
-	at be.vinci.pae.buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:41)
-	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:62)
+avr. 28, 2022 10:02:35 AM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: HTTP 404 Not Found
+jakarta.ws.rs.NotFoundException: HTTP 404 Not Found
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
+	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:274)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:244)
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)
+	at org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)
+	at org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:684)
+	at org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer.service(GrizzlyHttpContainer.java:356)
+	at org.glassfish.grizzly.http.server.HttpHandler$1.run(HttpHandler.java:190)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.doWork(AbstractThreadPool.java:535)
+	at org.glassfish.grizzly.threadpool.AbstractThreadPool$Worker.run(AbstractThreadPool.java:515)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+avr. 28, 2022 10:02:36 AM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: Aucun object existant avec cet id
+jakarta.ws.rs.WebApplicationException: Aucun object existant avec cet id
+	at be.vinci.pae.ihm.ItemRessource.userGetItemDetails(ItemRessource.java:98)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

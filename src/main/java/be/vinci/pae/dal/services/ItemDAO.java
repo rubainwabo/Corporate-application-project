@@ -41,7 +41,7 @@ public interface ItemDAO {
    */
   void changeItemCondition(int idItem, int userId, String condition);
 
-  List<ItemDTO> getMyItems(int id, String state);
+  List<ItemDTO> getMyItems(int id, String state,boolean mine);
 
   /**
    * retrives to get all the last item with the itemCondition offered.
@@ -71,5 +71,7 @@ public interface ItemDAO {
    * @return return 1 if the item is updated, 0 if not
    */
   int updateItem(ItemDTO item);
+
+  void rateItem(int itemId,String comment);
 
 }

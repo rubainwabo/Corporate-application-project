@@ -63,7 +63,7 @@ public class ItemDAOImpl implements ItemDAO {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
             + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested,"
-            + "m.last_name,m.first_name,m2.last_name,m2.first_name "
+            + "m.last_name,m.first_name,m2.last_name,m2.first_name,i.recipient "
             + "from projet.items i LEFT JOIN projet.members m2 on i.recipient=m2.user_id,"
             + "projet.item_type t,projet.dates d,projet.members m "
             + "where i.id_item=? and i.item_type = "
@@ -87,6 +87,7 @@ public class ItemDAOImpl implements ItemDAO {
         if (rs.getString(11) != null) {
           item.setRecipient(rs.getString(11) + " " + rs.getString(12));
         }
+        item.setRecipientId(rs.getInt(13));
         return item;
       }
     } catch (Exception e) {
@@ -168,24 +169,31 @@ public class ItemDAOImpl implements ItemDAO {
   public List<ItemDTO> getLastItemsOffered(int limit) {
     String limite = limit > 0 ? "LIMIT " + limit : "";
 
-    String query = "select i.id_item, i.description, i.url_picture,it.item_type_name, "
-        + " i.number_of_people_interested,max(d._date) as maxDate from projet.items i,"
+    String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
+        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, i.recipient, "
+        + "i.number_of_people_interested, "
+        + "i.number_of_people_interested,max(d._date) as maxDate "
+        + "from projet.items i, "
         + "projet.item_type it, projet.dates d "
-        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type"
-        + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
+        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type "
+        + "GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate " + limite;
 
     return getItemDTOS(query);
   }
 
   @Override
-  public List<ItemDTO> getMyItems(int id, String state) {
-    String query =
-        "select id_item, description, url_picture, "
-            + "it.item_type_name,number_of_people_interested "
-            + "from projet.items i, projet.item_type it "
-            + "where offeror =" + id + " and i.item_type = it.id_item_type "
-            + "and i.item_condition ='" + state + "'";
+  public List<ItemDTO> getMyItems(int id, String state, boolean mine) {
+    String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
+        + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, "
+        + "i.recipient, i.number_of_people_interested, "
+        + "i.number_of_people_interested "
+        + "from projet.items i,"
+        + "projet.item_type it "
+        + "where i.item_type=it.id_item_type "
+        + (mine ? "and i.offeror=" : "and i.recipient=") + id + " and i.item_condition='" + state
+        + "'";
+
     return getItemDTOS(query);
 
   }
@@ -199,10 +207,20 @@ public class ItemDAOImpl implements ItemDAO {
         while (rs.next()) {
           ItemDTO item = myBizFactoryService.getItem();
           item.setId(rs.getInt(1));
+
           item.setDescription(rs.getString(2));
           item.setUrlPicture(rs.getString(3));
-          item.setItemtype(rs.getString(4));
-          item.setNumberOfPeopleInterested(rs.getInt(5));
+          item.setRating(rs.getInt(4));
+
+          item.setComment(rs.getString(5));
+          item.setItemCondition(rs.getString(6));
+          item.setTimeSlot(rs.getString(7));
+
+          item.setOfferorId(rs.getInt(8));
+          item.setItemtype(rs.getString(9));
+          item.setRecipientId(rs.getInt(10));
+          item.setNumberOfPeopleInterested(rs.getInt(11));
+
           arrayItemDTO.add(item);
         }
       }
@@ -218,19 +236,22 @@ public class ItemDAOImpl implements ItemDAO {
         + " where id_item=" + item.getId() :
         "Update projet.items set item_condition='not collected',"
             + "recipient=NULL where id_item=" + item.getId();
+
+    int idRecipient = item.getRecipientId();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query)) {
       ps.executeUpdate();
       if (!itemCollected) {
         try (PreparedStatement psUpdtItmNotTkn = myBackService.getPreparedStatement(
             "update projet.members set nb_of_item_not_taken= nb_of_item_not_taken "
-                + "+ 1 where user_id=" + item.getRecipientId())) {
+                + "+ 1 where user_id=" + idRecipient)) {
           psUpdtItmNotTkn.executeUpdate();
         }
       }
     } catch (SQLException e) {
-      throw new FatalException(e);
+      e.printStackTrace();
     }
+
   }
 
   @Override
@@ -243,7 +264,8 @@ public class ItemDAOImpl implements ItemDAO {
           "INSERT INTO projet.notifications (id_notification,is_viewed,text,person,item)"
               + " VALUES (default,false,?,?,?)"
       )) {
-        psNotif.setString(1, "hello");
+        ItemDTO item = getOneById(idItem);
+        psNotif.setString(1, item.getOfferor() + " vous a attribué un objet");
         psNotif.setInt(2, idRecipient);
         psNotif.setInt(3, idItem);
         return psNotif.executeUpdate();
@@ -283,13 +305,28 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public int updateItem(ItemDTO item) {
     try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
-        "UPDATE projet.items set description=?, url_picture=?,time_slot=? WHERE id_item="
+        "UPDATE projet.items set description=?,url_picture=?, time_slot=? WHERE id_item="
             + item.getId()
     )) {
       psUpdate.setString(1, item.getDescription());
       psUpdate.setString(2, item.getUrlPicture());
       psUpdate.setString(3, item.getTimeSlot());
-      return psUpdate.executeUpdate();
+      psUpdate.executeUpdate();
+      return item.getId();
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public void rateItem(int itemId, String comment) {
+    try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
+        "UPDATE projet.items set rating=?, comment=? WHERE id_item="
+            + itemId
+    )) {
+      psUpdate.setInt(1, itemId);
+      psUpdate.setString(2, comment);
+      psUpdate.executeUpdate();
     } catch (Exception e) {
       throw new FatalException(e);
     }

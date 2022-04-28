@@ -1,8 +1,8 @@
-avr. 24, 2022 5:57:11 PM utils.WebExceptionMapper toResponse
-SEVERE: user on hold
-utils.exception.UserOnHoldException: user on hold
-	at buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:47)
-	at ihm.UserRessource.login(UserRessource.java:62)
+avr. 27, 2022 10:49:03 AM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: username or password incorrect
+be.vinci.pae.utils.exception.PasswordOrUsernameException: username or password incorrect
+	at be.vinci.pae.buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:41)
+	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:62)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

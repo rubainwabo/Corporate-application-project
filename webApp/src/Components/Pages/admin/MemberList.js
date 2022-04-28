@@ -91,38 +91,44 @@ async function getAllMemberByFilter(searchInput,token){
     memberList.innerHTML="";
     filtredUserList.forEach((e)=>{
     const divUserHandler = document.createElement("div");
-    const pFirstName = document.createElement("p");
-    const pLastName = document.createElement("p");
-    const username = document.createElement("p");
-    const state = document.createElement("p");
-    const role = document.createElement("p");
-    const phoneNumber = document.createElement("p");
-    const nb_of_item_not_taken = document.createElement("p");
-    const nb_of_item_offered = document.createElement("p");
-    const nb_of_item_gifted = document.createElement("p");
-    const nb_of_item_received = document.createElement("p");
-    const divPolygonLeft = document.createElement("div");
-    const divPolygonRight = document.createElement("div");
+    const pFirstName = document.createElement("span");
+    const pLastName = document.createElement("span");
+    const username = document.createElement("span");
+    const state = document.createElement("span");
+    const role = document.createElement("span");
+    const phoneNumber = document.createElement("span");
+    const nb_of_item_not_taken = document.createElement("span");
+    const nb_of_item_offered = document.createElement("span");
+    const nb_of_item_gifted = document.createElement("span");
+    const nb_of_item_received = document.createElement("span");
+    const divUserHandlerIn = document.createElement("div")
 
 
-    //divPolygonLeft.classList="member-list-polygon-left-top";
-    //divPolygonRight.classList="member-list-polygon-right-bot";
     divUserHandler.classList = "user-to-handle";
+    pFirstName.classList="col-1"
+    pLastName.classList="col-1"
+    username.classList="col-1"
+    state.classList="col-1"
+    role.classList="col-1"
+    phoneNumber.classList="col-1"
+    nb_of_item_not_taken.classList="col-1"
+    nb_of_item_offered.classList="col-1"
+    nb_of_item_gifted.classList="col-1"
+    nb_of_item_received.classList="col-1"
+    
     divUserHandler.id = e.id;
-
     pFirstName.innerHTML = e.firstName
     pLastName.innerHTML = e.lastName
     username.innerHTML = e.userName
     state.innerHTML=e.state
     role.innerHTML=e.role
-    phoneNumber.innerHTML=e.phoneNumber
+    console.log("voici ce que je cehrche : " + e.phoneNumber)
+    phoneNumber.innerHTML= e.phoneNumber == null ? "/" : e.phoneNumber
     nb_of_item_not_taken.innerHTML = e.nbrItemNotTaken + " object non pris"
     nb_of_item_offered.innerHTML = e.nbrItemOffered  + " offres"
     nb_of_item_gifted.innerHTML = e.nbrGiftenItems + " donnés"
     nb_of_item_received.innerHTML = e.nbrItemReceived + " réceptions"
 
-   // divUserHandler.appendChild(divPolygonLeft)
-    //divUserHandler.appendChild(divPolygonRight)
     divUserHandler.appendChild(pFirstName);
     divUserHandler.appendChild(pLastName);
     divUserHandler.appendChild(username);
@@ -135,7 +141,6 @@ async function getAllMemberByFilter(searchInput,token){
     divUserHandler.appendChild(nb_of_item_received);
     
     divUserHandler.addEventListener("click",async  () => {
-      // show userInfo
       const divMyItems = document.createElement("div"); 
       const left = document.createElement("div");
       const right = document.createElement("div");
@@ -156,7 +161,6 @@ async function getAllMemberByFilter(searchInput,token){
       // fetch offered items of the user we clicked on him
       let offeredItems = await getAllItemsByItemCondition('offered',token,divUserHandler.id,true);
       let receptedItems =  await getAllItemsByItemCondition('gifted',token,divUserHandler.id,false);
-
       divLeftTitle.appendChild(pLTitle);
       divRightTitle.appendChild(pRTitle);
       left.appendChild(divLeftTitle)
@@ -183,15 +187,16 @@ async function getAllMemberByFilter(searchInput,token){
   }
 }
 function membersItemsList(item,container,divItems){
-
+        
         let divSingleItem = document.createElement("div");
-        let pItemTypeTitle = document.createElement("h5");
-        let pDescriptionTitle = document.createElement("h5");
+        let pItemTypeTitle = document.createElement("h6");
+        let pDescriptionTitle = document.createElement("h6");
         let pItemType= document.createElement("p");
         let pDescription = document.createElement("p");
         let leftDiv = document.createElement("div");
         let rightDiv = document.createElement("div");
         let insideRightDiv = document.createElement("div")
+
 
         pItemTypeTitle.innerHTML="Type de l'objet :"
         pDescriptionTitle.innerHTML="Description :" 

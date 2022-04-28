@@ -47,7 +47,6 @@ const HomePage = async (id) => {
           "token" : token}
     };  
     const response = await fetch("/api/items/"+fetchMethodName,options); // fetch return a promise => we wait for the response
-    console.log("res", response.body);
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -56,10 +55,8 @@ const HomePage = async (id) => {
 
     const items = await response.json();
 
-    console.log("here", items);
 
     items.forEach((item) => {
-      console.log("my item", item);
 
       let itemBox = document.createElement("div");
       let homePageImageBox = document.createElement("div");

@@ -33,8 +33,8 @@ public class Main {
   public static HttpServer startServer() {
     // create a resource config that scans for JAX-RS resources and providers
     // in be.vinci package
-    final ResourceConfig rc = new ResourceConfig().
-        packages("be.vinci.pae.ihm")
+    final ResourceConfig rc = new ResourceConfig()
+        .packages("be.vinci.pae.ihm")
         .register(JacksonFeature.class)
         .register(ApplicationBinder.class)
         .register(FiltersDynamicBindingConfig.class)

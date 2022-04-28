@@ -26,7 +26,8 @@ public class ItemDAOImpl implements ItemDAO {
 
     try (PreparedStatement ps = myBackService.getPreparedStatementWithId(
         "insert into projet.items "
-            + "(id_item,description,url_picture,item_condition,offeror,item_type,time_slot,number_of_people_interested) "
+            + "(id_item,description,url_picture,item_condition,"
+            + "offeror,item_type,time_slot,number_of_people_interested) "
             + "VALUES (DEFAULT,?,?,?,?,?,?,0)",
         Statement.RETURN_GENERATED_KEYS)) {
       // ps to find lastId insere

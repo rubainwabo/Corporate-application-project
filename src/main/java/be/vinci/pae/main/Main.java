@@ -16,11 +16,11 @@ import org.glassfish.jersey.server.ResourceConfig;
  */
 public class Main {
 
-  public static String BASE_URI = Config.getProperty("BaseUri");
-
   static {
     Config.load("prod.properties");
   }
+
+  public static String BASE_URI = Config.getProperty("BaseUri");
 
   // Base URI the Grizzly HTTP server will listen on
   // public static final String BASE_URI = "http://localhost:8080/";

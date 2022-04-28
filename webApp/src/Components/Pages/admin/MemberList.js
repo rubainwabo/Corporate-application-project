@@ -122,7 +122,6 @@ async function getAllMemberByFilter(searchInput,token){
     username.innerHTML = e.userName
     state.innerHTML=e.state
     role.innerHTML=e.role
-    console.log("voici ce que je cehrche : " + e.phoneNumber)
     phoneNumber.innerHTML= e.phoneNumber == null ? "/" : e.phoneNumber
     nb_of_item_not_taken.innerHTML = e.nbrItemNotTaken + " object non pris"
     nb_of_item_offered.innerHTML = e.nbrItemOffered  + " offres"

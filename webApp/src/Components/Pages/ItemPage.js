@@ -141,6 +141,7 @@ const ItemPage = async () => {
   }
 
   addIterestBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
     await VerifyUser()
     e.preventDefault();
     let availabilities = document.getElementById("availabilities").value;

@@ -2,16 +2,16 @@
 Message d'erreur : Erreur lors de la connexion à la db
 
 StackTrace : 
-buiseness.ucc.ItemUCCImpl.addInterest(ItemUCCImpl.java:63)
-ihm.ItemRessource.addInterest(ItemRessource.java:92)
+be.vinci.pae.buiseness.ucc.ItemUCCImpl.addInterest(ItemUCCImpl.java:63)
+be.vinci.pae.ihm.ItemRessource.addInterest(ItemRessource.java:92)
 =======
 <<<<<<< HEAD
 Message d'erreur : Echec lors de la connexion à la db
 
 StackTrace : 
-dal.DalServicesImpl.commit(DalServicesImpl.java:61)
-buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:57)
-ihm.UserRessource.login(UserRessource.java:101)
+be.vinci.pae.dal.DalServicesImpl.commit(DalServicesImpl.java:61)
+be.vinci.pae.buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:57)
+be.vinci.pae.ihm.UserRessource.login(UserRessource.java:101)
 >>>>>>> master
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)

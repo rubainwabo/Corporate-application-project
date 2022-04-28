@@ -1,10 +1,10 @@
 package be.vinci.pae.main;
 
-import buiseness.dto.ItemDTO;
-import buiseness.ucc.ItemUCC;
+import be.vinci.pae.buiseness.dto.ItemDTO;
+import be.vinci.pae.buiseness.ucc.ItemUCC;
+import be.vinci.pae.dal.services.DateDAO;
+import be.vinci.pae.dal.services.ItemDAO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dal.services.DateDAO;
-import dal.services.ItemDAO;
 import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;

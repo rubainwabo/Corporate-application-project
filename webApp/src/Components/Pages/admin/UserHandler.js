@@ -1,5 +1,4 @@
 import {getSessionObject} from "../../../utils/session";
-import {Redirect} from "../../Router/Router";
 import { VerifyUser } from "../../../utils/session";
 
 const userHandler = `
@@ -83,21 +82,24 @@ async function gettAllByState(accesToken, state) {
     userHandlerList.innerHTML = "";
     items.forEach((e) => {
       const divUserHandler = document.createElement("div");
-      const pFirstName = document.createElement("p");
-      const pLastName = document.createElement("p");
+      const pFirstName = document.createElement("span");
+      const pLastName = document.createElement("span");
       const divIsAdminBox = document.createElement("div");
       const spanAdminBox = document.createElement("span");
       const br = document.createElement("br");
       const inputCheckBox = document.createElement("input");
       const divValid = document.createElement("div");
-      const divDenied = document.createElement("div");
       const validBtn = document.createElement("a");
-      const deniedBtn = document.createElement("a");
+      let classListCol = state!="denied" ? "col-2" : "col-3";
+  
+      pFirstName.classList=classListCol
+      pLastName.classList=classListCol
+      divIsAdminBox.classList=classListCol
+      divValid.classList=classListCol
 
       divUserHandler.classList = "user-to-handle";
       divUserHandler.id = e.id;
-      divIsAdminBox.classList = "is-admin-box";
-      deniedBtn.classList="user-handler-denied-btn"
+      divIsAdminBox.id = "is-admin-box";
       validBtn.classList="user-handler-accepted-btn"
       pFirstName.innerHTML = e.firstName
       pLastName.innerHTML = e.lastName
@@ -110,34 +112,36 @@ async function gettAllByState(accesToken, state) {
       inputCheckBox.id = e.id;
       inputCheckBox.type = "checkbox"
       divIsAdminBox.appendChild(inputCheckBox);
-
-      // append div with btnValid
-      deniedBtn.innerHTML = "refusé"
       validBtn.innerHTML = "accepté"
-
-      divUserHandler.appendChild(divValid)
       divValid.appendChild(validBtn)
-      // append div with btnDenied
-      divUserHandler.appendChild(divDenied)
-      divDenied.appendChild(deniedBtn)
-      deniedBtn.addEventListener("click", () => {
-        currentUser = e.id;
-        document.getElementById("add-reason-refusal").style.display = "flex";
-        document.getElementById("add-reason-button").addEventListener("click",
-            function (e) {
-              e.preventDefault();
-              let reason = document.getElementById("reason").value;
-              addOrRefuse(currentUser, "denied", reason, accesToken,
-                  inputCheckBox)
-            })
-           
-      });
+      divUserHandler.appendChild(divValid)
+      if (state!="denied"){
+        const divDenied = document.createElement("div");
+        const deniedBtn = document.createElement("a");  
+        divDenied.classList=classListCol;
+        deniedBtn.classList="user-handler-denied-btn"
+        deniedBtn.innerHTML = "refusé"  
+          divUserHandler.appendChild(divDenied)
+          divDenied.appendChild(deniedBtn)
+          deniedBtn.addEventListener("click", () => {
+            currentUser = e.id;
+            document.getElementById("add-reason-refusal").style.display = "flex";
+            document.getElementById("add-reason-button").addEventListener("click",
+                async function (e) {
+                  e.preventDefault();
+                  let reason = document.getElementById("reason").value;
+                  await addOrRefuse(currentUser, "denied", reason, accesToken,
+                      inputCheckBox)
+                      document.getElementById(currentUser).remove();
+                })
+          });  
+      }
       validBtn.addEventListener("click", () => {
         addOrRefuse(e.id, "valid", "", accesToken, inputCheckBox)
         document.getElementById(e.id).remove();
       });
       divUserHandler.addEventListener("click", (target) => {
-        if (target.target.innerHTML!= "refusé" && target.target.innerHTML!="accepté"){
+        if (target.target.innerHTML!= "refusé" && target.target.innerHTML!="accepté" &&  target.target.innerHTML!=""){
         getUserInformation(e.id, accesToken);
         }
       })
@@ -307,8 +311,9 @@ async function addOrRefuse(id, state, rsnRefusal, accesToken, admin) {
       );
     }
     await response.json(); // json() returns a promise => we wait for the data
-    document.getElementById("add-reason-refusal").style.display="none";
-    document.getElementById("reason").value="";
+      document.getElementById("add-reason-refusal").style.display="none";
+      document.getElementById("reason").value="";
+
   } catch (error) {
     console.error("LoginPage::error: ", error);
   }

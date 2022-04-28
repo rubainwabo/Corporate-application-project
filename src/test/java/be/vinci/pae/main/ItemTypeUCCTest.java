@@ -1,8 +1,8 @@
 package be.vinci.pae.main;
 
-import buiseness.dto.ItemTypeDTO;
-import buiseness.ucc.ItemTypeUCC;
-import dal.services.ItemTypeDAO;
+import be.vinci.pae.buiseness.dto.ItemTypeDTO;
+import be.vinci.pae.buiseness.ucc.ItemTypeUCC;
+import be.vinci.pae.dal.services.ItemTypeDAO;
 import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;

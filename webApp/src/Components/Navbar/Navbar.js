@@ -192,7 +192,6 @@ document.getElementById("all-notif").addEventListener("click",async  () => {
     let notificationsList = await getNotificationList(token,false);
     await createNotification(notificationsList,boxDiv,false);
     if (notificationsList.length > 0){
-      console.log("fdp")
       updateNotifNotViewed(token);
     }
     document.getElementById("h4GetAllOrNotNotif").innerHTML="Afficher toutes les notifications"

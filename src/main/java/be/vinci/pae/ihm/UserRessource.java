@@ -2,6 +2,7 @@ package be.vinci.pae.ihm;
 
 import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.ucc.UserUCC;
+import be.vinci.pae.utils.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
@@ -14,7 +15,6 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.commons.text.StringEscapeUtils;
-import be.vinci.pae.utils.TokenService;
 
 // ! To use the AdminAuthorizeFilter the name of your path methods must contain "admin" !
 // (name can be changed in FiltersDynamicBindingConfig class)

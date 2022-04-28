@@ -7,5 +7,5 @@ public interface NotificationDAO {
 
   List<NotificationDTO> getAllMyNotif(int userId, boolean allNotif);
 
-  void UpdateAllNotifToViewed(int userId);
+  void updateAllNotifToViewed(int userId);
 }

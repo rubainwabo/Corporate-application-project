@@ -3,6 +3,7 @@ package be.vinci.pae.dal.services;
 import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.factory.BizFactory;
 import be.vinci.pae.dal.DalBackService;
+import be.vinci.pae.utils.exception.FatalException;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +11,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import be.vinci.pae.utils.exception.FatalException;
 
 public class UserDAOImpl implements UserDAO {
 

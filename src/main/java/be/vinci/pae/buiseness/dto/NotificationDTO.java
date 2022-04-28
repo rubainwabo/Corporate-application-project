@@ -8,7 +8,7 @@ public interface NotificationDTO {
 
   boolean isIs_viewed();
 
-  void setIs_viewed(boolean is_viewed);
+  void setIs_viewed(boolean isViewed);
 
   String getTxt();
 
@@ -21,11 +21,7 @@ public interface NotificationDTO {
   int getItemId();
 
   void setItemId(int itemId);
-
-  String getUrl_picture();
-
-  void setUrl_picture(String url_picture);
-
+  
   String getItemType();
 
   void setItemType(String itemType);

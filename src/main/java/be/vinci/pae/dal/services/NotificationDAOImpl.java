@@ -49,7 +49,7 @@ public class NotificationDAOImpl implements NotificationDAO {
   }
 
   @Override
-  public void UpdateAllNotifToViewed(int userId) {
+  public void updateAllNotifToViewed(int userId) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "update projet.notifications set is_viewed=true where"
             + " is_viewed=false and person=" + userId)) {

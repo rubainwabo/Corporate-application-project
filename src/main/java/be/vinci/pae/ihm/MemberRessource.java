@@ -2,6 +2,7 @@ package be.vinci.pae.ihm;
 
 import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.ucc.UserUCC;
+import be.vinci.pae.utils.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
@@ -19,7 +20,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import org.glassfish.jersey.server.ContainerRequest;
-import be.vinci.pae.utils.TokenService;
 
 @Singleton
 @Path("/members")

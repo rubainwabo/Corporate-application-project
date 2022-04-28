@@ -28,10 +28,10 @@ public class NotificationUCCImpl implements NotificationUCC {
   }
 
   @Override
-  public void UpdateAllNotifToViewed(int userId) {
+  public void updateAllNotifToViewed(int userId) {
     try {
       myDalServices.start();
-      myNotifDaoService.UpdateAllNotifToViewed(userId);
+      myNotifDaoService.updateAllNotifToViewed(userId);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

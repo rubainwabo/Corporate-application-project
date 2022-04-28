@@ -6,16 +6,16 @@ import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.dal.DalServices;
 import be.vinci.pae.dal.services.ItemDAO;
 import be.vinci.pae.dal.services.UserDAO;
-import jakarta.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import org.mindrot.jbcrypt.BCrypt;
 import be.vinci.pae.utils.exception.InvalidStateException;
 import be.vinci.pae.utils.exception.PasswordOrUsernameException;
 import be.vinci.pae.utils.exception.ReasonForConnectionRefusalException;
 import be.vinci.pae.utils.exception.UserInvalidException;
 import be.vinci.pae.utils.exception.UserOnHoldException;
 import be.vinci.pae.utils.exception.UsernameAlreadyExists;
+import jakarta.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 
 public class UserUCCImpl implements UserUCC {

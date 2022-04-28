@@ -5,23 +5,12 @@ import be.vinci.pae.buiseness.dto.NotificationDTO;
 public class NotificationImpl implements NotificationDTO {
 
   private int idNotification;
-  private boolean is_viewed;
+  private boolean isViewed;
   private String txt;
   private int memberId;
   private int itemId;
-  private String url_picture;
   private String itemType;
   private String itemDescritpion;
-
-  @Override
-  public String getUrl_picture() {
-    return url_picture;
-  }
-
-  @Override
-  public void setUrl_picture(String url_picture) {
-    this.url_picture = url_picture;
-  }
 
   @Override
   public String getItemType() {
@@ -55,12 +44,12 @@ public class NotificationImpl implements NotificationDTO {
 
   @Override
   public boolean isIs_viewed() {
-    return is_viewed;
+    return isViewed;
   }
 
   @Override
-  public void setIs_viewed(boolean is_viewed) {
-    this.is_viewed = is_viewed;
+  public void setIs_viewed(boolean isViewed) {
+    this.isViewed = isViewed;
   }
 
   @Override

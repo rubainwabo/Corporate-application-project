@@ -38,7 +38,7 @@ public class NotificationRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   public Response userUpdateAllNotifToViewed(@Context ContainerRequest req) {
     int userId = (int) req.getProperty("id");
-    myNotifService.UpdateAllNotifToViewed(userId);
+    myNotifService.updateAllNotifToViewed(userId);
     return Response.ok().build();
   }
 }

@@ -1,5 +1,10 @@
 package be.vinci.pae.utils;
 
+import be.vinci.pae.utils.exception.BizzException;
+import be.vinci.pae.utils.exception.FatalException;
+import be.vinci.pae.utils.exception.ReasonForConnectionRefusalException;
+import be.vinci.pae.utils.exception.UserInvalidException;
+import be.vinci.pae.utils.exception.UserOnHoldException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -8,11 +13,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import be.vinci.pae.utils.exception.BizzException;
-import be.vinci.pae.utils.exception.FatalException;
-import be.vinci.pae.utils.exception.ReasonForConnectionRefusalException;
-import be.vinci.pae.utils.exception.UserInvalidException;
-import be.vinci.pae.utils.exception.UserOnHoldException;
 
 public class WebExceptionMapper implements ExceptionMapper<Throwable> {
 

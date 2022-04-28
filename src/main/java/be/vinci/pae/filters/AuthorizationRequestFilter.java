@@ -1,6 +1,7 @@
 package be.vinci.pae.filters;
 
 import be.vinci.pae.buiseness.ucc.UserUCC;
+import be.vinci.pae.utils.TokenService;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -10,7 +11,6 @@ import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.Provider;
-import be.vinci.pae.utils.TokenService;
 
 //1 set id dans le premier seulement
 //2 vrai filter qui vérifie l'user

@@ -1,7 +1,22 @@
-avr. 28, 2022 11:15:45 AM be.vinci.pae.utils.WebExceptionMapper toResponse
-SEVERE: HTTP 404 Not Found
-jakarta.ws.rs.NotFoundException: HTTP 404 Not Found
-	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:252)
+avr. 28, 2022 12:12:01 PM be.vinci.pae.utils.WebExceptionMapper toResponse
+SEVERE: Cannot invoke "java.sql.Connection.commit()" because "con" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.commit()" because "con" is null
+	at be.vinci.pae.dal.DalServicesImpl.commit(DalServicesImpl.java:60)
+	at be.vinci.pae.buiseness.ucc.ItemUCCImpl.getDetails(ItemUCCImpl.java:46)
+	at be.vinci.pae.ihm.ItemRessource.getPicture(ItemRessource.java:293)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.glassfish.jersey.server.model.internal.ResourceMethodInvocationHandlerFactory.lambda$static$0(ResourceMethodInvocationHandlerFactory.java:52)
+	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher$1.run(AbstractJavaResourceMethodDispatcher.java:124)
+	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.invoke(AbstractJavaResourceMethodDispatcher.java:167)
+	at org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$ResponseOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:176)
+	at org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.dispatch(AbstractJavaResourceMethodDispatcher.java:79)
+	at org.glassfish.jersey.server.model.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:475)
+	at org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:397)
+	at org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:81)
+	at org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:255)
 	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)
 	at org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)
 	at org.glassfish.jersey.internal.Errors.process(Errors.java:292)

@@ -167,26 +167,21 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public List<UserDTO> getAllUserFiltred(String name, String city, String postCode) {
-    String queryName = name.isBlank() ? "" : "last_name like '" + name + "%' ";
-    String queryCity = "";
-    String queryPostCode = "";
+    String add = "";
+    add += name.isBlank() ? " and " : " and last_name like '" + name + "%' ";
     if (name.isBlank() && !city.isBlank()) {
-      queryCity = "city like '" + city + "%' ";
+      add += "city like '" + city + "%' ";
     } else {
       if (!name.isBlank() && !city.isBlank()) {
-        queryCity = "or city like '" + city + "%' ";
-      } else {
-        queryCity = "";
+        add  += "or city like '" + city + "%' ";
       }
     }
     if (!postCode.isBlank()) {
       if (!name.isBlank() || !city.isBlank()) {
-        queryPostCode = "or CAST(postCode AS TEXT) like '" + postCode + "%'";
+        add += "or CAST(postCode AS TEXT) like '" + postCode + "%'";
       } else {
-        queryPostCode = "CAST(postCode AS TEXT) like '" + postCode + "%'";
+        add += "CAST(postCode AS TEXT) like '" + postCode + "%'";
       }
-    } else {
-      queryPostCode = "";
     }
     String query =
         "select m.user_id, m.state, m._role,m.username,m.last_name,"
@@ -201,13 +196,9 @@ public class UserDAOImpl implements UserDAO {
             + "AND o3.item_condition = 'gifted' "
             + "LEFT JOIN projet.items o4 on m.user_id = o4.recipient "
             + "and o4.item_condition= 'not collected' where m.state='valid'";
-    query +=
-        !name.isBlank() || !city.isBlank() || !postCode.isBlank()
-            ? " and "
-            + queryName
-            + queryCity + queryPostCode :
-            "";
-    query += " group by m.user_id";
+    query += !name.isBlank() || !city.isBlank() || !postCode.isBlank()
+            ? add + " group by m.user_id" :
+            " group by m.user_id";
     System.out.println(query);
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
       ArrayList<UserDTO> userDTOS = new ArrayList<>();
@@ -230,9 +221,8 @@ public class UserDAOImpl implements UserDAO {
         return userDTOS;
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      throw new FatalException(e);
     }
-    return null;
   }
 
   @Override

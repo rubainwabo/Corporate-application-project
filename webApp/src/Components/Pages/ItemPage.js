@@ -1,6 +1,6 @@
 import {getSessionObject, VerifyUser} from "../../utils/session";
 
-import itemImg from '../../img/image_not_available.png';
+//import itemImg from '../../img/image_not_available.png';
 import {Redirect} from "../Router/Router";
 
 const item = `

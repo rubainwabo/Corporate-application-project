@@ -52,8 +52,11 @@ public class UserDAOImpl implements UserDAO {
     List<UserDTO> userDTOList;
 
     try (PreparedStatement ps = myDalService.getPreparedStatement(
-        "select last_name,first_name,city,street,postCode,building_number,user_id,username, "
-            + "state,phone_number,_role from projet.members where state=?")) {
+        "select user_id, state, _role,username,"
+            + "reason_for_connection_refusal,last_name,"
+            + "first_name,city,street,postCode,"
+            + "building_number,unit_number,url_picture,phone_number"
+            + " from projet.members where state=?")) {
       ps.setString(1, state);
 
       try (ResultSet rs = ps.executeQuery()) {
@@ -61,16 +64,7 @@ public class UserDAOImpl implements UserDAO {
         UserDTO user;
         while (rs.next()) {
           user = myDomainFactory.getUser();
-          user.setLastName(rs.getString(1));
-          user.setFirstName(rs.getString(2));
-          user.setCity(rs.getString(3));
-          user.setStreet(rs.getString(4));
-          user.setPostCode(rs.getInt(5));
-          user.setBuildingNumber(rs.getInt(6));
-          user.setId(rs.getInt(7));
-          user.setUserName(rs.getString(8));
-          user.setState(rs.getString(9));
-          user.setRole(rs.getString(11));
+          getAllUserInfo(rs, user);
           userDTOList.add(user);
         }
       }

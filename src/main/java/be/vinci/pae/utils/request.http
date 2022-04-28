@@ -1,0 +1,125 @@
+### Create One film
+POST http://localhost:3000/auths/register
+Content-Type: application/json
+
+{
+  "userName": "p",
+  "lastName": "Dotche",
+  "firstName": "Daniel",
+  "state": "dendermonde",
+  "password": "motdepasse",
+  "street": "olieslagerstraat",
+  "buildingNumber": 92,
+  "unitNumber": 1,
+  "postCode": 9200,
+  "city": "dendermonde",
+  "urlPhoto": "une url"
+}
+
+### Create item
+POST http://localhost:3000/items/add
+Content-Type: application/json
+
+{
+  "description": "But I must explain to you how all this mistaken idea of ...",
+  "urlPicture": "www.velo.com",
+  "itemtype": "test",
+  "timeSlot": "12345"
+}
+
+### Create item
+POST http://localhost:3000/items/add
+Content-Type: application/json
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyNzQ4MiwidXNlciI6NH0.F-JE1p-OFdbfWqFAw3GQ-aoceXnppXb50o4foy9E59k
+
+{
+  "description": "mamanie",
+  "urlPicture": "www.object.com",
+  "itemtype": "test",
+  "timeSlot": "12345"
+}
+
+### add item type
+
+POST http://localhost:3000/itemsType/addItemType
+Content-Type: application/json
+
+{
+  "itemType": "wwwww"
+}
+
+### get an item
+
+GET http://localhost:3000/items/itemDetails/1
+
+### add interest
+POST http://localhost:3000/items/addInterest/2
+Content-Type: application/json
+
+{
+  "availabilities": "2016-03-04 11:30",
+  "callMe": "true",
+  "phoneNumber": "0471717306"
+}
+
+### get last item offered
+
+GET http://localhost:3000/items/lastItemsOfferedNotConnected
+
+### Create One film
+POST http://localhost:3000/auths/register
+Content-Type: application/json
+
+{
+  "userName": "aa",
+  "lastName": "Dotche",
+  "firstName": "Daniel",
+  "password": "motdepasse",
+  "street": "olieslagerstraat",
+  "buildingNumber": 92,
+  "unitNumber": 1,
+  "postCode": 9200,
+  "city": "dendermonde",
+  "urlPhoto": "une url"
+}
+
+### get all item-type
+GET http://localhost:3000/itemsType/getAll
+
+### get users who are interest on an item
+
+GET http://localhost:3000/members/interest/7
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
+
+
+### add recipient
+
+POST http://localhost:3000/items/addRecipient/7/6
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
+
+
+### update a item
+
+POST http://localhost:3000/items/update
+Content-Type: application/json
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDA0MDE5NCwidXNlciI6NH0._WVOCJVgXkWf1_7pixXqffd2tfWZW3N4Gx4uMLpJhbE
+
+{
+  "id": 7,
+  "description": "mark",
+  "urlPicture": "jhon",
+  "timeSlot": "oui"
+}
+
+### get my items
+ GET http://localhost:3000/items/myItems/gifted
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MDIyOTEzMiwidXNlciI6NH0.dwW5DPw3cYsK6b_J7g7goEnAPCZV18cAH-Ga1YOgIaE
+
+### offer again
+POST http://localhost:3000/items/offer/again/1
+
+###
+GET http://localhost/items/itemDetails/{{id}}
+
+###
+GET http://localhost:3000/items/picture/7

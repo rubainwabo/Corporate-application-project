@@ -2,7 +2,7 @@ import { Redirect } from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 
 import { setSessionObject,getSessionObject } from "../../utils/session";
-/**
+/** 
  * Render the LoginPage
  */
 const affichage = `
@@ -54,8 +54,8 @@ const LoginPage = () => {
       };
 
       const response = await fetch("/api/auths/login", options); // fetch return a promise => we wait for the response
-
-      if (!response.ok) {
+      
+       if (!response.ok) {
         response.text().then((result)=>{
           document.getElementById("error").innerText=result;
         })

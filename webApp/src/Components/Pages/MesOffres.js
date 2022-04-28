@@ -1,5 +1,5 @@
 import { Redirect } from "../Router/Router";
-import { getSessionObject } from "../../utils/session";
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
@@ -39,6 +39,7 @@ const MesOffres = async () => {
   let token = getSessionObject("accessToken");
 
   try {
+    await VerifyUser()
     var options = { method: 'GET',
                headers: {"token" : token},
                mode: 'cors',
@@ -46,7 +47,7 @@ const MesOffres = async () => {
     const response = await fetch("/api/items/mesOffres", options); // fetch return a promise => we wait for the response   
 
     if(!response.ok){
-    return Redirect("/logout");
+
   }
 
   const items = await response.json();
@@ -99,6 +100,7 @@ const MesOffres = async () => {
     allRecentItem.appendChild(itemBox);
     
     cross.onclick = async () => {
+      await VerifyUser();
         var options = { method: 'POST',
         headers: {"token" : getSessionObject("accessToken")},
         mode: 'cors',

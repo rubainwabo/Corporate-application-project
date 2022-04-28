@@ -1,8 +1,8 @@
 package be.vinci.pae.main;
 
-import buiseness.dto.ItemTypeDTO;
-import buiseness.ucc.ItemTypeUCC;
-import dal.services.ItemTypeDAO;
+import be.vinci.pae.buiseness.dto.ItemTypeDTO;
+import be.vinci.pae.buiseness.ucc.ItemTypeUCC;
+import be.vinci.pae.dal.services.ItemTypeDAO;
 import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
@@ -14,10 +14,9 @@ import org.mockito.Mockito;
 
 public class ItemTypeUCCTest {
 
-  private final String TYPE = "type";
-
   private static ItemTypeUCC itemTypeUCC;
   private static ServiceLocator locator;
+  private final String type = "type";
   private ItemTypeDAO itemTypeDAO;
 
   @BeforeAll
@@ -36,10 +35,10 @@ public class ItemTypeUCCTest {
   public void addItemType() {
     ItemTypeDTO itemType = Mockito.mock(ItemTypeDTO.class);
 
-    Mockito.when(itemTypeDAO.addItemType(TYPE)).thenReturn(itemType);
+    Mockito.when(itemTypeDAO.addItemType(type)).thenReturn(itemType);
     Assertions.assertAll(
-        () -> Assertions.assertEquals(itemType, itemTypeUCC.addItemType(TYPE)),
-        () -> Mockito.verify(itemTypeDAO).addItemType(TYPE)
+        () -> Assertions.assertEquals(itemType, itemTypeUCC.addItemType(type)),
+        () -> Mockito.verify(itemTypeDAO).addItemType(type)
     );
   }
 

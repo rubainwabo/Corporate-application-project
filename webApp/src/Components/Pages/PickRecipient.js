@@ -1,7 +1,7 @@
 import {Redirect} from "../Router/Router";
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
-import { getSessionObject,setSessionObject,removeSessionObject } from "../../utils/session";
+import { getSessionObject,setSessionObject,removeSessionObject, VerifyUser } from "../../utils/session";
 
 
 /**
@@ -32,6 +32,7 @@ const PickRecipient = async () => {
   
 
   try {
+    await VerifyUser();
     var options = { 
     method: 'GET',
     headers: {"token" : token},
@@ -63,8 +64,9 @@ const PickRecipient = async () => {
         adress.innerText=user.street+" "+user.buildingNumber+" ("+user.city+")";
 
         addButton.innerText=" Offrir";
-        addButton.addEventListener("click",function(e){
-          addRecipient(id,user.id);
+        addButton.addEventListener("click",async function(e){
+         await addRecipient(id,user.id);
+          Redirect("/myitems");
         })
         userBox.classList.add("user-interest");
 
@@ -117,6 +119,7 @@ const PickRecipient = async () => {
 };
 
 async function addRecipient(idItem,idRecipient){
+  await VerifyUser()
   try {
     var options = { method: 'POST',
     headers: {"token" : getSessionObject("accessToken")},

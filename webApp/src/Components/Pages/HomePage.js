@@ -1,12 +1,13 @@
 import {Redirect} from "../Router/Router";
 
-import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import itemImg from '../../img/image_not_available.png';
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 /**
  * Render the LoginPage
  */
 const home = `
-<div style="width : 100%; width : 100%, 
+<div style="width : 100%; width : 100%; 
 width : 100%; 
 height : 100%; position : absolute; 
 left : 0px; right : 0px;
@@ -22,8 +23,9 @@ background-color: #FFF59B;
 <section id="home-page">
     <div id="home-page-navigation">
         <h2 id="home-page-title"> Dernières offres</h2>
-        
+
     </div>
+    
     <div id="all-recent-item">
 
     </div>
@@ -36,10 +38,16 @@ const HomePage = async (id) => {
   pageDiv.innerHTML = home;
 
   let allRecentItem = document.getElementById("all-recent-item");
-
+  await VerifyUser();
+  let fetchMethodName = getSessionObject("accessToken") ? "lastItemsOfferedConnected" : "lastItemsOfferedNotConnected";
+  let token = getSessionObject("accessToken");
   try {
-    const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response
-    console.log("res", response.body);
+    var options = {
+        method: 'GET',
+        headers: {
+          "token" : token}
+    };
+    const response = await fetch("/api/items/"+fetchMethodName,options); // fetch return a promise => we wait for the response
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -48,10 +56,8 @@ const HomePage = async (id) => {
 
     const items = await response.json();
 
-    console.log("here", items);
 
     items.forEach((item) => {
-      console.log("my item", item);
 
       let itemBox = document.createElement("div");
       let homePageImageBox = document.createElement("div");
@@ -67,7 +73,8 @@ const HomePage = async (id) => {
       itemType.classList.add("item-title");
       itemDescription.classList.add("item-description");
 
-      itemImgDiv.src = itemImg;
+      //itemImgDiv.src = itemImg;
+      getPicture(item.id,itemImgDiv);
       itemType.innerText = item.itemtype;
       itemDescription.innerText = item.description;
 
@@ -89,5 +96,30 @@ const HomePage = async (id) => {
   }
 
 };
+async function getPicture(itemId,imgDiv){
+  try{
+    console.log(imgDiv);
+  const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
+  
+  if (!response.ok) {
+    imgDiv.src=itemImg;
+    throw new Error(
+        "fetch error : " + response.status + " : " + response.statusText
+    )
+  }
+  if(response.ok){
+
+    const imageBlob = await response.blob();
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        console.log(imageObjectURL);
+        imgDiv.src=imageObjectURL
+        
+  }
+ 
+
+  }catch(error){
+    console.log(error)
+  }
+}
 
 export default HomePage;

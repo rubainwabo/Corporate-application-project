@@ -1,6 +1,6 @@
-import {getSessionObject} from "../../utils/session";
+import {getSessionObject, VerifyUser} from "../../utils/session";
 
-import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
+import itemImg from '../../img/image_not_available.png';
 import {Redirect} from "../Router/Router";
 
 const item = `
@@ -40,7 +40,7 @@ background-color: #FFF59B;
       <form id="add-iterest-form">
       <span id="error"></span>
         <div>
-          <input type="text" id="availabilities" placeholder="vos heures de disponibilité">
+          <input type="text" required id="availabilities" placeholder="vos heures de disponibilité">
         </div>
         <div>
           <span>Contactez-moi</span><input type="checkbox" id="callMe"> 
@@ -74,6 +74,7 @@ const ItemPage = async () => {
   })
 
   try {
+    await VerifyUser()
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -111,7 +112,8 @@ const ItemPage = async () => {
       addInterestBox.appendChild(button);
     }
 
-    document.getElementById("img-id").src = itemImg;
+    getPicture(id,document.getElementById("img-id"))
+   
     document.getElementById("type-objet").style.fontSize = "12px";
     document.getElementById("Offert").style.fontSize = "12px";
     document.getElementById("nb-personnes").style.fontSize = "12px";
@@ -140,17 +142,27 @@ const ItemPage = async () => {
 
   addIterestBtn.addEventListener("click", async function (e) {
     e.preventDefault();
+    await VerifyUser()
+    e.preventDefault();
     let availabilities = document.getElementById("availabilities").value;
     let callMe = document.getElementById("callMe").checked;
+
+
 
     try {
       let options;
       if (callMe) {
+        let oldPhone = await getPhoneNumber(getSessionObject("userId"));
+
         let phoneNumber = document.getElementById("phone-number").value;
+        
+        let updateNumer = oldPhone!=phoneNumber;
+
         options = {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           body: JSON.stringify({
             availabilities: availabilities,
+            updateNumber:updateNumer,
             callMe: callMe,
             phoneNumber: phoneNumber
           }), // body data type must match "Content-Type" header
@@ -164,6 +176,9 @@ const ItemPage = async () => {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           body: JSON.stringify({
             availabilities: availabilities,
+            updateNumber:"false",
+            callMe: callMe,
+            phoneNumber: ""
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
@@ -188,6 +203,7 @@ const ItemPage = async () => {
       document.getElementById(
           "message").innerText = "votre interet a été pris en compte";
       popUp.style.display = "none";
+      document.getElementById("show-interest").style.display="none";
 
       /*
       const rep  = await response.json(); // json() returns a promise => we wait for the data
@@ -203,6 +219,25 @@ const ItemPage = async () => {
 
 }
 
+async function getPhoneNumber(idUser){
+  try{
+    const response = await fetch("/api/members/details/"+idUser); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+
+    let user = await response.json();
+    console.log(user);
+    return user.phoneNumber;
+    
+
+    }catch(error){
+      console.log(error)
+    }
+}
 function getId() {
   let urlString = window.location.href;
   let paramString = urlString.split('?')[1];
@@ -220,5 +255,32 @@ function getId() {
   }
 
 }
+
+async function getPicture(itemId,imgDiv){
+  try{
+    console.log(imgDiv);
+  const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
+  
+  if (!response.ok) {
+    imgDiv.src=itemImg;
+    throw new Error(
+        "fetch error : " + response.status + " : " + response.statusText
+    )
+  }
+  if(response.ok){
+
+    const imageBlob = await response.blob();
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        console.log(imageObjectURL);
+        imgDiv.src=imageObjectURL
+        
+  }
+ 
+
+  }catch(error){
+    console.log(error)
+  }
+}
+
 
 export default ItemPage;

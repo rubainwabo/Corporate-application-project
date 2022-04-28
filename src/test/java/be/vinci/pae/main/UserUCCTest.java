@@ -1,9 +1,9 @@
 package be.vinci.pae.main;
 
-import buiseness.domain.User;
-import buiseness.dto.UserDTO;
-import buiseness.ucc.UserUCC;
-import dal.services.UserDAO;
+import be.vinci.pae.buiseness.domain.User;
+import be.vinci.pae.buiseness.dto.UserDTO;
+import be.vinci.pae.buiseness.ucc.UserUCC;
+import be.vinci.pae.dal.services.UserDAO;
 import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;

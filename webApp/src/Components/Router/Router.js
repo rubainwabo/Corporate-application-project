@@ -6,13 +6,11 @@ import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
 import MesOffres from "../Pages/MesOffres";
-
+import MemberList from "../Pages/admin/MemberList";
 import MyItems from "../Pages/myItems";
 import UpdateItem from "../Pages/UpdateItem";
 import PickRecipient from "../Pages/PickRecipient";
-
 import MonProfile from "../Pages/MyProfilePage";
-
 // Configure your routes here
 const routes = {
   '/': HomePage,
@@ -23,13 +21,11 @@ const routes = {
   '/additem': AddItemPage,
   '/userhandeler': UserHandler,
   '/mesOffres': MesOffres,
-
+  '/memberList': MemberList,
+  '/monProfile': MonProfile,
   '/myitems': MyItems,
   '/updateitem': UpdateItem,
   '/pickrecipient': PickRecipient,
-
-  '/monProfile': MonProfile
-
 };
 
 /**
@@ -44,7 +40,6 @@ const Router = () => {
   navbarWrapper.addEventListener("click", (e) => {
     // To get a data attribute through the dataset object, get the property by the part of the attribute name after data- (note that dashes are converted to camelCase).
     let uri = e.target.dataset.uri;
-    console.log(uri);
     if (uri) {
       e.preventDefault();
       /* use Web History API to add current page URL to the user's navigation history
@@ -66,10 +61,11 @@ const Router = () => {
   /* Route the right component when the page is loaded / refreshed */
   window.addEventListener("load", (e) => {
     const componentToRender = routes[window.location.pathname];
-    if (!componentToRender)
+    if (!componentToRender) {
       throw Error(
           "The " + window.location.pathname + " ressource does not exist."
       );
+    }
 
     componentToRender();
   });
@@ -86,6 +82,8 @@ const Router = () => {
  * @param {*} uri - Provides an URL that is associated to a functional component in the
  * routes array of the Router
  */
+
+
 
 const Redirect = (uri, params) => {
   // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")

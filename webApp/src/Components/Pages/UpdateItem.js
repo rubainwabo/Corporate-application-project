@@ -1,11 +1,13 @@
-import { getSessionObject } from '../../utils/session';
+import { getSessionObject, VerifyUser } from '../../utils/session';
 import {Redirect} from '../Router/Router';
 
 const updateItem = `
 <section id="add-item-page">
   <p id="message"></p>
     <form id="add-item-form">
-     
+            <div>
+              <input name="file" type= "file" /> <br/><br/>
+            </div>
             <div>
                 <label for="item-type">Type d’objet</label><br>
                 <input type="text" value="" id="item-type" disabled>
@@ -51,6 +53,7 @@ const UpdateItem = async () => {
 
   
   try {
+    await VerifyUser();
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -81,8 +84,8 @@ const UpdateItem = async () => {
 
   updateButton.addEventListener("click", async function (e) {
     e.preventDefault();
+    await VerifyUser();
     let description = document.getElementById("itemDescription").value;
-    let urlPicture = "none";
     let timeSlot = document.getElementById("availability").value;
 
     try {
@@ -90,8 +93,8 @@ const UpdateItem = async () => {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         body: JSON.stringify({
           id:id,
+          offerorId:getSessionObject("userId"),
           description: description,
-          urlPicture: urlPicture,
           timeSlot: timeSlot
         }), // body data type must match "Content-Type" header
         headers: {
@@ -108,9 +111,19 @@ const UpdateItem = async () => {
         })
       }
 
-      const itemType = await response.json(); // json() returns a promise => we wait for the data
+      const itemId = await response.json(); // json() returns a promise => we wait for the data
+      console.log(itemId);
+      const fileInput = document.querySelector('input[name=file]');
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      formData.append("itemId",itemId);
+      console.log(fileInput);
+      const optionsimg = {
+        method: 'POST',
+        body: formData
+      };
+      await fetch('api/items/upload', optionsimg);
 
-      console.log(itemType);
       let params = [{key: "id", value: id}];
       Redirect("/item", params);
 

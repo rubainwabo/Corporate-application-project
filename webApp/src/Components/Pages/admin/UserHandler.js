@@ -83,6 +83,7 @@ async function gettAllByState(accesToken, state) {
     var userHandlerList = document.getElementById("user-handler-list");
     userHandlerList.innerHTML = "";
     items.forEach((e) => {
+      console.log(e);
       const divUserHandler = document.createElement("div");
       const pFirstName = document.createElement("span");
       const pLastName = document.createElement("span");
@@ -133,13 +134,13 @@ async function gettAllByState(accesToken, state) {
                   e.preventDefault();
                   let reason = document.getElementById("reason").value;
                   await addOrRefuse(currentUser, "denied", reason, accesToken,
-                      inputCheckBox)
+                      inputCheckBox,e.version)
                       document.getElementById(currentUser).remove();
                 })
           });  
       }
       validBtn.addEventListener("click", () => {
-        addOrRefuse(e.id, "valid", "", accesToken, inputCheckBox)
+        addOrRefuse(e.id, "valid", "", accesToken, inputCheckBox,e.version)
         document.getElementById(e.id).remove();
       });
       divUserHandler.addEventListener("click", (target) => {
@@ -283,14 +284,16 @@ async function getUserInformation(id, accesToken) {
   }
 }
 
-async function addOrRefuse(id, state, rsnRefusal, accesToken, admin) {
+async function addOrRefuse(id, state, rsnRefusal, accesToken, admin,version) {
   try {
     let body1 = rsnRefusal != "" ? JSON.stringify({
+      "version":version,
       "change_id": id,
       "state": state,
       "admin": admin.checked,
       "refusalReason": rsnRefusal
     }) : JSON.stringify({
+      "version":version,
       "change_id": id,
       "state": state,
       "admin": admin.checked

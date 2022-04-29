@@ -7,6 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(as = UserImpl.class)
 public interface UserDTO {
 
+  public int getVersion();
+
+  public void setVersion(int version);
+
   /**
    * get the user's username.
    *

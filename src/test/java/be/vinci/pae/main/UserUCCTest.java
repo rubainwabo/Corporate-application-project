@@ -1,22 +1,11 @@
 package be.vinci.pae.main;
 
 import be.vinci.pae.buiseness.domain.User;
-import be.vinci.pae.buiseness.dto.ItemDTO;
-import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.ucc.UserUCC;
-import be.vinci.pae.dal.services.ItemDAO;
 import be.vinci.pae.dal.services.UserDAO;
-import be.vinci.pae.utils.exception.FatalException;
-import be.vinci.pae.utils.exception.UserInvalidException;
-import java.util.ArrayList;
-import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 public class UserUCCTest {
 
@@ -46,17 +35,19 @@ public class UserUCCTest {
     locator = ServiceLocatorUtilities.bind(new TestApplicationBinder());
     userUCC = locator.getService(UserUCC.class);
   }
+}
 
-  /**
-   * Set up for tests.
-   */
+/**
+ * Set up for tests.
+ */
+  /*
   @BeforeEach
   public void setup() {
     userDAO = locator.getService(UserDAO.class);
     Mockito.clearInvocations(userDAO);
     Mockito.reset(userDAO);
   }
-
+/*
   @Test
   public void loginExceptionUserNull() {
 
@@ -519,3 +510,4 @@ public class UserUCCTest {
     );
   }
 }
+*/

@@ -1,9 +1,14 @@
 package be.vinci.pae.main;
 
 import be.vinci.pae.buiseness.domain.User;
+import be.vinci.pae.buiseness.dto.ItemDTO;
 import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.ucc.UserUCC;
+import be.vinci.pae.dal.services.ItemDAO;
 import be.vinci.pae.dal.services.UserDAO;
+import be.vinci.pae.utils.exception.FatalException;
+import be.vinci.pae.utils.exception.UserInvalidException;
+import java.util.ArrayList;
 import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
@@ -33,17 +38,23 @@ public class UserUCCTest {
   private User userWaiting;
   private User user;
 
+  /**
+   * Init for tests.
+   */
   @BeforeAll
   public static void init() {
     locator = ServiceLocatorUtilities.bind(new TestApplicationBinder());
     userUCC = locator.getService(UserUCC.class);
   }
 
-
+  /**
+   * Set up for tests.
+   */
   @BeforeEach
   public void setup() {
     userDAO = locator.getService(UserDAO.class);
     Mockito.clearInvocations(userDAO);
+    Mockito.reset(userDAO);
   }
 
   @Test
@@ -143,12 +154,33 @@ public class UserUCCTest {
   }
 
   @Test
+  public void loginFatalException() {
+
+    Mockito.when(userDAO.getOneByUsername(USERNAME)).thenThrow(FatalException.class);
+
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class,
+            () -> userUCC.login(USERNAME, PASSWORD)),
+        () -> Mockito.verify(userDAO).getOneByUsername(USERNAME));
+  }
+
+  @Test
   public void getUsersByStateException() {
     // if the state is not denied, valid or waiting the method will throw an exception
     // with the error message "invalid state"
     Throwable exception = Assertions.assertThrows(Exception.class,
         () -> userUCC.getUsersByState("wrong state"));
     Assertions.assertEquals("invalid state", exception.getMessage());
+  }
+
+  @Test
+  public void getUsersByStateFatalException() {
+    Mockito.when(userDAO.getAllUserByState(DENIED)).thenThrow(FatalException.class);
+
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class, () -> userUCC.getUsersByState(DENIED)),
+        () -> Mockito.verify(userDAO).getAllUserByState(DENIED)
+    );
   }
 
   @Test
@@ -177,12 +209,31 @@ public class UserUCCTest {
   }
 
   @Test
+  public void addPhoneNumberFatalException() {
+    // We verify the number of times that our method has been called
+    Mockito.doThrow(FatalException.class).when(userDAO).addPhoneNumber(ID, "0494555687");
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class,
+            () -> userUCC.addPhoneNumber(ID, "0494555687")),
+        () -> Mockito.verify(userDAO, Mockito.times(1)).addPhoneNumber(ID, "0494555687"));
+  }
+
+  @Test
   public void getOneById() {
     user = Mockito.mock(User.class);
 
     Mockito.when(userDAO.getOneById(ID)).thenReturn(user);
     Assertions.assertAll(
         () -> Assertions.assertEquals(user, userUCC.getOneById(ID)),
+        () -> Mockito.verify(userDAO).getOneById(ID)
+    );
+  }
+
+  @Test
+  public void getOneByIdFatalException() {
+    Mockito.when(userDAO.getOneById(ID)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class, () -> userUCC.getOneById(ID)),
         () -> Mockito.verify(userDAO).getOneById(ID)
     );
   }
@@ -201,7 +252,16 @@ public class UserUCCTest {
   }
 
   @Test
-  public void checkWaitingOrDenied() {
+  public void checkAdminFatalException() {
+    Mockito.when(userDAO.getOneById(ID)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class, () -> userUCC.checkAdmin(ID)),
+        () -> Mockito.verify(userDAO).getOneById(ID)
+    );
+  }
+
+  @Test
+  public void checkWaitingOrDeniedSuccessful() {
     user = Mockito.mock(User.class);
 
     Mockito.when(userDAO.getOneById(ID)).thenReturn(user);
@@ -212,6 +272,44 @@ public class UserUCCTest {
         () -> Mockito.verify(userDAO).getOneById(ID),
         () -> Mockito.verify(user).isWaiting(),
         () -> Mockito.verify(user).isDenied()
+    );
+  }
+
+  @Test
+  public void checkWaitingOrDeniedFailure() {
+    user = Mockito.mock(User.class);
+
+    Mockito.when(userDAO.getOneById(ID)).thenReturn(user);
+    Mockito.when(user.isWaiting()).thenReturn(true);
+    Mockito.when(user.isDenied()).thenReturn(false);
+    Assertions.assertAll(
+        () -> Assertions.assertFalse(userUCC.checkWaitingOrDenied(ID)),
+        () -> Mockito.verify(userDAO).getOneById(ID),
+        () -> Mockito.verify(user).isWaiting()
+    );
+  }
+
+  @Test
+  public void checkWaitingOrDeniedFailureSec() {
+    user = Mockito.mock(User.class);
+
+    Mockito.when(userDAO.getOneById(ID)).thenReturn(user);
+    Mockito.when(user.isWaiting()).thenReturn(false);
+    Mockito.when(user.isDenied()).thenReturn(true);
+    Assertions.assertAll(
+        () -> Assertions.assertFalse(userUCC.checkWaitingOrDenied(ID)),
+        () -> Mockito.verify(userDAO).getOneById(ID),
+        () -> Mockito.verify(user).isWaiting(),
+        () -> Mockito.verify(user).isDenied()
+    );
+  }
+
+  @Test
+  public void checkWaitingOrDeniedFatalException() {
+    Mockito.when(userDAO.getOneById(ID)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class, () -> userUCC.checkWaitingOrDenied(ID)),
+        () -> Mockito.verify(userDAO).getOneById(ID)
     );
   }
 
@@ -249,6 +347,16 @@ public class UserUCCTest {
   }
 
   @Test
+  public void changeStateFatalException() {
+    Mockito.when(userDAO.getOneById(ID)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class,
+            () -> userUCC.changeState(ID, VALID, EMPTY, true)),
+        () -> Mockito.verify(userDAO).getOneById(ID)
+    );
+  }
+
+  @Test
   public void registerException() {
     user = Mockito.mock(User.class);
 
@@ -277,4 +385,137 @@ public class UserUCCTest {
     );
   }
 
+  @Test
+  public void registerFatalException() {
+    user = Mockito.mock(User.class);
+
+    Mockito.when(user.getUserName()).thenReturn(USERNAME);
+    Mockito.when(userDAO.getOneByUsername(USERNAME)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class, () -> userUCC.register(user)),
+        () -> Mockito.verify(user).getUserName(),
+        () -> Mockito.verify(userDAO).getOneByUsername(USERNAME)
+    );
+  }
+
+  @Test
+  public void updateProfileSuccessful() {
+    Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID, USERNAME,
+        USERNAME, USERNAME)).thenReturn(true);
+    Assertions.assertTrue(userUCC.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
+        USERNAME, USERNAME, USERNAME));
+    Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
+        USERNAME, USERNAME, USERNAME);
+  }
+
+  @Test
+  public void updateProfileFatalException() {
+    Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME,
+        USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> userUCC.updateProfile(ID, USERNAME,
+        USERNAME, USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME));
+    Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
+        USERNAME, USERNAME, USERNAME);
+  }
+
+  @Test
+  public void updatePasswordSuccessful() {
+    Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenReturn(true);
+    Assertions.assertTrue(userUCC.updatePassword(ID, PASSWORD));
+    Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
+  }
+
+  @Test
+  public void updatePasswordFatalException() {
+    Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> userUCC.updatePassword(ID, PASSWORD));
+    Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
+  }
+
+  @Test
+  public void getAllUsersFilteredSuccessful() {
+    List<UserDTO> list = Mockito.mock(List.class);
+
+    Mockito.when(userDAO.getAllUsersFiltered(USERNAME, USERNAME, USERNAME)).thenReturn(list);
+    Assertions.assertEquals(list, userUCC.getAllUsersFiltered(USERNAME, USERNAME, USERNAME));
+    Mockito.verify(userDAO).getAllUsersFiltered(USERNAME, USERNAME, USERNAME);
+  }
+
+  @Test
+  public void getAllUsersFilteredFatalException() {
+    Mockito.when(userDAO.getAllUsersFiltered(USERNAME, USERNAME, USERNAME))
+        .thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () ->
+        userUCC.getAllUsersFiltered(USERNAME, USERNAME, USERNAME));
+    Mockito.verify(userDAO).getAllUsersFiltered(USERNAME, USERNAME, USERNAME);
+  }
+
+  @Test
+  public void getAutocompleteListBlankString() {
+    Assertions.assertEquals(new ArrayList(), userUCC.getAutocompleteList(EMPTY));
+  }
+
+  @Test
+  public void getAutocompleteListSuccessful() {
+    List<String> list = Mockito.mock(List.class);
+
+    Mockito.when(userDAO.getAutocompleteList(USERNAME)).thenReturn(list);
+    Assertions.assertEquals(list, userUCC.getAutocompleteList(USERNAME));
+    Mockito.verify(userDAO).getAutocompleteList(USERNAME);
+  }
+
+  @Test
+  public void getAutocompleteListFatalException() {
+    Mockito.when(userDAO.getAutocompleteList(USERNAME)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> userUCC.getAutocompleteList(USERNAME));
+    Mockito.verify(userDAO).getAutocompleteList(USERNAME);
+  }
+
+  @Test
+  public void getUsersInterestSuccessful() {
+    ItemDAO itemDAO = locator.getService(ItemDAO.class);
+    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
+    List<UserDTO> list = Mockito.mock(List.class);
+
+    Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
+    Mockito.when(itemDTO.getOfferorId()).thenReturn(ID);
+    Mockito.when(userDAO.getUserInterest(ID)).thenReturn(list);
+    Assertions.assertAll(
+        () -> Assertions.assertEquals(list, userUCC.getUsersInterest(ID, ID)),
+        () -> Mockito.verify(itemDTO).getOfferorId(),
+        () -> Mockito.verify(userDAO).getUserInterest(ID),
+        () -> Mockito.verify(itemDAO, Mockito.atMost(2)).getOneById(ID)
+    );
+  }
+
+  @Test
+  public void getUsersInterestUserInvalidException() {
+    ItemDAO itemDAO = locator.getService(ItemDAO.class);
+    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
+
+    Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
+    Mockito.when(itemDTO.getOfferorId()).thenReturn(2);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(UserInvalidException.class,
+            () -> userUCC.getUsersInterest(ID, ID)),
+        () -> Mockito.verify(itemDTO).getOfferorId(),
+        () -> Mockito.verify(itemDAO).getOneById(ID)
+    );
+  }
+
+  @Test
+  public void getUsersInterestFatalException() {
+    ItemDAO itemDAO = locator.getService(ItemDAO.class);
+    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
+
+    Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
+    Mockito.when(itemDTO.getOfferorId()).thenReturn(ID);
+    Mockito.when(userDAO.getUserInterest(ID)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class,
+            () -> userUCC.getUsersInterest(ID, ID)),
+        () -> Mockito.verify(itemDTO).getOfferorId(),
+        () -> Mockito.verify(itemDAO, Mockito.atMost(3)).getOneById(ID)
+    );
+  }
 }

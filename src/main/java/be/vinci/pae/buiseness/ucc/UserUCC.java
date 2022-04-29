@@ -88,7 +88,7 @@ public interface UserUCC {
    */
   int register(UserDTO user);
 
-  List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
+  List<UserDTO> getAllUsersFiltered(String name, String city, String postCode);
 
   List<String> getAutocompleteList(String val);
 
@@ -98,6 +98,6 @@ public interface UserUCC {
    * @param idItem the id of the item
    * @return all users who are interested
    */
-  List<UserDTO> getUsersIterest(int userId, int idItem);
+  List<UserDTO> getUsersInterest(int userId, int idItem);
 
 }

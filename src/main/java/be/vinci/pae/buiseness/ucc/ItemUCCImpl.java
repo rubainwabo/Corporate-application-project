@@ -43,7 +43,7 @@ public class ItemUCCImpl implements ItemUCC {
       myDalServices.commit();
       return item;
     } catch (Exception e) {
-      myDalServices.commit();
+      myDalServices.rollBack();
       throw e;
     }
   }

@@ -77,11 +77,13 @@ const UpdateItem = async () => {
     
     console.log(item);
 
+    await getDates(id);
+
   } catch (error) {
     Redirect('/');
     console.error("LoginPage::error: ", error);
   }
-
+ 
   updateButton.addEventListener("click", async function (e) {
     e.preventDefault();
     await VerifyUser();
@@ -112,23 +114,26 @@ const UpdateItem = async () => {
       }
 
       const itemId = await response.json(); // json() returns a promise => we wait for the data
-      console.log(itemId);
       const fileInput = document.querySelector('input[name=file]');
-      const formData = new FormData();
-      formData.append('file', fileInput.files[0]);
-      formData.append("itemId",itemId);
-      console.log(fileInput);
-      const optionsimg = {
-        method: 'POST',
-        body: formData
-      };
-      await fetch('api/items/upload', optionsimg);
-
+     
+      
+      if(fileInput.value){
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append("itemId",itemId);
+        console.log(fileInput);
+        const optionsimg = {
+          method: 'POST',
+          body: formData
+        };
+        await fetch('api/items/upload', optionsimg);
+       
+      }else{
+        console.log("no file selected");
+      }
+     
       let params = [{key: "id", value: id}];
-      Redirect("/item", params);
-
-     
-     
+      Redirect("/item", params); 
 
     } catch (error) {
       console.error("LoginPage::error: ", error);
@@ -154,6 +159,36 @@ function getId() {
       return -1;
     }
   
+  }
+
+  async function getDates(itemId){
+    try{
+      const options = {
+        // body data type must match "Content-Type" header
+        headers: {
+          "token": getSessionObject("accessToken"),
+        },
+      };
+      const response = await fetch("/api/dates/"+itemId,options); // fetch return a promise => we wait for the response
+  
+      if (!response.ok) {
+        throw new Error(
+            "fetch error : " + response.status + " : " + response.statusText
+        )
+      }
+    
+      let dates = await response.json();
+      let date = new Date(dates[dates.length-1].date)
+     
+     // let date = dates[dates.lenght-1];
+
+       let datesToString=+date.getDay()+"/"+date.getMonth()+"/"+date.getFullYear()
+       console.log(datesToString)
+      //console.log(date);
+      document.getElementById("item-date").value=datesToString;
+      }catch(error){
+        console.log(error)
+      }
   }
   
 export default UpdateItem;

@@ -1,7 +1,7 @@
-avr. 28, 2022 12:42:11 PM be.vinci.pae.utils.WebExceptionMapper toResponse
+avr. 29, 2022 7:50:47 PM be.vinci.pae.utils.WebExceptionMapper toResponse
 SEVERE: username or password incorrect
 be.vinci.pae.utils.exception.PasswordOrUsernameException: username or password incorrect
-	at be.vinci.pae.buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:38)
+	at be.vinci.pae.buiseness.ucc.UserUCCImpl.login(UserUCCImpl.java:41)
 	at be.vinci.pae.ihm.UserRessource.login(UserRessource.java:62)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)

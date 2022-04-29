@@ -35,7 +35,8 @@ public class DateDAOImpl implements DateDAO {
   @Override
   public List<DateDTO> getAllDateItem(int itemId) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "select id_date,_date,item from projet.dates where item = " + itemId)) {
+        "select id_date,_date,item from projet.dates where item = " +
+            itemId + "ORDER BY _date")) {
       List<DateDTO> dateDTOList = new ArrayList<>();
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {

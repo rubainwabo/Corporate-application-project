@@ -165,13 +165,16 @@ const MyItems = async (id) => {
       document.getElementById("my-items-pop-up").style.display="none";
     })
 
-    document.getElementById("item-not-gived").addEventListener("click",function(e){
+    document.getElementById("item-not-gived").addEventListener("click",async function(e){
       let itemR = document.getElementById(currentItemId);
 
-      if(itemGived(currentItemId,false)){
-        document.getElementById("all-recent-item").removeChild(itemR);
-      }
-      document.getElementById("my-items-pop-up").style.display="none";
+      await itemGived(currentItemId,false);
+
+      currentState = "item-not-gived";
+    
+      changeOptions(currentState);
+       
+      
     })
 
     document.getElementById("offer-again").addEventListener("click",function(e){
@@ -355,6 +358,13 @@ function changeOptions(state){
       show.style.display="flex";
       document.getElementById("get-items-gifted-by-me").style.fontWeight="bold"
 
+    } else if(state=="item-not-gived"){
+      offerAgain.style.display="flex";
+      cancel.style.display="flex";
+      pickRecipient.style.display="flex";
+      document.getElementById("my-items-pop-up").style.display="flex";
+      document.getElementById("get-items-assigned").style.fontWeight="bold"
+      
     }else{
       rating.style.display="flex";
       show.style.display="flex";

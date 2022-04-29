@@ -29,7 +29,7 @@ background-color: #FFF59B;
         <p style ="font-size : 0px" id="type-objet"> Type d’objet : <span id="item-type"><span> </p> 
         <p style ="font-size : 0px" id="Offert"> Offert par : <span id="offeror"><span> </p> 
         <p style ="font-size : 0px" id="nb-personnes"> Nombres de personnes interessées : <span id="number-interest"><span> </p> 
-        <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="offeror"> <span> </p>   
+        <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="last-dates"> <span> </p>   
     </div>
 
     <div id="item-show-interest">
@@ -103,6 +103,10 @@ const ItemPage = async () => {
         "number-interest").innerText = item.numberOfPeopleInterested;
     let addInterestBox = document.getElementById("item-show-interest");
 
+    
+
+
+
     if (item.offerorId != getSessionObject("userId")) {
       let button = document.createElement("button");
       button.id = "show-interest";
@@ -140,14 +144,14 @@ const ItemPage = async () => {
   } catch (error) {
     console.error("LoginPage::error: ", error);
   }
+  console.log("hello");
+  await getDates(id);
 
   addIterestBtn.addEventListener("click", async function (e) {
     e.preventDefault();
     e.preventDefault();
     let availabilities = document.getElementById("availabilities").value;
     let callMe = document.getElementById("callMe").checked;
-
-
 
     try {
       let options;
@@ -183,7 +187,6 @@ const ItemPage = async () => {
           headers: {
             "Content-Type": "application/json",
             "token": getSessionObject("accessToken"),
-
           },
         };
       }
@@ -223,7 +226,10 @@ const ItemPage = async () => {
 }
 
 async function getPhoneNumber(idUser){
+
+  console.log("START OF ");
   try{
+    
     const response = await fetch("/api/members/details/"+idUser); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser(); 
@@ -240,6 +246,34 @@ async function getPhoneNumber(idUser){
     return user.phoneNumber;
     
 
+    }catch(error){
+      console.log(error)
+    }
+}
+
+async function getDates(itemId){
+  try{
+    const options = {
+      // body data type must match "Content-Type" header
+      headers: {
+        "token": getSessionObject("accessToken"),
+      },
+    };
+    const response = await fetch("/api/dates/"+itemId,options); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+    let datesToString ="";
+    let dates = await response.json();
+    dates.forEach(element => {
+      let date = new Date(element.date);
+      datesToString+=",  "+date.getDay()+"/"+date.getMonth()+"/"+date.getFullYear()
+    });
+    datesToString = datesToString.substr(1);
+    document.getElementById("last-dates").innerText=datesToString;
     }catch(error){
       console.log(error)
     }

@@ -122,4 +122,5 @@ POST http://localhost:3000/items/offer/again/1
 GET http://localhost/items/itemDetails/{{id}}
 
 ###
-GET http://localhost:3000/items/picture/7
+GET http://localhost:3000/dates/3
+token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTY1MTI1NDYyOSwidXNlciI6NH0.SVDBhM3KM6iqtMxdqc9zAiypdDre1NFwKAqueOHAupg

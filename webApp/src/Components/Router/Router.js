@@ -10,7 +10,7 @@ import MemberList from "../Pages/admin/MemberList";
 import MyItems from "../Pages/myItems";
 import UpdateItem from "../Pages/UpdateItem";
 import PickRecipient from "../Pages/PickRecipient";
-import MonProfile from "../Pages/MyProfilePage";
+import MonProfil from "../Pages/MyProfilePage";
 // Configure your routes here
 const routes = {
   '/': HomePage,
@@ -22,7 +22,7 @@ const routes = {
   '/userhandeler': UserHandler,
   '/mesOffres': MesOffres,
   '/memberList': MemberList,
-  '/monProfile': MonProfile,
+  '/monProfil': MonProfil,
   '/myitems': MyItems,
   '/updateitem': UpdateItem,
   '/pickrecipient': PickRecipient,

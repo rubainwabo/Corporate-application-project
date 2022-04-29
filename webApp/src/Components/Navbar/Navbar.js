@@ -2,11 +2,10 @@
 // However, the JS has still to be loaded for each Bootstrap's component that needs it.
 // Here, because our JS component 'Navbar' has the same name as Navbar Bootstrap's component
 // we change the name of the imported Bootstrap's 'Navbar' component
-import { Navbar as BootstrapNavbar} from "bootstrap";
 import { getSessionObject, VerifyUser } from "../../utils/session";
 import defaultItemImg from '../../img/image_not_available.png';
 import logo from "../../img/logo.svg"
-
+import { Redirect } from "../Router/Router";
 /**
  * Render the Navbar which is styled by using Bootstrap
  * Each item in the Navbar is tightly coupled with the Router configuration :
@@ -52,19 +51,18 @@ if(accesToken && isAdmin == "admin"){
         <div id="navigation" >
           <div id="menu">
           <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
-            <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfile"> Mon profile </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Profil </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/myitems"> Mes offres </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> liste des utilisateurs </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/memberList"> liste des membres </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Offre + </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> Utilisateurs </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/memberList"> Membres </a></div>
           </div>
         
-          <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
-          <div class="notifications" id="box"></div>
 
           <div id="nav-connection"> 
-            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
+          <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
+          <div class="notifications" id="box"></div>
+          <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
           </div>
         </div>
       </nav>
@@ -75,9 +73,8 @@ if(accesToken && isAdmin == "admin"){
    <nav>
    <div id="navigation">
      <div id="menu">
-     <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
-     <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfile"> Mon profile </a></div>
+     <img src =" ${logo}" id = "logoImg"> </img>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Mon profil </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/myitems"> Mes offres </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
      </div>
@@ -95,7 +92,7 @@ if(accesToken && isAdmin == "admin"){
   navbar=
   ` <nav>
         <div id="navigation">
-          <img src =" ${logo}" style = "height : 90px; position : relative;"id = "logoImg"> </img>
+          <img src =" ${logo}" style = "left: 50px;"id = "logoImg"> </img>
 
           <div id="nav-connection"> 
             <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
@@ -125,6 +122,10 @@ if(accesToken && isAdmin == "admin"){
     }
   });
   };
+  const image = document.getElementById("logoImg");
+  image.onclick = () => {
+     Redirect("/");
+  }
 };
 async function getNotificationList(accesToken,isAll){
   try {
@@ -133,10 +134,10 @@ async function getNotificationList(accesToken,isAll){
       headers: {
         "token" : accesToken
       }
-  };   
+  };
   const response = await fetch("/api/members/notifications/"+getSessionObject("userId")+"?all="+isAll, options);
   if (response.status == 307) {
-    await VerifyUser(); 
+    await VerifyUser();
     document.location.reload();
   }
   return await response.json();
@@ -145,21 +146,21 @@ async function getNotificationList(accesToken,isAll){
   }
 }
 async function createNotification(notificationsList,boxDiv,isALl){
-  
+
     notificationsList.forEach (async (item) => {
     let notificationItemDiv = document.createElement("div");
     let textDiv = document.createElement("div");
     let h4ItemType = document.createElement("h4");
     let pDescription = document.createElement("p")
     let itemImg = document.createElement("img");
-  
+
     notificationItemDiv.classList="notifications-item";
     textDiv.classList="text";
 
     getImg(item.itemId,itemImg);
     h4ItemType.innerHTML=item.itemType
     pDescription.innerHTML=item.txt
-  
+
     notificationItemDiv.appendChild(itemImg);
     textDiv.appendChild(h4ItemType);
     textDiv.appendChild(pDescription);
@@ -207,10 +208,10 @@ async function updateNotifNotViewed(accesToken) {
       headers: {
         "token" : accesToken
       }
-  };   
+  };
   const response = await fetch("/api/members/notifications/update/notViewed/"+getSessionObject("userId"), options);
   if (response.status == 307) {
-    await VerifyUser(); 
+    await VerifyUser();
     document.location.reload();
   }
   await response.json();

@@ -3,35 +3,12 @@ import { getSessionObject, VerifyUser } from "../../utils/session";
 
 import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
 
-const monProfile = `
-<div style="width : 100%; width : 100%, 
-width : 100%; 
-height : 100%; position : absolute; 
-left : 0px; right : 0px;
-clip-path: polygon(75% 0, 0 0, 0 25%);
-position : absolute; 
-top : 0px;
-left : 0px;
-z-index: -5;
-background-color: #FFF59B;
-"> </div>
-
-</div> 
+const monProfil = `
+<div id="triangle"> </div>
 `;
 
 const myProfilePassword = `
-<div style="width : 100%; width : 100%, 
-width : 100%; 
-height : 100%; position : absolute; 
-left : 0px; right : 0px;
-clip-path: polygon(75% 0, 0 0, 0 25%);
-position : absolute; 
-top : 0px;
-left : 0px;
-z-index: -5;
-background-color: #FFF59B;
-"> </div>
-</div> 
+<div id="triangle> </div>
 
 <section class="vh-100" style="background-color: white;">
   <div id="main-container" class="container py-5">
@@ -60,9 +37,9 @@ background-color: #FFF59B;
   </section> 
 `;
 
-const MonProfile = async () => {
+const MonProfil = async () => {
   const pageDiv = document.querySelector("#page");
-  
+
   try {
     // hide data to inform if the pizza menu is already printed
     const options = {
@@ -74,12 +51,12 @@ const MonProfile = async () => {
 
     const response = await fetch("/api/members/myProfile", options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
-      await VerifyUser(); 
+      await VerifyUser();
       document.location.reload();
     }
     const data = await response.json();
 
-    pageDiv.innerHTML = monProfile;
+    pageDiv.innerHTML = monProfil;
 
     const formDiv = document.createElement("div");
     formDiv.innerHTML = `
@@ -304,11 +281,11 @@ const MonProfile = async () => {
                 if (pwd.value.length > 5) {  
                 const res = await fetch("/api/members/updatePassword", options); // fetch return a promise => we wait for the response
                 if (response.status == 307) {
-                  await VerifyUser(); 
+                  await VerifyUser();
                   document.location.reload();
                 }
                 if (res.ok) {
-                  setTimeout( () => {Redirect("/monProfile");}, 2000);
+                  setTimeout( () => {Redirect("/monProfil");}, 2000);
                   msg.innerHTML = "Votre mot de passe a bien été changé";
                 }
               }
@@ -354,10 +331,10 @@ const MonProfile = async () => {
 
           const res = await fetch("/api/members/updateProfile", options); // fetch return a promise => we wait for the response
           if (response.status == 307) {
-            await VerifyUser(); 
+            await VerifyUser();
             document.location.reload();
           }
-          Redirect("/monProfile");
+          Redirect("/monProfil");
 
           if (!res.ok) {
             res.text().then((result) => {
@@ -372,7 +349,7 @@ const MonProfile = async () => {
       }
     };
     if (response.status == 307) {
-      await VerifyUser(); 
+      await VerifyUser();
       document.location.reload();
     }
     if (!response.ok) {
@@ -384,4 +361,4 @@ const MonProfile = async () => {
     console.error("MyProfile::error: ", error);
   }
 };
-export default MonProfile;
+export default MonProfil;

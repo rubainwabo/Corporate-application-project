@@ -96,34 +96,6 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public boolean checkAdmin(int id) {
-    try {
-      myDalServices.start();
-      User myUser = (User) myUserDAO.getOneById(id);
-      boolean isAdmin = myUser.isAdmin();
-      myDalServices.commit();
-      return isAdmin;
-    } catch (Exception e) {
-      myDalServices.rollBack();
-      throw e;
-    }
-  }
-
-  @Override
-  public boolean checkWaitingOrDenied(int id) {
-    try {
-      myDalServices.start();
-      User myUser = (User) myUserDAO.getOneById(id);
-      boolean isValid = !myUser.isWaiting() && !myUser.isDenied();
-      myDalServices.commit();
-      return isValid;
-    } catch (Exception e) {
-      myDalServices.rollBack();
-      throw e;
-    }
-  }
-
-  @Override
   public boolean changeState(int id, String state, String refusalReason, boolean admin) {
     try {
       if (!state.equals("denied") && !state.equals("valid")) {

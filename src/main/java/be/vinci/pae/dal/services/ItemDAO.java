@@ -6,6 +6,16 @@ import java.util.List;
 
 public interface ItemDAO {
 
+
+  /**
+   * returns list of items after filter by name, state depending on input.
+   *
+   * @param filter we wanna have.
+   * @param input  input of the user.
+   * @return a list of item
+   */
+  List<ItemDTO> getFiltered(String filter, String input);
+
   /**
    * add the item to the database.
    *

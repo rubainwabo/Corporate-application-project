@@ -24,13 +24,13 @@ public class FiltersDynamicBindingConfig implements DynamicFeature {
         || AdminRessource.class.equals(resourceInfo.getResourceClass())
         || NotificationRessource.class.equals(resourceInfo.getResourceClass())) {
       if (resourceInfo.getResourceMethod().getName().contains("user")) {
-        context.register(AuthorizationRequestFilter.class);
+        context.register(UserAuthorizeRequestFilter.class);
       }
       if (resourceInfo.getResourceMethod().getName().contains("admin")) {
         //When you're admin u want to check if the user has refreshToken to access to pages aswell
         //then check if user is admin.
-        context.register(AuthorizationRequestFilter.class, 1);
-        context.register(AdminAuthorizeRequestFilter.class, 2);
+        context.register(UserAuthorizeRequestFilter.class, 1);
+        context.register(filters.AdminAuthorizeRequestFilter.class, 2);
       }
     }
   }

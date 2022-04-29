@@ -24,6 +24,15 @@ public interface ItemUCC {
   ItemDTO getDetails(int id);
 
   /**
+   * call the dao to get the the items with the filter and the input in params.
+   *
+   * @param filter date, type, state, or name, depending on what the user wants.
+   * @param input search input user has already put.
+   * @return list of items
+   */
+  List<ItemDTO> getItems(String filter, String input);
+
+  /**
    * call the dao to add an interest.
    *
    * @param itemId     the itemID

@@ -50,22 +50,6 @@ public interface UserUCC {
   User getOneById(int id);
 
   /**
-   * checks if user is admin.
-   *
-   * @param id id of the user we want to check
-   * @return true if admin.
-   */
-  boolean checkAdmin(int id);
-
-  /**
-   * checks if user is waiting or denied.
-   *
-   * @param id id of the user we want to check
-   * @return true if waiting or denied.
-   */
-  boolean checkWaitingOrDenied(int id);
-
-  /**
    * allows to retrieve all the users of the db with the state.
    *
    * @return a list of users with the state in params

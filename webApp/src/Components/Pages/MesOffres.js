@@ -9,16 +9,7 @@ import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
  */
 const home = 
 `
-<div style="width : 100%; 
-height : 100%; position : absolute; 
-left : 0px; right : 0px;
-clip-path: polygon(75% 0, 0 0, 0 25%);
-position : absolute; 
-top : 0px;
-left : 0px;
-z-index: -5;
-background-color: #FFF59B;
-"> </div>
+<div id="triangle"> </div>
 
 <section id="home-page">
 <div id="home-page-navigation">

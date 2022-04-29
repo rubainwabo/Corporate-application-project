@@ -18,7 +18,8 @@ left : 0px;
 z-index: -5;
 background-color: #FFF59B;
 "> </div>
-
+<div id="polygon-bottom-right">
+</div>
 </div> 
 <section id="home-page">
     <div id="home-page-navigation">

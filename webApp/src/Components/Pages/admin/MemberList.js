@@ -2,11 +2,13 @@ import { Redirect } from "../../Router/Router";
 import { getSessionObject,setSessionObject,removeSessionObject } from "../../../utils/session";
 import itemImg from '../../../img/wheelbarrows-4566619_640.jpg';
 import { VerifyUser } from "../../../utils/session";
+import defaultItemImg from '../../../img/image_not_available.png';
 
 /**
  * Render the MemberList
  */
-const pageContaint = `<section id="home-page">
+const pageContaint = `
+<section id="home-page">
 <div id="home-page-navigation">
     <h2 id="home-page-title"> Listes des membres</h2>
 </div>
@@ -206,7 +208,8 @@ function membersItemsList(item,container,divItems){
         pItemTypeTitle.style.paddingTop="10px"
         let img = document.createElement("img");
         img.classList="member-list-item-img";
-        img.src=itemImg;
+        
+        getImg(item.id,img);
         leftDiv.classList="member-list-left-items";
         rightDiv.classList="member-list-right-items";
         divSingleItem.classList="member-list-container-item";
@@ -340,5 +343,23 @@ async function getAllItemsByItemCondition(itemCondition,token,id,isOfferor) {
 
   } catch (error) {
 }   
+}
+async function getImg(itemId,itemImg){
+  try{
+    const response = await fetch("/api/items/picture/"+itemId);
+    if (!response.ok) {
+      itemImg.src=defaultItemImg;
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+    if(response.ok){
+      const imageBlob = await response.blob();
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      itemImg.src= imageObjectURL
+    }
+    }catch(error){
+      console.log(error)
+    }
 }
 export default MemberList;

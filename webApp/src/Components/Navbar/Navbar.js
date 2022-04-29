@@ -6,6 +6,7 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
 import { getSessionObject } from "../../utils/session";
 
 import logo from "../../img/logo.svg"
+import { Redirect } from "../Router/Router";
 /**
  * Render the Navbar which is styled by using Bootstrap
  * Each item in the Navbar is tightly coupled with the Router configuration :
@@ -51,9 +52,8 @@ if(accesToken && isAdmin == "admin"){
       <nav>
         <div id="navigation" >
           <div id="menu">
-          <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
-            <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfile"> Mon profile </a></div>
+          <img src =" ${logo}" id = "logoImg"> </img>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Mon profil </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> liste des utilisateurs </a></div>
@@ -73,7 +73,7 @@ if(accesToken && isAdmin == "admin"){
    navbar = `
    <div id="navigation">
      <div id="menu">
-     <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
+     <img src =" ${logo}" id = "logoImg"> </img>
      <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfile"> Mon profile </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/mesOffres"> Mes offres </a></div>
@@ -92,7 +92,7 @@ if(accesToken && isAdmin == "admin"){
   navbar=
   ` <nav>
         <div id="navigation">
-          <img src =" ${logo}" style = "height : 90px; position : relative;"id = "logoImg"> </img>
+          <img src =" ${logo}" style = "left: 50px;"id = "logoImg"> </img>
 
           <div id="nav-connection"> 
             <div id="connection"> <a class="nav-item" href="#" data-uri="/login"> Se connecter </a> </div>
@@ -104,6 +104,10 @@ if(accesToken && isAdmin == "admin"){
 }
 }
   navbarWrapper.innerHTML = navbar;
+  const image = document.getElementById("logoImg");
+  image.onclick = () => {
+    Redirect("/");
+  }
 };
 
 export default Navbar;

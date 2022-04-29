@@ -2,6 +2,8 @@ import { getSessionObject } from '../../utils/session';
 import {Redirect} from '../Router/Router';
 
 const addItem = `
+<div id="triangle"> </div>
+
 <section id="add-item-page">
   <p id="message"></p>
     <form id="add-item-form">

@@ -2,6 +2,8 @@
 import { Redirect } from "../Router/Router";
 
 const register = `
+<div id="triangle"> </div>
+
 <section id="register-page">
     
     <h2> Inscrivez-vous !</h2>

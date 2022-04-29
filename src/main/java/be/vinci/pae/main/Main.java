@@ -1,6 +1,6 @@
 package be.vinci.pae.main;
 
-import filters.FiltersDynamicBindingConfig;
+import filters.config.FiltersDynamicBindingConfig;
 import java.io.IOException;
 import java.net.URI;
 import org.glassfish.grizzly.http.server.HttpServer;

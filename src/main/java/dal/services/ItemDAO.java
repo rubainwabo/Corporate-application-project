@@ -6,6 +6,18 @@ import java.util.List;
 
 public interface ItemDAO {
 
+
+
+
+  List<ItemDTO> getFiltered(String filter, String input);
+
+  /**
+   * retrives to get all the last item with the itemCondition offered.
+   *
+   * @param limit the limit of rows
+   * @return a list of item
+   */
+
   /**
    * add the item to the database.
    *

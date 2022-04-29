@@ -6,6 +6,8 @@ import { setSessionObject,getSessionObject } from "../../utils/session";
  * Render the LoginPage
  */
 const affichage = `
+<div id="triangle"> </div>
+
 <section id="section-connection">
   <div id="connection-box">
     <form action="#" id="form">

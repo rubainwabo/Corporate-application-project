@@ -6,7 +6,7 @@ import Register from "../Pages/Register";
 import Logout from "../Logout/Logout";
 import UserHandler from "../Pages/admin/UserHandler";
 import MesOffres from "../Pages/MesOffres";
-import MonProfile from "../Pages/MyProfilePage";
+import MonProfil from "../Pages/MyProfilePage";
 
 // Configure your routes here
 const routes = {
@@ -18,7 +18,7 @@ const routes = {
   '/additem':AddItemPage,
   '/userhandeler':UserHandler,
   '/mesOffres' : MesOffres,
-  '/monProfile' : MonProfile
+  '/monProfil' : MonProfil
 };
 
 /**

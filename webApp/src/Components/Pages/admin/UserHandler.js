@@ -2,6 +2,9 @@ import { getSessionObject } from "../../../utils/session";
 import { Redirect } from "../../Router/Router";
 
 const userHandler = `
+
+<div id="triangle"> </div>
+
 <section id="user-handler-page">
 <form name="formA">
    <div id="switch-list-users">

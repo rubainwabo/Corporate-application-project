@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import utils.exception.FatalException;
 
@@ -19,6 +20,40 @@ public class ItemDAOImpl implements ItemDAO {
 
   @Inject
   private BizFactory myBizFactoryService;
+
+
+  @Override
+  public List<ItemDTO> getFiltered(String filter, String input) {
+    String add = "";
+    switch (filter) {
+      case "type":
+        add = "and it.item_type_name LIKE " + "'" + input + "%'";
+        break;
+      case "name":
+        add = "and i.offeror in (SELECT m.user_id FROM projet.members m "
+            + "WHERE m.last_name LIKE " + "'" + input + "%')";
+        break;
+      case "state":
+        add = "and i.item_condition LIKE " + "'" + input + "%'";
+        break;
+      case "date":
+        String[] date = input.split("-");
+        add = "and i.id_item in (SELECT d.item FROM projet.dates d "
+            + "WHERE TO_TIMESTAMP('" + date[0] + "', 'YYYY/MM/DD') <= d._date and TO_TIMESTAMP('" + date[1] + "', 'YYYY/MM/DD') >= d._date)";
+        break;
+    }
+
+    String query = "select i.id_item, i.description, i.url_picture,it.item_type_name, "
+        + " i.number_of_people_interested,max(d._date) as maxDate "
+        + "from projet.items i, projet.item_type it, projet.dates d "
+        + "where i.id_item=d.item and i.item_type=it.id_item_type "
+        + add
+        + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, it.item_type_name";
+
+    System.out.println(query);
+    return getItemDTOS(query);
+
+  }
 
   @Override
   public int addItem(ItemDTO item, int offerorId) {

@@ -1,5 +1,6 @@
 package filters;
 
+import buiseness.domain.User;
 import buiseness.ucc.UserUCC;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.inject.Inject;
@@ -17,7 +18,7 @@ import utils.TokenService;
 
 @Singleton
 @Provider
-public class AuthorizationRequestFilter implements ContainerRequestFilter {
+public class UserAuthorizeRequestFilter implements ContainerRequestFilter {
 
   @Inject
   TokenService myTokenService;
@@ -45,11 +46,16 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
       }
       int id = decodedToken.getClaim("user").asInt();
 
-      if (!myUserUCC.checkWaitingOrDenied(id)) {
-        requestContext.abortWith(Response.status(Status.FORBIDDEN)
-            .entity("You are forbidden to access this resource").build());
-      }
+      User myUser = myUserUCC.getOneById(id);
+      //We already set admin property for next filters if needed.
+      requestContext.setProperty("admin", myUser.getRole());
       requestContext.setProperty("id", id);
+
+      if (myUser.isWaiting() || myUser.isDenied()) {
+        requestContext.abortWith(Response.status(Status.FORBIDDEN)
+            .entity("You are denied or waiting").build());
+      }
+
       if (refreshToken != null) {
         requestContext.setProperty("refresh", "");
       }

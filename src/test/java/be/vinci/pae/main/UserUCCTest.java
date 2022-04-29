@@ -188,34 +188,6 @@ public class UserUCCTest {
   }
 
   @Test
-  public void checkAdmin() {
-    user = Mockito.mock(User.class);
-
-    Mockito.when(userDAO.getOneById(ID)).thenReturn(user);
-    Mockito.when(user.isAdmin()).thenReturn(true);
-    Assertions.assertAll(
-        () -> Assertions.assertTrue(userUCC.checkAdmin(ID)),
-        () -> Mockito.verify(userDAO).getOneById(ID),
-        () -> Mockito.verify(user).isAdmin()
-    );
-  }
-
-  @Test
-  public void checkWaitingOrDenied() {
-    user = Mockito.mock(User.class);
-
-    Mockito.when(userDAO.getOneById(ID)).thenReturn(user);
-    Mockito.when(user.isWaiting()).thenReturn(false);
-    Mockito.when(user.isDenied()).thenReturn(false);
-    Assertions.assertAll(
-        () -> Assertions.assertTrue(userUCC.checkWaitingOrDenied(ID)),
-        () -> Mockito.verify(userDAO).getOneById(ID),
-        () -> Mockito.verify(user).isWaiting(),
-        () -> Mockito.verify(user).isDenied()
-    );
-  }
-
-  @Test
   public void changeStateException() {
     // if the state is not denied or valid the method will throw an exception
     // with the error message "Trying to insert invalid state"

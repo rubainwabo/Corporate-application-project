@@ -39,7 +39,8 @@ public class ItemRessource {
   @Path("filtered")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> getItems(@QueryParam("filter") String filter,@QueryParam("input") String input) {
+  public List<ItemDTO> getItems(@QueryParam("filter")
+      String filter, @QueryParam("input") String input) {
     return myItemUCC.getItems(filter, input);
   }
 

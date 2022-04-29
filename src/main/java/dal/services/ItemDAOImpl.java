@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import utils.exception.FatalException;
 
@@ -24,8 +23,10 @@ public class ItemDAOImpl implements ItemDAO {
 
   @Override
   public List<ItemDTO> getFiltered(String filter, String input) {
-    String add = "";
+    String add;
     switch (filter) {
+      default: {
+      }
       case "type":
         add = "and it.item_type_name LIKE " + "'" + input + "%'";
         break;
@@ -39,7 +40,9 @@ public class ItemDAOImpl implements ItemDAO {
       case "date":
         String[] date = input.split("-");
         add = "and i.id_item in (SELECT d.item FROM projet.dates d "
-            + "WHERE TO_TIMESTAMP('" + date[0] + "', 'YYYY/MM/DD') <= d._date and TO_TIMESTAMP('" + date[1] + "', 'YYYY/MM/DD') >= d._date)";
+            + "WHERE TO_TIMESTAMP('" + date[0] + "', 'YYYY/MM/DD') "
+            + "<= d._date and TO_TIMESTAMP('"
+            + date[1] + "', 'YYYY/MM/DD') >= d._date)";
         break;
     }
 
@@ -48,11 +51,9 @@ public class ItemDAOImpl implements ItemDAO {
         + "from projet.items i, projet.item_type it, projet.dates d "
         + "where i.id_item=d.item and i.item_type=it.id_item_type "
         + add
-        + " GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, it.item_type_name";
-
-    System.out.println(query);
+        + " GROUP BY i.id_item, i.description, i.url_picture, "
+        + "i.number_of_people_interested, it.item_type_name";
     return getItemDTOS(query);
-
   }
 
   @Override

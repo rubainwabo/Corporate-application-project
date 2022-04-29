@@ -23,14 +23,14 @@ public class ItemUCCImpl implements ItemUCC {
   @Override
   public List<ItemDTO> getItems(String filter, String input) {
     try {
-    myDalServices.start();
-    List<ItemDTO> list = myItemDAOService.getFiltered(filter, input);
-    myDalServices.commit();
-    return list;
-  } catch (Exception e) {
-    myDalServices.rollBack();
-    throw e;
-  }
+      myDalServices.start();
+      List<ItemDTO> list = myItemDAOService.getFiltered(filter, input);
+      myDalServices.commit();
+      return list;
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
   }
 
   @Override

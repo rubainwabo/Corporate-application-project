@@ -93,7 +93,7 @@ async function gettAllByState(accesToken, state) {
       const br = document.createElement("br");
       const inputCheckBox = document.createElement("input");
       const divValid = document.createElement("div");
-      const validBtn = document.createElement("a");
+      const validBtn = document.createElement("p");
       let classListCol = state!="denied" ? "col-2" : "col-3";
   
       pFirstName.classList=classListCol
@@ -110,7 +110,7 @@ async function gettAllByState(accesToken, state) {
       divUserHandler.appendChild(pFirstName);
       divUserHandler.appendChild(pLastName);
       divUserHandler.appendChild(divIsAdminBox)
-      spanAdminBox.innerHTML = "admin"
+      spanAdminBox.innerHTML = "admin";
       divIsAdminBox.appendChild(spanAdminBox);
       divIsAdminBox.appendChild(br);
       inputCheckBox.id = e.id;
@@ -121,7 +121,7 @@ async function gettAllByState(accesToken, state) {
       divUserHandler.appendChild(divValid)
       if (state!="denied"){
         const divDenied = document.createElement("div");
-        const deniedBtn = document.createElement("a");  
+        const deniedBtn = document.createElement("p");  
         divDenied.classList=classListCol;
         deniedBtn.classList="user-handler-denied-btn"
         deniedBtn.innerHTML = "refusé"  

@@ -8,11 +8,7 @@ import be.vinci.pae.utils.exception.UserOnHoldException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
-import java.io.IOException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class WebExceptionMapper implements ExceptionMapper<Throwable> {
 
@@ -46,17 +42,7 @@ public class WebExceptionMapper implements ExceptionMapper<Throwable> {
 
   @Override
   public Response toResponse(Throwable exception) {
-    Logger logger = Logger.getLogger("Log");
-    FileHandler fileHandler;
-    try {
-      fileHandler = new FileHandler("log/log.txt");
-      logger.addHandler(fileHandler);
-      SimpleFormatter simpleFormatter = new SimpleFormatter();
-      fileHandler.setFormatter(simpleFormatter);
-      logger.log(Level.SEVERE, exception.getMessage(), exception);
-    } catch (IOException | SecurityException e) {
-      logger.info("Exception: " + e.getMessage());
-    }
+    MyLogger.writeError(Level.SEVERE, exception);
     return mapper(exception);
   }
 }

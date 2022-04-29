@@ -3,6 +3,7 @@ package be.vinci.pae.main;
 import be.vinci.pae.filters.FiltersDynamicBindingConfig;
 import be.vinci.pae.utils.ApplicationBinder;
 import be.vinci.pae.utils.Config;
+import be.vinci.pae.utils.MyLogger;
 import be.vinci.pae.utils.WebExceptionMapper;
 import java.io.IOException;
 import java.net.URI;
@@ -40,6 +41,7 @@ public class Main {
         .register(ApplicationBinder.class)
         .register(FiltersDynamicBindingConfig.class)
         .register(WebExceptionMapper.class).register(MultiPartFeature.class);
+    MyLogger.init();
 
     // create and start a new instance of grizzly http server
     // exposing the Jersey application at BASE_URI

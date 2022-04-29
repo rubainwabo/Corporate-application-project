@@ -49,7 +49,7 @@ const VerifyUser = async () => {
   };
     const response = await fetch("/api/members/me", options); // fetch return a promise => we wait for the response
     if (!response.ok) {
-      Redirect("/logout");
+      return Redirect("/logout");
     }
     if (response.status == 200 ){
       const myTokens = await response.json();

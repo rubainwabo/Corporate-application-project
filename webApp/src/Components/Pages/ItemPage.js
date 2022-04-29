@@ -74,7 +74,6 @@ const ItemPage = async () => {
   })
 
   try {
-    await VerifyUser()
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -84,7 +83,10 @@ const ItemPage = async () => {
     };
 
     const response = await fetch("/api/items/itemDetails/" + id, options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -142,7 +144,6 @@ const ItemPage = async () => {
 
   addIterestBtn.addEventListener("click", async function (e) {
     e.preventDefault();
-    await VerifyUser()
     e.preventDefault();
     let availabilities = document.getElementById("availabilities").value;
     let callMe = document.getElementById("callMe").checked;
@@ -189,7 +190,10 @@ const ItemPage = async () => {
       }
 
       const response = await fetch("/api/items/addInterest/" + id, options); // fetch return a promise => we wait for the response
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
+      }
       if (!response.ok) {
         response.text().then((result) => {
           document.getElementById("error").innerText = result;
@@ -222,7 +226,10 @@ const ItemPage = async () => {
 async function getPhoneNumber(idUser){
   try{
     const response = await fetch("/api/members/details/"+idUser); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText

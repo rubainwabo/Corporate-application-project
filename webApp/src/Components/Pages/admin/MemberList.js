@@ -45,7 +45,6 @@ const pageContaint = `
 `;
 
 const MemberList =  async () => {
-  await VerifyUser();
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = pageContaint;
   
@@ -64,7 +63,6 @@ const MemberList =  async () => {
     }
   })
   document.getElementById("container-i-member-list").addEventListener("click",async() => {
-    await VerifyUser();
     getAllMemberByFilter(searchInput,token)
   })
 };
@@ -85,8 +83,9 @@ async function getAllMemberByFilter(searchInput,token){
                   };   
       const response = await fetch("/api/admins/list/filtred?name="+username+"&"+"city="+city+"&"+"postCode="+postCode, options);    
   
-      if(!response.ok){
-      return Redirect("/logout");
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
     }
     const filtredUserList = await response.json();
     var memberList = document.getElementById("member-list");
@@ -248,8 +247,10 @@ function autocomplete(inp,token) {
                         };   
 
             const response = await fetch("/api/admins/autocompleteList?value="+val.toUpperCase(), options);    
-            if(!response.ok){
-          }
+            if (response.status == 307) {
+              await VerifyUser(); 
+              document.location.reload();
+            }
           const autocompleteList = await response.json();
           autocompleteList.forEach((item)=>{
             /*create a DIV element for each matching element:*/
@@ -337,8 +338,10 @@ async function getAllItemsByItemCondition(itemCondition,token,id,isOfferor) {
                 };   
     const response = await fetch("/api/admins/memberListItems/"+id+"?itemCondition="+itemCondition+"&isOfferor="+isOfferor, options);    
 
-    if(!response.ok){
-  }
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
   return await response.json();
 
   } catch (error) {

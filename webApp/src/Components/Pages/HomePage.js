@@ -1,5 +1,3 @@
-import { Redirect } from "../Router/Router";
-
 import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
 import search from "../../img/search.svg";
 
@@ -24,7 +22,8 @@ const updateCards = (items) => {
     itemType.classList.add("item-title");
     itemDescription.classList.add("item-description");
 
-    itemImgDiv.src = itemImg;
+    //itemImgDiv.src = itemImg;
+    getPicture(item.id,itemImgDiv);
     itemType.innerText = item.itemtype;
     itemDescription.innerText = item.description;
 
@@ -48,20 +47,20 @@ const handleSearchButton = async () => {
     console.log("We clicked");
     const value = document.getElementById("search").value;
     const filter = document.getElementById("type").checked
-      ? "type"
-      : document.getElementById("state").checked
-      ? "state"
-      : document.getElementById("name").checked
-      ? "name"
-      : "";
+        ? "type"
+        : document.getElementById("state").checked
+            ? "state"
+            : document.getElementById("name").checked
+                ? "name"
+                : "";
 
     try {
       const response = await fetch(
-        "/api/items/filtered?filter=" + filter + "&input=" + value
+          "/api/items/filtered?filter=" + filter + "&input=" + value
       ); // fetch return a promise => we wait for the response
       if (!response.ok) {
         throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
+            "fetch error : " + response.status + " : " + response.statusText
         );
       }
       const items = await response.json();
@@ -69,9 +68,6 @@ const handleSearchButton = async () => {
     } catch (error) {}
   });
 };
-/**
- * Render the LoginPage
- */
 
 const input2 = `
   <input id="search" class="col-10 mt-1" style="border-radius : 4px; border : solid grey;"> </input>
@@ -83,8 +79,9 @@ const input2 = `
 const searchBtn = document.createElement("img");
 searchBtn.id = "search-date";
 searchBtn.style =
-  "width: 30px; border : solid grey; border-radius : 5px;margin-left: 45%;margin-right: 45%;margin-top: 7px;";
+    "width: 30px; border : solid grey; border-radius : 5px;margin-left: 45%;margin-right: 45%;margin-top: 7px;";
 searchBtn.src = search;
+
 
 const home = `
 <div id="triangle"> </div>
@@ -132,17 +129,28 @@ const home = `
 </section>
 `;
 
+
 const HomePage = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
-
+  let allRecentItem = document.getElementById("all-recent-item");
+  let fetchMethodName = getSessionObject("accessToken") ? "lastItemsOfferedConnected" : "lastItemsOfferedNotConnected";
+  let token = getSessionObject("accessToken");
   try {
-    const response = await fetch("/api/items/lastItemsOfferedNotConnected"); // fetch return a promise => we wait for the response
-    console.log("res", response.body);
+    var options = {
+      method: 'GET',
+      headers: {
+        "token" : token}
+    };
+    const response = await fetch("/api/items/"+fetchMethodName,options); // fetch return a promise => we wait for the response
+    if (response.status == 307) {
+      await VerifyUser();
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
-        "fetch error : " + response.status + " : " + response.statusText
-      );
+          "fetch error : " + response.status + " : " + response.statusText
+      )
     }
 
     const items = await response.json();
@@ -207,14 +215,14 @@ const HomePage = async () => {
     const date2 = document.getElementById("date-f").value;
     try {
       const response = await fetch(
-        "api/items/filtered?filter=date&input=" + date1 + "-" + date2,
-        options
+          "api/items/filtered?filter=date&input=" + date1 + "-" + date2,
+          options
       );
       console.log(response);
 
       if (!response.ok) {
         throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
+            "fetch error : " + response.status + " : " + response.statusText
         );
       }
       const items = await response.json();
@@ -222,5 +230,27 @@ const HomePage = async () => {
     } catch (error) {}
   };
 };
+
+async function getPicture(itemId,imgDiv){
+  try{
+    const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+      imgDiv.src=itemImg;
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+    if(response.ok){
+      const imageBlob = await response.blob();
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      imgDiv.src=imageObjectURL
+
+    }
+
+  }catch(error){
+  }
+}
+
 
 export default HomePage;

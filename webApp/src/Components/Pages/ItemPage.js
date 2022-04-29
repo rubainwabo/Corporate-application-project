@@ -1,7 +1,7 @@
-import {getSessionObject} from "../../utils/session";
+import {getSessionObject, VerifyUser} from "../../utils/session";
 
-import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
-import { Redirect } from "../Router/Router";
+import itemImg from '../../img/image_not_available.png';
+import {Redirect} from "../Router/Router";
 
 const item = `
 <div id="triangle"> </div>
@@ -21,18 +21,18 @@ const item = `
         <p style ="font-size : 0px" id="type-objet"> Type d’objet : <span id="item-type"><span> </p> 
         <p style ="font-size : 0px" id="Offert"> Offert par : <span id="offeror"><span> </p> 
         <p style ="font-size : 0px" id="nb-personnes"> Nombres de personnes interessées : <span id="number-interest"><span> </p> 
-        <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="offeror"> <span> </p>   
+        <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="last-dates"> <span> </p>   
     </div>
 
-    <div id="item-show-interest" style="display : none">
-        <button id="show-interest">Je suis interessé</button>
+    <div id="item-show-interest">
+       
     </div>
 
     <div id="add-iterest-pop-up">
       <form id="add-iterest-form">
       <span id="error"></span>
         <div>
-          <input type="text" id="availabilities" placeholder="vos heures de disponibilité">
+          <input type="text" required id="availabilities" placeholder="vos heures de disponibilité">
         </div>
         <div>
           <span>Contactez-moi</span><input type="checkbox" id="callMe"> 
@@ -55,10 +55,8 @@ const ItemPage = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = item;
 
-
   let addIterestBtn = document.getElementById("add-interest-btn");
 
-  let showInterest = document.getElementById("show-interest");
   let removePopUp = document.getElementById("cancel-add-iterest");
   let popUp = document.getElementById("add-iterest-pop-up");
 
@@ -67,22 +65,20 @@ const ItemPage = async () => {
     popUp.style.display = "none";
   })
 
-  showInterest.addEventListener("click", function (e) {
-    e.preventDefault();
-    popUp.style.display = "flex";
-  })
-
   try {
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
       headers: {
-        "token":getSessionObject("accessToken"),
+        "token": getSessionObject("accessToken"),
       },
     };
 
-    const response = await fetch("/api/items/itemDetails/" + id,options); // fetch return a promise => we wait for the response
-
+    const response = await fetch("/api/items/itemDetails/" + id, options); // fetch return a promise => we wait for the response
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -97,15 +93,31 @@ const ItemPage = async () => {
     document.getElementById("offeror").innerText = item.offeror;
     document.getElementById(
         "number-interest").innerText = item.numberOfPeopleInterested;
+    let addInterestBox = document.getElementById("item-show-interest");
 
-    document.getElementById("img-id").src = itemImg;
+    
+
+
+
+    if (item.offerorId != getSessionObject("userId")) {
+      let button = document.createElement("button");
+      button.id = "show-interest";
+      button.innerText = "Je suis interessé";
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        popUp.style.display = "flex";
+      })
+      addInterestBox.appendChild(button);
+    }
+
+    getPicture(id,document.getElementById("img-id"))
+   
     document.getElementById("type-objet").style.fontSize = "12px";
     document.getElementById("Offert").style.fontSize = "12px";
     document.getElementById("nb-personnes").style.fontSize = "12px";
     document.getElementById("preced").style.fontSize = "12px";
     document.getElementById("item-show-interest").style = "display : inline"
-    
-    
+
     let callMe = document.getElementById("callMe");
 
     callMe.addEventListener("change", function (e) {
@@ -122,11 +134,13 @@ const ItemPage = async () => {
     console.log(item);
 
   } catch (error) {
-    Redirect('/');
     console.error("LoginPage::error: ", error);
   }
+  console.log("hello");
+  await getDates(id);
 
   addIterestBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
     e.preventDefault();
     let availabilities = document.getElementById("availabilities").value;
     let callMe = document.getElementById("callMe").checked;
@@ -134,17 +148,23 @@ const ItemPage = async () => {
     try {
       let options;
       if (callMe) {
+        let oldPhone = await getPhoneNumber(getSessionObject("userId"));
+
         let phoneNumber = document.getElementById("phone-number").value;
+        
+        let updateNumer = oldPhone!=phoneNumber;
+
         options = {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           body: JSON.stringify({
             availabilities: availabilities,
+            updateNumber:updateNumer,
             callMe: callMe,
             phoneNumber: phoneNumber
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
-            "token":getSessionObject("accessToken")
+            "token": getSessionObject("accessToken")
           },
         };
       } else {
@@ -152,18 +172,22 @@ const ItemPage = async () => {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           body: JSON.stringify({
             availabilities: availabilities,
+            updateNumber:"false",
+            callMe: callMe,
+            phoneNumber: ""
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
-             "token":getSessionObject("accessToken"),
-            
-            
+            "token": getSessionObject("accessToken"),
           },
         };
       }
 
       const response = await fetch("/api/items/addInterest/" + id, options); // fetch return a promise => we wait for the response
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
+      }
       if (!response.ok) {
         response.text().then((result) => {
           document.getElementById("error").innerText = result;
@@ -177,6 +201,7 @@ const ItemPage = async () => {
       document.getElementById(
           "message").innerText = "votre interet a été pris en compte";
       popUp.style.display = "none";
+      document.getElementById("show-interest").style.display="none";
 
       /*
       const rep  = await response.json(); // json() returns a promise => we wait for the data
@@ -192,6 +217,59 @@ const ItemPage = async () => {
 
 }
 
+async function getPhoneNumber(idUser){
+
+  console.log("START OF ");
+  try{
+    
+    const response = await fetch("/api/members/details/"+idUser); // fetch return a promise => we wait for the response
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
+    if (!response.ok) {
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+
+    let user = await response.json();
+    console.log(user);
+    return user.phoneNumber;
+    
+
+    }catch(error){
+      console.log(error)
+    }
+}
+
+async function getDates(itemId){
+  try{
+    const options = {
+      // body data type must match "Content-Type" header
+      headers: {
+        "token": getSessionObject("accessToken"),
+      },
+    };
+    const response = await fetch("/api/dates/"+itemId,options); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+    let datesToString ="";
+    let dates = await response.json();
+    dates.forEach(element => {
+      let date = new Date(element.date);
+      datesToString+=",  "+date.getDay()+"/"+date.getMonth()+"/"+date.getFullYear()
+    });
+    datesToString = datesToString.substr(1);
+    document.getElementById("last-dates").innerText=datesToString;
+    }catch(error){
+      console.log(error)
+    }
+}
 function getId() {
   let urlString = window.location.href;
   let paramString = urlString.split('?')[1];
@@ -209,5 +287,32 @@ function getId() {
   }
 
 }
+
+async function getPicture(itemId,imgDiv){
+  try{
+    console.log(imgDiv);
+  const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
+  
+  if (!response.ok) {
+    imgDiv.src=itemImg;
+    throw new Error(
+        "fetch error : " + response.status + " : " + response.statusText
+    )
+  }
+  if(response.ok){
+
+    const imageBlob = await response.blob();
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        console.log(imageObjectURL);
+        imgDiv.src=imageObjectURL
+        
+  }
+ 
+
+  }catch(error){
+    console.log(error)
+  }
+}
+
 
 export default ItemPage;

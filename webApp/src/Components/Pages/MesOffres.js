@@ -1,5 +1,5 @@
 import { Redirect } from "../Router/Router";
-import { getSessionObject } from "../../utils/session";
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 
 import itemImg from '../../img/wheelbarrows-4566619_640.jpg';
@@ -36,9 +36,10 @@ const MesOffres = async () => {
                cache: 'default'};   
     const response = await fetch("/api/items/mesOffres", options); // fetch return a promise => we wait for the response   
 
-    if(!response.ok){
-    return Redirect("/logout");
-  }
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
 
   const items = await response.json();
 
@@ -96,7 +97,10 @@ const MesOffres = async () => {
         cache: 'default',
     }; 
     const response = await fetch("/api/items/cancelOffer/" + item.id, options); // fetch return a promise => we wait for the response   
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (response.ok) {
         allRecentItem.removeChild(itemBox);
     } 

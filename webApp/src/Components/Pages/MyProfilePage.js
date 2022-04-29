@@ -1,5 +1,5 @@
 import { Redirect } from "../Router/Router";
-import { getSessionObject } from "../../utils/session";
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
 
@@ -50,14 +50,16 @@ const MonProfil = async () => {
     };
 
     const response = await fetch("/api/members/myProfile", options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser();
+      document.location.reload();
+    }
     const data = await response.json();
-    console.log(data);
 
     pageDiv.innerHTML = monProfil;
 
     const formDiv = document.createElement("div");
-    formDiv.innerHTML = `<section class="vh-100" style="background-color: white;">
+    formDiv.innerHTML = `
   <div id="main-container" class="container py-5">
     <div class="row d-flex justify-content-center align-items-center ">
       <div class="col col-lg-6 mb-4 mb-lg-0">
@@ -148,7 +150,6 @@ const MonProfil = async () => {
       </div>
     </div>
   </div>
-</section>
 `;
     pageDiv.appendChild(formDiv);
 
@@ -279,13 +280,13 @@ const MonProfil = async () => {
                 
                 if (pwd.value.length > 5) {  
                 const res = await fetch("/api/members/updatePassword", options); // fetch return a promise => we wait for the response
-
+                if (response.status == 307) {
+                  await VerifyUser();
+                  document.location.reload();
+                }
                 if (res.ok) {
                   setTimeout( () => {Redirect("/monProfil");}, 2000);
                   msg.innerHTML = "Votre mot de passe a bien été changé";
-                }
-                else {
-                  Redirect("/logout");
                 }
               }
               else {
@@ -327,9 +328,12 @@ const MonProfil = async () => {
               token: getSessionObject("accessToken"),
             },
           };
-          console.log("clicked");
+
           const res = await fetch("/api/members/updateProfile", options); // fetch return a promise => we wait for the response
-          console.log("clicked", res.body);
+          if (response.status == 307) {
+            await VerifyUser();
+            document.location.reload();
+          }
           Redirect("/monProfil");
 
           if (!res.ok) {
@@ -344,14 +348,16 @@ const MonProfil = async () => {
         };
       }
     };
-
+    if (response.status == 307) {
+      await VerifyUser();
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
         "fetch error : " + response.status + " : " + response.statusText
       );
     }
   } catch (error) {
-    Redirect("/");
     console.error("MyProfile::error: ", error);
   }
 };

@@ -1,4 +1,4 @@
-import { getSessionObject } from '../../utils/session';
+import { getSessionObject, VerifyUser } from '../../utils/session';
 import {Redirect} from '../Router/Router';
 
 const addItem = `
@@ -7,7 +7,7 @@ const addItem = `
 <section id="add-item-page">
   <p id="message"></p>
     <form id="add-item-form">
-     
+        <input name="file" type= "file" /> <br/><br/>
             <div >
                 <label for="pet-select">Type d’objet</label><br>
                 <select class="add-item-iputs" name="pets" id="items-type-selectbox" required="required">
@@ -58,9 +58,7 @@ const addItem = `
        
         <button id="add-new">continuer</button>
         <button id="done">OK</button>
-        </div>
-        
-        
+        </div>   
     </div>
 
 
@@ -104,7 +102,6 @@ const AddItemPage = () => {
 
   addItemType.addEventListener("click", async function (e) {
     e.preventDefault();
-
     let itemTypeName = document.getElementById("item-type-name").value;
     try {
       const options = {
@@ -120,7 +117,10 @@ const AddItemPage = () => {
       };
 
       const response = await fetch("/api/itemsType/addItemType", options); // fetch return a promise => we wait for the response
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
+      }
       if (!response.ok) {
         response.text().then((result) => {
           document.getElementById("error").innerText = result;
@@ -171,16 +171,30 @@ const AddItemPage = () => {
       };
 
       const response = await fetch("/api/items/add", options); // fetch return a promise => we wait for the response
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
+      }
       if (!response.ok) {
         response.text().then((result) => {
           document.getElementById("error").innerText = result;
         })
       }
 
-      const itemType = await response.json(); // json() returns a promise => we wait for the data
+      const itemId = await response.json(); // json() returns a promise => we wait for the data
 
-      console.log(itemType);
+      const fileInput = document.querySelector('input[name=file]');
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      formData.append("itemId",itemId);
+      console.log(fileInput);
+      const optionsimg = {
+        method: 'POST',
+        body: formData
+      };
+      await fetch('api/items/upload', optionsimg);
+
+
       document.getElementById("add-item-pop-up-confim").style.display = "flex";
 
     } catch (error) {
@@ -190,9 +204,7 @@ const AddItemPage = () => {
   })
 
   async function getItemsTypes() {
-
     let selectBox = document.getElementById("items-type-selectbox");
-
     try {
       const options = {
         // body data type must match "Content-Type" header
@@ -202,8 +214,9 @@ const AddItemPage = () => {
       };
       const response = await fetch("/api/itemsType/getAll",options); // fetch return a promise => we wait for the response
 
-      if (!response.ok) {
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
       }
       const itemsTypes = await response.json();
 

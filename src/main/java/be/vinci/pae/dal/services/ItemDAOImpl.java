@@ -305,9 +305,9 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public int updateItem(ItemDTO item) {
     try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
-        "UPDATE projet.items set description=?," +
-            (item.getUrlPicture() != null ? "url_picture=?," : "") +
-            "time_slot=? WHERE id_item=" + item.getId()
+        "UPDATE projet.items set description=?,"
+            + (item.getUrlPicture() != null ? "url_picture=?," : "")
+            + "time_slot=? WHERE id_item=" + item.getId()
     )) {
       psUpdate.setString(1, item.getDescription());
       if (item.getUrlPicture() != null) {

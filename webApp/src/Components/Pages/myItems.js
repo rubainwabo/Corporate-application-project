@@ -10,6 +10,8 @@ const data = [{type: "meuble", description: "une table tres belle"},
  * Render the LoginPage
  */
 const myItems = `
+<div id="triangle"> </div>
+
 <section id="my-items-page">
     <h2 id="my-items-page-title"> Dernières offres</h2>
     <div id="">
@@ -262,7 +264,6 @@ async function getMyItems(state,mine){
               "fetch error : " + response.status + " : " + response.statusText
           )
         }
-
 
         const items = await response.json();
 

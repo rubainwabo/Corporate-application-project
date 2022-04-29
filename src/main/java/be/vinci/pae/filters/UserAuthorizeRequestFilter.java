@@ -1,12 +1,8 @@
 package be.vinci.pae.filters;
 
-<<<<<<<< HEAD:src/main/java/be/vinci/pae/filters/UserAuthorizeRequestFilter.java
-import buiseness.domain.User;
-import buiseness.ucc.UserUCC;
-========
+import be.vinci.pae.buiseness.domain.User;
 import be.vinci.pae.buiseness.ucc.UserUCC;
 import be.vinci.pae.utils.TokenService;
->>>>>>>> master:src/main/java/be/vinci/pae/filters/AuthorizationRequestFilter.java
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

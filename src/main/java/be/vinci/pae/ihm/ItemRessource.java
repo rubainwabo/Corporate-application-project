@@ -14,6 +14,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -40,6 +41,19 @@ public class ItemRessource {
 
   @Inject
   private UserUCC myUserUCC;
+  /**
+   * gets list of offers of the user.
+   *
+   * @return items
+   */
+  @GET
+  @Path("filtered")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<ItemDTO> getItems(@QueryParam("filter")
+      String filter, @QueryParam("input") String input) {
+    return myItemUCC.getItems(filter, input);
+  }
 
   /**
    * gets list of offers of the user.

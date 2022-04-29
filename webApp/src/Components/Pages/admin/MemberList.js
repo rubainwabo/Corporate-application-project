@@ -8,6 +8,8 @@ import defaultItemImg from '../../../img/image_not_available.png';
  * Render the MemberList
  */
 const pageContaint = `
+<div id="triangle"> </div>
+
 <section id="home-page">
 <div id="home-page-navigation">
     <h2 id="home-page-title"> Listes des membres</h2>

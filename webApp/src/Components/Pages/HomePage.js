@@ -1,5 +1,8 @@
 import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
 import search from "../../img/search.svg";
+import { Redirect } from "../Router/Router";
+import {getSessionObject, VerifyUser} from "../../utils/session";
+
 
 const updateCards = (items) => {
   console.log("items update");
@@ -133,7 +136,6 @@ const home = `
 const HomePage = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
-  let allRecentItem = document.getElementById("all-recent-item");
   let fetchMethodName = getSessionObject("accessToken") ? "lastItemsOfferedConnected" : "lastItemsOfferedNotConnected";
   let token = getSessionObject("accessToken");
   try {

@@ -2,11 +2,10 @@
 // However, the JS has still to be loaded for each Bootstrap's component that needs it.
 // Here, because our JS component 'Navbar' has the same name as Navbar Bootstrap's component
 // we change the name of the imported Bootstrap's 'Navbar' component
-import { Navbar as BootstrapNavbar} from "bootstrap";
 import { getSessionObject, VerifyUser } from "../../utils/session";
 import defaultItemImg from '../../img/image_not_available.png';
 import logo from "../../img/logo.svg"
-
+import { Redirect } from "../Router/Router";
 /**
  * Render the Navbar which is styled by using Bootstrap
  * Each item in the Navbar is tightly coupled with the Router configuration :
@@ -52,19 +51,18 @@ if(accesToken && isAdmin == "admin"){
         <div id="navigation" >
           <div id="menu">
           <img src =" ${logo}" style = "height : 90px; position : relative;" id = "logoImg"> </img>
-            <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfile"> Mon profile </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Profil </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/myitems"> Mes offres </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> liste des utilisateurs </a></div>
-            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/memberList"> liste des membres </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Offre + </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/userhandeler"> Utilisateurs </a></div>
+            <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/memberList"> Membres </a></div>
           </div>
         
-          <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
-          <div class="notifications" id="box"></div>
 
           <div id="nav-connection"> 
-            <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
+          <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
+          <div class="notifications" id="box"></div>
+          <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
           </div>
         </div>
       </nav>
@@ -76,8 +74,7 @@ if(accesToken && isAdmin == "admin"){
    <div id="navigation">
      <div id="menu">
      <img src =" ${logo}" id = "logoImg"> </img>
-     <div id="logo"> <a class="nav-item menu-item" href="#"  data-uri="/"> Donnamis </a></div>
-       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Mon profile </a></div>
+       <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/monProfil"> Mon profil </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/myitems"> Mes offres </a></div>
        <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
      </div>
@@ -127,7 +124,7 @@ if(accesToken && isAdmin == "admin"){
   };
   const image = document.getElementById("logoImg");
   image.onclick = () => {
-    Redirect("/");
+     Redirect("/");
   }
 };
 async function getNotificationList(accesToken,isAll){

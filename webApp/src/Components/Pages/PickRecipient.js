@@ -8,6 +8,8 @@ import { getSessionObject,setSessionObject,removeSessionObject, VerifyUser } fro
  * Render the pick recipient page
  */
 const pickRecipient = `
+<div id="triangle"> </div>
+
 <section id="pick-recipient-page">
     <div id="recipient-page-item-infos">
         <div>

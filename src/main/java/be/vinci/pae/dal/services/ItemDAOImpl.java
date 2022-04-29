@@ -179,7 +179,7 @@ public class ItemDAOImpl implements ItemDAO {
         + "GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate " + limite;
 
-    return getItemDTOS(query);
+    return getItemDTOs(query);
   }
 
   @Override
@@ -194,11 +194,11 @@ public class ItemDAOImpl implements ItemDAO {
         + (mine ? "and i.offeror=" : "and i.recipient=") + id + " and i.item_condition='" + state
         + "'";
 
-    return getItemDTOS(query);
+    return getItemDTOs(query);
 
   }
 
-  private List<ItemDTO> getItemDTOS(String query) {
+  private List<ItemDTO> getItemDTOs(String query) {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query

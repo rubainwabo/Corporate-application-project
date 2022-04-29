@@ -52,7 +52,7 @@ public interface UserDAO {
    */
   void changeState(int userId, String newState, String newRefusalReason, boolean admin);
 
-  List<UserDTO> getAllUserFiltred(String name, String city, String postCode);
+  List<UserDTO> getAllUsersFiltered(String name, String city, String postCode);
 
   List<String> getAutocompleteList(String val);
 

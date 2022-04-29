@@ -70,7 +70,7 @@ public class MemberRessource {
   @Path("interest/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public List<UserDTO> userInterest(@Context ContainerRequest req, @PathParam("id") int itemId) {
-    return myUserUCC.getUsersIterest((int) req.getProperty("id"), itemId);
+    return myUserUCC.getUsersInterest((int) req.getProperty("id"), itemId);
   }
 
   /**

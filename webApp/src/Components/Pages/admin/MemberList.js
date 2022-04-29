@@ -2,11 +2,13 @@ import { Redirect } from "../../Router/Router";
 import { getSessionObject,setSessionObject,removeSessionObject } from "../../../utils/session";
 import itemImg from '../../../img/wheelbarrows-4566619_640.jpg';
 import { VerifyUser } from "../../../utils/session";
+import defaultItemImg from '../../../img/image_not_available.png';
 
 /**
  * Render the MemberList
  */
-const pageContaint = `<section id="home-page">
+const pageContaint = `
+<section id="home-page">
 <div id="home-page-navigation">
     <h2 id="home-page-title"> Listes des membres</h2>
 </div>
@@ -43,7 +45,6 @@ const pageContaint = `<section id="home-page">
 `;
 
 const MemberList =  async () => {
-  await VerifyUser();
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = pageContaint;
   
@@ -62,7 +63,6 @@ const MemberList =  async () => {
     }
   })
   document.getElementById("container-i-member-list").addEventListener("click",async() => {
-    await VerifyUser();
     getAllMemberByFilter(searchInput,token)
   })
 };
@@ -83,8 +83,9 @@ async function getAllMemberByFilter(searchInput,token){
                   };   
       const response = await fetch("/api/admins/list/filtred?name="+username+"&"+"city="+city+"&"+"postCode="+postCode, options);    
   
-      if(!response.ok){
-      return Redirect("/logout");
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
     }
     const filtredUserList = await response.json();
     var memberList = document.getElementById("member-list");
@@ -206,7 +207,8 @@ function membersItemsList(item,container,divItems){
         pItemTypeTitle.style.paddingTop="10px"
         let img = document.createElement("img");
         img.classList="member-list-item-img";
-        img.src=itemImg;
+        
+        getImg(item.id,img);
         leftDiv.classList="member-list-left-items";
         rightDiv.classList="member-list-right-items";
         divSingleItem.classList="member-list-container-item";
@@ -245,8 +247,10 @@ function autocomplete(inp,token) {
                         };   
 
             const response = await fetch("/api/admins/autocompleteList?value="+val.toUpperCase(), options);    
-            if(!response.ok){
-          }
+            if (response.status == 307) {
+              await VerifyUser(); 
+              document.location.reload();
+            }
           const autocompleteList = await response.json();
           autocompleteList.forEach((item)=>{
             /*create a DIV element for each matching element:*/
@@ -334,11 +338,31 @@ async function getAllItemsByItemCondition(itemCondition,token,id,isOfferor) {
                 };   
     const response = await fetch("/api/admins/memberListItems/"+id+"?itemCondition="+itemCondition+"&isOfferor="+isOfferor, options);    
 
-    if(!response.ok){
-  }
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
   return await response.json();
 
   } catch (error) {
 }   
+}
+async function getImg(itemId,itemImg){
+  try{
+    const response = await fetch("/api/items/picture/"+itemId);
+    if (!response.ok) {
+      itemImg.src=defaultItemImg;
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+    if(response.ok){
+      const imageBlob = await response.blob();
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      itemImg.src= imageObjectURL
+    }
+    }catch(error){
+      console.log(error)
+    }
 }
 export default MemberList;

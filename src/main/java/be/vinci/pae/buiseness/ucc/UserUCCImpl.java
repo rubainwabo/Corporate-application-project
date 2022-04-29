@@ -15,7 +15,6 @@ import be.vinci.pae.utils.exception.UsernameAlreadyExists;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import org.mindrot.jbcrypt.BCrypt;
 
 
 public class UserUCCImpl implements UserUCC {
@@ -164,7 +163,6 @@ public class UserUCCImpl implements UserUCC {
   public boolean updatePassword(int id, String password) {
     try {
       myDalServices.start();
-      password = BCrypt.hashpw(password, BCrypt.gensalt());
       boolean ret = myUserDAO.updatePassword(id, password);
       myDalServices.commit();
       return ret;
@@ -195,12 +193,12 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public List<UserDTO> getAllUserFiltred(String name, String city, String postCode) {
+  public List<UserDTO> getAllUsersFiltered(String name, String city, String postCode) {
     try {
       myDalServices.start();
-      var memberFiltred = myUserDAO.getAllUserFiltred(name, city, postCode);
+      var membersFiltered = myUserDAO.getAllUsersFiltered(name, city, postCode);
       myDalServices.commit();
-      return memberFiltred;
+      return membersFiltered;
     } catch (Exception e) {
       myDalServices.rollBack();
       throw e;
@@ -224,7 +222,7 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public List<UserDTO> getUsersIterest(int reqUserId, int idItem) {
+  public List<UserDTO> getUsersInterest(int reqUserId, int idItem) {
     try {
       myDalServices.start();
       ItemDTO itemDTO = myItemDAOService.getOneById(idItem);

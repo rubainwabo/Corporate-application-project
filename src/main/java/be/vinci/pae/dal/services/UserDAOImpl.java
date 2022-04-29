@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -116,6 +117,7 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public boolean updatePassword(int id, String password) {
+    password = BCrypt.hashpw(password, BCrypt.gensalt());
     String query = "update projet.members set password = '" + password + "' where "
         + "user_id = " + id;
     return execQuery(query);
@@ -166,14 +168,14 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public List<UserDTO> getAllUserFiltred(String name, String city, String postCode) {
+  public List<UserDTO> getAllUsersFiltered(String name, String city, String postCode) {
     String add = "";
     add += name.isBlank() ? " and " : " and last_name like '" + name + "%' ";
     if (name.isBlank() && !city.isBlank()) {
       add += "city like '" + city + "%' ";
     } else {
       if (!name.isBlank() && !city.isBlank()) {
-        add  += "or city like '" + city + "%' ";
+        add += "or city like '" + city + "%' ";
       }
     }
     if (!postCode.isBlank()) {
@@ -197,8 +199,8 @@ public class UserDAOImpl implements UserDAO {
             + "LEFT JOIN projet.items o4 on m.user_id = o4.recipient "
             + "and o4.item_condition= 'not collected' where m.state='valid'";
     query += !name.isBlank() || !city.isBlank() || !postCode.isBlank()
-            ? add + " group by m.user_id" :
-            " group by m.user_id";
+        ? add + " group by m.user_id" :
+        " group by m.user_id";
     System.out.println(query);
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
       ArrayList<UserDTO> userDTOS = new ArrayList<>();

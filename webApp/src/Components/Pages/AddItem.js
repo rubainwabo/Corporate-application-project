@@ -100,7 +100,6 @@ const AddItemPage = () => {
 
   addItemType.addEventListener("click", async function (e) {
     e.preventDefault();
-    await VerifyUser()
     let itemTypeName = document.getElementById("item-type-name").value;
     try {
       const options = {
@@ -116,7 +115,10 @@ const AddItemPage = () => {
       };
 
       const response = await fetch("/api/itemsType/addItemType", options); // fetch return a promise => we wait for the response
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
+      }
       if (!response.ok) {
         response.text().then((result) => {
           document.getElementById("error").innerText = result;
@@ -145,7 +147,6 @@ const AddItemPage = () => {
 
   addItemForm.addEventListener("submit", async function (e) {
     e.preventDefault();
-    await VerifyUser()
     let description = document.getElementById("itemDescription").value;
     let urlPicture = "none";
     let itemtype = document.getElementById("items-type-selectbox").value;
@@ -168,7 +169,10 @@ const AddItemPage = () => {
       };
 
       const response = await fetch("/api/items/add", options); // fetch return a promise => we wait for the response
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
+      }
       if (!response.ok) {
         response.text().then((result) => {
           document.getElementById("error").innerText = result;
@@ -198,7 +202,6 @@ const AddItemPage = () => {
   })
 
   async function getItemsTypes() {
-    await VerifyUser()
     let selectBox = document.getElementById("items-type-selectbox");
     try {
       const options = {
@@ -209,8 +212,9 @@ const AddItemPage = () => {
       };
       const response = await fetch("/api/itemsType/getAll",options); // fetch return a promise => we wait for the response
 
-      if (!response.ok) {
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
       }
       const itemsTypes = await response.json();
 

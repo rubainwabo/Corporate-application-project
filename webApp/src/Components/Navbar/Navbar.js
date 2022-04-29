@@ -4,7 +4,7 @@
 // we change the name of the imported Bootstrap's 'Navbar' component
 import { Navbar as BootstrapNavbar} from "bootstrap";
 import { getSessionObject, VerifyUser } from "../../utils/session";
-
+import defaultItemImg from '../../img/image_not_available.png';
 import logo from "../../img/logo.svg"
 
 /**
@@ -112,12 +112,11 @@ if(accesToken && isAdmin == "admin"){
   let isClicked = false;
   if (bellIconDiv){
     bellIconDiv.addEventListener("click", async () => {
-      await VerifyUser();
       if (!isClicked){
       let notificationsList = await getNotificationList(accesToken,false)
       await createNotification(notificationsList,boxDiv,false);
       if (notificationsList.length > 0){
-        updateNotifNotViewed(accesToken);
+        await updateNotifNotViewed(accesToken);
       }
       isClicked=true;
     }else {
@@ -136,7 +135,9 @@ async function getNotificationList(accesToken,isAll){
       }
   };   
   const response = await fetch("/api/members/notifications/"+getSessionObject("userId")+"?all="+isAll, options);
-  if(!response.ok){
+  if (response.status == 307) {
+    await VerifyUser(); 
+    document.location.reload();
   }
   return await response.json();
 }
@@ -145,7 +146,7 @@ async function getNotificationList(accesToken,isAll){
 }
 async function createNotification(notificationsList,boxDiv,isALl){
   
-  notificationsList.forEach((item) => {
+    notificationsList.forEach (async (item) => {
     let notificationItemDiv = document.createElement("div");
     let textDiv = document.createElement("div");
     let h4ItemType = document.createElement("h4");
@@ -154,8 +155,8 @@ async function createNotification(notificationsList,boxDiv,isALl){
   
     notificationItemDiv.classList="notifications-item";
     textDiv.classList="text";
-    itemImg.src=logo;
-    
+
+    getImg(item.itemId,itemImg);
     h4ItemType.innerHTML=item.itemType
     pDescription.innerHTML=item.txt
   
@@ -178,6 +179,7 @@ txtAllNotifDiv.appendChild(h4GetAll);
 getAllNotifDiv.appendChild(txtAllNotifDiv);
 boxDiv.appendChild(getAllNotifDiv)
 boxDiv.style.opacity="1";
+
 document.getElementById("all-notif").addEventListener("click",async  () => {
   // need to do all this getSessionObjet bcs in other case, it is null ...
   if (document.getElementById("h4GetAllOrNotNotif").innerHTML=="Afficher toutes les notifications"){
@@ -192,7 +194,7 @@ document.getElementById("all-notif").addEventListener("click",async  () => {
     let notificationsList = await getNotificationList(token,false);
     await createNotification(notificationsList,boxDiv,false);
     if (notificationsList.length > 0){
-      updateNotifNotViewed(token);
+      await updateNotifNotViewed(token);
     }
     document.getElementById("h4GetAllOrNotNotif").innerHTML="Afficher toutes les notifications"
   }
@@ -207,11 +209,32 @@ async function updateNotifNotViewed(accesToken) {
       }
   };   
   const response = await fetch("/api/members/notifications/update/notViewed/"+getSessionObject("userId"), options);
-  if(!response.ok){
+  if (response.status == 307) {
+    await VerifyUser(); 
+    document.location.reload();
   }
   await response.json();
 }
   catch (error) {
   }
+}
+
+async function getImg(itemId,itemImg){
+  try{
+    const response = await fetch("/api/items/picture/"+itemId);
+    if (!response.ok) {
+      itemImg.src=defaultItemImg;
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+    if(response.ok){
+      const imageBlob = await response.blob();
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      itemImg.src= imageObjectURL
+    }
+    }catch(error){
+      console.log(error)
+    }
 }
 export default Navbar;

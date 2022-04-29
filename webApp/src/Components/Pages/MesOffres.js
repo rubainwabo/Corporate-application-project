@@ -39,16 +39,16 @@ const MesOffres = async () => {
   let token = getSessionObject("accessToken");
 
   try {
-    await VerifyUser()
     var options = { method: 'GET',
                headers: {"token" : token},
                mode: 'cors',
                cache: 'default'};   
     const response = await fetch("/api/items/mesOffres", options); // fetch return a promise => we wait for the response   
 
-    if(!response.ok){
-
-  }
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
 
   const items = await response.json();
 
@@ -100,14 +100,16 @@ const MesOffres = async () => {
     allRecentItem.appendChild(itemBox);
     
     cross.onclick = async () => {
-      await VerifyUser();
         var options = { method: 'POST',
         headers: {"token" : getSessionObject("accessToken")},
         mode: 'cors',
         cache: 'default',
     }; 
     const response = await fetch("/api/items/cancelOffer/" + item.id, options); // fetch return a promise => we wait for the response   
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (response.ok) {
         allRecentItem.removeChild(itemBox);
     } 

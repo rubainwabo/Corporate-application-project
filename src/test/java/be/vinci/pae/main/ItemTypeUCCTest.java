@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 
 public class ItemTypeUCCTest {
 
-  private final String TYPE = "type";
+  private final String type = "type";
 
   private static ItemTypeUCC itemTypeUCC;
   private static ServiceLocator locator;
@@ -36,10 +36,10 @@ public class ItemTypeUCCTest {
   public void addItemType() {
     ItemTypeDTO itemType = Mockito.mock(ItemTypeDTO.class);
 
-    Mockito.when(itemTypeDAO.addItemType(TYPE)).thenReturn(itemType);
+    Mockito.when(itemTypeDAO.addItemType(type)).thenReturn(itemType);
     Assertions.assertAll(
-        () -> Assertions.assertEquals(itemType, itemTypeUCC.addItemType(TYPE)),
-        () -> Mockito.verify(itemTypeDAO).addItemType(TYPE)
+        () -> Assertions.assertEquals(itemType, itemTypeUCC.addItemType(type)),
+        () -> Mockito.verify(itemTypeDAO).addItemType(type)
     );
   }
 

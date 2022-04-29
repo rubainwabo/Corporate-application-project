@@ -21,7 +21,8 @@ public class AdminAuthorizeRequestFilter implements ContainerRequestFilter {
 
     if (!requestContext.getProperty("admin").equals("admin")) {
       requestContext.abortWith(
-          Response.status(Status.FORBIDDEN).entity("You need to be admin to access to this ressource")
+          Response.status(Status.FORBIDDEN)
+              .entity("You need to be admin to access to this ressource")
               .build());
     }
   }

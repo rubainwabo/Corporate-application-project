@@ -25,8 +25,9 @@ public class ItemDAOImpl implements ItemDAO {
   public List<ItemDTO> getFiltered(String filter, String input) {
     String add;
     switch (filter) {
-      default: {
-      }
+      default:
+        add = "";
+        break;
       case "type":
         add = "and it.item_type_name LIKE " + "'" + input + "%'";
         break;

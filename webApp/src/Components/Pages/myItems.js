@@ -234,7 +234,6 @@ const MyItems = async (id) => {
 };
 
 async function getMyItems(state,mine){
-    await VerifyUser()
     if(state=="gifted-by-me"){
       state="gifted";
     }
@@ -251,6 +250,10 @@ async function getMyItems(state,mine){
           response = await fetch("/api/items/myItems/"+state+"/0",options);
         }       
          // fetch return a promise => we wait for the response
+         if (response.status == 307) {
+          await VerifyUser(); 
+          document.location.reload();
+        }
         if (!response.ok) {
           throw new Error(
               "fetch error : " + response.status + " : " + response.statusText
@@ -359,7 +362,6 @@ function changeOptions(state){
     }
 }
 async function cancelItem(idItem){
-    await VerifyUser();
    try {
         var options = { method: 'POST',
         headers: {"token" : getSessionObject("accessToken")},
@@ -367,7 +369,10 @@ async function cancelItem(idItem){
         cache: 'default',
         };
         const response = await fetch("/api/items/changeCondition/" + idItem+"/cancelled", options); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
-
+        if (response.status == 307) {
+          await VerifyUser(); 
+          document.location.reload();
+        }
         if (response.ok) {
             return true;
         }
@@ -377,7 +382,6 @@ async function cancelItem(idItem){
     }
 }
 async function offerAgain(idItem){
-    await VerifyUser()
     try {
          var options = { method: 'POST',
          headers: {"token" : getSessionObject("accessToken")},
@@ -385,7 +389,10 @@ async function offerAgain(idItem){
          cache: 'default',
          };
          const response = await fetch("/api/items/offer/again/" + idItem, options); // fetch return a promise => we wait for the response
-
+         if (response.status == 307) {
+          await VerifyUser(); 
+          document.location.reload();
+        }
          if (response.ok) {
              return true;
          }
@@ -411,7 +418,10 @@ async function itemGived(itemId,collected){
       cache: 'default',
     };
     const response = await fetch("/api/items/itemCollected", options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (response.ok) {
       return true;
     }
@@ -462,7 +472,10 @@ async function rateItem(itemId,comment){
       cache: 'default',
     };
     const response = await fetch("/api/items/rate", options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (response.ok) {
       return true;
     }

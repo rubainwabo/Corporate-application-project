@@ -64,7 +64,6 @@ const MonProfile = async () => {
   const pageDiv = document.querySelector("#page");
   
   try {
-    await VerifyUser();
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -74,9 +73,11 @@ const MonProfile = async () => {
     };
 
     const response = await fetch("/api/members/myProfile", options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     const data = await response.json();
-    console.log(data);
 
     pageDiv.innerHTML = monProfile;
 
@@ -301,15 +302,14 @@ const MonProfile = async () => {
                 };
                 
                 if (pwd.value.length > 5) {  
-                  await VerifyUser();
                 const res = await fetch("/api/members/updatePassword", options); // fetch return a promise => we wait for the response
-
+                if (response.status == 307) {
+                  await VerifyUser(); 
+                  document.location.reload();
+                }
                 if (res.ok) {
                   setTimeout( () => {Redirect("/monProfile");}, 2000);
                   msg.innerHTML = "Votre mot de passe a bien été changé";
-                }
-                else {
-                  Redirect("/logout");
                 }
               }
               else {
@@ -328,7 +328,6 @@ const MonProfile = async () => {
         main.appendChild(saveDiv);
 
         saveButton.onclick = async () => {
-          await VerifyUser();
           let char = nameInput.value.split(" ");
           let lName = char[0];
           let fName = char[1];
@@ -352,10 +351,12 @@ const MonProfile = async () => {
               token: getSessionObject("accessToken"),
             },
           };
-          console.log("clicked");
 
           const res = await fetch("/api/members/updateProfile", options); // fetch return a promise => we wait for the response
-          console.log("clicked", res.body);
+          if (response.status == 307) {
+            await VerifyUser(); 
+            document.location.reload();
+          }
           Redirect("/monProfile");
 
           if (!res.ok) {
@@ -370,14 +371,16 @@ const MonProfile = async () => {
         };
       }
     };
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
         "fetch error : " + response.status + " : " + response.statusText
       );
     }
   } catch (error) {
-    Redirect("/");
     console.error("MyProfile::error: ", error);
   }
 };

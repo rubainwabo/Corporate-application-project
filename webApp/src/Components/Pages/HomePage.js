@@ -39,7 +39,6 @@ const HomePage = async (id) => {
   pageDiv.innerHTML = home;
 
   let allRecentItem = document.getElementById("all-recent-item");
-  await VerifyUser();
   let fetchMethodName = getSessionObject("accessToken") ? "lastItemsOfferedConnected" : "lastItemsOfferedNotConnected";
   let token = getSessionObject("accessToken");
   try {
@@ -49,6 +48,10 @@ const HomePage = async (id) => {
           "token" : token}
     };
     const response = await fetch("/api/items/"+fetchMethodName,options); // fetch return a promise => we wait for the response
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -99,7 +102,6 @@ const HomePage = async (id) => {
 };
 async function getPicture(itemId,imgDiv){
   try{
-    console.log(imgDiv);
   const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
   
   if (!response.ok) {
@@ -109,17 +111,13 @@ async function getPicture(itemId,imgDiv){
     )
   }
   if(response.ok){
-
     const imageBlob = await response.blob();
         const imageObjectURL = URL.createObjectURL(imageBlob);
-        console.log(imageObjectURL);
         imgDiv.src=imageObjectURL
         
   }
- 
-
+  
   }catch(error){
-    console.log(error)
   }
 }
 

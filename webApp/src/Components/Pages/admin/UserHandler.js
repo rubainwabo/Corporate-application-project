@@ -1,5 +1,6 @@
 import {getSessionObject} from "../../../utils/session";
 import { VerifyUser } from "../../../utils/session";
+import { Redirect } from "../../Router/Router";
 
 const userHandler = `
 <section id="home-page">
@@ -67,7 +68,6 @@ const UserHandler = () => {
 let currentUser;
 
 async function gettAllByState(accesToken, state) {
-  await VerifyUser();
   try {
     const option = {
       headers: {
@@ -75,7 +75,9 @@ async function gettAllByState(accesToken, state) {
       }
     }
     const response = await fetch("/api/admins/listByState?state=" + state, option); // fetch return a promise => we wait for the response
-    if (!response.ok) {
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
     }
     const items = await response.json();
     var userHandlerList = document.getElementById("user-handler-list");
@@ -153,7 +155,6 @@ async function gettAllByState(accesToken, state) {
 }
 
 async function getUserInformation(id, accesToken) {
-  await VerifyUser();
   try {
     const options = {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -162,7 +163,10 @@ async function getUserInformation(id, accesToken) {
       },
     };
     const response = await fetch("/api/members/details?id=" + id, options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       response.text().then((result) => {
         document.getElementById("error").innerText = result;
@@ -280,7 +284,6 @@ async function getUserInformation(id, accesToken) {
 }
 
 async function addOrRefuse(id, state, rsnRefusal, accesToken, admin) {
-  await VerifyUser();
   try {
     let body1 = rsnRefusal != "" ? JSON.stringify({
       "change_id": id,
@@ -301,7 +304,10 @@ async function addOrRefuse(id, state, rsnRefusal, accesToken, admin) {
       },
     };
     const response = await fetch("/api/admins/changeState", options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       response.text().then((result) => {
         document.getElementById("error").innerText = result;

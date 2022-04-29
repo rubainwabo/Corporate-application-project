@@ -53,7 +53,6 @@ const UpdateItem = async () => {
 
   
   try {
-    await VerifyUser();
     // hide data to inform if the pizza menu is already printed
     const options = {
       // body data type must match "Content-Type" header
@@ -63,7 +62,10 @@ const UpdateItem = async () => {
     };
 
     const response = await fetch("/api/items/itemDetails/" + id,options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -84,7 +86,6 @@ const UpdateItem = async () => {
 
   updateButton.addEventListener("click", async function (e) {
     e.preventDefault();
-    await VerifyUser();
     let description = document.getElementById("itemDescription").value;
     let timeSlot = document.getElementById("availability").value;
 
@@ -104,7 +105,10 @@ const UpdateItem = async () => {
       };
 
       const response = await fetch("/api/items/update", options); // fetch return a promise => we wait for the response
-
+      if (response.status == 307) {
+        await VerifyUser(); 
+        document.location.reload();
+      }
       if (!response.ok) {
         response.text().then((result) => {
           document.getElementById("error").innerText = result;

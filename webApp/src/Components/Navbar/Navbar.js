@@ -5,8 +5,6 @@
 import { Navbar as BootstrapNavbar} from "bootstrap";
 import { getSessionObject, VerifyUser } from "../../utils/session";
 import defaultItemImg from '../../img/image_not_available.png';
-
-
 import logo from "../../img/logo.svg"
 
 /**
@@ -114,7 +112,6 @@ if(accesToken && isAdmin == "admin"){
   let isClicked = false;
   if (bellIconDiv){
     bellIconDiv.addEventListener("click", async () => {
-      await VerifyUser();
       if (!isClicked){
       let notificationsList = await getNotificationList(accesToken,false)
       await createNotification(notificationsList,boxDiv,false);
@@ -138,7 +135,9 @@ async function getNotificationList(accesToken,isAll){
       }
   };   
   const response = await fetch("/api/members/notifications/"+getSessionObject("userId")+"?all="+isAll, options);
-  if(!response.ok){
+  if (response.status == 307) {
+    await VerifyUser(); 
+    document.location.reload();
   }
   return await response.json();
 }
@@ -210,7 +209,9 @@ async function updateNotifNotViewed(accesToken) {
       }
   };   
   const response = await fetch("/api/members/notifications/update/notViewed/"+getSessionObject("userId"), options);
-  if(!response.ok){
+  if (response.status == 307) {
+    await VerifyUser(); 
+    document.location.reload();
   }
   await response.json();
 }

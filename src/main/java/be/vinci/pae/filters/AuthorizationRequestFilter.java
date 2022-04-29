@@ -40,7 +40,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
             : myTokenService.getVerifyRefreshToken(refreshToken);
 
       } catch (Exception e) {
-        throw new WebApplicationException(Response.status(Status.UNAUTHORIZED)
+        throw new WebApplicationException(Response.status(Status.TEMPORARY_REDIRECT)
             .entity("Malformed token : " + e.getMessage()).type("text/plain").build());
       }
       int id = decodedToken.getClaim("user").asInt();

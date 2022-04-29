@@ -32,14 +32,16 @@ const PickRecipient = async () => {
   
 
   try {
-    await VerifyUser();
     var options = { 
     method: 'GET',
     headers: {"token" : token},
     };
 
     const response = await fetch("/api/members/interest/"+id,options); // fetch return a promise => we wait for the response
-    console.log("res", response.body);
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -96,7 +98,10 @@ const PickRecipient = async () => {
     };
 
     const response = await fetch("/api/items/itemDetails/" + id,options); // fetch return a promise => we wait for the response
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (!response.ok) {
       throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -119,7 +124,6 @@ const PickRecipient = async () => {
 };
 
 async function addRecipient(idItem,idRecipient){
-  await VerifyUser()
   try {
     var options = { method: 'POST',
     headers: {"token" : getSessionObject("accessToken")},
@@ -127,7 +131,10 @@ async function addRecipient(idItem,idRecipient){
     cache: 'default',
     }; 
     const response = await fetch("/api/items/addRecipient/" + idItem+"/"+idRecipient, options); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
-
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
     if (response.ok) {
         return true;
     } 

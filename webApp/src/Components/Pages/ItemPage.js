@@ -138,7 +138,6 @@ const ItemPage = async () => {
     console.log(item);
 
   } catch (error) {
-    Redirect('/');
     console.error("LoginPage::error: ", error);
   }
 

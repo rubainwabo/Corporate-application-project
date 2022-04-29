@@ -5,8 +5,6 @@
 import { Navbar as BootstrapNavbar} from "bootstrap";
 import { getSessionObject, VerifyUser } from "../../utils/session";
 import defaultItemImg from '../../img/image_not_available.png';
-import { VerifyUser } from "../../utils/session";
-
 import logo from "../../img/logo.svg"
 
 /**

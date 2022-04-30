@@ -94,6 +94,6 @@ public interface ItemUCC {
 
   void updateItemUrl(int itemId, String img);
 
-  void rateItem(int itemId, String comment);
+  void rateItem(int itemId, int nbStars, String comment);
 
 }

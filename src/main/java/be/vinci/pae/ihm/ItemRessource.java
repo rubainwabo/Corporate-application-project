@@ -287,7 +287,7 @@ public class ItemRessource {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("no image uploaded").type("text/plain").build());
     }
-    return Response.ok(fileName).header("Access-Control-Allow-Origin", "*").build();
+    return Response.ok(fileName).build();
   }
 
   /**
@@ -342,8 +342,9 @@ public class ItemRessource {
           .entity("informations manquantes").type("text/plain").build());
     }
     int itemId = node.get("itemId").asInt();
+    int nbStars = node.get("nbStars").asInt();
     String comment = node.get("comment").asText();
-    myItemUCC.rateItem(itemId, comment);
+    myItemUCC.rateItem(itemId, nbStars, comment);
     return Response.ok().build();
   }
 

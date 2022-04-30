@@ -68,6 +68,7 @@ const UserHandler = () => {
 };
 
 let currentUser;
+let currentVersion;
 
 async function gettAllByState(accesToken, state) {
   try {
@@ -85,6 +86,7 @@ async function gettAllByState(accesToken, state) {
     var userHandlerList = document.getElementById("user-handler-list");
     userHandlerList.innerHTML = "";
     items.forEach((e) => {
+      console.log(e);
       const divUserHandler = document.createElement("div");
       const pFirstName = document.createElement("span");
       const pLastName = document.createElement("span");
@@ -129,19 +131,20 @@ async function gettAllByState(accesToken, state) {
           divDenied.appendChild(deniedBtn)
           deniedBtn.addEventListener("click", () => {
             currentUser = e.id;
+            currentVersion=e.version;
             document.getElementById("add-reason-refusal").style.display = "flex";
             document.getElementById("add-reason-button").addEventListener("click",
                 async function (e) {
                   e.preventDefault();
                   let reason = document.getElementById("reason").value;
                   await addOrRefuse(currentUser, "denied", reason, accesToken,
-                      inputCheckBox)
+                      inputCheckBox,currentVersion)
                       document.getElementById(currentUser).remove();
                 })
           });  
       }
       validBtn.addEventListener("click", () => {
-        addOrRefuse(e.id, "valid", "", accesToken, inputCheckBox)
+        addOrRefuse(e.id, "valid", "", accesToken, inputCheckBox,e.version)
         document.getElementById(e.id).remove();
       });
       divUserHandler.addEventListener("click", (target) => {
@@ -285,14 +288,17 @@ async function getUserInformation(id, accesToken) {
   }
 }
 
-async function addOrRefuse(id, state, rsnRefusal, accesToken, admin) {
+async function addOrRefuse(id, state, rsnRefusal, accesToken, admin,version) {
+  console.log(version);
   try {
     let body1 = rsnRefusal != "" ? JSON.stringify({
+      "version":version,
       "change_id": id,
       "state": state,
       "admin": admin.checked,
       "refusalReason": rsnRefusal
     }) : JSON.stringify({
+      "version":version,
       "change_id": id,
       "state": state,
       "admin": admin.checked

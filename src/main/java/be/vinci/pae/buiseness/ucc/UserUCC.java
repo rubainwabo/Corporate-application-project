@@ -22,7 +22,7 @@ public interface UserUCC {
    *
    * @return true if correctly changed.
    */
-  boolean changeState(int id, String state, String refusalReason, boolean admin);
+  boolean changeState(int id, String state, String refusalReason, boolean admin, int version);
 
   /**
    * updates the profile of an user.

@@ -85,37 +85,47 @@ public class ItemUCCTest {
     );
   }
 
-  /*
-    @Test
-    public void getDetailsFatalException() {
-      Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
-      Assertions.assertAll(
-          () -> Assertions.assertThrows(FatalException.class, () -> itemUCC.getDetails(ID)),
-          () -> Mockito.verify(itemDAO).getOneById(ID)
-      );
-    }
+  @Test
+  public void getDetailsFatalException() {
+    Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class, () -> itemUCC.getDetails(ID)),
+        () -> Mockito.verify(itemDAO).getOneById(ID)
+    );
+  }
+
+  @Test
+  public void getItemsSuccessful() {
+    List<ItemDTO> list = Mockito.mock(List.class);
+
+    Mockito.when(itemDAO.getFiltered(state, state)).thenReturn(list);
+    Assertions.assertEquals(list, itemUCC.getItems(state, state));
+  }
+
+  @Test
+  public void getItemsFatalException() {
+    Mockito.when(itemDAO.getFiltered(state, state)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.getItems(state, state));
+  }
 
 
-    @Test
-    public void addInterestSuccessful() {
-      ObjectNode objectNode = Mockito.mock(ObjectNode.class);
+  @Test
+  public void addInterestSuccessful() {
+    itemUCC.addInterest(ID, ID, true, state, state);
+    Mockito.verify(itemDAO).addInterest(ID, ID, true, state, state);
 
-      itemUCC.addInterest(ID, objectNode, ID);
-      Mockito.verify(itemDAO).addInterest(ID, objectNode, ID);
-
-    }
+  }
 
 
+  @Test
+  public void addInterestFatalException() {
+    Mockito.doThrow(FatalException.class).when(itemDAO).addInterest(ID, ID, true, state, state);
+    Assertions.assertThrows(FatalException.class,
+        () -> itemUCC.addInterest(ID, ID, true, state, state));
+    Mockito.verify(itemDAO, Mockito.times(1)).addInterest(ID, ID, true, state, state);
 
-    @Test
-    public void addInterestFatalException() {
-      ObjectNode objectNode = Mockito.mock(ObjectNode.class);
-      Mockito.doThrow(FatalException.class).when(itemDAO).addInterest(ID, objectNode, ID);
-      Assertions.assertThrows(FatalException.class, () -> itemUCC.addInterest(ID, objectNode, ID));
-      Mockito.verify(itemDAO, Mockito.times(1)).addInterest(ID, objectNode, ID);
+  }
 
-    }
-   */
   @Test
   public void changeItemConditionSuccessful() {
     itemUCC.changeItemCondition(ID, ID, state);
@@ -258,8 +268,6 @@ public class ItemUCCTest {
 
   @Test
   public void offerAgainFatalException() {
-    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
-
     Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
     Assertions.assertAll(
         () -> Assertions.assertThrows(FatalException.class, () -> itemUCC.offerAgain(ID, ID)),
@@ -297,8 +305,6 @@ public class ItemUCCTest {
 
   @Test
   public void itemCollectedOrNotFatalException() {
-    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
-
     Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
     Assertions.assertAll(
         () -> Assertions.assertThrows(FatalException.class,
@@ -360,6 +366,4 @@ public class ItemUCCTest {
     Assertions.assertThrows(FatalException.class, () -> itemUCC.rateItem(ID, ID, state));
     Mockito.verify(itemDAO).rateItem(ID, ID, state);
   }
-
-
 }

@@ -41,6 +41,7 @@ public class ItemRessource {
 
   @Inject
   private UserUCC myUserUCC;
+
   /**
    * gets list of offers of the user.
    *
@@ -132,12 +133,12 @@ public class ItemRessource {
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
     String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
-
+    String availabilities = body.get("availabilities").asText();
     int userId = (int) req.getProperty("id");
     if (callMe && !phoneNumber.isBlank() && updateNumber) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
-    myItemUCC.addInterest(itemId, body, userId);
+    myItemUCC.addInterest(itemId, userId, callMe, phoneNumber, availabilities);
     return Response.ok().build();
   }
 

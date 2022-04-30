@@ -1,8 +1,7 @@
 import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
 import search from "../../img/search.svg";
 import { Redirect } from "../Router/Router";
-import {getSessionObject, VerifyUser} from "../../utils/session";
-
+import { getSessionObject, VerifyUser } from "../../utils/session";
 
 const updateCards = (items) => {
   console.log("items update");
@@ -26,7 +25,7 @@ const updateCards = (items) => {
     itemDescription.classList.add("item-description");
 
     //itemImgDiv.src = itemImg;
-    getPicture(item.id,itemImgDiv);
+    getPicture(item.id, itemImgDiv);
     itemType.innerText = item.itemtype;
     itemDescription.innerText = item.description;
 
@@ -50,20 +49,20 @@ const handleSearchButton = async () => {
     console.log("We clicked");
     const value = document.getElementById("search").value;
     const filter = document.getElementById("type").checked
-        ? "type"
-        : document.getElementById("state").checked
-            ? "state"
-            : document.getElementById("name").checked
-                ? "name"
-                : "";
+      ? "type"
+      : document.getElementById("state").checked
+      ? "state"
+      : document.getElementById("name").checked
+      ? "name"
+      : "";
 
     try {
       const response = await fetch(
-          "/api/items/filtered?filter=" + filter + "&input=" + value
+        "/api/items/filtered?filter=" + filter + "&input=" + value
       ); // fetch return a promise => we wait for the response
       if (!response.ok) {
         throw new Error(
-            "fetch error : " + response.status + " : " + response.statusText
+          "fetch error : " + response.status + " : " + response.statusText
         );
       }
       const items = await response.json();
@@ -73,86 +72,86 @@ const handleSearchButton = async () => {
 };
 
 const input2 = `
-  <input id="search" class="col-10 mt-1" style="border-radius : 4px; border : solid grey;"> </input>
-    <img id="search-btn" src="${search}" class="col-2 px-0 mt-1" 
-      style="width: 30px; border : solid grey; transform: translateX(-8px); border-radius : 5px;"/>
-  </div>
+<input id="search" class="col-10 mt-1" style="border-radius : 4px; border : solid grey;"> </input>
+<img id="search-btn" src="${search}" class="col-2 px-0 mt-1" 
+   style="width: 30px; border : solid grey; transform: translateX(-8px); border-radius : 5px;"/>
+</div>
       `;
 
 const searchBtn = document.createElement("img");
 searchBtn.id = "search-date";
 searchBtn.style =
-    "width: 30px; border : solid grey; border-radius : 5px;margin-left: 45%;margin-right: 45%;margin-top: 7px;";
+  "width: 30px; border : solid grey; border-radius : 5px;margin-left: 45%;margin-right: 45%;margin-top: 7px;";
 searchBtn.src = search;
-
 
 const home = `
 <div id="triangle"> </div>
-
 <section id="home-page">
-    <div id="home-page-navigation">
-        <div class="row">
-        <h2 class="col-4" id="home-page-title"> Dernières offres</h2>
-        <div class="col-8">
-          <div class="row">  
-            <div class="col-4">
-              <div class="row" id="input-div">
-                <input id="search" class="col-10 mt-1" style="border-radius : 4px; border : solid grey;"> </input>
-                <img id="search-btn" src="${search}" class="col-2 px-0 mt-1" 
-                style="width: 30px; border : solid grey; transform: translateX(-8px); border-radius : 5px;"/>
-              </div>
+   <div id="home-page-navigation">
+      <div class="row">
+         <h2 class="col-4" id="home-page-title"> Dernières offres</h2>
+         <div class="col-8">
+            <div class="row">
+               <div class="col-4">
+                  <div class="row" id="input-div">
+                     <input id="search" class="col-10 mt-1" style="border-radius : 4px; border : solid grey;"> </input>
+                     <img id="search-btn" src="${search}" class="col-2 px-0 mt-1" 
+                        style="width: 30px; border : solid grey; transform: translateX(-8px); border-radius : 5px;"/>
+                  </div>
+               </div>
+               <div id="radio-cont" class="col-8">
+                  <div id="radio"class="col-8 pt-2" style="display : flex;">
+                     <span class="col-2 filter" style ="padding-right : 10px;"> Trier par : </span> 
+                     <label class="filter col-2 container"> Nom de la personne
+                     <input id="name" type="radio" name="radio">
+                     <span class="checkmark"></span>
+                     </label>
+                     <label class="filter col-2 container"> Type d'objet
+                     <input id="type" type="radio" name="radio">
+                     <span class="checkmark"></span>
+                     </label>
+                     <label class="filter col-2 container"> Etat de l'objet
+                     <input  id="state" type="radio" name="radio">
+                     <span class="checkmark"></span>
+                     </label>
+                     <label class="filter col-2 container"> Date
+                     <input id="date" type="radio" name="radio">
+                     <span class="checkmark"></span>
+                     </label>
+                  </div>
+               </div>
             </div>
-            <div id="radio-cont" class="col-8">
-            <div id="radio"class="col-8 pt-2" style="display : flex;">
-              <span class="col-2 filter" style ="padding-right : 10px;"> Trier par : </span> 
-              <label class="filter col-2 container"> Nom de la personne
-                <input id="name" type="radio" name="radio">
-                <span class="checkmark"></span>
-              </label>
-              <label class="filter col-2 container"> Type d'objet
-                <input id="type" type="radio" name="radio">
-                <span class="checkmark"></span>
-              </label>
-              <label class="filter col-2 container"> Etat de l'objet
-                <input  id="state" type="radio" name="radio">
-                <span class="checkmark"></span>
-              </label>
-              <label class="filter col-2 container"> Date
-                <input id="date" type="radio" name="radio">
-                <span class="checkmark"></span>
-              </label>
-            </div>
-            </div>
-          </div>
-          </div>
-        </div>
-    </div>
-      <div id="all-recent-item">
-    </div>
+         </div>
+      </div>
+   </div>
+   <div id="all-recent-item">
+   </div>
 </section>
 `;
-
 
 const HomePage = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
-  let fetchMethodName = getSessionObject("accessToken") ? "lastItemsOfferedConnected" : "lastItemsOfferedNotConnected";
+  let fetchMethodName = getSessionObject("accessToken")
+    ? "lastItemsOfferedConnected"
+    : "lastItemsOfferedNotConnected";
   let token = getSessionObject("accessToken");
   try {
     var options = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        "token" : token}
+        token: token,
+      },
     };
-    const response = await fetch("/api/items/"+fetchMethodName,options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/" + fetchMethodName, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();
     }
     if (!response.ok) {
       throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
-      )
+        "fetch error : " + response.status + " : " + response.statusText
+      );
     }
 
     const items = await response.json();
@@ -217,14 +216,14 @@ const HomePage = async () => {
     const date2 = document.getElementById("date-f").value;
     try {
       const response = await fetch(
-          "api/items/filtered?filter=date&input=" + date1 + "-" + date2,
-          options
+        "api/items/filtered?filter=date&input=" + date1 + "-" + date2,
+        options
       );
       console.log(response);
 
       if (!response.ok) {
         throw new Error(
-            "fetch error : " + response.status + " : " + response.statusText
+          "fetch error : " + response.status + " : " + response.statusText
         );
       }
       const items = await response.json();
@@ -233,26 +232,22 @@ const HomePage = async () => {
   };
 };
 
-async function getPicture(itemId,imgDiv){
-  try{
-    const response = await fetch("/api/items/picture/"+itemId); // fetch return a promise => we wait for the response
+async function getPicture(itemId, imgDiv) {
+  try {
+    const response = await fetch("/api/items/picture/" + itemId); // fetch return a promise => we wait for the response
 
     if (!response.ok) {
-      imgDiv.src=itemImg;
+      imgDiv.src = itemImg;
       throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
-      )
+        "fetch error : " + response.status + " : " + response.statusText
+      );
     }
-    if(response.ok){
+    if (response.ok) {
       const imageBlob = await response.blob();
       const imageObjectURL = URL.createObjectURL(imageBlob);
-      imgDiv.src=imageObjectURL
-
+      imgDiv.src = imageObjectURL;
     }
-
-  }catch(error){
-  }
+  } catch (error) {}
 }
-
 
 export default HomePage;

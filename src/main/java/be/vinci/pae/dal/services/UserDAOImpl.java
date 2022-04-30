@@ -153,19 +153,35 @@ public class UserDAOImpl implements UserDAO {
     String query = refusalReason.isBlank() ? "update projet.members set state = '" + state
         + "', _role = '" + role + (state.equals("valid")
         ? "',reason_for_connection_refusal = null"
-        : "'") + "version=version+1"
-        + " where user_id =" + userId + "AND version=" + version
+        : "' ") + ", version = version+1"
+        + " where user_id = " + userId + " AND version=" + version
         : "update projet.members set state = '" + state
             + "', reason_for_connection_refusal = '"
             + refusalReason + "', _role = '" + role + (state.equals("valid")
-            ? "',reason_for_connection_refusal = null" : "'")
-            + " version=version+1 "
-            + "where user_id = " + userId + "AND version=" + version;
+            ? "',reason_for_connection_refusal = null" : "' ")
+            + ", version = version+1 "
+            + "where user_id = " + userId + " AND version = " + version;
+    String queryVersion = "SELECT version FROM projet.members"
+        + " WHERE user_id = " + userId;
+
+    System.out.println(query);
 
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
-      if (psConfirm.executeUpdate() == 1) {
+      if (psConfirm.executeUpdate() == 0) {
+        try (PreparedStatement psVersion = myDalService.getPreparedStatement(
+            queryVersion)) {
+          
+          try (ResultSet verifVersion = psVersion.executeQuery()) {
 
+            if (verifVersion.next()) {
+              if (verifVersion.getInt(1) != version) {
+                throw new FatalException("optimistic lock");
+              }
+            }
+
+          }
+        }
       }
       ;
     } catch (Exception e) {

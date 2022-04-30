@@ -66,6 +66,7 @@ const UserHandler = () => {
 };
 
 let currentUser;
+let currentVersion;
 
 async function gettAllByState(accesToken, state) {
   try {
@@ -128,13 +129,14 @@ async function gettAllByState(accesToken, state) {
           divDenied.appendChild(deniedBtn)
           deniedBtn.addEventListener("click", () => {
             currentUser = e.id;
+            currentVersion=e.version;
             document.getElementById("add-reason-refusal").style.display = "flex";
             document.getElementById("add-reason-button").addEventListener("click",
                 async function (e) {
                   e.preventDefault();
                   let reason = document.getElementById("reason").value;
                   await addOrRefuse(currentUser, "denied", reason, accesToken,
-                      inputCheckBox,e.version)
+                      inputCheckBox,currentVersion)
                       document.getElementById(currentUser).remove();
                 })
           });  
@@ -285,6 +287,7 @@ async function getUserInformation(id, accesToken) {
 }
 
 async function addOrRefuse(id, state, rsnRefusal, accesToken, admin,version) {
+  console.log(version);
   try {
     let body1 = rsnRefusal != "" ? JSON.stringify({
       "version":version,

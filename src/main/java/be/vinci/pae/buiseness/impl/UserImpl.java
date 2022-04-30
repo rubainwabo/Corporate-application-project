@@ -24,8 +24,17 @@ public class UserImpl implements User {
   private int nbrGiftenItems;
   private int nbrItemReceived;
   private int nbrItemNotTaken;
+  private int version;
 
   public UserImpl() {
+  }
+
+  public int getVersion() {
+    return version;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
   }
 
   @Override

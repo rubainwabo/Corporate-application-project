@@ -96,7 +96,8 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public boolean changeState(int id, String state, String refusalReason, boolean admin) {
+  public boolean changeState(int id, String state, String refusalReason, boolean admin,
+      int version) {
     try {
       if (!state.equals("denied") && !state.equals("valid")) {
         throw new InvalidStateException("Trying to insert invalid state");
@@ -106,7 +107,7 @@ public class UserUCCImpl implements UserUCC {
         myDalServices.commit();
         return false;
       }
-      myUserDAO.changeState(id, state, refusalReason, admin);
+      myUserDAO.changeState(id, state, refusalReason, admin, version);
       myDalServices.commit();
       return true;
     } catch (Exception e) {

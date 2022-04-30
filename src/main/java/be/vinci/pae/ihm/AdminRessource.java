@@ -103,10 +103,11 @@ public class AdminRessource {
     }
     if (body.hasNonNull("refusalReason")) {
       return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
-          body.get("refusalReason").asText(), body.get("admin").asBoolean());
+          body.get("refusalReason").asText(), body.get("admin").asBoolean(),
+          body.get("version").asInt());
     } else {
       return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
-          body.get("admin").asBoolean());
+          body.get("admin").asBoolean(), body.get("version").asInt());
     }
   }
 

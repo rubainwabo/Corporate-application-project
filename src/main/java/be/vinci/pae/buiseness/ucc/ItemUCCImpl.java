@@ -216,10 +216,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void rateItem(int itemId, String comment) {
+  public void rateItem(int itemId, int nbStars, String comment) {
     try {
       myDalServices.start();
-      myItemDAOService.rateItem(itemId, comment);
+      myItemDAOService.rateItem(itemId, nbStars, comment);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

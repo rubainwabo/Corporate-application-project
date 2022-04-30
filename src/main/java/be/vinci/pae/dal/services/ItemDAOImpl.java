@@ -4,7 +4,6 @@ import be.vinci.pae.buiseness.dto.ItemDTO;
 import be.vinci.pae.buiseness.factory.BizFactory;
 import be.vinci.pae.dal.DalBackService;
 import be.vinci.pae.utils.exception.FatalException;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -139,10 +138,11 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void addInterest(int idItem, ObjectNode objectNode, int interestUserId) {
+  public void addInterest(int idItem, int interestUserId, boolean callMe,
+      String phoneNumber, String avaibatilities) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
-      ps.setString(1, objectNode.get("availabilities").asText());
+      ps.setString(1, avaibatilities);
       ps.setInt(2, interestUserId);
       ps.setInt(3, idItem);
       ps.executeUpdate();
@@ -170,10 +170,8 @@ public class ItemDAOImpl implements ItemDAO {
           psNotif.setInt(3, idItem);
         }
         String phoneNumerStr =
-            objectNode.get("callMe").asBoolean() && !objectNode.get("phoneNumber").asText()
-                .isBlank() ? ", vous pouvez la contacter via son numéro : " + objectNode.get(
-                    "phoneNumber")
-                .asText() + " " : "";
+            callMe && !phoneNumber.isBlank() ? ", vous pouvez la contacter via son numéro : "
+                + phoneNumber + " " : "";
 
         psNotif.setString(1,
             interestUsrName + " est interessé par votre offre" + phoneNumerStr);

@@ -6,7 +6,6 @@ import be.vinci.pae.dal.services.DateDAO;
 import be.vinci.pae.dal.services.ItemDAO;
 import be.vinci.pae.utils.exception.BizzException;
 import be.vinci.pae.utils.exception.UserInvalidException;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import java.util.List;
 
@@ -63,10 +62,12 @@ public class ItemUCCImpl implements ItemUCC {
 
 
   @Override
-  public void addInterest(int itemId, ObjectNode objectNode, int userId) {
+  public void addInterest(int itemId, int userId, boolean callMe,
+      String phoneNumber, String avaibatilities) {
     try {
       myDalServices.start();
-      myItemDAOService.addInterest(itemId, objectNode, userId);
+      myItemDAOService.addInterest(itemId, userId, callMe, phoneNumber,
+          avaibatilities);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

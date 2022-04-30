@@ -1,7 +1,6 @@
 package be.vinci.pae.buiseness.ucc;
 
 import be.vinci.pae.buiseness.dto.ItemDTO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 
 public interface ItemUCC {
@@ -27,7 +26,7 @@ public interface ItemUCC {
    * call the dao to get the the items with the filter and the input in params.
    *
    * @param filter date, type, state, or name, depending on what the user wants.
-   * @param input search input user has already put.
+   * @param input  search input user has already put.
    * @return list of items
    */
   List<ItemDTO> getItems(String filter, String input);
@@ -35,12 +34,13 @@ public interface ItemUCC {
   /**
    * call the dao to add an interest.
    *
-   * @param itemId     the itemID
-   * @param objectNode the node getted by the front
-   * @param userId     the user who's sending a request
-   * @return
+   * @param itemId      the itemID
+   * @param userId      the user who's sending a request
+   * @param callMe      if the user want to be called
+   * @param phoneNumber the user's phone number
    */
-  void addInterest(int itemId, ObjectNode objectNode, int userId);
+  void addInterest(int itemId, int userId, boolean callMe,
+      String phoneNumber, String avaibatilities);
 
   /**
    * call the DAO to change the itemCondition to cancel.

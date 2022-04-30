@@ -220,8 +220,13 @@ async function getPhoneNumber(idUser){
 
   console.log("START OF ");
   try{
-    
-    const response = await fetch("/api/members/details/"+idUser); // fetch return a promise => we wait for the response
+    const options = {
+      // body data type must match "Content-Type" header
+      headers: {
+        "token": getSessionObject("accessToken"),
+      },
+    };
+    const response = await fetch("/api/members/details?id="+idUser,options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser(); 
       document.location.reload();

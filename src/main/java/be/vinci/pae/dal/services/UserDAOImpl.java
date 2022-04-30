@@ -26,7 +26,7 @@ public class UserDAOImpl implements UserDAO {
   public UserDTO getOneByUsername(String username) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select user_id,password,username,state,"
-            + "reason_for_connection_refusal,_role from projet.members where username=?")) {
+            + "reason_for_connection_refusal,_role,version from projet.members where username=?")) {
 
       ps.setString(1, username);
       try (ResultSet rs = ps.executeQuery()) {
@@ -40,6 +40,7 @@ public class UserDAOImpl implements UserDAO {
         user.setState(rs.getString(4));
         user.setReasonForConnectionRefusal(rs.getString(5));
         user.setRole(rs.getString(6));
+        user.setVersion(rs.getInt(7));
         return user;
 
       }
@@ -56,7 +57,7 @@ public class UserDAOImpl implements UserDAO {
         "select user_id, state, _role,username,"
             + "reason_for_connection_refusal,last_name,"
             + "first_name,city,street,postCode,"
-            + "building_number,unit_number,url_picture,phone_number"
+            + "building_number,unit_number,url_picture,phone_number,version"
             + " from projet.members where state=?")) {
       ps.setString(1, state);
 
@@ -80,7 +81,7 @@ public class UserDAOImpl implements UserDAO {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         "select user_id, state, _role,username,reason_for_connection_refusal,"
             + "last_name,first_name,city,street,postCode,building_number,"
-            + "unit_number,url_picture,phone_number from "
+            + "unit_number,url_picture,phone_number,version from "
             + "projet.members where user_id=?")) {
       ps.setInt(1, id);
       try (ResultSet rs = ps.executeQuery()) {
@@ -145,23 +146,41 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void changeState(int userId, String state, String refusalReason, boolean admin) {
+  public void changeState(int userId, String state, String refusalReason, boolean admin,
+      int version) {
     String role = admin ? "admin" : "member";
 
     String query = refusalReason.isBlank() ? "update projet.members set state = '" + state
         + "', _role = '" + role + (state.equals("valid")
         ? "',reason_for_connection_refusal = null"
-        : "'")
-        + " where user_id =" + userId
+        : "' ") + ", version = version+1"
+        + " where user_id = " + userId + " AND version=" + version
         : "update projet.members set state = '" + state
             + "', reason_for_connection_refusal = '"
             + refusalReason + "', _role = '" + role + (state.equals("valid")
-            ? "',reason_for_connection_refusal = null" : "'")
-            + " where user_id = " + userId;
+            ? "',reason_for_connection_refusal = null" : "' ")
+            + ", version = version+1 "
+            + "where user_id = " + userId + " AND version = " + version;
+    String queryVersion = "SELECT version FROM projet.members"
+        + " WHERE user_id = " + userId;
+
+    System.out.println(query);
 
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
-      psConfirm.executeUpdate();
+      if (psConfirm.executeUpdate() == 0) {
+        try (PreparedStatement psVersion = myDalService.getPreparedStatement(
+            queryVersion)) {
+
+          try (ResultSet verifVersion = psVersion.executeQuery()) {
+
+            if (verifVersion.next() && verifVersion.getInt(1) != version) {
+              throw new FatalException("optimistic lock");
+            }
+
+          }
+        }
+      }
     } catch (Exception e) {
       throw new FatalException(e);
     }
@@ -264,6 +283,7 @@ public class UserDAOImpl implements UserDAO {
     user.setUnitNumber(rs.getInt(12));
     user.setUrlPhoto(rs.getString(13));
     user.setPhoneNumber(rs.getString(14));
+    user.setVersion(rs.getInt(15));
   }
 
 
@@ -274,8 +294,8 @@ public class UserDAOImpl implements UserDAO {
         "INSERT INTO projet.members(user_id,username,last_name, first_name,"
             + " unit_number,state,password,street,postCode,"
             + " building_number,city,"
-            + " url_picture,nb_of_item_not_taken,_role) "
-            + "VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT) ",
+            + " url_picture,nb_of_item_not_taken,_role,version) "
+            + "VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,?,?,DEFAULT,?) ",
         Statement.RETURN_GENERATED_KEYS)) {
 
       ps.setString(1, user.getUserName());
@@ -290,6 +310,7 @@ public class UserDAOImpl implements UserDAO {
       ps.setString(10, user.getCity());
       ps.setString(11, user.getUrlPhoto());
       ps.setInt(12, 0);
+      ps.setInt(13, 0);
       ps.executeUpdate();
       ResultSet rs = ps.getGeneratedKeys();
 

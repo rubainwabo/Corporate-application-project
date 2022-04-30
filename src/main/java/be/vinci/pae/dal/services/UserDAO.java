@@ -50,7 +50,8 @@ public interface UserDAO {
    * @param newState         : state we want to put
    * @param newRefusalReason : his refusal reason
    */
-  void changeState(int userId, String newState, String newRefusalReason, boolean admin);
+  void changeState(int userId, String newState, String newRefusalReason, boolean admin,
+      int version);
 
   List<UserDTO> getAllUsersFiltered(String name, String city, String postCode);
 

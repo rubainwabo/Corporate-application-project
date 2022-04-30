@@ -135,6 +135,11 @@ const HomePage = async () => {
   let fetchMethodName = getSessionObject("accessToken")
     ? true
     : false;
+
+    let con = getSessionObject("accessToken")
+    ? "connected"
+    : "notConnected";
+    
   let token = getSessionObject("accessToken");
   try {
     var options = {
@@ -143,7 +148,7 @@ const HomePage = async () => {
         token: token,
       },
     };
-    const response = await fetch("/api/items?isConnected=" + fetchMethodName, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/"+ con + "?isConnected=" + fetchMethodName, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();

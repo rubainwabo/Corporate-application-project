@@ -68,7 +68,6 @@ public class MemberRessource {
    * @return user's details
    */
   @GET
-  @Path("")
   @Produces(MediaType.APPLICATION_JSON)
   public UserDTO userGetOneById(@Context ContainerRequest req, @QueryParam("id") int id) {
     return id > 0 ? myUserUCC.getOneById(id) : myUserUCC.getOneById((int) req.getProperty("id"));

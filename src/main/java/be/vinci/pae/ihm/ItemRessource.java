@@ -85,7 +85,6 @@ public class ItemRessource {
    * @return the id of the item insered
    */
   @POST
-  @Path("")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public int userAddItem(ItemDTO itemDTO, @Context ContainerRequest req) {
@@ -168,7 +167,7 @@ public class ItemRessource {
    * @return a list with all the last items
    */
   @GET
-  @Path("")
+  @Path("notConnected")
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> getLastItemsOfferedNotConnected(
       @QueryParam("isConnected") boolean connected) {
@@ -181,7 +180,7 @@ public class ItemRessource {
    * @return a list with all the last items
    */
   @GET
-  @Path("")
+  @Path("connected")
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> userGetLastItemsOfferedConnected(
       @QueryParam("isConnected") boolean connected) {

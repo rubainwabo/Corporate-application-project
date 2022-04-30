@@ -1,11 +1,22 @@
 package be.vinci.pae.main;
 
 import be.vinci.pae.buiseness.domain.User;
+import be.vinci.pae.buiseness.dto.ItemDTO;
+import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.ucc.UserUCC;
+import be.vinci.pae.dal.services.ItemDAO;
 import be.vinci.pae.dal.services.UserDAO;
+import be.vinci.pae.utils.exception.FatalException;
+import be.vinci.pae.utils.exception.UserInvalidException;
+import java.util.ArrayList;
+import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class UserUCCTest {
 
@@ -35,19 +46,19 @@ public class UserUCCTest {
     locator = ServiceLocatorUtilities.bind(new TestApplicationBinder());
     userUCC = locator.getService(UserUCC.class);
   }
-}
 
-/**
- * Set up for tests.
- */
-  /*
+
+  /**
+   * Set up for tests.
+   */
+
   @BeforeEach
   public void setup() {
     userDAO = locator.getService(UserDAO.class);
     Mockito.clearInvocations(userDAO);
     Mockito.reset(userDAO);
   }
-/*
+
   @Test
   public void loginExceptionUserNull() {
 
@@ -309,7 +320,7 @@ public class UserUCCTest {
     // if the state is not denied or valid the method will throw an exception
     // with the error message "Trying to insert invalid state"
     Throwable exception = Assertions.assertThrows(Exception.class,
-        () -> userUCC.changeState(ID, WAITING, EMPTY, true));
+        () -> userUCC.changeState(ID, WAITING, EMPTY, true, ID));
     Assertions.assertEquals("Trying to insert invalid state", exception.getMessage());
   }
 
@@ -317,8 +328,8 @@ public class UserUCCTest {
   public void changeStateFailure() {
     Mockito.when(userDAO.getOneById(ID)).thenReturn(null);
     Assertions.assertAll(
-        () -> Assertions.assertFalse(userUCC.changeState(ID, VALID, EMPTY, true)),
-        () -> Assertions.assertFalse(userUCC.changeState(ID, DENIED, EMPTY, true)),
+        () -> Assertions.assertFalse(userUCC.changeState(ID, VALID, EMPTY, true, ID)),
+        () -> Assertions.assertFalse(userUCC.changeState(ID, DENIED, EMPTY, true, ID)),
         () -> Mockito.verify(userDAO, Mockito.times(2)).getOneById(ID)
     );
   }
@@ -329,11 +340,11 @@ public class UserUCCTest {
 
     Mockito.when(userDAO.getOneById(ID)).thenReturn(user);
     Assertions.assertAll(
-        () -> Assertions.assertTrue(userUCC.changeState(ID, VALID, EMPTY, true)),
-        () -> Assertions.assertTrue(userUCC.changeState(ID, DENIED, EMPTY, true)),
+        () -> Assertions.assertTrue(userUCC.changeState(ID, VALID, EMPTY, true, ID)),
+        () -> Assertions.assertTrue(userUCC.changeState(ID, DENIED, EMPTY, true, ID)),
         () -> Mockito.verify(userDAO, Mockito.times(2)).getOneById(ID),
-        () -> Mockito.verify(userDAO).changeState(ID, VALID, EMPTY, true),
-        () -> Mockito.verify(userDAO).changeState(ID, DENIED, EMPTY, true)
+        () -> Mockito.verify(userDAO).changeState(ID, VALID, EMPTY, true, ID),
+        () -> Mockito.verify(userDAO).changeState(ID, DENIED, EMPTY, true, ID)
     );
   }
 
@@ -342,7 +353,7 @@ public class UserUCCTest {
     Mockito.when(userDAO.getOneById(ID)).thenThrow(FatalException.class);
     Assertions.assertAll(
         () -> Assertions.assertThrows(FatalException.class,
-            () -> userUCC.changeState(ID, VALID, EMPTY, true)),
+            () -> userUCC.changeState(ID, VALID, EMPTY, true, ID)),
         () -> Mockito.verify(userDAO).getOneById(ID)
     );
   }
@@ -510,4 +521,4 @@ public class UserUCCTest {
     );
   }
 }
-*/
+

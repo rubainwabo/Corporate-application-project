@@ -347,15 +347,17 @@ public class ItemUCCTest {
 
   @Test
   public void rateItemSuccessful() {
-    itemUCC.rateItem(ID, state);
-    Mockito.verify(itemDAO).rateItem(ID, state);
+    itemUCC.rateItem(ID, ID, state);
+    Mockito.verify(itemDAO).rateItem(ID, ID, state);
   }
 
 
   @Test
   public void rateItemFatalException() {
-    Mockito.doThrow(FatalException.class).when(itemDAO).rateItem(ID, state);
-    Assertions.assertThrows(FatalException.class, () -> itemUCC.rateItem(ID, state));
-    Mockito.verify(itemDAO).rateItem(ID, state);
+    Mockito.doThrow(FatalException.class).when(itemDAO).rateItem(ID, ID, state);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.rateItem(ID, ID, state));
+    Mockito.verify(itemDAO).rateItem(ID, ID, state);
   }
+
+
 }

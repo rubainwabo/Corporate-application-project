@@ -59,6 +59,8 @@ const VerifyUser = async () => {
   } catch (error) {
     console.error("checkUser::error: ", error);
   }
+}else{
+  Redirect("/logout");
 }
 }
 

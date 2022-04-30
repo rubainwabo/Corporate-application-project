@@ -78,7 +78,7 @@ const MonProfile = async () => {
       document.location.reload();
     }
     const data = await response.json();
-
+    console.log(data);
     pageDiv.innerHTML = monProfile;
 
     const formDiv = document.createElement("div");

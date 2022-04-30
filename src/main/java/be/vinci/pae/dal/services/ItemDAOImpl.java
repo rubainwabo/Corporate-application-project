@@ -63,7 +63,8 @@ public class ItemDAOImpl implements ItemDAO {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
             + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested,"
-            + "m.last_name,m.first_name,m2.last_name,m2.first_name,i.recipient "
+            + "m.last_name,m.first_name,m2.last_name,m2.first_name,i.recipient,"
+            + "i.rating "
             + "from projet.items i LEFT JOIN projet.members m2 on i.recipient=m2.user_id,"
             + "projet.item_type t,projet.dates d,projet.members m "
             + "where i.id_item=? and i.item_type = "
@@ -88,6 +89,7 @@ public class ItemDAOImpl implements ItemDAO {
           item.setRecipient(rs.getString(11) + " " + rs.getString(12));
         }
         item.setRecipientId(rs.getInt(13));
+        item.setRating(rs.getInt(14));
         return item;
       }
     } catch (Exception e) {
@@ -325,12 +327,12 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void rateItem(int itemId, String comment) {
+  public void rateItem(int itemId, int nbStars, String comment) {
     try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
         "UPDATE projet.items set rating=?, comment=? WHERE id_item="
             + itemId
     )) {
-      psUpdate.setInt(1, itemId);
+      psUpdate.setInt(1, nbStars);
       psUpdate.setString(2, comment);
       psUpdate.executeUpdate();
     } catch (Exception e) {

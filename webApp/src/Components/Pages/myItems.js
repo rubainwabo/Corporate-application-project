@@ -207,29 +207,36 @@ const MyItems = async (id) => {
     })
 
     document.getElementById("submit-rate-button").addEventListener("click",async function(e){
-      var radios = document.getElementsByName("stars");
-      var found = 1;
-      for (var i = 0; i < radios.length; i++) {       
-          if (radios[i].checked) {
-              let nbStart = radios[i].value;
-              let comment = document.getElementById("rate-comment").value;
-              if(comment!=""){
-                if( await rateItem(currentItemId,comment)){
-                  document.getElementById("rating-box").style.display="none";
-                };
-                
-              }else{
-                document.getElementById("error").innerText="un commentaire est obligatoire";
-              }
-             
-              found = 0;
-              break;
-          }
+      let rating = await getItemDetails(currentItemId);
+     console.log(rating);
+      if(rating==0){
+        var radios = document.getElementsByName("stars");
+        var found = 1;
+        for (var i = 0; i < radios.length; i++) {       
+            if (radios[i].checked) {
+                let nbStars = radios[i].value;
+                let comment = document.getElementById("rate-comment").value;
+                if(comment!=""){
+                  if( await rateItem(currentItemId,nbStars,comment)){
+                    document.getElementById("rating-box").style.display="none";
+                  };
+                  
+                }else{
+                  document.getElementById("error").innerText="un commentaire est obligatoire";
+                }
+               
+                found = 0;
+                break;
+            }
+        }
+          if(found == 1)
+          {
+            alert("Please Select Radio");
+          } 
+      }else{
+        document.getElementById("error").innerText="vous avez déjà évalué  l'offre";
       }
-        if(found == 1)
-        {
-          alert("Please Select Radio");
-        } 
+    
     })
 
     await getMyItems(currentState,true);
@@ -466,12 +473,13 @@ async function itemGived(itemId,collected){
       console.log(error)
     }
   }
-async function rateItem(itemId,comment){
+async function rateItem(itemId,nbStars,comment){
   try {
     var options = {
       method: 'POST',
       body: JSON.stringify({
         itemId: itemId,
+        nbStars:nbStars,
         comment: comment,
       }),
       headers: {
@@ -492,6 +500,36 @@ async function rateItem(itemId,comment){
   }catch(error){
     console.log(error);
     return false;
+  }
+}
+
+async function getItemDetails(itemId){
+
+  try {
+    // hide data to inform if the pizza menu is already printed
+    const options = {
+      // body data type must match "Content-Type" header
+      headers: {
+        "token": getSessionObject("accessToken"),
+      },
+    };
+
+    const response = await fetch("/api/items/itemDetails/" + itemId, options); // fetch return a promise => we wait for the response
+    if (response.status == 307) {
+      await VerifyUser(); 
+      document.location.reload();
+    }
+    if (!response.ok) {
+      throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+      )
+    }
+
+    const item = await response.json();
+    console.log(item);
+    return item.rating;
+  }catch(error){
+    console.log(error);
   }
 }
 export default MyItems;

@@ -34,13 +34,14 @@ public interface ItemUCC {
   /**
    * call the dao to add an interest.
    *
-   * @param itemId      the itemID
-   * @param userId      the user who's sending a request
-   * @param callMe      if the user want to be called
-   * @param phoneNumber the user's phone number
+   * @param itemId         the item id
+   * @param userId         the user's who's sending a request
+   * @param callMe         if the user's want to be called
+   * @param phoneNumber    the user's phone number
+   * @param availabilities the user's availabilities
    */
   void addInterest(int itemId, int userId, boolean callMe,
-      String phoneNumber, String avaibatilities);
+      String phoneNumber, String availabilities);
 
   /**
    * call the DAO to change the itemCondition to cancel.

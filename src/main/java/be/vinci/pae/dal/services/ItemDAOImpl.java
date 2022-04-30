@@ -139,10 +139,10 @@ public class ItemDAOImpl implements ItemDAO {
 
   @Override
   public void addInterest(int idItem, int interestUserId, boolean callMe,
-      String phoneNumber, String avaibatilities) {
+      String phoneNumber, String availabilities) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
-      ps.setString(1, avaibatilities);
+      ps.setString(1, availabilities);
       ps.setInt(2, interestUserId);
       ps.setInt(3, idItem);
       ps.executeUpdate();

@@ -63,11 +63,11 @@ public class ItemUCCImpl implements ItemUCC {
 
   @Override
   public void addInterest(int itemId, int userId, boolean callMe,
-      String phoneNumber, String avaibatilities) {
+      String phoneNumber, String availabilities) {
     try {
       myDalServices.start();
       myItemDAOService.addInterest(itemId, userId, callMe, phoneNumber,
-          avaibatilities);
+          availabilities);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

@@ -232,6 +232,15 @@ public class UserUCCTest {
   }
 
   @Test
+  public void getOneByIdFatalException() {
+    Mockito.when(userDAO.getOneById(ID)).thenThrow(FatalException.class);
+    Assertions.assertAll(
+        () -> Assertions.assertThrows(FatalException.class, () -> userUCC.getOneById(ID)),
+        () -> Mockito.verify(userDAO).getOneById(ID)
+    );
+  }
+
+  @Test
   public void changeStateException() {
     // if the state is not denied or valid the method will throw an exception
     // with the error message "Trying to insert invalid state"

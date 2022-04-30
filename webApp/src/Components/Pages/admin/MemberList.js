@@ -84,7 +84,7 @@ async function getAllMemberByFilter(searchInput, token) {
   try {
     var options = { method: "GET", headers: { token: token } };
     const response = await fetch(
-      "/api/admins/list/filtred?name=" +
+      "/api/admins/filtered?name=" +
         username +
         "&" +
         "city=" +
@@ -355,7 +355,7 @@ async function getAllItemsByItemCondition(itemCondition, token, id, isOfferor) {
   try {
     var options = { method: "GET", headers: { token: token } };
     const response = await fetch(
-      "/api/admins/memberListItems/" +
+      "/api/admins/items/" +
         id +
         "?itemCondition=" +
         itemCondition +

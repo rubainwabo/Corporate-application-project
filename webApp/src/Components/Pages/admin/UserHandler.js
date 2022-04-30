@@ -70,7 +70,7 @@ async function gettAllByState(accesToken, state) {
       },
     };
     const response = await fetch(
-      "/api/admins/listByState?state=" + state,
+      "/api/admins/members?state=" + state,
       option
     ); // fetch return a promise => we wait for the response
     if (response.status == 307) {
@@ -310,14 +310,14 @@ async function addOrRefuse(id, state, rsnRefusal, accesToken, admin, version) {
             admin: admin.checked,
           });
     const options = {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
       body: body1,
       headers: {
         token: accesToken,
         "Content-Type": "application/json",
       },
     };
-    const response = await fetch("/api/admins/changeState", options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/admins/update/state/"+id, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();

@@ -1,4 +1,4 @@
-import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
+import itemImg from "../../img/image_not_available.png";
 import search from "../../img/search.svg";
 import { Redirect } from "../Router/Router";
 import { getSessionObject, VerifyUser } from "../../utils/session";
@@ -133,8 +133,8 @@ const HomePage = async () => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = home;
   let fetchMethodName = getSessionObject("accessToken")
-    ? "lastItemsOfferedConnected"
-    : "lastItemsOfferedNotConnected";
+    ? true
+    : false;
   let token = getSessionObject("accessToken");
   try {
     var options = {
@@ -143,7 +143,7 @@ const HomePage = async () => {
         token: token,
       },
     };
-    const response = await fetch("/api/items/" + fetchMethodName, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items?isConnected=" + fetchMethodName, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();

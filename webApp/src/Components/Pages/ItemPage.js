@@ -66,7 +66,7 @@ const ItemPage = async () => {
       },
     };
 
-    const response = await fetch("/api/items/itemDetails/" + id, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/" + id, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();

@@ -261,9 +261,9 @@ async function getMyItems(state, mine) {
     };
     let response;
     if (mine) {
-      response = await fetch("/api/items/myItems/" + state + "/1", options);
+      response = await fetch("/api/items/member/" + getSessionObject("userId") + "?state="+state +"&mine="+1, options);
     } else {
-      response = await fetch("/api/items/myItems/" + state + "/0", options);
+      response = await fetch("/api/items/member/" + getSessionObject("userId") + "?state="+state +"&mine="+0, options);
     }
     // fetch return a promise => we wait for the response
     if (response.status == 307) {
@@ -378,13 +378,13 @@ function changeOptions(state) {
 async function cancelItem(idItem) {
   try {
     var options = {
-      method: "POST",
+      method: "PUT",
       headers: { token: getSessionObject("accessToken") },
       mode: "cors",
       cache: "default",
     };
     const response = await fetch(
-      "/api/items/changeCondition/" + idItem + "/cancelled",
+      "/api/items/update/" + idItem + "?condition=cancelled",
       options
     ); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
     if (response.status == 307) {
@@ -407,7 +407,7 @@ async function offerAgain(idItem) {
       mode: "cors",
       cache: "default",
     };
-    const response = await fetch("/api/items/offer/again/" + idItem, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/offerAgain/" + idItem, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();

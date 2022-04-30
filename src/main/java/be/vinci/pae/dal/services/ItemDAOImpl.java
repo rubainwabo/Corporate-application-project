@@ -51,12 +51,12 @@ public class ItemDAOImpl implements ItemDAO {
     String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
         + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, "
         + "i.recipient, i.number_of_people_interested, "
-        + "i.number_of_people_interested "
+        + "i.number_of_people_interested,max(d._date) as maxDate "
         + "from projet.items i, projet.item_type it, projet.dates d "
         + "where i.id_item=d.item and i.item_type=it.id_item_type "
         + add
         + " GROUP BY i.id_item, i.description, i.url_picture, "
-        + "i.number_of_people_interested, it.item_type_name";
+        + "i.number_of_people_interested, it.item_type_name ORDER BY maxDate desc";
     System.out.println(query);
     return getItemDTOs(query);
   }

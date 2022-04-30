@@ -54,7 +54,7 @@ const UpdateItem = async () => {
       },
     };
 
-    const response = await fetch("/api/items/itemDetails/" + id, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/" + id, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();
@@ -85,7 +85,7 @@ const UpdateItem = async () => {
 
     try {
       const options = {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        method: "PUT", // *GET, POST, PUT, DELETE, etc.
         body: JSON.stringify({
           id: id,
           offerorId: getSessionObject("userId"),

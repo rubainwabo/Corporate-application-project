@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -31,18 +31,6 @@ public class MemberRessource {
   @Inject
   private TokenService myTokenService;
 
-  /**
-   * Returns the user who's connected.
-   *
-   * @return true or false if state successfully changed.
-   */
-  @GET
-  @Path("myProfile")
-  @Produces(MediaType.APPLICATION_JSON)
-  public UserDTO userMyProfile(@Context ContainerRequest req) {
-    int userId = (int) req.getProperty("id");
-    return myUserUCC.getOneById(userId);
-  }
 
   /**
    * check the validity of a user.
@@ -80,7 +68,7 @@ public class MemberRessource {
    * @return user's details
    */
   @GET
-  @Path("details")
+  @Path("")
   @Produces(MediaType.APPLICATION_JSON)
   public UserDTO userGetOneById(@Context ContainerRequest req, @QueryParam("id") int id) {
     return id > 0 ? myUserUCC.getOneById(id) : myUserUCC.getOneById((int) req.getProperty("id"));
@@ -89,16 +77,14 @@ public class MemberRessource {
   /**
    * Updates the profile of an user.
    *
-   * @param req  request we get.
    * @param body data we want to change.
    * @return true if user updates successfully.
    */
-  @POST
-  @Path("updateProfile")
+  @PUT
+  @Path("update/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public boolean userUpdateProfile(@Context ContainerRequest req, JsonNode body) {
-    int userId = (int) req.getProperty("id");
+  public boolean userUpdateProfile(@PathParam("id") int userId, JsonNode body) {
 
     if (!body.hasNonNull("phone") || !body.hasNonNull("street")
         || !body.hasNonNull("unitNumber") || !body.hasNonNull("city")
@@ -127,16 +113,16 @@ public class MemberRessource {
    *
    * @return true or false if state successfully changed.
    */
-  @POST
-  @Path("updatePassword")
+  @PUT
+  @Path("update/password/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public boolean userUpdatePassword(@Context ContainerRequest req, JsonNode body) {
+  public boolean userUpdatePassword(@PathParam("id") int userId, JsonNode body) {
     if (!body.hasNonNull("newPassword")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("newPassword field is required").type("text/plain").build());
     } else {
-      int userId = (int) req.getProperty("id");
+
       if (body.get("newPassword").asText().isBlank()) {
         throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
             .entity("newPassword field is blank").type("text/plain").build());

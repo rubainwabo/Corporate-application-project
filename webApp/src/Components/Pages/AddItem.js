@@ -100,7 +100,7 @@ const AddItemPage = () => {
         },
       };
 
-      const response = await fetch("/api/itemsType/addItemType", options); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/itemsType", options); // fetch return a promise => we wait for the response
       if (response.status == 307) {
         await VerifyUser();
         document.location.reload();
@@ -152,7 +152,7 @@ const AddItemPage = () => {
         },
       };
 
-      const response = await fetch("/api/items/add", options); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/items", options); // fetch return a promise => we wait for the response
       if (response.status == 307) {
         await VerifyUser();
         document.location.reload();
@@ -191,7 +191,7 @@ const AddItemPage = () => {
           token: getSessionObject("accessToken"),
         },
       };
-      const response = await fetch("/api/itemsType/getAll", options); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/itemsType", options); // fetch return a promise => we wait for the response
 
       if (response.status == 307) {
         await VerifyUser();

@@ -510,7 +510,7 @@ async function getItemDetails(itemId) {
       },
     };
 
-    const response = await fetch("/api/items/itemDetails/" + itemId, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/" + itemId, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();

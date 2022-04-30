@@ -120,13 +120,19 @@ const PickRecipient = async () => {
 async function addRecipient(idItem, idRecipient) {
   try {
     var options = {
-      method: "POST",
-      headers: { token: getSessionObject("accessToken") },
+      method: "PUT",
+      body: JSON.stringify({
+        idItem : idItem ,
+        idRecipient: idRecipient
+      }),
+      headers: { 
+      token: getSessionObject("accessToken"), 
+      "Content-Type": "application/json" },
       mode: "cors",
       cache: "default",
     };
     const response = await fetch(
-      "/api/items/addRecipient/" + idItem + "/" + idRecipient,
+      "/api/items/addRecipient",
       options
     ); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
     if (response.status == 307) {

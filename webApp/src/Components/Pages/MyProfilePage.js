@@ -1,17 +1,14 @@
 import { Redirect } from "../Router/Router";
 import { getSessionObject, VerifyUser } from "../../utils/session";
 
-import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
-
 const monProfil = `
 <div id="triangle"> </div>
 `;
 
 const myProfilePassword = `
-<div id="triangle> </div>
-
+<div id="triangle"></div>
 <section class="vh-100" style="background-color: white;">
-  <div id="main-container" class="container py-5">
+  <div id="main-container">
     <div class="row d-flex justify-content-center align-items-center ">
       <div class="col col-lg-6 mb-4 mb-lg-0">
         <div class="card mb-3" style="border-radius: .5rem;">
@@ -39,7 +36,6 @@ const myProfilePassword = `
 
 const MonProfil = async () => {
   const pageDiv = document.querySelector("#page");
-
   try {
     // hide data to inform if the pizza menu is already printed
     const options = {
@@ -60,7 +56,8 @@ const MonProfil = async () => {
 
     const formDiv = document.createElement("div");
     formDiv.innerHTML = `
-  <div id="main-container" class="container py-5">
+    <div id="triangle"> </div>
+  <div id="main-container" >
     <div class="row d-flex justify-content-center align-items-center ">
       <div class="col col-lg-6 mb-4 mb-lg-0">
         <div class="card mb-3" style="border-radius: .5rem;">

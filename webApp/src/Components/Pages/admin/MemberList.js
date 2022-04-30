@@ -12,7 +12,7 @@ const pageContaint = `
 
 <section id="home-page">
 <div id="home-page-navigation">
-    <h2 id="home-page-title"> Listes des membres</h2>
+    <h2 id="home-page-title"> Liste des membres</h2>
 </div>
 <div id="member-list-checkbox-container">
     <div id="member-list-checkbox-in">

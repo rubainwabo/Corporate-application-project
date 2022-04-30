@@ -175,7 +175,7 @@ let h4GetAll = document.createElement("h4");
 h4GetAll.id="h4GetAllOrNotNotif";
 getAllNotifDiv.id="all-notif";
 txtAllNotifDiv.id="txt-all-notif-div"
-h4GetAll.innerHTML= !isALl ? "Afficher toutes les notifications" : "Afficher les notifications non lus"
+h4GetAll.innerHTML= !isALl ? "Afficher toutes les notifications" : "Afficher les notifications non vues"
 txtAllNotifDiv.appendChild(h4GetAll);
 getAllNotifDiv.appendChild(txtAllNotifDiv);
 boxDiv.appendChild(getAllNotifDiv)
@@ -187,8 +187,9 @@ document.getElementById("all-notif").addEventListener("click",async  () => {
     let token = getSessionObject("accessToken");
     boxDiv.innerHTML="";
     let notificationsList = await getNotificationList(token,true);
+
     await createNotification(notificationsList,boxDiv,true);
-    document.getElementById("h4GetAllOrNotNotif").innerHTML="Afficher les notifications non lus"
+    document.getElementById("h4GetAllOrNotNotif").innerHTML="Afficher les notifications non vues"
   }else {
     let token = getSessionObject("accessToken");
     boxDiv.innerHTML="";

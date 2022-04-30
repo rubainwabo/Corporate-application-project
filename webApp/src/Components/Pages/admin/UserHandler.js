@@ -10,7 +10,7 @@ const userHandler = `
 
 </div>
 <div id="home-page-navigation">
-    <h2 id="home-page-title"> Listes des personnes en attentes/refusées</h2>
+    <h2 id="home-page-title"> Liste des personnes en attentes/refusées</h2>
 </div>
 <div id="switch-list-users">
   <div id="in-toggle-list-user">
@@ -57,7 +57,7 @@ const UserHandler = () => {
   document.querySelector(".slider.round").addEventListener("click", () => {
     if (stateUserList.innerHTML == "ATTENTE") {
       
-      stateUserList.innerHTML = "REFUSÉ"
+      stateUserList.innerHTML = "REFUSÉS"
       gettAllByState(accesToken, "denied");
     } else {
         // click out the div and delete it TODO !
@@ -116,7 +116,7 @@ async function gettAllByState(accesToken, state) {
       inputCheckBox.id = e.id;
       inputCheckBox.type = "checkbox"
       divIsAdminBox.appendChild(inputCheckBox);
-      validBtn.innerHTML = "accepté"
+      validBtn.innerHTML = "accepter"
       divValid.appendChild(validBtn)
       divUserHandler.appendChild(divValid)
       if (state!="denied"){
@@ -124,7 +124,7 @@ async function gettAllByState(accesToken, state) {
         const deniedBtn = document.createElement("p");  
         divDenied.classList=classListCol;
         deniedBtn.classList="user-handler-denied-btn"
-        deniedBtn.innerHTML = "refusé"  
+        deniedBtn.innerHTML = "refuser"  
           divUserHandler.appendChild(divDenied)
           divDenied.appendChild(deniedBtn)
           deniedBtn.addEventListener("click", () => {
@@ -145,7 +145,7 @@ async function gettAllByState(accesToken, state) {
         document.getElementById(e.id).remove();
       });
       divUserHandler.addEventListener("click", (target) => {
-        if (target.target.innerHTML!= "refusé" && target.target.innerHTML!="accepté" &&  target.target.innerHTML!=""){
+        if (target.target.innerHTML!= "refuser" && target.target.innerHTML!="accepter" &&  target.target.innerHTML!=""){
         getUserInformation(e.id, accesToken);
         }
       })

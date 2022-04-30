@@ -13,10 +13,7 @@ const myItems = `
 <div id="triangle"> </div>
 
 <section id="my-items-page">
-    <h2 id="my-items-page-title"> Dernières offres</h2>
-    <div id="">
-        
-    </div>
+    
     <div id="my-items-page-content">
         <div id="my-item-menu">
             <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> Mes offres</a></div>

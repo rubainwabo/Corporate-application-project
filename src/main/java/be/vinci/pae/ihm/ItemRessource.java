@@ -226,6 +226,7 @@ public class ItemRessource {
   public int userAddRecipient(ObjectNode node) {
     if (!node.hasNonNull("idItem") || !node.hasNonNull("idRecipient")
         || node.get("idItem").asInt() <= 0 || node.get("idRecipient").asInt() <= 0) {
+      
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }

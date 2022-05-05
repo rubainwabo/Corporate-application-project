@@ -49,7 +49,7 @@ const MonProfil = async () => {
       },
     };
 
-    const response = await fetch("/api/members/myProfile", options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/members/"+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();
@@ -313,7 +313,7 @@ const MonProfil = async () => {
           let fName = char[1];
 
           let options = {
-            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
             body: JSON.stringify({
               username: usernameInput.value,
               firstName: fName,
@@ -332,7 +332,7 @@ const MonProfil = async () => {
             },
           };
 
-          const res = await fetch("/api/members/updateProfile", options); // fetch return a promise => we wait for the response
+          const res = await fetch("/api/members/update/"+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
           if (response.status == 307) {
             await VerifyUser();
             document.location.reload();

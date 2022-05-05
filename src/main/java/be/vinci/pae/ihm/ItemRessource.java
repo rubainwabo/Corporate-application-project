@@ -11,6 +11,7 @@ import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -41,6 +42,7 @@ public class ItemRessource {
 
   @Inject
   private UserUCC myUserUCC;
+
   /**
    * gets list of offers of the user.
    *
@@ -61,18 +63,17 @@ public class ItemRessource {
    * @return items
    */
   @GET
-  @Path("myItems/{state}/{mine}")
+  @Path("member/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> userMyItems(@Context ContainerRequest req,
-      @PathParam("state") String state, @PathParam("mine") int mine) {
+  public List<ItemDTO> userMyItems(
+      @PathParam("id") int userId, @QueryParam("state") String state,
+      @QueryParam("mine") int mine) {
 
-    int id = (int) req.getProperty("id");
     if (mine == 1) {
-      return myItemUCC.getMyItems(id, state, true);
+      return myItemUCC.getMyItems(userId, state, true);
     } else {
-      System.out.println("MY ITEMS RECEIVED");
-      return myItemUCC.getMyItems(id, state, false);
+      return myItemUCC.getMyItems(userId, state, false);
     }
 
   }
@@ -84,7 +85,6 @@ public class ItemRessource {
    * @return the id of the item insered
    */
   @POST
-  @Path("add")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public int userAddItem(ItemDTO itemDTO, @Context ContainerRequest req) {
@@ -104,7 +104,7 @@ public class ItemRessource {
    * @return the itemDTO find in the DB
    */
   @GET
-  @Path("itemDetails/{id}")
+  @Path("{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public ItemDTO userGetItemDetails(@PathParam("id") int id) {
     if (id <= 0) {
@@ -132,12 +132,12 @@ public class ItemRessource {
     boolean callMe = body.hasNonNull("callMe") && body.get("callMe").asBoolean();
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
     String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
-
+    String availabilities = body.get("availabilities").asText();
     int userId = (int) req.getProperty("id");
     if (callMe && !phoneNumber.isBlank() && updateNumber) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
-    myItemUCC.addInterest(itemId, body, userId);
+    myItemUCC.addInterest(itemId, userId, callMe, phoneNumber, availabilities);
     return Response.ok().build();
   }
 
@@ -146,12 +146,12 @@ public class ItemRessource {
    *
    * @param itemId the id of the item we want to cancel
    */
-  @POST
-  @Path("changeCondition/{id}/{condition}")
+  @PUT
+  @Path("update/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response userChangeItemCondition(@PathParam("id") int itemId,
-      @PathParam("condition") String condition, @Context ContainerRequest req) {
+      @QueryParam("condition") String condition, @Context ContainerRequest req) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information manquante").type("text/plain").build());
@@ -167,10 +167,11 @@ public class ItemRessource {
    * @return a list with all the last items
    */
   @GET
-  @Path("lastItemsOfferedNotConnected")
+  @Path("notConnected")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> getLastItemsOfferedNotConnected() {
-    return myItemUCC.getLastItemsOffered(false);
+  public List<ItemDTO> getLastItemsOfferedNotConnected(
+      @QueryParam("isConnected") boolean connected) {
+    return myItemUCC.getLastItemsOffered(connected);
   }
 
   /**
@@ -179,10 +180,11 @@ public class ItemRessource {
    * @return a list with all the last items
    */
   @GET
-  @Path("lastItemsOfferedConnected")
+  @Path("connected")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ItemDTO> userGetLastItemsOfferedConnected() {
-    return myItemUCC.getLastItemsOffered(true);
+  public List<ItemDTO> userGetLastItemsOfferedConnected(
+      @QueryParam("isConnected") boolean connected) {
+    return myItemUCC.getLastItemsOffered(connected);
   }
 
   /**
@@ -217,16 +219,19 @@ public class ItemRessource {
    *
    * @return a list with all the users
    */
-  @POST
-  @Path("addRecipient/{idItem}/{idRecipient}")
+  @PUT
+  @Path("addRecipient")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public int userAddRecipient(@PathParam("idItem") int idItem,
-      @PathParam("idRecipient") int idRecipient) {
-    if (idItem <= 0 || idRecipient <= 0) {
+  public int userAddRecipient(ObjectNode node) {
+    if (!node.hasNonNull("idItem") || !node.hasNonNull("idRecipient")
+        || node.get("idItem").asInt() <= 0 || node.get("idRecipient").asInt() <= 0) {
+      
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("informations manquantes").type("text/plain").build());
     }
-    return myItemUCC.addRecipient(idItem, idRecipient);
+
+    return myItemUCC.addRecipient(node.get("idItem").asInt(), node.get("idRecipient").asInt());
 
   }
 
@@ -235,7 +240,7 @@ public class ItemRessource {
    *
    * @return 1 if everything is correctly done
    */
-  @POST
+  @PUT
   @Path("update")
   @Produces(MediaType.APPLICATION_JSON)
   public int userUpdateItem(ItemDTO item, @Context ContainerRequest req) {
@@ -251,7 +256,7 @@ public class ItemRessource {
    * retrives to offer again an item.
    */
   @POST
-  @Path("offer/again/{id}")
+  @Path("offerAgain/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public void userOfferItemAgain(@PathParam("id") int idItem, @Context ContainerRequest req) {
     if (idItem <= 0) {
@@ -326,7 +331,6 @@ public class ItemRessource {
   /**
    * rating an item.
    *
-   * @param req  contains the id of the user connected
    * @param node contains the rate and the comment of the rating
    * @return
    */
@@ -334,7 +338,7 @@ public class ItemRessource {
   @Path("rate")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response userRateItem(@Context ContainerRequest req, JsonNode node) {
+  public Response userRateItem(JsonNode node) {
 
     if (!node.hasNonNull("itemId") || !node.hasNonNull("comment")
         || node.get("itemId").asInt() <= 0) {

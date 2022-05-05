@@ -1,123 +1,110 @@
-
 import { Redirect } from "../Router/Router";
 
 const register = `
 <div id="triangle"> </div>
-
 <section id="register-page">
-    
-    <h2> Inscrivez-vous !</h2>
-        <form action="#" id="register-form">
-        <span id="error"></span>
-            <div>
-                <input id ='username-rgst' type='text' placeholder='Username' required="required">
-            </div>
-            <div>
-                <input id ='password-rgst' type='password' placeholder='Password' required="required">
-                <input id ='confirm-pass-rgst' type='password' placeholder='Confirm password'>
-            </div>
-            <div>
-                <input id ='last-name-rgst' type='text' placeholder='Last name' required="required">
-                <input id ='first-name-rgst' type='text' placeholder='First name' required="required">
-            </div>
-            <div>
-                <input id ='city-rgst' type='text' placeholder='City' required="required">
-            </div>
-            <div>
-                <input id ='street-rgst' type='text' placeholder='Street' required="required">
-                <input id ='number-of-building-rgst' type='number' placeholder='Number of building' required="required">
-                <input id ='unit-number' type='number' placeholder='Unit number'>
-            </div>
-            <div>
-                <input id ='post-code-rgst' type='number' placeholder='Post code' required="required">
-            </div>
-
-            <div id="user-decision">
-                <div id="form-button-box">
-                    <input type="submit" value="Envoyer"> 
-                </div>
-                
-            </div>         
-        </form>
-   
-
-    <div id="register-pop-up"> 
-        <p>Votre incription a été réalisé</p>
-        <button id="register-done"> Terminer </button>
-    </div>
-
-</section>
-`;
+   <h2> Inscrivez-vous !</h2>
+   <form action="#" id="register-form">
+      <span id="error"></span>
+      <div>
+         <input id ='username-rgst' type='text' placeholder='Username' required="required">
+      </div>
+      <div>
+         <input id ='password-rgst' type='password' placeholder='Password' required="required">
+         <input id ='confirm-pass-rgst' type='password' placeholder='Confirm password'>
+      </div>
+      <div>
+         <input id ='last-name-rgst' type='text' placeholder='Last name' required="required">
+         <input id ='first-name-rgst' type='text' placeholder='First name' required="required">
+      </div>
+      <div>
+         <input id ='city-rgst' type='text' placeholder='City' required="required">
+      </div>
+      <div>
+         <input id ='street-rgst' type='text' placeholder='Street' required="required">
+         <input id ='number-of-building-rgst' type='number' placeholder='Number of building' required="required">
+         <input id ='unit-number' type='number' placeholder='Unit number'>
+      </div>
+      <div>
+         <input id ='post-code-rgst' type='number' placeholder='Post code' required="required">
+      </div>
+      <div id="user-decision">
+         <div id="form-button-box">
+            <input type="submit" value="Envoyer"> 
+         </div>
+      </div>
+   </form>
+   <div id="register-pop-up">
+      <p>Votre incription a été réalisé</p>
+      <button id="register-done"> Terminer </button>
+   </div>
+</section>`;
 
 const Register = () => {
-   
-    const pageDiv = document.querySelector("#page");
-    pageDiv.innerHTML = register;
+  const pageDiv = document.querySelector("#page");
+  pageDiv.innerHTML = register;
 
-    let registerForm = document.getElementById("register-form");
+  let registerForm = document.getElementById("register-form");
 
-    registerForm.addEventListener("submit", async function(e){
-        e.preventDefault();
+  registerForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-        let username = document.getElementById("username-rgst").value;
-        let lastName = document.getElementById("last-name-rgst").value;
-        let firstName= document.getElementById("first-name-rgst").value;
-        let password= document.getElementById("password-rgst").value;
-        let street = document.getElementById("street-rgst").value;
-        let buildingNumber = document.getElementById("number-of-building-rgst").value;
-        let unitNumber = document.getElementById("unit-number").value;
-        let postCode = document.getElementById("post-code-rgst").value;
-        let city = document.getElementById("city-rgst").value;
-        let urlPhoto = "url_photo";
-        let registerDone = document.getElementById("register-done");
+    let username = document.getElementById("username-rgst").value;
+    let lastName = document.getElementById("last-name-rgst").value;
+    let firstName = document.getElementById("first-name-rgst").value;
+    let password = document.getElementById("password-rgst").value;
+    let street = document.getElementById("street-rgst").value;
+    let buildingNumber = document.getElementById(
+      "number-of-building-rgst"
+    ).value;
+    let unitNumber = document.getElementById("unit-number").value;
+    let postCode = document.getElementById("post-code-rgst").value;
+    let city = document.getElementById("city-rgst").value;
+    let urlPhoto = "url_photo";
+    let registerDone = document.getElementById("register-done");
 
-        
+    registerDone.addEventListener("click", function (e) {
+      e.preventDefault();
+      Redirect("/");
+    });
 
-        registerDone.addEventListener("click",function(e){
-          e.preventDefault();
-          Redirect("/");
-        })
-       
-        try {
-            const options = {
-              method: "POST", // *GET, POST, PUT, DELETE, etc.
-              body: JSON.stringify({
-                userName: username,
-                lastName: lastName,
-                firstName: firstName,
-                password: password,
-                street: street,
-                buildingNumber: buildingNumber,
-                unitNumber: unitNumber,
-                postCode: postCode,
-                city: city,
-                urlPhoto: urlPhoto
-              }), // body data type must match "Content-Type" header
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
-      
-            const response = await fetch("/api/auths/register", options); // fetch return a promise => we wait for the response
-      
-            if (!response.ok) {
-              response.text().then((result)=>{
-                document.getElementById("error").innerText=result;
-              })
-              throw new Error(
-                "fetch error : " + response.status + " : " + response.statusText
-              );
-            }
+    try {
+      const options = {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        body: JSON.stringify({
+          userName: username,
+          lastName: lastName,
+          firstName: firstName,
+          password: password,
+          street: street,
+          buildingNumber: buildingNumber,
+          unitNumber: unitNumber,
+          postCode: postCode,
+          city: city,
+          urlPhoto: urlPhoto,
+        }), // body data type must match "Content-Type" header
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-            document.getElementById("register-pop-up").style.display="flex";  
-            // call the HomePage via the Router
+      const response = await fetch("/api/auths/register", options); // fetch return a promise => we wait for the response
 
-            
-          } catch (error) {
-            console.error("LoginPage::error: ", error);
-          }
-    })
+      if (!response.ok) {
+        response.text().then((result) => {
+          document.getElementById("error").innerText = result;
+        });
+        throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
 
-  };
-  
+      document.getElementById("register-pop-up").style.display = "flex";
+      // call the HomePage via the Router
+    } catch (error) {
+      console.error("LoginPage::error: ", error);
+    }
+  });
+};
+
 export default Register;

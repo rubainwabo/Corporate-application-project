@@ -6,7 +6,6 @@ import be.vinci.pae.dal.services.DateDAO;
 import be.vinci.pae.dal.services.ItemDAO;
 import be.vinci.pae.utils.exception.BizzException;
 import be.vinci.pae.utils.exception.FatalException;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
@@ -95,22 +94,35 @@ public class ItemUCCTest {
     );
   }
 
-
   @Test
-  public void addInterestSuccessful() {
-    ObjectNode objectNode = Mockito.mock(ObjectNode.class);
+  public void getItemsSuccessful() {
+    List<ItemDTO> list = Mockito.mock(List.class);
 
-    itemUCC.addInterest(ID, objectNode, ID);
-    Mockito.verify(itemDAO).addInterest(ID, objectNode, ID);
-
+    Mockito.when(itemDAO.getFiltered(state, state)).thenReturn(list);
+    Assertions.assertEquals(list, itemUCC.getItems(state, state));
   }
 
   @Test
+  public void getItemsFatalException() {
+    Mockito.when(itemDAO.getFiltered(state, state)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.getItems(state, state));
+  }
+
+
+  @Test
+  public void addInterestSuccessful() {
+    itemUCC.addInterest(ID, ID, true, state, state);
+    Mockito.verify(itemDAO).addInterest(ID, ID, true, state, state);
+
+  }
+
+
+  @Test
   public void addInterestFatalException() {
-    ObjectNode objectNode = Mockito.mock(ObjectNode.class);
-    Mockito.doThrow(FatalException.class).when(itemDAO).addInterest(ID, objectNode, ID);
-    Assertions.assertThrows(FatalException.class, () -> itemUCC.addInterest(ID, objectNode, ID));
-    Mockito.verify(itemDAO, Mockito.times(1)).addInterest(ID, objectNode, ID);
+    Mockito.doThrow(FatalException.class).when(itemDAO).addInterest(ID, ID, true, state, state);
+    Assertions.assertThrows(FatalException.class,
+        () -> itemUCC.addInterest(ID, ID, true, state, state));
+    Mockito.verify(itemDAO, Mockito.times(1)).addInterest(ID, ID, true, state, state);
 
   }
 
@@ -256,8 +268,6 @@ public class ItemUCCTest {
 
   @Test
   public void offerAgainFatalException() {
-    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
-
     Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
     Assertions.assertAll(
         () -> Assertions.assertThrows(FatalException.class, () -> itemUCC.offerAgain(ID, ID)),
@@ -295,8 +305,6 @@ public class ItemUCCTest {
 
   @Test
   public void itemCollectedOrNotFatalException() {
-    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
-
     Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
     Assertions.assertAll(
         () -> Assertions.assertThrows(FatalException.class,
@@ -358,6 +366,4 @@ public class ItemUCCTest {
     Assertions.assertThrows(FatalException.class, () -> itemUCC.rateItem(ID, ID, state));
     Mockito.verify(itemDAO).rateItem(ID, ID, state);
   }
-
-
 }

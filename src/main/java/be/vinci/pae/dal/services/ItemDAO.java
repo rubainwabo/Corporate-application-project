@@ -1,7 +1,6 @@
 package be.vinci.pae.dal.services;
 
 import be.vinci.pae.buiseness.dto.ItemDTO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 
 public interface ItemDAO {
@@ -36,11 +35,14 @@ public interface ItemDAO {
   /**
    * try to add an interest for an object.
    *
-   * @param idItem     the item id
-   * @param objectNode the node getted from the front
-   * @param userId     the user who send the request
+   * @param idItem         the item id
+   * @param userId         the user's who's sending a request
+   * @param callMe         if the user's want to be called
+   * @param phoneNumber    the user's phone number
+   * @param availabilities the user's availabilities
    */
-  void addInterest(int idItem, ObjectNode objectNode, int userId);
+  void addInterest(int idItem, int userId, boolean callMe,
+      String phoneNumber, String availabilities);
 
   /**
    * retrives to change the itemCondition to cancelled.

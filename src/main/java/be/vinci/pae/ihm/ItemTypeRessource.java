@@ -30,7 +30,6 @@ public class ItemTypeRessource {
    * @return the id returned by the insert
    */
   @POST
-  @Path("addItemType")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public ItemTypeDTO userAddItemType(JsonNode itemType) {
@@ -47,7 +46,6 @@ public class ItemTypeRessource {
    * @return a list of all the itemType
    */
   @GET
-  @Path("getAll")
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemTypeDTO> userGetAllItemType() {
     return myItemTypeUCC.getAllItemType();

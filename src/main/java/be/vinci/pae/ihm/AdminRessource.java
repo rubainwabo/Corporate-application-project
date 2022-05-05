@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -37,7 +37,7 @@ public class AdminRessource {
    * @return a list of users based on received be.vinci.pae.filters.
    */
   @GET
-  @Path("list/filtred")
+  @Path("filtered")
   @Produces(MediaType.APPLICATION_JSON)
   public List<UserDTO> adminMemberListFiltred(@QueryParam("name") String name,
       @QueryParam("city") String city, @QueryParam("postCode") String postCode) {
@@ -63,7 +63,7 @@ public class AdminRessource {
    * @return a list of user by a specific state
    */
   @GET
-  @Path("listByState")
+  @Path("members")
   @Produces(MediaType.APPLICATION_JSON)
   public List<UserDTO> adminListByState(@QueryParam("state") String state) {
     if (state.isBlank()) {
@@ -79,12 +79,12 @@ public class AdminRessource {
    * @param body the data that the user has entered put in json format
    * @return true or false if state successfully changed.
    */
-  @POST
-  @Path("changeState")
+  @PUT
+  @Path("update/state/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public boolean adminChangeState(JsonNode body) {
-    if (!body.hasNonNull("change_id") || !body.hasNonNull("state")) {
+  public boolean adminChangeState(JsonNode body, @PathParam("id") int userId) {
+    if (userId <= 0 || !body.hasNonNull("state")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("id field is required").type("text/plain").build());
     }
@@ -102,11 +102,11 @@ public class AdminRessource {
           .type("text/plain").build());
     }
     if (body.hasNonNull("refusalReason")) {
-      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(),
+      return myUserUCC.changeState(userId, body.get("state").asText(),
           body.get("refusalReason").asText(), body.get("admin").asBoolean(),
           body.get("version").asInt());
     } else {
-      return myUserUCC.changeState(body.get("change_id").asInt(), body.get("state").asText(), "",
+      return myUserUCC.changeState(userId, body.get("state").asText(), "",
           body.get("admin").asBoolean(), body.get("version").asInt());
     }
   }
@@ -120,7 +120,7 @@ public class AdminRessource {
    * @return the list of his items.
    */
   @GET
-  @Path("memberListItems/{id}")
+  @Path("items/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> adminAllMemberItemsByItemCondition(
       @QueryParam("itemCondition") String itemCondition, @PathParam("id") int userId,

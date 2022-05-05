@@ -26,6 +26,7 @@ public class NotificationDAOImpl implements NotificationDAO {
         + " and n.item=i.id_item and i.item_type="
         + "it.id_item_type";
     query += allNotif ? "" : " and n.is_viewed=false";
+    query += " order by n.id_notification desc";
 
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         query)) {

@@ -21,6 +21,13 @@ p.user-handler-accepted-btn {
 p.user-handler-denied-btn {
   margin-bottom: 0px;
 }
+
+p.user-handler-accepted-btn:hover,p.user-handler-denied-btn:hover{
+  font-size: 110%;
+  transition:all;
+  transition-duration: 0.2s;
+}
+
 nav {
   padding-left: 20px;
   padding-right: 20px;
@@ -470,8 +477,8 @@ add-item-page
   width: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
+
 
 #user-handler-list, #member-list {
   width: 100%;
@@ -524,18 +531,20 @@ add-item-page
 #my-items-page-content {
   display: flex;
   justify-content: space-between;
-
+  width: 110%;
+  margin-left: 120px;
 }
 
 #my-item-menu {
   margin-right: 15vh;
   width: 30vh;
   margin-top: 3%;
-
 }
 
 .my-item-link a {
   text-decoration: none;
+  font-size: 18px;
+  font-weight: lighter;
 }
 
 .my-item-link {
@@ -547,23 +556,21 @@ add-item-page
 }
 
 #my-items-pop-up {
-  display: none;
-  position: absolute;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  height: 40vh;
-  width: 50vh;
-  background-color: white;
-  border-radius: 5%;
-
-
+  border: 1px solid black;
+    display: none;
+    position: fixed;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 40vh;
+    width: 50vh;
+    background-color: white;
+    border-radius: 5%;
 }
 
 #my-items-pop-up div {
@@ -782,7 +789,7 @@ input {
 .user-to-handle {
   position: relative;
   height: 9vh;
-  border-radius: 75px;
+  border-radius: 0.5rem;
   display: flex;
   width: 100%;
   border: #e9e5e1 1px solid;
@@ -808,14 +815,14 @@ input {
   width: 100%;
   height: 100%;
   background: #FDA8CF;
-  border-radius: 75px;
-  animation: 1s clockwise infinite;
+  border-radius: 0.5rem;
+  animation: 1.3s clockwise infinite;
   z-index: -1;
 }
 
 .user-to-handle:hover:after{
   background: #FFF59B;
-  animation: 2s counterclockwise infinite;
+  animation: 2.4s counterclockwise infinite;
 }
 @keyframes clockwise {
   0% {
@@ -976,13 +983,13 @@ input:checked + .slider:before {
 
 #text-state-list-user {
   text-align: center;
-  line-height: 28px;
+  line-height: 26.4px;
   padding-right: 20px;
 }
 
 #state-user-handler {
   border: solid;
-  border-radius: 100px;
+  border-radius: 0.5rem;
   height: 32px;
   width: 176px;
 }
@@ -1108,8 +1115,9 @@ input:checked + .slider:before {
 }
 
 .member-list-offered-items {
-  padding-left: 5px;
-  padding-top: 90px;
+  padding-right: 20px;
+    padding-left: 50px;
+    padding-top: 90px;
 }
 
 .member-list-container-item {
@@ -1121,10 +1129,9 @@ input:checked + .slider:before {
   float: right;
     background-color: white;
     height: 100%;
-    width: 50%;
+    width: 38%;
     display: flex;
     align-items: center;
-    justify-content: center;
     padding-left: 22px;
 }
 

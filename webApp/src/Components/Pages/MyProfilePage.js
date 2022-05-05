@@ -8,10 +8,10 @@ const monProfil = `
 `;
 
 const myProfilePassword = `
-<div id="triangle> </div>
+<div id="triangle"> </div>
 
 <section class="vh-100" style="background-color: white;">
-  <div id="main-container" class="container py-5">
+  <div id="main-container" class="py-5">
     <div class="row d-flex justify-content-center align-items-center ">
       <div class="col col-lg-6 mb-4 mb-lg-0">
         <div class="card mb-3" style="border-radius: .5rem;">
@@ -60,7 +60,7 @@ const MonProfil = async () => {
 
     const formDiv = document.createElement("div");
     formDiv.innerHTML = `
-  <div id="main-container" class="container py-5">
+  <div id="main-container" class="py-5">
     <div class="row d-flex justify-content-center align-items-center ">
       <div class="col col-lg-6 mb-4 mb-lg-0">
         <div class="card mb-3" style="border-radius: .5rem;">

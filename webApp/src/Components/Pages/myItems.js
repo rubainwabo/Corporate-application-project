@@ -13,10 +13,7 @@ const myItems = `
 <div id="triangle"> </div>
 
 <section id="my-items-page">
-    <h2 id="my-items-page-title"> Dernières offres</h2>
-    <div id="">
-        
-    </div>
+  
     <div id="my-items-page-content">
         <div id="my-item-menu">
             <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> Mes offres</a></div>
@@ -340,7 +337,7 @@ function changeOptions(state){
     let links = document.querySelectorAll("#my-item-menu div a");
     console.log(links);
     for(let i=0;i<links.length;i++){
-        links[i].style.fontWeight="normal";
+        links[i].style.fontWeight="lighter";
     }
 
     document.getElementById("my-items-pop-up").style.display="none"
@@ -350,33 +347,33 @@ function changeOptions(state){
         update.style.display="flex";
         show.style.display="flex";
         pickRecipient.style="flex";
-        document.getElementById("get-items-offered").style.fontWeight="bold";
+        document.getElementById("get-items-offered").style.fontWeight="normal";
     }else if(state=="cancelled"){
         offerAgain.style.display="flex";
         show.style.display="flex";
-        document.getElementById("get-items-cancelled").style.fontWeight="bold";
+        document.getElementById("get-items-cancelled").style.fontWeight="normal";
     }else if(state=="Assigned"){
         itemGived.style.display="flex";
         itemNotGived.style.display="flex";
 
         itemGived.style.display="flex";
         show.style.display="flex";
-        document.getElementById("get-items-assigned").style.fontWeight="bold"
+        document.getElementById("get-items-assigned").style.fontWeight="normal"
     }else if(state=="gifted-by-me"){
       show.style.display="flex";
-      document.getElementById("get-items-gifted-by-me").style.fontWeight="bold"
+      document.getElementById("get-items-gifted-by-me").style.fontWeight="normal"
 
     } else if(state=="item-not-gived"){
       offerAgain.style.display="flex";
       cancel.style.display="flex";
       pickRecipient.style.display="flex";
       document.getElementById("my-items-pop-up").style.display="flex";
-      document.getElementById("get-items-assigned").style.fontWeight="bold"
+      document.getElementById("get-items-assigned").style.fontWeight="normal"
       
     }else{
       rating.style.display="flex";
       show.style.display="flex";
-      document.getElementById("get-items-gifted").style.fontWeight="bold"
+      document.getElementById("get-items-gifted").style.fontWeight="normal"
     }
 }
 async function cancelItem(idItem){

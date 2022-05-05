@@ -13,7 +13,6 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -68,8 +67,9 @@ public class MemberRessource {
    * @return user's details
    */
   @GET
+  @Path("{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public UserDTO userGetOneById(@Context ContainerRequest req, @QueryParam("id") int id) {
+  public UserDTO userGetOneById(@Context ContainerRequest req, @PathParam("id") int id) {
     return id > 0 ? myUserUCC.getOneById(id) : myUserUCC.getOneById((int) req.getProperty("id"));
   }
 

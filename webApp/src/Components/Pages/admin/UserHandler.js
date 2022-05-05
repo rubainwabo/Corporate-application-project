@@ -171,7 +171,7 @@ async function getUserInformation(id, accesToken) {
         token: accesToken,
       },
     };
-    const response = await fetch("/api/members/details?id=" + id, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/members/" + id, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();
@@ -317,6 +317,7 @@ async function addOrRefuse(id, state, rsnRefusal, accesToken, admin, version) {
         "Content-Type": "application/json",
       },
     };
+    console.log(id);
     const response = await fetch("/api/admins/update/state/"+id, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();

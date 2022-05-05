@@ -46,7 +46,7 @@ const MonProfil = async () => {
       },
     };
 
-    const response = await fetch("/api/members?id="+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/members/"+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();
@@ -265,7 +265,7 @@ const MonProfil = async () => {
             const pwd = document.getElementById("pwd-1");
             const msg = document.getElementById("error-msg");
             let options = {
-              method: "POST", // *GET, POST, PUT, DELETE, etc.
+              method: "PUT", // *GET, POST, PUT, DELETE, etc.
               body: JSON.stringify({
                 newPassword: pwd.value,
               }),
@@ -277,7 +277,7 @@ const MonProfil = async () => {
             };
 
             if (pwd.value.length > 5) {
-              const res = await fetch("/api/members/update/password/id="+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
+              const res = await fetch("/api/members/update/password/"+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
               if (response.status == 307) {
                 await VerifyUser();
                 document.location.reload();
@@ -329,7 +329,7 @@ const MonProfil = async () => {
             },
           };
 
-          const res = await fetch("/api/members/update/id="+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
+          const res = await fetch("/api/members/update/"+getSessionObject("userId"), options); // fetch return a promise => we wait for the response
           if (response.status == 307) {
             await VerifyUser();
             document.location.reload();

@@ -219,17 +219,19 @@ public class ItemRessource {
    *
    * @return a list with all the users
    */
-  @POST
+  @PUT
   @Path("addRecipient")
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public int userAddRecipient(ObjectNode node) {
     if (!node.hasNonNull("idItem") || !node.hasNonNull("idRecipient")
         || node.get("idItem").asInt() <= 0 || node.get("idRecipient").asInt() <= 0) {
+      
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }
 
-    return myItemUCC.addRecipient(node.get("itemId").asInt(), node.get("idRecipient").asInt());
+    return myItemUCC.addRecipient(node.get("idItem").asInt(), node.get("idRecipient").asInt());
 
   }
 

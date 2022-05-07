@@ -53,6 +53,7 @@ const PickRecipient = async () => {
       document.getElementById("recipient-page-item-users").innerText =
         "aucun interet pour l'instant";
     }
+    // list of user
     users.forEach((user) => {
       let userBox = document.createElement("div");
       let lastName = document.createElement("p");
@@ -79,7 +80,6 @@ const PickRecipient = async () => {
 
       document.getElementById("recipient-page-item-users").appendChild(userBox);
     });
-    console.log(users);
   } catch (error) {
     console.log(error);
   }
@@ -103,7 +103,7 @@ const PickRecipient = async () => {
         "fetch error : " + response.status + " : " + response.statusText
       );
     }
-
+    // get the item
     const item = await response.json();
 
     document.getElementById("recipient-page-item-type").innerText =
@@ -111,7 +111,6 @@ const PickRecipient = async () => {
     document.getElementById("recipient-page-item-description").innerText =
       item.description;
 
-    console.log(item);
   } catch (error) {
     console.error("LoginPage::error: ", error);
   }

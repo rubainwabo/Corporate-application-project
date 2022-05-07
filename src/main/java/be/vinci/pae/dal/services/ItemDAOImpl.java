@@ -56,7 +56,6 @@ public class ItemDAOImpl implements ItemDAO {
         + add
         + " GROUP BY i.id_item, i.description, i.url_picture, "
         + "i.number_of_people_interested, it.item_type_name ORDER BY maxDate desc";
-    System.out.println(query);
     return getItemDTOs(query, false);
   }
 
@@ -401,8 +400,8 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   private void _updateItemOfInvalidMember(boolean isOfferor, int memberId) {
-    var items = isOfferor ? getMyItems(memberId, "Assigned", true)
-        : getMyItems(memberId, "Assigned", false);
+    var items = isOfferor ? getMyItems(memberId, "Assigned", 0, true)
+        : getMyItems(memberId, "Assigned", 0, false);
     if (items.size() > 0) {
       String itemCondition = isOfferor ? "invalid offeror" : "invalid recipient";
       String query = "insert into projet.notifications "

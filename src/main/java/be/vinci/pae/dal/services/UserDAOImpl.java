@@ -164,8 +164,6 @@ public class UserDAOImpl implements UserDAO {
     String queryVersion = "SELECT version FROM projet.members"
         + " WHERE user_id = " + userId;
 
-    System.out.println(query);
-
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       if (psConfirm.executeUpdate() == 0) {
@@ -220,7 +218,6 @@ public class UserDAOImpl implements UserDAO {
     query += !name.isBlank() || !city.isBlank() || !postCode.isBlank()
         ? add + " group by m.user_id" :
         " group by m.user_id";
-    System.out.println(query);
     try (PreparedStatement ps = myDalService.getPreparedStatement(query)) {
       ArrayList<UserDTO> userDTOS = new ArrayList<>();
       try (ResultSet rs = ps.executeQuery()) {

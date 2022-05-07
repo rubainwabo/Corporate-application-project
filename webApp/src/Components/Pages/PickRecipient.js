@@ -8,18 +8,30 @@ import {
 
 /**
  * Render the pick recipient page
+ * 
  */
+
+
 const pickRecipient = `
 <div id="triangle"> </div>
 <section id="pick-recipient-page">
-   <div id="recipient-page-item-infos">
-      <div>
-         <p id="recipient-page-item-type"></p>
-         <p id="recipient-page-item-description"></p>
+   <div id="recipient-page-container">
+      <div id="pick-recipient-page-left">
+              <div class="recipent-page-desc">
+              <h6 id="recipent-page-item-type-title"></h6>
+               <p id="recipient-page-item-type"></p>
+               </div>
+               <div class="recipent-page-desc">
+               <h6 id="recipent-page-item-description-title"></h6>
+               <p id="recipient-page-item-description"></p>
+              </div>
+            <img id="recipient-page-item-img">
+         </div>
+      <div id="pick-recipient-page-right">
+         <div id="recipient-page-item-users">
+         <h6 id="recipient-page-item-users-no-interest"> </h6>
+         </div>
       </div>
-      <div> <img src=${itemImg} ></div>
-   </div>
-   <div id="recipient-page-item-users">
    </div>
 </section>
 `;
@@ -29,6 +41,7 @@ const PickRecipient = async () => {
   let token = getSessionObject("accessToken");
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = pickRecipient;
+  getPicture(id,document.getElementById("recipient-page-item-img"));
 
   try {
     var options = {
@@ -48,17 +61,26 @@ const PickRecipient = async () => {
     }
 
     const users = await response.json();
-
     if (users.length == 0) {
-      document.getElementById("recipient-page-item-users").innerText =
-        "aucun interet pour l'instant";
+      let myItems = document.getElementById("recipient-page-item-users-no-interest");
+      myItems.innerText =
+      "Aucun interet pour l'instant";
     }
+    // list of user
     users.forEach((user) => {
       let userBox = document.createElement("div");
-      let lastName = document.createElement("p");
-      let firstName = document.createElement("p");
-      let adress = document.createElement("p");
-      let addButton = document.createElement("button");
+      let lastName = document.createElement("span");
+      let firstName = document.createElement("span");
+      let adress = document.createElement("span");
+      const divBtn = document.createElement("div");
+      let addButton = document.createElement("p");
+
+      lastName.classList="col-2"
+      firstName.classList="col-2"
+      adress.classList="col-3"
+      divBtn.classList="col-2"
+      addButton.classList="user-handler-denied-btn"
+      divBtn.classList="col-2"
 
       lastName.innerText = user.lastName;
       firstName.innerText = user.firstName;
@@ -70,24 +92,33 @@ const PickRecipient = async () => {
         await addRecipient(id, user.id);
         Redirect("/myitems");
       });
-      userBox.classList.add("user-interest");
+      userBox.classList.add("user-list-pick-recipient");
+      userBox.style.cursor="auto"
+      
+      let userInBox = document.getElementById("recipient-page-item-users");
+      if (users.length == 1){
+        userInBox.style.height="12vh";
+      }else if (users.length == 2){
+        userInBox.style.height="24vh";
+      }else if (users.length==3 ){
+        userInBox.style.height="274px"
+      }else {
+        userInBox.style.height="363px"
+      }
 
       userBox.appendChild(lastName);
       userBox.appendChild(firstName);
       userBox.appendChild(adress);
-      userBox.appendChild(addButton);
-
+      divBtn.appendChild(addButton)
+      userBox.appendChild(divBtn);
       document.getElementById("recipient-page-item-users").appendChild(userBox);
     });
-    console.log(users);
   } catch (error) {
     console.log(error);
   }
 
   try {
-    // hide data to inform if the pizza menu is already printed
     const options = {
-      // body data type must match "Content-Type" header
       headers: {
         token: getSessionObject("accessToken"),
       },
@@ -103,15 +134,16 @@ const PickRecipient = async () => {
         "fetch error : " + response.status + " : " + response.statusText
       );
     }
-
+    // get the item
     const item = await response.json();
-
     document.getElementById("recipient-page-item-type").innerText =
-      item.itemtype;
+     item.itemtype;
     document.getElementById("recipient-page-item-description").innerText =
-      item.description;
+ item.description;
 
-    console.log(item);
+      document.getElementById("recipent-page-item-type-title").innerHTML="Type de l'objet : ";
+      document.getElementById("recipent-page-item-description-title").innerHTML="Description de l'objet : ";
+
   } catch (error) {
     console.error("LoginPage::error: ", error);
   }
@@ -161,6 +193,26 @@ function getId() {
     }
   } else {
     return -1;
+  }
+}
+async function getPicture(itemId, imgDiv) {
+  try {
+    const response = await fetch("/api/items/picture/" + itemId); // fetch return a promise => we wait for the response
+
+    if (!response.ok) {
+      imgDiv.src = itemImg;
+      throw new Error(
+        "fetch error : " + response.status + " : " + response.statusText
+      );
+    }
+    if (response.ok) {
+      const imageBlob = await response.blob();
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      
+      imgDiv.src = imageObjectURL;
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 

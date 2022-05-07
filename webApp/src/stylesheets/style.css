@@ -20,12 +20,14 @@ p.user-handler-accepted-btn {
 
 p.user-handler-denied-btn {
   margin-bottom: 0px;
+
 }
 
 p.user-handler-accepted-btn:hover,p.user-handler-denied-btn:hover{
   font-size: 120%;
   transition:all;
   transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 nav {
@@ -702,9 +704,11 @@ add-item-page
   align-items: center;
   align-self: center;
   justify-self: center;
-  width: 80%;
-  height: 90vh;
-
+  width: 90%;
+  height: 60vh;
+}
+#recipient-page-container{
+  width: 100%;
 }
 
 .user-interest {
@@ -719,17 +723,24 @@ add-item-page
 }
 
 #recipient-page-item-infos {
-  display: flex;
-  justify-content: space-between;
-  width: 100vh;
+
 }
 
-#recipient-page-item-infos img {
-  height: 20vh;
+#pick-recipient-page-left img {
+  height: 40vh;
+  max-width: 36vw;
 }
 
 #recipient-page-item-users {
-  margin-top: 10vh;
+  height: 193px;
+    /* margin-top: 61px; */
+    overflow: scroll;
+    border-radius: 15px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    width: 80%;
+    margin-left: 5vw;
 }
 
 
@@ -796,7 +807,7 @@ input {
   padding-top: 5vh;
 }
 
-.user-to-handle {
+.user-to-handle,.user-list-pick-recipient {
   position: relative;
   height: 9vh;
   border-radius: 0.5rem;
@@ -1427,4 +1438,19 @@ h6{
 
 .member-list-invalid-btn:focus {
 	outline: none;
+}
+#pick-recipient-page-left{
+  float: left;
+  width: 40%;
+  height: 100%;
+}
+#pick-recipient-page-right{
+  height: 100%;
+    float: right;
+    width: 60%;
+    display: flex;
+    align-items: center;
+}
+.recipent-page-desc{
+  width: 80%;
 }

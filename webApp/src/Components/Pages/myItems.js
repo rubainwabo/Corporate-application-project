@@ -11,67 +11,80 @@ const data = [
 /**
  * Render the LoginPage
  */
+const starsForm=`<form class="rating">
+<label>
+<input id="star1" type="radio" name="stars" value="1" />
+<span class="icon">★</span>
+</label>
+<label>
+<input id="star2" type="radio" name="stars" value="2" />
+<span class="icon">★</span>
+<span class="icon">★</span>
+</label>
+<label>
+<input id="star3" type="radio" name="stars" value="3" />
+<span class="icon">★</span>
+<span class="icon">★</span>
+<span class="icon">★</span>   
+</label>
+<label>
+<input id="star4" type="radio" name="stars" value="4" />
+<span class="icon">★</span>
+<span class="icon">★</span>
+<span class="icon">★</span>
+<span class="icon">★</span>
+</label>
+<label>
+<input id="star5" type="radio" name="stars" value="5" />
+<span class="icon">★</span>
+<span class="icon">★</span>
+<span class="icon">★</span>
+<span class="icon">★</span>
+<span class="icon">★</span>
+</label>`
 const myItems = `
 <div id="triangle"> </div>
-<section id="my-items-page">
-   <div id="my-items-page-content">
-      <div id="my-item-menu">
-         <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> Mes offres</a></div>
-         <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> Mes offres annulées </a></div>
-         <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> Mes offres attribuées </a></div>
-         <div class="my-item-link" > <a href="#" id="get-items-gifted-by-me"  data-uri="/userhandeler"> Mes offres données </a></div>
-         <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçus  </a></div>
-      </div>
-      <div id="all-recent-item">
-      </div>
-   </div>
-   <div id="my-items-pop-up">
-      <div id="cancell-item" class="pop-up-option"> Annuler l'offre </div>
-      <div id="offer-again" style="color:green; font-weight: bold" class="pop-up-option"> Offir à nouveau </div>
-      <div id="item-gived" style="color:green" class="pop-up-option"> Indiquer objet donné </div>
-      <div id="item-not-gived" style="color:red" class="pop-up-option"> Indiquer objet non pris </div>
-      <div id="rate-item" class="pop-up-option"> Noter l'offre </div>
-      <div id="update-item" class="pop-up-option"> Mettre à jour les informations  </div>
-      <div id="show-item" class="pop-up-option"> Accéder à la publication </div>
-      <div id="pick-recipient" class="pop-up-option"> Indiquer un membre receveur</div>
-   </div>
-   <div id="rating-box">
-      <div id="error"> </div>
-      <form class="rating">
-         <label>
-         <input type="radio" name="stars" value="1" />
-         <span class="icon">★</span>
-         </label>
-         <label>
-         <input type="radio" name="stars" value="2" />
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         </label>
-         <label>
-         <input type="radio" name="stars" value="3" />
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         <span class="icon">★</span>   
-         </label>
-         <label>
-         <input type="radio" name="stars" value="4" />
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         </label>
-         <label>
-         <input type="radio" name="stars" value="5" />
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         <span class="icon">★</span>
-         </label>
-      </form>
-      <textarea placeholder="commentaire" id="rate-comment" required></textarea>
-      <input type="submit" name="envoyer" id="submit-rate-button" value="envoyer" />
-   </div>
+    
+  <section id="my-items-page">
+    <div id="my-items-filtre" >
+      <label for="pet-select">Type d’objet</label><br>
+      <select class="add-item-iputs" name="pets" id="items-type-selectbox" >
+      
+        <option value="0" selected disabled hidden>TYPE</option>
+        <option value="0">Tous sélectionner </option>
+      </select>
+    </div>
+    <div id="my-items-page-content">
+    
+        <div id="my-item-menu">
+          <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> Mes offres</a></div>
+          <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> Mes offres annulées </a></div>
+          <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> Mes offres attribuées </a></div>
+          <div class="my-item-link" > <a href="#" id="get-items-gifted-by-me"  data-uri="/userhandeler"> Mes offres données </a></div>
+          <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçus  </a></div>
+        </div>
+        <div id="all-recent-item">
+        </div>
+    </div>
+    <div id="my-items-pop-up">
+        <div id="cancell-item" class="pop-up-option"> Annuler l'offre </div>
+        <div id="offer-again" style="color:green; font-weight: bold" class="pop-up-option"> Offir à nouveau </div>
+        <div id="item-gived" style="color:green" class="pop-up-option"> Indiquer objet donné </div>
+        <div id="item-not-gived" style="color:red" class="pop-up-option"> Indiquer objet non pris </div>
+        <div id="rate-item" class="pop-up-option"> Noter l'offre </div>
+        <div id="update-item" class="pop-up-option"> Mettre à jour les informations  </div>
+        <div id="show-item" class="pop-up-option"> Accéder à la publication </div>
+        <div id="pick-recipient" class="pop-up-option"> Indiquer un membre receveur</div>
+    </div>
+    <div id="rating-box">
+        <div id="error"> </div>
+        <form class="rating">
+          ${starsForm}
+        </form>
+        <textarea placeholder="commentaire" id="rate-comment" required></textarea>
+        <input type="submit" name="envoyer" id="submit-rate-button" value="envoyer" />
+    </div>
+   
 </section>
 `;
 let currentItemId;
@@ -80,12 +93,17 @@ const MyItems = async (id) => {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = myItems;
 
+  getItemsTypes();
   changeOptions(currentState);
+
+  document.getElementById("items-type-selectbox").addEventListener("change",function(e){
+    getMyItems(currentState, true);
+  })
 
   document
     .getElementById("my-items-page")
     .addEventListener("click", function (e) {
-      console.log(e.target.id);
+     
       if (
         e.target.id == "my-items-page" ||
         e.target.id == "all-recent-item" ||
@@ -168,13 +186,11 @@ const MyItems = async (id) => {
   document
     .getElementById("item-not-gived")
     .addEventListener("click", async function (e) {
-      let itemR = document.getElementById(currentItemId);
 
       await itemGived(currentItemId, false);
-
       currentState = "item-not-gived";
-
       changeOptions(currentState);
+
     });
 
   document
@@ -197,9 +213,9 @@ const MyItems = async (id) => {
 
   document
     .getElementById("pick-recipient")
-    .addEventListener("click", function (e) {
-      let params = [{ key: "id", value: currentItemId }];
-      Redirect("/pickrecipient", params);
+    .addEventListener("click", function (e) {       
+        let params = [{ key: "id", value: currentItemId }];
+        Redirect("/pickrecipient", params);    
     });
 
   document.getElementById("show-item").addEventListener("click", function (e) {
@@ -253,7 +269,11 @@ async function getMyItems(state, mine) {
   if (state == "gifted-by-me") {
     state = "gifted";
   }
+  let itemtype = parseInt(document.getElementById("items-type-selectbox").value);
+  
+ 
   let allRecentItem = document.getElementById("all-recent-item");
+  allRecentItem.innerText="";
   try {
     var options = {
       method: "GET",
@@ -261,9 +281,9 @@ async function getMyItems(state, mine) {
     };
     let response;
     if (mine) {
-      response = await fetch("/api/items/member/" + getSessionObject("userId") + "?state="+state +"&mine="+1, options);
+      response = await fetch("/api/items/member/" + getSessionObject("userId") + "?state="+state+"&type="+itemtype +"&mine="+1, options);
     } else {
-      response = await fetch("/api/items/member/" + getSessionObject("userId") + "?state="+state +"&mine="+0, options);
+      response = await fetch("/api/items/member/" + getSessionObject("userId") + "?state="+state+"&type="+itemtype +"&mine="+0, options);
     }
     // fetch return a promise => we wait for the response
     if (response.status == 307) {
@@ -278,7 +298,7 @@ async function getMyItems(state, mine) {
 
     const items = await response.json();
 
-    console.log("here", items);
+    
 
     items.forEach((item) => {
       let itemBox = document.createElement("div");
@@ -287,11 +307,17 @@ async function getMyItems(state, mine) {
       let descriptionBox = document.createElement("div");
       let itemType = document.createElement("p");
       let itemDescription = document.createElement("p");
+      let nbrInterestBox = document.createElement("div");
+      let nbrInterestHeart = document.createElement("div");
+      let nbrInterest = document.createElement("div");
 
       itemBox.classList.add("item-box");
       itemBox.id = item.id;
       homePageImageBox.classList.add("home-page-item-image");
       descriptionBox.classList.add("home-page-item-description");
+
+      nbrInterestBox.classList.add("number-interest-box");
+      
 
       itemType.classList.add("item-title");
       itemDescription.classList.add("item-description");
@@ -301,23 +327,50 @@ async function getMyItems(state, mine) {
       itemType.innerText = item.itemtype;
       itemDescription.innerText = item.description.substring(0, 40) + "...";
 
+      // number of interest
+      let color;
+      if(item.numberOfPeopleInterested>0){
+        color = "#FF3030";
+      }
+     
+
+      if(item.rating!=0){
+        let allStars = `<i class="fa-solid fa-star" style="color:#FFC300"></i>`;
+        for(let i= 0; i<item.rating;i++){
+          nbrInterestHeart.innerHTML+=allStars;
+        }
+      }else if(currentState!="gifted-by-me" && currentState!="gifted"){
+        console.log(currentState);
+        nbrInterestHeart.innerHTML=`<i class="fa-solid fa-heart" style="color:${color};margin:2px"></i>`;
+        nbrInterest.innerText=item.numberOfPeopleInterested;
+
+      }
+
+
       descriptionBox.appendChild(itemType);
       descriptionBox.appendChild(itemDescription);
       homePageImageBox.appendChild(itemImgDiv);
+      nbrInterestBox.appendChild(nbrInterestHeart);
+      nbrInterestBox.appendChild(nbrInterest);
+
       itemBox.appendChild(homePageImageBox);
       itemBox.appendChild(descriptionBox);
+      itemBox.appendChild(nbrInterestBox);
+
 
       itemBox.addEventListener("click", function () {
         document.getElementById("my-items-pop-up").style.display = "flex";
-
         currentItemId = item.id;
       });
+      
       allRecentItem.appendChild(itemBox);
+      console.log(item);
     });
   } catch (error) {
     console.log(error);
   }
 }
+
 function changeOptions(state) {
   let cancel = document.getElementById("cancell-item");
   let offerAgain = document.getElementById("offer-again");
@@ -336,7 +389,7 @@ function changeOptions(state) {
     divs[i].style.display = "none";
   }
   let links = document.querySelectorAll("#my-item-menu div a");
-  console.log(links);
+ 
   for (let i = 0; i < links.length; i++) {
     links[i].style.fontWeight = "normal";
   }
@@ -463,7 +516,7 @@ async function getPicture(itemId, imgDiv) {
     if (response.ok) {
       const imageBlob = await response.blob();
       const imageObjectURL = URL.createObjectURL(imageBlob);
-      console.log(imageObjectURL);
+      
       imgDiv.src = imageObjectURL;
     }
   } catch (error) {
@@ -528,4 +581,33 @@ async function getItemDetails(itemId) {
     console.log(error);
   }
 }
+async function getItemsTypes() {
+  let selectBox = document.getElementById("items-type-selectbox");
+  try {
+    const options = {
+      // body data type must match "Content-Type" header
+      headers: {
+        token: getSessionObject("accessToken"),
+      },
+    };
+    const response = await fetch("/api/itemsType", options); // fetch return a promise => we wait for the response
+
+    if (response.status == 307) {
+      await VerifyUser();
+      document.location.reload();
+    }
+    const itemsTypes = await response.json();
+
+    itemsTypes.forEach((itemType) => {
+      let option = document.createElement("option");
+      option.value = itemType.idItemType;
+      option.innerText = itemType.itemTypeName;
+
+      selectBox.appendChild(option);
+    });
+  } catch (error) {
+    console.error("addItemPage::error: ", error);
+  }
+}
+
 export default MyItems;

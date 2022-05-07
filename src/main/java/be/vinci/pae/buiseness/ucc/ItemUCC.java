@@ -64,7 +64,7 @@ public interface ItemUCC {
 
   List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
 
-  List<ItemDTO> getMyItems(int id, String state, boolean mine);
+  List<ItemDTO> getMyItems(int id, String state, int type, boolean mine);
 
   /**
    * call to add recipient to a item.

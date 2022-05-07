@@ -76,10 +76,14 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void changeItemCondition(int idItem, int userId, String state) {
+  public void changeItemCondition(int itemId, int userId, String state) {
     try {
       myDalServices.start();
-      myItemDAOService.changeItemCondition(idItem, userId, state);
+      ItemDTO item = myItemDAOService.getOneById(itemId);
+      if (item.getOfferorId() != userId) {
+        throw new BizzException("vous n'avez pas le droit de modifier l'offre");
+      }
+      myItemDAOService.changeItemCondition(itemId, userId, state);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -88,10 +92,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public List<ItemDTO> getMyItems(int id, String state, boolean mine) {
+  public List<ItemDTO> getMyItems(int id, String state, int type, boolean mine) {
     try {
       myDalServices.start();
-      List<ItemDTO> list = myItemDAOService.getMyItems(id, state, mine);
+      List<ItemDTO> list = myItemDAOService.getMyItems(id, state, type, mine);
       myDalServices.commit();
       return list;
     } catch (Exception e) {

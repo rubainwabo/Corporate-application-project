@@ -56,7 +56,6 @@ public class ItemDAOImpl implements ItemDAO {
         + add
         + " GROUP BY i.id_item, i.description, i.url_picture, "
         + "i.number_of_people_interested, it.item_type_name ORDER BY maxDate desc";
-    System.out.println(query);
     return getItemDTOs(query);
   }
 
@@ -228,8 +227,7 @@ public class ItemDAOImpl implements ItemDAO {
         + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, "
         + "i.recipient, i.number_of_people_interested, "
         + "i.number_of_people_interested "
-        + "from projet.items i,"
-        + "projet.item_type it "
+        + "from projet.items i, projet.item_type it "
         + "where i.item_type=it.id_item_type "
         + (mine ? "and i.offeror=" : "and i.recipient=") + id + " and i.item_condition='" + state
         + "'";
@@ -375,6 +373,52 @@ public class ItemDAOImpl implements ItemDAO {
       psUpdate.executeUpdate();
     } catch (Exception e) {
       throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public void updateItemOfInvalidMember(int memberId) {
+    // case where we are an invalid offeror
+    _updateItemOfInvalidMember(true, memberId);
+    // case we are an invalid recipient
+    _updateItemOfInvalidMember(false, memberId);
+  }
+
+  private void _updateItemCondition(int offerorId, String itemCondition) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "update projet.items set item_condition ='" +
+            itemCondition + "' where offeror = " + offerorId + " and item_condition='Assigned'")) {
+      ps.executeUpdate();
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  private void _updateItemOfInvalidMember(boolean isOfferor, int memberId) {
+    var items = isOfferor ? getMyItems(memberId, "Assigned", true)
+        : getMyItems(memberId, "Assigned", false);
+    if (items.size() > 0) {
+      String itemCondition = isOfferor ? "invalid offeror" : "invalid recipient";
+      String query = "insert into projet.notifications "
+          + "(id_notification,is_viewed,text,person,item)"
+          + " VALUES (default,false,?,?,?)";
+      for (ItemDTO item : items) {
+        try (PreparedStatement ps = myBackService.getPreparedStatement(query)) {
+          ps.setString(1, (isOfferor ? item.getOfferor() : item.getRecipient())
+              + " ne sera pas disponible pour votre rendez-vous");
+          ps.setInt(2, isOfferor ? item.getRecipientId() : item.getOfferorId());
+          ps.setInt(3, item.getId());
+          ps.executeUpdate();
+          if (!isOfferor) {
+            changeItemCondition(item.getId(), item.getOfferorId(), itemCondition);
+          }
+        } catch (Exception e) {
+          throw new FatalException(e);
+        }
+      }
+      if (isOfferor) {
+        _updateItemCondition(memberId, itemCondition);
+      }
     }
   }
 }

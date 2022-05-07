@@ -187,7 +187,7 @@ async function getUserInformation(id, accesToken) {
     const data = await response.json(); // json() returns a promise => we wait for the data
     const formDiv = document.getElementById("container-user-info");
     formDiv.innerHTML = `
-  <div id="main-container" class="container py-5">
+  <div id="main-container" class="py-5">
     <div class="row d-flex justify-content-center align-items-center ">
       <div id="user-handler-info" class="col col-lg-6 mb-4 mb-lg-0">
         <div id="card-mb-3" class="card mb-3" style="border-radius: .5rem;">
@@ -292,7 +292,6 @@ async function getUserInformation(id, accesToken) {
 }
 
 async function addOrRefuse(id, state, rsnRefusal, accesToken, admin, version) {
-  console.log(version);
   try {
     let body1 =
       rsnRefusal != ""
@@ -317,7 +316,6 @@ async function addOrRefuse(id, state, rsnRefusal, accesToken, admin, version) {
         "Content-Type": "application/json",
       },
     };
-    console.log(id);
     const response = await fetch("/api/admins/update/state/"+id, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();

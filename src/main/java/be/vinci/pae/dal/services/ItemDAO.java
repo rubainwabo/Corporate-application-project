@@ -86,4 +86,5 @@ public interface ItemDAO {
 
   void rateItem(int itemId, int nbStars, String comment);
 
+  void updateItemOfInvalidMember(int memberId);
 }

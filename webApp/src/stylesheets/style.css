@@ -23,7 +23,7 @@ p.user-handler-denied-btn {
 }
 
 p.user-handler-accepted-btn:hover,p.user-handler-denied-btn:hover{
-  font-size: 110%;
+  font-size: 120%;
   transition:all;
   transition-duration: 0.2s;
 }
@@ -433,6 +433,7 @@ add-item-page
   color: inherit;
 
 }
+/*
 
 .user-handler-denied-btn:hover,.user-handler-accepted-btn:hover{
   color: #000;
@@ -451,16 +452,9 @@ add-item-page
   color: inherit;
   width: 100%;
 }
+*/
 
-#user-handler-page, #member-list-page {
-  padding-top: 2vh;
-}
 
-#switch-list-users {
-  width: 100%;
-  padding-bottom: 2vh;
-  padding-top: 40px;
-}
 
 .is-admin-box {
   text-align: center;
@@ -774,14 +768,12 @@ input {
   align-items: center;
   align-self: center;
   justify-self: center;
-  padding-top: 2vh;
 }
 
 #switch-list-users {
   width: 100%;
   padding-bottom: 2vh;
-  padding-top: 10vh;
-
+  padding-top: 5vh;
 }
 
 .user-to-handle {
@@ -996,7 +988,8 @@ input:checked + .slider:before {
   display: flex;
   justify-content: end;
   align-items: center;
-  padding-top: 10px;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
 }
 
 #container-research-member-list {
@@ -1065,11 +1058,10 @@ input:checked + .slider:before {
   position: fixed;
   top: 50%;
   left: 50%;
-  /* bring your own prefixes */
   transform: translate(-50%, -50%);
   width: 70vw;
   height: 70vh;
-  border: solid 1px black;
+  border: #e9e5e1d7 1px solid;
   border-radius: 2px;
   background-color: white;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
@@ -1082,7 +1074,7 @@ input:checked + .slider:before {
   overflow-y: scroll; /* Add the ability to scroll */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-  border-right: #000 solid 1px;
+  border-right: #e9e5e1 2px solid;
 
 }
 
@@ -1108,7 +1100,7 @@ input:checked + .slider:before {
     padding-bottom: 2vh;
     text-align: center;
     margin-bottom: 23px;
-    border-bottom: 1px solid black;
+    border-bottom:  #e9e5e1 2px solid;;
 
 }
 
@@ -1337,4 +1329,82 @@ h6{
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+h3{
+  font-weight: normal;
+}
+h6{
+  font-weight: 400;
+}
+
+/* btn member-list */
+.member-list-invalid-btn {
+  height: 5vh;
+  margin-left: 30px;
+  border-radius: 0.5rem;
+  margin-bottom: 26px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+
+.member-list-invalid-btn {
+	width: 150px;
+  height: 37px;
+  cursor: pointer;
+	display: flex;
+	align-items: center;
+	background: white;
+	border: #e9e5e1 1px solid;
+	border-radius: 5px;
+	box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+}
+
+.member-list-invalid-btn,.member-list-invalid-btn span {
+	transition: 200ms;
+}
+
+.member-list-invalid-btn .text {
+	transform: translateX(35px);
+	color: black;
+	font-weight: lighter;
+}
+
+.member-list-invalid-btn .icon {
+	position: absolute;
+	border-left: 1px solid #e9e5e1;
+	transform: translateX(110px);
+	height: 37px;
+	width: 35px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.member-list-invalid-btn svg {
+	width: 15px;
+	fill: #eee;
+}
+
+.member-list-invalid-btn:hover {
+	background: crimson;
+}
+
+.member-list-invalid-btn:hover .text {
+	color: transparent;
+}
+
+.member-list-invalid-btn:hover .icon {
+	width: 140px;
+	border-left: none;
+	transform: translateX(0);
+}
+
+.member-list-invalid-btn:focus {
+	outline: none;
 }

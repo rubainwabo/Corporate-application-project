@@ -56,7 +56,8 @@ public class ItemDAOImpl implements ItemDAO {
         + add
         + " GROUP BY i.id_item, i.description, i.url_picture, "
         + "i.number_of_people_interested, it.item_type_name ORDER BY maxDate desc";
-    return getItemDTOs(query);
+    System.out.println(query);
+    return getItemDTOs(query, false);
   }
 
   @Override
@@ -183,25 +184,17 @@ public class ItemDAOImpl implements ItemDAO {
 
   @Override
   public void changeItemCondition(int idItem, int userId, String condition) {
-    try (PreparedStatement psVerifyUser = myBackService.getPreparedStatement(
-        "select offeror from projet.items where id_item = " + idItem)) {
-      try (ResultSet rsVerifyUser = psVerifyUser.executeQuery()) {
-        if (!rsVerifyUser.next()) {
-          throw new FatalException("prblm cancelOffer user request");
-        }
-        if (rsVerifyUser.getInt(1) != userId) {
-          throw new FatalException(
-              "cet utilisateur n'est pas l'auteur de l'offre, il ne peut donc pas l'annuler");
-        }
-        try (PreparedStatement psChangeCondition = myBackService.getPreparedStatement(
-            "update projet.items set item_condition ='" + condition + "' where id_item = "
-                + idItem)) {
-          psChangeCondition.executeUpdate();
-        }
-      }
-    } catch (Exception e) {
-      throw new FatalException(e);
+    String query = "update projet.items set item_condition ='" + condition + "'";
+    if (condition.equals("cancelled") || condition.equals("offered")) {
+      query += ", recipient=null";
     }
+    query += " where id_item = " + idItem + "";
+    try (PreparedStatement psChangeCondition = myBackService.getPreparedStatement(query)) {
+      psChangeCondition.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
   }
 
   @Override
@@ -218,25 +211,34 @@ public class ItemDAOImpl implements ItemDAO {
         + "GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate desc " + limite;
 
-    return getItemDTOs(query);
+    return getItemDTOs(query, false);
   }
 
   @Override
-  public List<ItemDTO> getMyItems(int id, String state, boolean mine) {
+  public List<ItemDTO> getMyItems(int id, String state, int type, boolean mine) {
     String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
         + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, "
         + "i.recipient, i.number_of_people_interested, "
-        + "i.number_of_people_interested "
-        + "from projet.items i, projet.item_type it "
-        + "where i.item_type=it.id_item_type "
+        + "m.last_name,m.first_name,m2.last_name,m2.first_name, "
+        + "max(d._date) as maxDate "
+        + "from projet.items i LEFT JOIN projet.members m2 on i.recipient=m2.user_id, "
+        + "projet.item_type it, projet.dates d, projet.members m "
+        + "where i.item_type=it.id_item_type and i.id_item=d.item "
+        + "and m.user_id = i.offeror "
         + (mine ? "and i.offeror=" : "and i.recipient=") + id + " and i.item_condition='" + state
         + "'";
+    if (type != 0) {
+      query = query + " and i.item_type=" + type + " ";
+    }
+    query += "GROUP BY i.id_item, i.description, i.url_picture, "
+        + "i.number_of_people_interested,m.last_name,m.first_name,"
+        + "m2.last_name,m2.first_name, "
+        + "it.item_type_name ORDER BY maxDate desc ";
 
-    return getItemDTOs(query);
-
+    return getItemDTOs(query, true);
   }
 
-  private List<ItemDTO> getItemDTOs(String query) {
+  private List<ItemDTO> getItemDTOs(String query, boolean withNames) {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query
@@ -258,7 +260,12 @@ public class ItemDAOImpl implements ItemDAO {
           item.setItemtype(rs.getString(9));
           item.setRecipientId(rs.getInt(10));
           item.setNumberOfPeopleInterested(rs.getInt(11));
-
+          if (withNames) {
+            item.setOfferor(rs.getString(12) + " " + rs.getString(13));
+            if (rs.getString(14) != null) {
+              item.setRecipient(rs.getString(14) + " " + rs.getString(15));
+            }
+          }
           arrayItemDTO.add(item);
         }
       }
@@ -289,7 +296,6 @@ public class ItemDAOImpl implements ItemDAO {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-
   }
 
   @Override

@@ -136,7 +136,8 @@ public class ItemUCCTest {
    @Test
    public void changeItemConditionFatalException() {
      Mockito.doThrow(FatalException.class).when(itemDAO).changeItemCondition(ID, ID, state);
-     Assertions.assertThrows(FatalException.class, () -> itemUCC.changeItemCondition(ID, ID, state));
+     Assertions.assertThrows(FatalException.class, () ->
+     itemUCC.changeItemCondition(ID, ID, state));
      Mockito.verify(itemDAO).changeItemCondition(ID, ID, state);
    }
 

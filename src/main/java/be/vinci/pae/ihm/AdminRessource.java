@@ -131,4 +131,23 @@ public class AdminRessource {
     }
     return myItemUCC.memberItemsByItemCondition(itemCondition, userId, isOfferor);
   }
+
+  /**
+   * change all item condition for a new invalid user.
+   *
+   * @param node body of the request
+   * @return if nothing gonna wrong, return status 200
+   */
+  @PUT
+  @Path("update/invalidMember/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response adminInvalideMember(JsonNode node) {
+    if (!node.hasNonNull("memberId") || node.get("memberId").asInt() <= 0) {
+      throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+          .entity("infos invalides").type("text/plain").build());
+    }
+    myItemUCC.updateItemOfInvalidMember(node.get("memberId").asInt());
+    return Response.ok().build();
+  }
 }

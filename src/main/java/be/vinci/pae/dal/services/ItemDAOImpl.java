@@ -56,7 +56,6 @@ public class ItemDAOImpl implements ItemDAO {
         + add
         + " GROUP BY i.id_item, i.description, i.url_picture, "
         + "i.number_of_people_interested, it.item_type_name ORDER BY maxDate desc";
-    System.out.println(query);
     return getItemDTOs(query, false);
   }
 
@@ -236,8 +235,6 @@ public class ItemDAOImpl implements ItemDAO {
         + "it.item_type_name ORDER BY maxDate desc ";
 
     return getItemDTOs(query, true);
-
-
   }
 
   private List<ItemDTO> getItemDTOs(String query, boolean withNames) {
@@ -298,7 +295,6 @@ public class ItemDAOImpl implements ItemDAO {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-
   }
 
   @Override
@@ -382,6 +378,53 @@ public class ItemDAOImpl implements ItemDAO {
       psUpdate.executeUpdate();
     } catch (Exception e) {
       throw new FatalException(e);
+    }
+  }
+
+  @Override
+  public void updateItemOfInvalidMember(int memberId) {
+    // case where we are an invalid offeror
+    updateItemOfInvalidMemberWithCondition(true, memberId);
+    // case we are an invalid recipient
+    updateItemOfInvalidMemberWithCondition(false, memberId);
+  }
+
+  private void updateItemConditionOfInvalidOfferor(int offerorId, String itemCondition) {
+    try (PreparedStatement ps = myBackService.getPreparedStatement(
+        "update projet.items set item_condition ='" + itemCondition
+            + "' where offeror = " + offerorId + " "
+            + "and item_condition='Assigned'")) {
+      ps.executeUpdate();
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
+  private void updateItemOfInvalidMemberWithCondition(boolean isOfferor, int memberId) {
+    var items = isOfferor ? getMyItems(memberId, "Assigned", 0, true)
+        : getMyItems(memberId, "Assigned", 0, false);
+    if (items.size() > 0) {
+      String itemCondition = isOfferor ? "invalid offeror" : "invalid recipient";
+      String query = "insert into projet.notifications "
+          + "(id_notification,is_viewed,text,person,item)"
+          + " VALUES (default,false,?,?,?)";
+      for (ItemDTO item : items) {
+        try (PreparedStatement ps = myBackService.getPreparedStatement(query)) {
+          ps.setString(1, (isOfferor ? item.getOfferor() : item.getRecipient())
+              + " ne sera pas disponible pour votre rendez-vous");
+          ps.setInt(2, isOfferor ? item.getRecipientId() : item.getOfferorId());
+          ps.setInt(3, item.getId());
+          ps.executeUpdate();
+          if (!isOfferor) {
+            changeItemCondition(item.getId(), item.getOfferorId(), itemCondition);
+          }
+        } catch (Exception e) {
+          throw new FatalException(e);
+        }
+      }
+      if (isOfferor) {
+        updateItemConditionOfInvalidOfferor(memberId, itemCondition);
+      }
     }
   }
 }

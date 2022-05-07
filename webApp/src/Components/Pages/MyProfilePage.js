@@ -1,6 +1,8 @@
 import { Redirect } from "../Router/Router";
 import { getSessionObject, VerifyUser } from "../../utils/session";
 
+import itemImg from "../../img/wheelbarrows-4566619_640.jpg";
+
 const monProfil = `
 <div id="triangle"> </div>
 `;
@@ -37,6 +39,7 @@ const myProfilePassword = `
 
 const MonProfil = async () => {
   const pageDiv = document.querySelector("#page");
+
   try {
     // hide data to inform if the pizza menu is already printed
     const options = {

@@ -114,8 +114,9 @@ async function getAllMemberByFilter(searchInput, token) {
       const nb_of_item_offered = document.createElement("span");
       const nb_of_item_gifted = document.createElement("span");
       const nb_of_item_received = document.createElement("span");
-      const divUserHandlerIn = document.createElement("div");
-
+      const divMemberToHandle = document.createElement("div");
+      const switchToInvalidMember = document.createElement("div");
+      
       divUserHandler.classList = "user-to-handle";
       pFirstName.classList = "col-1";
       pLastName.classList = "col-1";
@@ -161,6 +162,7 @@ async function getAllMemberByFilter(searchInput, token) {
         const pRTitle = document.createElement("H3");
 
         divMyItems.id = "member-list-all-my-item";
+
         divLeftTitle.classList = "member-list-pop-up-items";
         divRightTitle.classList = "member-list-pop-up-items";
         left.id = "member-list-left";
@@ -200,7 +202,17 @@ async function getAllMemberByFilter(searchInput, token) {
         divMyItems.appendChild(right);
         document.querySelector("#page").appendChild(divMyItems);
       });
-      memberList.appendChild(divUserHandler);
+      divMemberToHandle.style.display="flex"
+      divMemberToHandle.style.alignItems="center"
+      switchToInvalidMember.innerHTML=`
+      <button class="member-list-invalid-btn" id="${e.id}"><span class='text'>Invalide</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg></span></button>
+      `
+      divMemberToHandle.appendChild(divUserHandler);
+      divMemberToHandle.appendChild(switchToInvalidMember);
+      memberList.appendChild(divMemberToHandle);
+      switchToInvalidMember.addEventListener("click",async () => {
+        await updateInvalideMember(divUserHandler.id,token);
+      })
     });
   } catch (error) {}
 }
@@ -389,4 +401,26 @@ async function getImg(itemId, itemImg) {
     console.log(error);
   }
 }
+async function updateInvalideMember(id,token) {
+  try {
+    const options = {
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
+      body:  JSON.stringify({
+        memberId:id
+      }),
+      headers: {
+        token: token,
+        "Content-Type": "application/json",
+      },
+    };
+    const response = await fetch("/api/admins/update/invalidMember/"+id, options); // fetch return a promise => we wait for the response
+    if (response.status == 307) {
+      await VerifyUser();
+      document.location.reload();
+    }
+    await response.json(); // json() returns a promise => we wait for the data
+  } catch (error) {
+  }
+}
+
 export default MemberList;

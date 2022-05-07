@@ -231,4 +231,16 @@ public class ItemUCCImpl implements ItemUCC {
       throw e;
     }
   }
+
+  @Override
+  public void updateItemOfInvalidMember(int memberId) {
+    try {
+      myDalServices.start();
+      myItemDAOService.updateItemOfInvalidMember(memberId);
+      myDalServices.commit();
+    } catch (Exception e) {
+      myDalServices.rollBack();
+      throw e;
+    }
+  }
 }

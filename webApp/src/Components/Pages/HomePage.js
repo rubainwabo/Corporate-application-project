@@ -27,7 +27,7 @@ const updateCards = (items) => {
     //itemImgDiv.src = itemImg;
     getPicture(item.id, itemImgDiv);
     itemType.innerText = item.itemtype;
-    itemDescription.innerText = item.description;
+    itemDescription.innerText =  item.description.length >=40 ? item.description.substring(0, 40) + "..." : item.description
 
     descriptionBox.appendChild(itemType);
     descriptionBox.appendChild(itemDescription);

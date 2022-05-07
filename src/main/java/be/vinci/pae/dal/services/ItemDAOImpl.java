@@ -57,7 +57,7 @@ public class ItemDAOImpl implements ItemDAO {
         + " GROUP BY i.id_item, i.description, i.url_picture, "
         + "i.number_of_people_interested, it.item_type_name ORDER BY maxDate desc";
     System.out.println(query);
-    return getItemDTOs(query);
+    return getItemDTOs(query, false);
   }
 
   @Override
@@ -211,7 +211,7 @@ public class ItemDAOImpl implements ItemDAO {
         + "GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate desc " + limite;
 
-    return getItemDTOs(query);
+    return getItemDTOs(query, false);
   }
 
   @Override
@@ -235,44 +235,12 @@ public class ItemDAOImpl implements ItemDAO {
         + "m2.last_name,m2.first_name, "
         + "it.item_type_name ORDER BY maxDate desc ";
 
-    ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
-    try (PreparedStatement ps = myBackService.getPreparedStatement(
-        query
-    )) {
-      try (ResultSet rs = ps.executeQuery()) {
-        while (rs.next()) {
-          ItemDTO item = myBizFactoryService.getItem();
-          item.setId(rs.getInt(1));
-
-          item.setDescription(rs.getString(2));
-          item.setUrlPicture(rs.getString(3));
-          item.setRating(rs.getInt(4));
-
-          item.setComment(rs.getString(5));
-          item.setItemCondition(rs.getString(6));
-          item.setTimeSlot(rs.getString(7));
-
-          item.setOfferorId(rs.getInt(8));
-          item.setItemtype(rs.getString(9));
-          item.setRecipientId(rs.getInt(10));
-          item.setNumberOfPeopleInterested(rs.getInt(11));
-          item.setOfferor(rs.getString(12) + " " + rs.getString(13));
-          if (rs.getString(14) != null) {
-            item.setRecipient(rs.getString(14) + " " + rs.getString(15));
-          }
-
-          arrayItemDTO.add(item);
-        }
-      }
-      return arrayItemDTO;
-    } catch (Exception e) {
-      throw new FatalException(e);
-    }
+    return getItemDTOs(query, true);
 
 
   }
 
-  private List<ItemDTO> getItemDTOs(String query) {
+  private List<ItemDTO> getItemDTOs(String query, boolean withNames) {
     ArrayList<ItemDTO> arrayItemDTO = new ArrayList<>();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query
@@ -294,7 +262,12 @@ public class ItemDAOImpl implements ItemDAO {
           item.setItemtype(rs.getString(9));
           item.setRecipientId(rs.getInt(10));
           item.setNumberOfPeopleInterested(rs.getInt(11));
-
+          if (withNames) {
+            item.setOfferor(rs.getString(12) + " " + rs.getString(13));
+            if (rs.getString(14) != null) {
+              item.setRecipient(rs.getString(14) + " " + rs.getString(15));
+            }
+          }
           arrayItemDTO.add(item);
         }
       }

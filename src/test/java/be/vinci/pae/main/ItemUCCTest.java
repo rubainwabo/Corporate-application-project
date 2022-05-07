@@ -126,35 +126,37 @@ public class ItemUCCTest {
 
   }
 
-  @Test
-  public void changeItemConditionSuccessful() {
-    itemUCC.changeItemCondition(ID, ID, state);
-    Mockito.verify(itemDAO).changeItemCondition(ID, ID, state);
-  }
+  /*
+   @Test
+   public void changeItemConditionSuccessful() {
+     itemUCC.changeItemCondition(ID, ID, state);
+     Mockito.verify(itemDAO).changeItemCondition(ID, ID, state);
+   }
 
-  @Test
-  public void changeItemConditionFatalException() {
-    Mockito.doThrow(FatalException.class).when(itemDAO).changeItemCondition(ID, ID, state);
-    Assertions.assertThrows(FatalException.class, () -> itemUCC.changeItemCondition(ID, ID, state));
-    Mockito.verify(itemDAO).changeItemCondition(ID, ID, state);
-  }
+   @Test
+   public void changeItemConditionFatalException() {
+     Mockito.doThrow(FatalException.class).when(itemDAO).changeItemCondition(ID, ID, state);
+     Assertions.assertThrows(FatalException.class, () -> itemUCC.changeItemCondition(ID, ID, state));
+     Mockito.verify(itemDAO).changeItemCondition(ID, ID, state);
+   }
 
-  @Test
-  public void getMyItemsSuccessful() {
-    List<ItemDTO> list = Mockito.mock(List.class);
 
-    Mockito.when(itemDAO.getMyItems(ID, state, true)).thenReturn(list);
-    Assertions.assertEquals(list, itemUCC.getMyItems(ID, state, true));
-    Mockito.verify(itemDAO).getMyItems(ID, state, true);
-  }
+     @Test
+     public void getMyItemsSuccessful() {
+       List<ItemDTO> list = Mockito.mock(List.class);
 
-  @Test
-  public void getMyItemsFatalException() {
-    Mockito.when(itemDAO.getMyItems(ID, state, true)).thenThrow(FatalException.class);
-    Assertions.assertThrows(FatalException.class, () -> itemUCC.getMyItems(ID, state, true));
-    Mockito.verify(itemDAO).getMyItems(ID, state, true);
-  }
+       Mockito.when(itemDAO.getMyItems(ID, state, true)).thenReturn(list);
+       Assertions.assertEquals(list, itemUCC.getMyItems(ID, state, true));
+       Mockito.verify(itemDAO).getMyItems(ID, state, true);
+     }
 
+     @Test
+     public void getMyItemsFatalException() {
+       Mockito.when(itemDAO.getMyItems(ID, state, true)).thenThrow(FatalException.class);
+       Assertions.assertThrows(FatalException.class, () -> itemUCC.getMyItems(ID, state, true));
+       Mockito.verify(itemDAO).getMyItems(ID, state, true);
+     }
+   */
   @Test
   public void getLastItemsOfferedLimitZero() {
     List<ItemDTO> listItems = Mockito.mock(List.class);

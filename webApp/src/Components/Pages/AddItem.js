@@ -203,6 +203,7 @@ const AddItemPage = () => {
         let option = document.createElement("option");
         option.value = itemType.itemTypeName;
         option.innerText = itemType.itemTypeName;
+        console.log(itemType);
 
         selectBox.appendChild(option);
       });

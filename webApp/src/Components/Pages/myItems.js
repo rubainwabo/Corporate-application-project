@@ -41,10 +41,16 @@ const myItems = `
 <div id="triangle"> </div>
 <section id="my-items-page">
    <div id="my-items-filtre" >
-      <label for="pet-select">Type d’objet</label><br>
+
       <select class="add-item-iputs" name="pets" id="items-type-selectbox" >
          <option value="0" selected disabled hidden>TYPE</option>
          <option value="0">Tous sélectionner </option>
+      </select>
+     
+      <select class="add-item-iputs" name="pets" id="invalid-selectbox" >
+         <option value="" id="hidden-invalid-option" selected disabled hidden>Cause de la mise en attente</option>
+         <option value="invalid recipient">Receveur indisponible</option>  
+         <option value="invalid offeror">offreur indisponible</option>
       </select>
    </div>
    <div id="my-items-page-content">
@@ -54,6 +60,7 @@ const myItems = `
          <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> Mes offres attribuées </a></div>
          <div class="my-item-link" > <a href="#" id="get-items-gifted-by-me"  data-uri="/userhandeler"> Mes offres données </a></div>
          <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçus  </a></div>
+         <div class="my-item-link"> <a  href="#" id="get-items-invalid" data-uri="/additem"> Mes offres en attente  </a></div>
       </div>
       <div id="all-recent-item">
       </div>
@@ -89,7 +96,13 @@ const MyItems = async (id) => {
 
   document.getElementById("items-type-selectbox").addEventListener("change",function(e){
     getMyItems(currentState, true);
+  });
+  document.getElementById("invalid-selectbox").addEventListener("change",function(e){
+    let invalidState = document.getElementById("invalid-selectbox").value;
+    currentState = invalidState;
+    getMyItems(currentState, true);
   })
+
 
   document
     .getElementById("my-items-page")
@@ -154,6 +167,17 @@ const MyItems = async (id) => {
       getMyItems(currentState, true);
       changeOptions(currentState);
     });
+
+  document
+    .getElementById("get-items-invalid")
+    .addEventListener("click",function(e){
+      e.preventDefault();
+      currentState="invalid recipient";
+      document.getElementById("invalid-selectbox").style.display="flex";
+      document.getElementById("all-recent-item").innerText = "";
+      getMyItems(currentState, true);
+      changeOptions(currentState);
+    })
 
   document
     .getElementById("cancell-item")
@@ -316,7 +340,7 @@ async function getMyItems(state, mine) {
       //itemImgDiv.src = itemImg;
       getPicture(item.id, itemImgDiv);
       itemType.innerText = item.itemtype;
-      itemDescription.innerText = item.description.substring(0, 40) + "...";
+      itemDescription.innerText =  item.description.length >=40 ? item.description.substring(0, 40) + "..." : item.description
 
       // number of interest
       let color;
@@ -384,6 +408,10 @@ function changeOptions(state) {
   for (let i = 0; i < links.length; i++) {
     links[i].style.fontWeight = "lighter";
   }
+  if(state!="invalid offeror" && state!="invalid recipient"){
+    document.getElementById("hidden-invalid-option").selected=true;
+    document.getElementById("invalid-selectbox").style.display="none";
+  }
 
   document.getElementById("my-items-pop-up").style.display = "none";
   document.getElementById("rating-box").style.display = "none";
@@ -413,7 +441,12 @@ function changeOptions(state) {
     pickRecipient.style.display = "flex";
     document.getElementById("my-items-pop-up").style.display = "flex";
     document.getElementById("get-items-assigned").style.fontWeight = "normal";
-  } else {
+  } else if(state=="invalid offeror" || state=="invalid recipient"){
+    offerAgain.style.display = "flex";
+    cancel.style.display = "flex";
+    pickRecipient.style.display = "flex";
+    document.getElementById("get-items-invalid").style.fontWeight = "normal";
+  }else {
     rating.style.display = "flex";
     show.style.display = "flex";
     document.getElementById("get-items-gifted").style.fontWeight = "normal";

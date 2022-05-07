@@ -39,47 +39,43 @@ const starsForm=`<form class="rating">
 </label>`
 const myItems = `
 <div id="triangle"> </div>
-    
-  <section id="my-items-page">
-    <div id="my-items-filtre" >
+<section id="my-items-page">
+   <div id="my-items-filtre" >
       <label for="pet-select">Type d’objet</label><br>
       <select class="add-item-iputs" name="pets" id="items-type-selectbox" >
-      
-        <option value="0" selected disabled hidden>TYPE</option>
-        <option value="0">Tous sélectionner </option>
+         <option value="0" selected disabled hidden>TYPE</option>
+         <option value="0">Tous sélectionner </option>
       </select>
-    </div>
-    <div id="my-items-page-content">
-    
-        <div id="my-item-menu">
-          <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> Mes offres</a></div>
-          <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> Mes offres annulées </a></div>
-          <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> Mes offres attribuées </a></div>
-          <div class="my-item-link" > <a href="#" id="get-items-gifted-by-me"  data-uri="/userhandeler"> Mes offres données </a></div>
-          <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçus  </a></div>
-        </div>
-        <div id="all-recent-item">
-        </div>
-    </div>
-    <div id="my-items-pop-up">
-        <div id="cancell-item" class="pop-up-option"> Annuler l'offre </div>
-        <div id="offer-again" style="color:green; font-weight: bold" class="pop-up-option"> Offir à nouveau </div>
-        <div id="item-gived" style="color:green" class="pop-up-option"> Indiquer objet donné </div>
-        <div id="item-not-gived" style="color:red" class="pop-up-option"> Indiquer objet non pris </div>
-        <div id="rate-item" class="pop-up-option"> Noter l'offre </div>
-        <div id="update-item" class="pop-up-option"> Mettre à jour les informations  </div>
-        <div id="show-item" class="pop-up-option"> Accéder à la publication </div>
-        <div id="pick-recipient" class="pop-up-option"> Indiquer un membre receveur</div>
-    </div>
-    <div id="rating-box">
-        <div id="error"> </div>
-        <form class="rating">
-          ${starsForm}
-        </form>
-        <textarea placeholder="commentaire" id="rate-comment" required></textarea>
-        <input type="submit" name="envoyer" id="submit-rate-button" value="envoyer" />
-    </div>
-   
+   </div>
+   <div id="my-items-page-content">
+      <div id="my-item-menu">
+         <div class="my-item-link"> <a href="#"  id="get-items-offered" data-uri="/"> Mes offres</a></div>
+         <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> Mes offres annulées </a></div>
+         <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> Mes offres attribuées </a></div>
+         <div class="my-item-link" > <a href="#" id="get-items-gifted-by-me"  data-uri="/userhandeler"> Mes offres données </a></div>
+         <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçus  </a></div>
+      </div>
+      <div id="all-recent-item">
+      </div>
+   </div>
+   <div id="my-items-pop-up">
+      <div id="cancell-item" class="pop-up-option"> Annuler l'offre </div>
+      <div id="offer-again" style="color:green; font-weight: bold" class="pop-up-option"> Offir à nouveau </div>
+      <div id="item-gived" style="color:green" class="pop-up-option"> Indiquer objet donné </div>
+      <div id="item-not-gived" style="color:red" class="pop-up-option"> Indiquer objet non pris </div>
+      <div id="rate-item" class="pop-up-option"> Noter l'offre </div>
+      <div id="update-item" class="pop-up-option"> Mettre à jour les informations  </div>
+      <div id="show-item" class="pop-up-option"> Accéder à la publication </div>
+      <div id="pick-recipient" class="pop-up-option"> Indiquer un membre receveur</div>
+   </div>
+   <div id="rating-box">
+      <div id="error"> </div>
+      <form class="rating">
+         ${starsForm}
+      </form>
+      <textarea placeholder="commentaire" id="rate-comment" required></textarea>
+      <input type="submit" name="envoyer" id="submit-rate-button" value="envoyer" />
+   </div>
 </section>
 `;
 let currentItemId;

@@ -384,22 +384,23 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public void updateItemOfInvalidMember(int memberId) {
     // case where we are an invalid offeror
-    _updateItemOfInvalidMember(true, memberId);
+    updateItemOfInvalidMemberWithCondition(true, memberId);
     // case we are an invalid recipient
-    _updateItemOfInvalidMember(false, memberId);
+    updateItemOfInvalidMemberWithCondition(false, memberId);
   }
 
-  private void _updateItemCondition(int offerorId, String itemCondition) {
+  private void updateItemConditionOfInvalidOfferor(int offerorId, String itemCondition) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
-        "update projet.items set item_condition ='" +
-            itemCondition + "' where offeror = " + offerorId + " and item_condition='Assigned'")) {
+        "update projet.items set item_condition ='" + itemCondition
+            + "' where offeror = " + offerorId + " "
+            + "and item_condition='Assigned'")) {
       ps.executeUpdate();
     } catch (Exception e) {
       throw new FatalException(e);
     }
   }
 
-  private void _updateItemOfInvalidMember(boolean isOfferor, int memberId) {
+  private void updateItemOfInvalidMemberWithCondition(boolean isOfferor, int memberId) {
     var items = isOfferor ? getMyItems(memberId, "Assigned", 0, true)
         : getMyItems(memberId, "Assigned", 0, false);
     if (items.size() > 0) {
@@ -422,7 +423,7 @@ public class ItemDAOImpl implements ItemDAO {
         }
       }
       if (isOfferor) {
-        _updateItemCondition(memberId, itemCondition);
+        updateItemConditionOfInvalidOfferor(memberId, itemCondition);
       }
     }
   }

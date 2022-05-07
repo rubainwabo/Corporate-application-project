@@ -68,15 +68,14 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public List<ItemDTO> userMyItems(
       @PathParam("id") int userId, @QueryParam("state") String state,
-      @QueryParam("mine") int mine) {
+      @QueryParam("mine") int mine, @QueryParam("type") int type) {
+    
+    boolean itemOfferedByMe = mine == 1;
 
-    if (mine == 1) {
-      return myItemUCC.getMyItems(userId, state, true);
-    } else {
-      return myItemUCC.getMyItems(userId, state, false);
-    }
+    return myItemUCC.getMyItems(userId, state, type, itemOfferedByMe);
 
   }
+
 
   /**
    * retrives to add an item to the DB.
@@ -226,7 +225,7 @@ public class ItemRessource {
   public int userAddRecipient(ObjectNode node) {
     if (!node.hasNonNull("idItem") || !node.hasNonNull("idRecipient")
         || node.get("idItem").asInt() <= 0 || node.get("idRecipient").asInt() <= 0) {
-      
+
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }

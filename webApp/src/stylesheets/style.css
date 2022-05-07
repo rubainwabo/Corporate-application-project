@@ -248,6 +248,7 @@ home page
 }
 
 .item-box {
+  position: relative;
   width: 16vw;
   height: 20vh;
   margin-top: 3%;
@@ -257,7 +258,17 @@ home page
   transition: 0.3s;
   opacity: 95%;
 }
+.number-interest-box{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin:3px;
+  right: 0;
+  bottom: 0;
 
+}
+ 
 .item-box:hover {
   opacity: 100%;
   width: 18vw;
@@ -573,6 +584,11 @@ add-item-page
   cursor: pointer;
 
 
+}
+#my-items-filtre{
+  display: flex;
+  justify-self: center;
+  align-items: center;
 }
 
 #pick-recipient {

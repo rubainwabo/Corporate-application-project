@@ -593,12 +593,16 @@ add-item-page
   display: flex;
   justify-self: center;
   align-items: center;
+  justify-content: space-between;
 }
 
 #pick-recipient {
   border-bottom: none !important;
 }
-
+#invalid-selectbox{
+  display: none;
+  margin-left: 15px;
+}
 #cancell-item {
   font-weight: bold;
   color: red;

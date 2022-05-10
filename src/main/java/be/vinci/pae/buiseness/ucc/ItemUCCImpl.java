@@ -4,6 +4,7 @@ import be.vinci.pae.buiseness.dto.ItemDTO;
 import be.vinci.pae.dal.DalServices;
 import be.vinci.pae.dal.services.DateDAO;
 import be.vinci.pae.dal.services.ItemDAO;
+import be.vinci.pae.dal.services.NotificationDAO;
 import be.vinci.pae.utils.exception.BizzException;
 import be.vinci.pae.utils.exception.UserInvalidException;
 import jakarta.inject.Inject;
@@ -19,6 +20,9 @@ public class ItemUCCImpl implements ItemUCC {
 
   @Inject
   private DalServices myDalServices;
+
+  @Inject
+  private NotificationDAO myNotificationDAO;
 
   @Override
   public int addItem(ItemDTO item, int userId) {
@@ -63,11 +67,11 @@ public class ItemUCCImpl implements ItemUCC {
 
   @Override
   public void addInterest(int itemId, int userId, boolean callMe,
-      String phoneNumber, String availabilities) {
+      String phoneNumber, String availabilities, int version) {
     try {
       myDalServices.start();
       myItemDAOService.addInterest(itemId, userId, callMe, phoneNumber,
-          availabilities);
+          availabilities, version);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -76,14 +80,14 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void changeItemCondition(int itemId, int userId, String state) {
+  public void changeItemCondition(int itemId, int userId, String state, int version) {
     try {
       myDalServices.start();
       ItemDTO item = myItemDAOService.getOneById(itemId);
       if (item.getOfferorId() != userId) {
         throw new BizzException("vous n'avez pas le droit de modifier l'offre");
       }
-      myItemDAOService.changeItemCondition(itemId, userId, state);
+      myItemDAOService.changeItemCondition(itemId, userId, state, version);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -125,11 +129,11 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public int addRecipient(int idItem, int idRecipient) {
+  public int addRecipient(int idItem, int idRecipient, int version) {
     try {
       myDalServices.start();
 
-      int itemId = myItemDAOService.addRecipient(idItem, idRecipient);
+      int itemId = myItemDAOService.addRecipient(idItem, idRecipient, version);
       myDalServices.commit();
       return itemId;
     } catch (Exception e) {
@@ -157,7 +161,7 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void offerAgain(int itemId, int userId) {
+  public void offerAgain(int itemId, int userId, int version) {
     try {
       myDalServices.start();
       ItemDTO item = myItemDAOService.getOneById(itemId);
@@ -165,7 +169,13 @@ public class ItemUCCImpl implements ItemUCC {
         throw new BizzException("vous n'avez pas le droit de modifier l'offre");
       }
       myDateDAOService.addDate(itemId);
-      myItemDAOService.changeItemCondition(itemId, userId, "offered");
+      myItemDAOService.changeItemCondition(itemId, userId, "offered", version);
+      
+      if (item.getRecipientId() > 0) {
+        myNotificationDAO.sendNotification(item.getOfferor() + " a réoffert cette objet ",
+            item.getRecipientId(), item.getId());
+      }
+
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -175,7 +185,7 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void itemCollectedOrNot(int itemId, boolean itemCollected, int reqUserId) {
+  public void itemCollectedOrNot(int itemId, boolean itemCollected, int reqUserId, int version) {
     try {
       myDalServices.start();
       ItemDTO itemDTO = myItemDAOService.getOneById(itemId);
@@ -183,7 +193,7 @@ public class ItemUCCImpl implements ItemUCC {
         throw new UserInvalidException(
             "la personne essayant de faire la requête n'est pas l'offereur de l'objet");
       }
-      myItemDAOService.itemCollectedOrNot(itemDTO, itemCollected);
+      myItemDAOService.itemCollectedOrNot(itemDTO, itemCollected, version);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -221,10 +231,10 @@ public class ItemUCCImpl implements ItemUCC {
   }
 
   @Override
-  public void rateItem(int itemId, int nbStars, String comment) {
+  public void rateItem(int itemId, int nbStars, String comment, int version) {
     try {
       myDalServices.start();
-      myItemDAOService.rateItem(itemId, nbStars, comment);
+      myItemDAOService.rateItem(itemId, nbStars, comment, version);
       myDalServices.commit();
     } catch (Exception e) {
       myDalServices.rollBack();

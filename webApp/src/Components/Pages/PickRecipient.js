@@ -35,7 +35,7 @@ const pickRecipient = `
    </div>
 </section>
 `;
-
+let version;
 const PickRecipient = async () => {
   let id = getId();
   let token = getSessionObject("accessToken");
@@ -136,6 +136,7 @@ const PickRecipient = async () => {
     }
     // get the item
     const item = await response.json();
+    version = item.version;
     document.getElementById("recipient-page-item-type").innerText =
      item.itemtype;
     document.getElementById("recipient-page-item-description").innerText =
@@ -155,7 +156,8 @@ async function addRecipient(idItem, idRecipient) {
       method: "PUT",
       body: JSON.stringify({
         idItem : idItem ,
-        idRecipient: idRecipient
+        idRecipient: idRecipient,
+        version:version
       }),
       headers: { 
       token: getSessionObject("accessToken"), 

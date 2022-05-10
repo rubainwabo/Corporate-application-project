@@ -59,4 +59,20 @@ public class NotificationDAOImpl implements NotificationDAO {
       throw new FatalException(e);
     }
   }
+
+  @Override
+  public void sendNotification(String description, int recipientId, int itemId) {
+
+    try (PreparedStatement psNotif = myDalService.getPreparedStatement(
+        "insert into projet.notifications (id_notification,is_viewed,text,person,item) "
+            + "VALUES (default,false,?,?,?)")) {
+      psNotif.setString(1, description);
+      psNotif.setInt(2, recipientId);
+      psNotif.setInt(3, itemId);
+      psNotif.executeUpdate();
+    } catch (Exception e) {
+      throw new FatalException(e);
+    }
+  }
+
 }

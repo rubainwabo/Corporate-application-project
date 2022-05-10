@@ -89,7 +89,8 @@ public class MemberRessource {
         || !body.hasNonNull("unitNumber") || !body.hasNonNull("city")
         || !body.hasNonNull("postcode") || !body.hasNonNull("box")
         || !body.hasNonNull("username") || !body.hasNonNull("firstName")
-        || !body.hasNonNull("lastName")) {
+        || !body.hasNonNull("lastName")
+        || !body.hasNonNull("version")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("id field is required").type("text/plain").build());
     } else {
@@ -103,7 +104,9 @@ public class MemberRessource {
           body.get("postcode").asInt(),
           body.get("box").asText(),
           body.get("city").asText(),
-          body.get("phone").asText());
+          body.get("phone").asText(),
+          body.get("version").asInt()
+      );
     }
   }
 
@@ -126,7 +129,12 @@ public class MemberRessource {
         throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
             .entity("newPassword field is blank").type("text/plain").build());
       }
-      return myUserUCC.updatePassword(userId, body.get("newPassword").asText());
+      if (body.get("version").asInt() < 0) {
+        throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+            .entity("number of version incorrect").type("text/plain").build());
+      }
+      return myUserUCC.updatePassword(userId, body.get("newPassword").asText(),
+          body.get("version").asInt());
     }
   }
 }

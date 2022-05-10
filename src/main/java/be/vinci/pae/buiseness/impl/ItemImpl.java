@@ -17,8 +17,19 @@ public class ItemImpl implements Item {
   private int recipientId;
   private String itemType;
   private int numberOfPeopleInterested;
+  private int version;
 
   public ItemImpl() {
+  }
+
+  @Override
+  public int getVersion() {
+    return version;
+  }
+
+  @Override
+  public void setVersion(int version) {
+    this.version = version;
   }
 
   @Override

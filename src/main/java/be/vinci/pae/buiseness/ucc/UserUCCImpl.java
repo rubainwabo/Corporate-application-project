@@ -118,12 +118,12 @@ public class UserUCCImpl implements UserUCC {
 
   @Override
   public boolean updateProfile(int id, String username, String firstName, String lastName,
-      String street, int number, int postcode, String box, String city, String phone) {
+      String street, int number, int postcode, String box, String city, String phone, int version) {
     try {
       myDalServices.start();
       boolean ret = myUserDAO.updateProfile(id, username, firstName, lastName, street, number,
           postcode, box,
-          city, phone);
+          city, phone, version);
       myDalServices.commit();
       return ret;
     } catch (Exception e) {
@@ -133,10 +133,10 @@ public class UserUCCImpl implements UserUCC {
   }
 
   @Override
-  public boolean updatePassword(int id, String password) {
+  public boolean updatePassword(int id, String password, int version) {
     try {
       myDalServices.start();
-      boolean ret = myUserDAO.updatePassword(id, password);
+      boolean ret = myUserDAO.updatePassword(id, password, version);
       myDalServices.commit();
       return ret;
     } catch (Exception e) {

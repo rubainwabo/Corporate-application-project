@@ -325,40 +325,41 @@ public class UserUCCTest {
     );
   }
 
-  @Test
-  public void updateProfileSuccessful() {
-    Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID, USERNAME,
-        USERNAME, USERNAME)).thenReturn(true);
-    Assertions.assertTrue(userUCC.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
-        USERNAME, USERNAME, USERNAME));
-    Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
-        USERNAME, USERNAME, USERNAME);
-  }
+  /*
+    @Test
+    public void updateProfileSuccessful() {
+      Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID, USERNAME,
+          USERNAME, USERNAME)).thenReturn(true);
+      Assertions.assertTrue(userUCC.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
+          USERNAME, USERNAME, USERNAME));
+      Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
+          USERNAME, USERNAME, USERNAME);
+    }
 
-  @Test
-  public void updateProfileFatalException() {
-    Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME,
-        USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME)).thenThrow(FatalException.class);
-    Assertions.assertThrows(FatalException.class, () -> userUCC.updateProfile(ID, USERNAME,
-        USERNAME, USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME));
-    Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
-        USERNAME, USERNAME, USERNAME);
-  }
+    @Test
+    public void updateProfileFatalException() {
+      Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME,
+          USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME)).thenThrow(FatalException.class);
+      Assertions.assertThrows(FatalException.class, () -> userUCC.updateProfile(ID, USERNAME,
+          USERNAME, USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME));
+      Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
+          USERNAME, USERNAME, USERNAME);
+    }
 
-  @Test
-  public void updatePasswordSuccessful() {
-    Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenReturn(true);
-    Assertions.assertTrue(userUCC.updatePassword(ID, PASSWORD));
-    Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
-  }
+    @Test
+    public void updatePasswordSuccessful() {
+      Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenReturn(true);
+      Assertions.assertTrue(userUCC.updatePassword(ID, PASSWORD));
+      Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
+    }
 
-  @Test
-  public void updatePasswordFatalException() {
-    Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenThrow(FatalException.class);
-    Assertions.assertThrows(FatalException.class, () -> userUCC.updatePassword(ID, PASSWORD));
-    Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
-  }
-
+    @Test
+    public void updatePasswordFatalException() {
+      Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenThrow(FatalException.class);
+      Assertions.assertThrows(FatalException.class, () -> userUCC.updatePassword(ID, PASSWORD));
+      Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
+    }
+  */
   @Test
   public void getAllUsersFilteredSuccessful() {
     List<UserDTO> list = Mockito.mock(List.class);

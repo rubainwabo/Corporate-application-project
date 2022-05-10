@@ -69,7 +69,7 @@ public class ItemRessource {
   public List<ItemDTO> userMyItems(
       @PathParam("id") int userId, @QueryParam("state") String state,
       @QueryParam("mine") int mine, @QueryParam("type") int type) {
-    
+
     boolean itemOfferedByMe = mine == 1;
 
     return myItemUCC.getMyItems(userId, state, type, itemOfferedByMe);
@@ -124,7 +124,8 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response userAddInterest(@PathParam("id") int itemId, ObjectNode body,
       @Context ContainerRequest req) {
-    if (!body.hasNonNull("availabilities") || itemId <= 0) {
+    if (!body.hasNonNull("availabilities") || itemId <= 0
+        || !body.hasNonNull("version")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }
@@ -132,11 +133,12 @@ public class ItemRessource {
     boolean updateNumber = body.hasNonNull("updateNumber") && body.get("updateNumber").asBoolean();
     String phoneNumber = body.hasNonNull("phoneNumber") ? body.get("phoneNumber").asText() : "";
     String availabilities = body.get("availabilities").asText();
+    int version = body.get("version").asInt();
     int userId = (int) req.getProperty("id");
     if (callMe && !phoneNumber.isBlank() && updateNumber) {
       myUserUCC.addPhoneNumber(userId, phoneNumber);
     }
-    myItemUCC.addInterest(itemId, userId, callMe, phoneNumber, availabilities);
+    myItemUCC.addInterest(itemId, userId, callMe, phoneNumber, availabilities, version);
     return Response.ok().build();
   }
 
@@ -150,13 +152,15 @@ public class ItemRessource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response userChangeItemCondition(@PathParam("id") int itemId,
-      @QueryParam("condition") String condition, @Context ContainerRequest req) {
-    if (itemId <= 0) {
+      @QueryParam("condition") String condition, @QueryParam("version") int version,
+      @Context ContainerRequest req) {
+    if (itemId <= 0 || condition == null || condition.equals("")
+        || version < 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information manquante").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
-    myItemUCC.changeItemCondition(itemId, userId, condition);
+    myItemUCC.changeItemCondition(itemId, userId, condition, version);
     return Response.ok().build();
   }
 
@@ -208,8 +212,9 @@ public class ItemRessource {
 
     int reqUserId = (int) req.getProperty("id");
     int itemId = node.get("itemId").asInt();
+    int version = node.get("version").asInt();
     boolean isCollected = node.get("itemCollected").asBoolean();
-    myItemUCC.itemCollectedOrNot(itemId, isCollected, reqUserId);
+    myItemUCC.itemCollectedOrNot(itemId, isCollected, reqUserId, version);
     return Response.ok().build();
   }
 
@@ -224,13 +229,15 @@ public class ItemRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public int userAddRecipient(ObjectNode node) {
     if (!node.hasNonNull("idItem") || !node.hasNonNull("idRecipient")
-        || node.get("idItem").asInt() <= 0 || node.get("idRecipient").asInt() <= 0) {
+        || node.get("idItem").asInt() <= 0 || node.get("idRecipient").asInt() <= 0
+        || node.get("version").asInt() < 0) {
 
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }
 
-    return myItemUCC.addRecipient(node.get("idItem").asInt(), node.get("idRecipient").asInt());
+    return myItemUCC.addRecipient(node.get("idItem").asInt(), node.get("idRecipient").asInt(),
+        node.get("version").asInt());
 
   }
 
@@ -257,13 +264,14 @@ public class ItemRessource {
   @POST
   @Path("offerAgain/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public void userOfferItemAgain(@PathParam("id") int idItem, @Context ContainerRequest req) {
-    if (idItem <= 0) {
+  public void userOfferItemAgain(@PathParam("id") int idItem, @QueryParam("version") int version,
+      @Context ContainerRequest req) {
+    if (idItem <= 0 || version < 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("information is missing").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
-    myItemUCC.offerAgain(idItem, userId);
+    myItemUCC.offerAgain(idItem, userId, version);
   }
 
   /**
@@ -340,14 +348,15 @@ public class ItemRessource {
   public Response userRateItem(JsonNode node) {
 
     if (!node.hasNonNull("itemId") || !node.hasNonNull("comment")
-        || node.get("itemId").asInt() <= 0) {
+        || node.get("itemId").asInt() <= 0 || node.get("version").asInt() < 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations manquantes").type("text/plain").build());
     }
     int itemId = node.get("itemId").asInt();
     int nbStars = node.get("nbStars").asInt();
     String comment = node.get("comment").asText();
-    myItemUCC.rateItem(itemId, nbStars, comment);
+    int version = node.get("version").asInt();
+    myItemUCC.rateItem(itemId, nbStars, comment, version);
     return Response.ok().build();
   }
 

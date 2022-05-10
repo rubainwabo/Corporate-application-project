@@ -36,7 +36,7 @@ const myProfilePassword = `
    </div>
 </section>
 `;
-
+let version;
 const MonProfil = async () => {
   const pageDiv = document.querySelector("#page");
 
@@ -55,7 +55,7 @@ const MonProfil = async () => {
       document.location.reload();
     }
     const data = await response.json();
-
+    version = data.version;
     pageDiv.innerHTML = monProfil;
 
     const formDiv = document.createElement("div");
@@ -271,6 +271,7 @@ const MonProfil = async () => {
               method: "PUT", // *GET, POST, PUT, DELETE, etc.
               body: JSON.stringify({
                 newPassword: pwd.value,
+                version:version
               }),
               // body data type must match "Content-Type" header
               headers: {
@@ -324,6 +325,7 @@ const MonProfil = async () => {
               box: unitInput.value,
               city: cityInput.value,
               phone: phoneInput.value,
+              version:version
             }),
             // body data type must match "Content-Type" header
             headers: {

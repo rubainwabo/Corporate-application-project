@@ -36,7 +36,7 @@ const updateItem = `
    </form>
    </div>
 </section>`;
-
+let currentVersion;
 const UpdateItem = async () => {
   let id = getId();
   const pageDiv = document.querySelector("#page");
@@ -69,6 +69,7 @@ const UpdateItem = async () => {
     document.getElementById("item-type").value = item.itemtype;
     document.getElementById("availability").value = item.timeSlot;
     document.getElementById("itemDescription").value = item.description;
+    currentVersion=item.version;
 
     console.log(item);
 
@@ -91,6 +92,7 @@ const UpdateItem = async () => {
           offerorId: getSessionObject("userId"),
           description: description,
           timeSlot: timeSlot,
+          version:currentVersion,
         }), // body data type must match "Content-Type" header
         headers: {
           "Content-Type": "application/json",

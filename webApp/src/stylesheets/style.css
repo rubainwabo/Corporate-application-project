@@ -230,7 +230,7 @@ home page
 #all-recent-item {
   display: inline-flex;
   justify-content: start;
-
+  margin-bottom: 10vh;
   width: 80vw;
   flex-wrap: wrap;
   gap: 3%;

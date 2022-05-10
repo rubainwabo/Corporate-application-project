@@ -3,6 +3,7 @@ package be.vinci.pae.dal.services;
 import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.factory.BizFactory;
 import be.vinci.pae.dal.DalBackService;
+import be.vinci.pae.utils.exception.ConflictException;
 import be.vinci.pae.utils.exception.FatalException;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
@@ -360,7 +361,7 @@ public class UserDAOImpl implements UserDAO {
       try (ResultSet verifVersion = psVersion.executeQuery()) {
 
         if (verifVersion.next() && verifVersion.getInt(1) != version) {
-          throw new FatalException("accès concurrent, veuillez réessayer plus tard");
+          throw new ConflictException("accès concurrent, veuillez réessayer plus tard");
         }
 
       }

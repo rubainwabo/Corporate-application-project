@@ -2,6 +2,7 @@ import { getSessionObject, VerifyUser } from "../../utils/session";
 
 import itemImg from "../../img/image_not_available.png";
 
+let currentVersion;
 const item = `
 <div id="triangle"> </div>
 <section id="item-page">
@@ -18,23 +19,28 @@ const item = `
       <p style ="font-size : 0px" id="type-objet"> Type d’objet : <span id="item-type"><span> </p>
       <p style ="font-size : 0px" id="Offert"> Offert par : <span id="offeror"><span> </p>
       <p style ="font-size : 0px" id="nb-personnes"> Nombres de personnes interessées : <span id="number-interest"><span> </p>
+      <p style ="font-size : 0px" id="slot"> Plages horaires : <span id="timeSlot"></span></p>
       <p style ="font-size : 0px" id="preced"> Précedentes dates d’offre : <span id="last-dates"> <span> </p>
+      
    </div>
    <div id="item-show-interest">
    </div>
    <div id="add-iterest-pop-up">
+      <div id="close-pop-up">
+      <i style="font-size:25px;color:#CACACA"class="fa-regular fa-circle-xmark"></i>
+      </div>
       <form id="add-iterest-form">
          <span id="error"></span>
-         <div>
+         <div id="availabilitiesBox">
             <input type="text" required id="availabilities" placeholder="vos heures de disponibilité">
          </div>
          <div>
-            <span>Contactez-moi</span><input type="checkbox" id="callMe"> 
+            <span> Je souhaite discuter des modalités pratiques du don </span><input type="checkbox" id="callMe"> 
          </div>
          <div id="call-me-box"> 
             <input type="text" id="phone-number" placeholder="numéro" required >
          </div>
-         <div>
+         <div id="add-iterest-form-submits">
             <input type="submit" id="cancel-add-iterest" value="annuler">
             <input type="submit" id="add-interest-btn" value="envoyer">
          </div>
@@ -56,9 +62,13 @@ const ItemPage = async () => {
     e.preventDefault();
     popUp.style.display = "none";
   });
+  //close pop-up
+  document.getElementById("close-pop-up").addEventListener("click",function(e){
+    popUp.style.display = "none";
+  })
 
   try {
-    // hide data to inform if the pizza menu is already printed
+    // prepare the header of the request
     const options = {
       // body data type must match "Content-Type" header
       headers: {
@@ -78,13 +88,17 @@ const ItemPage = async () => {
     }
 
     const item = await response.json();
-
+    
+    currentVersion = item.version;
     document.getElementById("item-description-p").innerText = item.description;
     document.getElementById("item-type").innerText = item.itemtype;
     document.getElementById("offeror").innerText = item.offeror;
     document.getElementById("number-interest").innerText =
       item.numberOfPeopleInterested;
+    document.getElementById("timeSlot").innerText=item.timeSlot;
+    console.log(item.timeSlot);
     let addInterestBox = document.getElementById("item-show-interest");
+
 
     if (item.offerorId != getSessionObject("userId")) {
       let button = document.createElement("button");
@@ -103,6 +117,7 @@ const ItemPage = async () => {
     document.getElementById("Offert").style.fontSize = "12px";
     document.getElementById("nb-personnes").style.fontSize = "12px";
     document.getElementById("preced").style.fontSize = "12px";
+    document.getElementById("slot").style.fontSize="12px"
     document.getElementById("item-show-interest").style = "display : inline";
 
     let callMe = document.getElementById("callMe");
@@ -146,6 +161,7 @@ const ItemPage = async () => {
             updateNumber: updateNumer,
             callMe: callMe,
             phoneNumber: phoneNumber,
+            version:currentVersion,
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",
@@ -160,6 +176,7 @@ const ItemPage = async () => {
             updateNumber: "false",
             callMe: callMe,
             phoneNumber: "",
+            version:currentVersion,
           }), // body data type must match "Content-Type" header
           headers: {
             "Content-Type": "application/json",

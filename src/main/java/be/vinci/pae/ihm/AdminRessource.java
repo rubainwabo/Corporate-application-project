@@ -68,7 +68,7 @@ public class AdminRessource {
   public List<UserDTO> adminListByState(@QueryParam("state") String state) {
     if (state.isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("a state is required").type("text/plain").build());
+          .entity("un état est obligatoire").type("text/plain").build());
     }
     return myUserUCC.getUsersByState(state);
   }
@@ -86,19 +86,19 @@ public class AdminRessource {
   public boolean adminChangeState(JsonNode body, @PathParam("id") int userId) {
     if (userId <= 0 || !body.hasNonNull("state")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("id field is required").type("text/plain").build());
+          .entity("le champ id est obligatoire").type("text/plain").build());
     }
 
     if (!body.get("state").asText().equals("denied") && body.hasNonNull("refusalReason")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("You cannot put refusal reason on something else than refused state")
+          .entity("vous ne pouvez pas mettre une raison de refus autre qu'un état refusé")
           .type("text/plain").build());
     }
 
     if (body.get("state").asText().equals("denied") && (!body.hasNonNull("refusalReason")
         || body.get("refusalReason").asText().isBlank())) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("You have to put your denial reason if you want to deny someone")
+          .entity("vous devez mettre une raison de denie si vous voulez denier quelqu'un")
           .type("text/plain").build());
     }
     if (body.hasNonNull("refusalReason")) {
@@ -127,7 +127,7 @@ public class AdminRessource {
       @QueryParam("isOfferor") boolean isOfferor) {
     if (userId <= 0 || itemCondition.isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("Des informations sont manquantes").type("text/plain").build());
+          .entity("informations sont manquantes").type("text/plain").build());
     }
     return myItemUCC.memberItemsByItemCondition(itemCondition, userId, isOfferor);
   }
@@ -135,19 +135,19 @@ public class AdminRessource {
   /**
    * change all item condition for a new invalid user.
    *
-   * @param node body of the request
+   * @param memberId id of the member.
    * @return if nothing gonna wrong, return status 200
    */
   @PUT
   @Path("update/invalidMember/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response adminInvalideMember(JsonNode node) {
-    if (!node.hasNonNull("memberId") || node.get("memberId").asInt() <= 0) {
+  public Response adminInvalideMember(@PathParam("id") int memberId) {
+    if (memberId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("infos invalides").type("text/plain").build());
+          .entity("informations invalides").type("text/plain").build());
     }
-    myItemUCC.updateItemOfInvalidMember(node.get("memberId").asInt());
+    myItemUCC.updateItemOfInvalidMember(memberId);
     return Response.ok().build();
   }
 }

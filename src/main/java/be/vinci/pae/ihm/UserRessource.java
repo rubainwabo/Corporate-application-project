@@ -46,7 +46,7 @@ public class UserRessource {
     if (!body.hasNonNull("username") || !body.hasNonNull("password") || !body.hasNonNull(
         "rememberMe")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("username or password required").type("text/plain").build());
+          .entity("pseudo ou mot de passe obligatoire").type("text/plain").build());
     }
 
     // escape characters to avoid XSS injections
@@ -57,7 +57,7 @@ public class UserRessource {
 
     if (username.isBlank() || password.isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("username or password required").type("text/plain").build());
+          .entity("pseudo ou mot de passe obligatoire").type("text/plain").build());
     }
     var user = myUserUCC.login(username, password);
     return myTokenService.login(user, rememberMe);
@@ -79,7 +79,7 @@ public class UserRessource {
         || user.getFirstName() == null || user.getFirstName().isBlank()
         || user.getPassword() == null || user.getPassword().isBlank()) {
       throw new WebApplicationException(
-          Response.status(Response.Status.BAD_REQUEST).entity("Lacks of mandatory info")
+          Response.status(Response.Status.BAD_REQUEST).entity("Manque d'informations nécessaires")
               .type("text/plain").build());
     }
     return myUserUCC.register(user);

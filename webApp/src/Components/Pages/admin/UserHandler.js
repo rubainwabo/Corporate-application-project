@@ -26,6 +26,9 @@ const userHandler = `
       <div id="user-handler-list">
       </div>
       <div id="add-reason-refusal">
+        <div id="close-pop-up">
+          <i style="font-size:25px;color:#CACACA"class="fa-regular fa-circle-xmark"></i>
+        </div>
          <form id="add-iterest-form">
             <span id="error"></span>
             <div>
@@ -57,6 +60,11 @@ const UserHandler = () => {
       gettAllByState(accesToken, "waiting");
     }
   });
+
+  //close pop-up
+  document.getElementById("close-pop-up").addEventListener("click",function(e){
+    document.getElementById("add-reason-refusal").style.display="none";
+  })
 };
 
 let currentUser;

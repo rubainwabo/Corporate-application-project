@@ -52,6 +52,12 @@ const myItems = `
          <option value="invalid recipient">Receveur indisponible</option>  
          <option value="invalid offeror">offreur indisponible</option>
       </select>
+
+      <select class="" name="pets" id="assigned-selectbox" >
+        <option id="assigned-option" value="false">offres que j'ai attribuées</option>
+        <option value="true">Offres qui me sont dédiées</option>   
+      </select>
+      
    </div>
    <div id="my-items-page-content">
       <div id="my-item-menu">
@@ -59,7 +65,7 @@ const myItems = `
          <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> Mes offres annulées </a></div>
          <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> Mes offres attribuées </a></div>
          <div class="my-item-link" > <a href="#" id="get-items-gifted-by-me"  data-uri="/userhandeler"> Mes offres données </a></div>
-         <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçus  </a></div>
+         <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçues  </a></div>
          <div class="my-item-link"> <a  href="#" id="get-items-invalid" data-uri="/additem"> Mes offres en attente  </a></div>
       </div>
       <div id="all-recent-item">
@@ -86,6 +92,7 @@ const myItems = `
 </section>
 `;
 let currentItemId;
+let currentVersion;
 let currentState = "offered";
 const MyItems = async (id) => {
   const pageDiv = document.querySelector("#page");
@@ -95,13 +102,28 @@ const MyItems = async (id) => {
   changeOptions(currentState);
 
   document.getElementById("items-type-selectbox").addEventListener("change",function(e){
+    if(currentState=="gifted"){
+      getMyItems(currentState,false);
+    }
     getMyItems(currentState, true);
   });
   document.getElementById("invalid-selectbox").addEventListener("change",function(e){
     let invalidState = document.getElementById("invalid-selectbox").value;
     currentState = invalidState;
     getMyItems(currentState, true);
-  })
+  });
+
+  document.getElementById("assigned-selectbox").addEventListener("change",function(e){
+    let assignedToMe = document.getElementById("assigned-selectbox").value;
+    console.log(assignedToMe);
+    if(assignedToMe=="true"){
+      getMyItems(currentState, false);
+    }else{
+      getMyItems(currentState, true);
+    }
+  
+  });
+
 
 
   document
@@ -114,12 +136,16 @@ const MyItems = async (id) => {
         e.target.id == "my-items-page-content" ||
         e.target.id == "my-item-menu"
       ) {
+        if(currentState=="item-not-gived"){
+          changeOptions("Assigned");
+        }
         let popup = document.getElementById("my-items-pop-up");
         popup.style.display = "none";
         document.getElementById("rating-box").style.display = "none";
       }
+      
     });
-
+  // cancel an item 
   document
     .getElementById("get-items-cancelled")
     .addEventListener("click", function (e) {
@@ -135,6 +161,7 @@ const MyItems = async (id) => {
       e.preventDefault();
       currentState = "Assigned";
       document.getElementById("all-recent-item").innerText = "";
+      document.getElementById("assigned-selectbox").style.display="flex";
       getMyItems(currentState, true);
       changeOptions(currentState);
     });
@@ -183,7 +210,7 @@ const MyItems = async (id) => {
     .getElementById("cancell-item")
     .addEventListener("click", function (e) {
       let itemR = document.getElementById(currentItemId);
-      if (cancelItem(currentItemId)) {
+      if (cancelItem(currentItemId,currentVersion)) {
         document.getElementById("all-recent-item").removeChild(itemR);
       }
       document.getElementById("my-items-pop-up").style.display = "none";
@@ -192,7 +219,7 @@ const MyItems = async (id) => {
   document.getElementById("item-gived").addEventListener("click", function (e) {
     let itemR = document.getElementById(currentItemId);
 
-    if (itemGived(currentItemId, true)) {
+    if (itemGived(currentItemId, true,currentVersion)) {
       document.getElementById("all-recent-item").removeChild(itemR);
     }
     document.getElementById("my-items-pop-up").style.display = "none";
@@ -201,11 +228,11 @@ const MyItems = async (id) => {
   document
     .getElementById("item-not-gived")
     .addEventListener("click", async function (e) {
+      await itemGived(currentItemId,false,currentVersion);
 
-      await itemGived(currentItemId, false);
-      currentState = "item-not-gived";
-      changeOptions(currentState);
-
+        currentState = "item-not-gived";
+        changeOptions(currentState);
+      
     });
 
   document
@@ -213,7 +240,7 @@ const MyItems = async (id) => {
     .addEventListener("click", function (e) {
       let itemR = document.getElementById(currentItemId);
 
-      if (offerAgain(currentItemId)) {
+      if (offerAgain(currentItemId,currentVersion)) {
         document.getElementById("all-recent-item").removeChild(itemR);
       }
       document.getElementById("my-items-pop-up").style.display = "none";
@@ -228,9 +255,11 @@ const MyItems = async (id) => {
 
   document
     .getElementById("pick-recipient")
-    .addEventListener("click", function (e) {       
+    .addEventListener("click", function (e) {
+        currentState="offered";
         let params = [{ key: "id", value: currentItemId }];
-        Redirect("/pickrecipient", params);    
+        Redirect("/pickrecipient", params);   
+            
     });
 
   document.getElementById("show-item").addEventListener("click", function (e) {
@@ -256,7 +285,7 @@ const MyItems = async (id) => {
             let nbStars = radios[i].value;
             let comment = document.getElementById("rate-comment").value;
             if (comment != "") {
-              if (await rateItem(currentItemId, nbStars, comment)) {
+              if (await rateItem(currentItemId, nbStars, comment,currentVersion)) {
                 document.getElementById("rating-box").style.display = "none";
               }
             } else {
@@ -376,6 +405,7 @@ async function getMyItems(state, mine) {
       itemBox.addEventListener("click", function () {
         document.getElementById("my-items-pop-up").style.display = "flex";
         currentItemId = item.id;
+        currentVersion = item.version;
       });
       
       allRecentItem.appendChild(itemBox);
@@ -412,6 +442,10 @@ function changeOptions(state) {
     document.getElementById("hidden-invalid-option").selected=true;
     document.getElementById("invalid-selectbox").style.display="none";
   }
+  if(state!="Assigned" && state!="item-not-gived"){
+    document.getElementById("assigned-option").selected=true;
+    document.getElementById("assigned-selectbox").style.display="none";
+  }
 
   document.getElementById("my-items-pop-up").style.display = "none";
   document.getElementById("rating-box").style.display = "none";
@@ -423,6 +457,7 @@ function changeOptions(state) {
     document.getElementById("get-items-offered").style.fontWeight = "normal";
   } else if (state == "cancelled") {
     offerAgain.style.display = "flex";
+    update.style.display = "flex";
     show.style.display = "flex";
     document.getElementById("get-items-cancelled").style.fontWeight = "normal";
   } else if (state == "Assigned") {
@@ -452,7 +487,7 @@ function changeOptions(state) {
     document.getElementById("get-items-gifted").style.fontWeight = "normal";
   }
 }
-async function cancelItem(idItem) {
+async function cancelItem(idItem,version) {
   try {
     var options = {
       method: "PUT",
@@ -461,7 +496,7 @@ async function cancelItem(idItem) {
       cache: "default",
     };
     const response = await fetch(
-      "/api/items/update/" + idItem + "?condition=cancelled",
+      "/api/items/update/" + idItem + "?condition=cancelled&version="+version,
       options
     ); // fetch return a promise => we wait for the response   changeCondition/{id}/{condition}
     if (response.status == 307) {
@@ -476,7 +511,7 @@ async function cancelItem(idItem) {
     return false;
   }
 }
-async function offerAgain(idItem) {
+async function offerAgain(idItem,version) {
   try {
     var options = {
       method: "POST",
@@ -484,7 +519,7 @@ async function offerAgain(idItem) {
       mode: "cors",
       cache: "default",
     };
-    const response = await fetch("/api/items/offerAgain/" + idItem, options); // fetch return a promise => we wait for the response
+    const response = await fetch("/api/items/offerAgain/" + idItem+"?version="+version, options); // fetch return a promise => we wait for the response
     if (response.status == 307) {
       await VerifyUser();
       document.location.reload();
@@ -498,13 +533,14 @@ async function offerAgain(idItem) {
   }
 }
 
-async function itemGived(itemId, collected) {
+async function itemGived(itemId, collected,version) {
   try {
     var options = {
       method: "POST",
       body: JSON.stringify({
         itemId: itemId,
         itemCollected: collected,
+        version:version
       }),
       headers: {
         "Content-Type": "application/json",
@@ -547,7 +583,7 @@ async function getPicture(itemId, imgDiv) {
     console.log(error);
   }
 }
-async function rateItem(itemId, nbStars, comment) {
+async function rateItem(itemId, nbStars, comment,version) {
   try {
     var options = {
       method: "POST",
@@ -555,6 +591,7 @@ async function rateItem(itemId, nbStars, comment) {
         itemId: itemId,
         nbStars: nbStars,
         comment: comment,
+        version:version
       }),
       headers: {
         "Content-Type": "application/json",

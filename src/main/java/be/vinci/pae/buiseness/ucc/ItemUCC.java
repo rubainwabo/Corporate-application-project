@@ -41,7 +41,7 @@ public interface ItemUCC {
    * @param availabilities the user's availabilities
    */
   void addInterest(int itemId, int userId, boolean callMe,
-      String phoneNumber, String availabilities);
+      String phoneNumber, String availabilities, int version);
 
   /**
    * call the DAO to change the itemCondition to cancel.
@@ -50,7 +50,7 @@ public interface ItemUCC {
    * @param userId    the userId sending a request
    * @param condition the new condition of the item
    */
-  void changeItemCondition(int idItem, int userId, String condition);
+  void changeItemCondition(int idItem, int userId, String condition, int version);
 
   /**
    * call the dao to get all the last items.
@@ -60,7 +60,7 @@ public interface ItemUCC {
    */
   List<ItemDTO> getLastItemsOffered(boolean isConnected);
 
-  void itemCollectedOrNot(int itemId, boolean itemCollected, int reqUsrId);
+  void itemCollectedOrNot(int itemId, boolean itemCollected, int reqUsrId, int version);
 
   List<ItemDTO> memberItemsByItemCondition(String itemCondition, int userId, boolean isOfferor);
 
@@ -73,7 +73,7 @@ public interface ItemUCC {
    * @param idRecipient the id of de recipient
    * @return return 1 if the recipient is added, 0 if not
    */
-  int addRecipient(int idItem, int idRecipient);
+  int addRecipient(int idItem, int idRecipient, int version);
 
   /**
    * call update some info of an item.
@@ -91,11 +91,11 @@ public interface ItemUCC {
    * @param idItem the id of the item
    * @param userId user who want to offer again
    */
-  void offerAgain(int idItem, int userId);
+  void offerAgain(int idItem, int userId, int version);
 
   void updateItemUrl(int itemId, String img);
 
-  void rateItem(int itemId, int nbStars, String comment);
+  void rateItem(int itemId, int nbStars, String comment, int version);
 
   void updateItemOfInvalidMember(int memberId);
 }

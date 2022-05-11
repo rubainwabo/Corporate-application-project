@@ -8,4 +8,6 @@ public interface NotificationDAO {
   List<NotificationDTO> getAllMyNotif(int userId, boolean allNotif);
 
   void updateAllNotifToViewed(int userId);
+
+  void sendNotification(String description, int recipientId, int itemId);
 }

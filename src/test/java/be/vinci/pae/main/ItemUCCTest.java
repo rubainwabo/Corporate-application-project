@@ -4,6 +4,7 @@ import be.vinci.pae.buiseness.dto.ItemDTO;
 import be.vinci.pae.buiseness.ucc.ItemUCC;
 import be.vinci.pae.dal.services.DateDAO;
 import be.vinci.pae.dal.services.ItemDAO;
+import be.vinci.pae.dal.services.NotificationDAO;
 import be.vinci.pae.utils.exception.BizzException;
 import be.vinci.pae.utils.exception.FatalException;
 import java.util.List;
@@ -24,9 +25,9 @@ public class ItemUCCTest {
 
   private static ItemUCC itemUCC;
   private static ServiceLocator locator;
+  private static NotificationDAO notificationDAO;
   private ItemDAO itemDAO;
   private DateDAO dateDAO;
-
 
   /**
    * Init for tests.
@@ -44,10 +45,13 @@ public class ItemUCCTest {
   public void setup() {
     itemDAO = locator.getService(ItemDAO.class);
     dateDAO = locator.getService(DateDAO.class);
+    notificationDAO = locator.getService(NotificationDAO.class);
     Mockito.clearInvocations(itemDAO);
     Mockito.clearInvocations(dateDAO);
+    Mockito.clearInvocations(notificationDAO);
     Mockito.reset(itemDAO);
     Mockito.reset(dateDAO);
+    Mockito.reset(notificationDAO);
   }
 
   @Test
@@ -111,53 +115,75 @@ public class ItemUCCTest {
 
   @Test
   public void addInterestSuccessful() {
-    itemUCC.addInterest(ID, ID, true, state, state);
-    Mockito.verify(itemDAO).addInterest(ID, ID, true, state, state);
+    itemUCC.addInterest(ID, ID, true, state, state, ID);
+    Mockito.verify(itemDAO).addInterest(ID, ID, true, state, state, ID);
 
   }
 
 
   @Test
   public void addInterestFatalException() {
-    Mockito.doThrow(FatalException.class).when(itemDAO).addInterest(ID, ID, true, state, state);
+    Mockito.doThrow(FatalException.class).when(itemDAO).addInterest(ID, ID, true, state, state, ID);
     Assertions.assertThrows(FatalException.class,
-        () -> itemUCC.addInterest(ID, ID, true, state, state));
-    Mockito.verify(itemDAO, Mockito.times(1)).addInterest(ID, ID, true, state, state);
+        () -> itemUCC.addInterest(ID, ID, true, state, state, ID));
+    Mockito.verify(itemDAO, Mockito.times(1)).addInterest(ID, ID, true, state, state, ID);
 
   }
 
-  /*
-   @Test
-   public void changeItemConditionSuccessful() {
-     itemUCC.changeItemCondition(ID, ID, state);
-     Mockito.verify(itemDAO).changeItemCondition(ID, ID, state);
-   }
 
-   @Test
-   public void changeItemConditionFatalException() {
-     Mockito.doThrow(FatalException.class).when(itemDAO).changeItemCondition(ID, ID, state);
-     Assertions.assertThrows(FatalException.class, () ->
-     itemUCC.changeItemCondition(ID, ID, state));
-     Mockito.verify(itemDAO).changeItemCondition(ID, ID, state);
-   }
+  @Test
+  public void changeItemConditionSuccessful() {
+    ItemDTO item = Mockito.mock(ItemDTO.class);
+    Mockito.when(item.getOfferorId()).thenReturn(ID);
+    Mockito.when(itemDAO.getOneById(ID)).thenReturn(item);
+    itemUCC.changeItemCondition(ID, ID, state, ID);
+    Mockito.verify(itemDAO).getOneById(ID);
+    Mockito.verify(item).getOfferorId();
+    Mockito.verify(itemDAO).changeItemCondition(ID, ID, state, ID);
+  }
+
+  @Test
+  public void changeItemConditionBizzException() {
+    ItemDTO item = Mockito.mock(ItemDTO.class);
+    Mockito.when(item.getOfferorId()).thenReturn(ID);
+    Mockito.when(itemDAO.getOneById(ID)).thenReturn(item);
+    Assertions.assertThrows(BizzException.class, () ->
+        itemUCC.changeItemCondition(ID, 2, state, ID));
+    Mockito.verify(itemDAO).getOneById(ID);
+    Mockito.verify(item).getOfferorId();
+  }
 
 
-     @Test
-     public void getMyItemsSuccessful() {
-       List<ItemDTO> list = Mockito.mock(List.class);
+  @Test
+  public void changeItemConditionFatalException() {
+    ItemDTO item = Mockito.mock(ItemDTO.class);
+    Mockito.when(item.getOfferorId()).thenReturn(ID);
+    Mockito.when(itemDAO.getOneById(ID)).thenReturn(item);
+    Mockito.doThrow(FatalException.class).when(itemDAO).changeItemCondition(ID, ID, state, ID);
+    Assertions.assertThrows(FatalException.class, () ->
+        itemUCC.changeItemCondition(ID, ID, state, ID));
+    Mockito.verify(itemDAO).getOneById(ID);
+    Mockito.verify(item).getOfferorId();
+    Mockito.verify(itemDAO).changeItemCondition(ID, ID, state, ID);
+  }
 
-       Mockito.when(itemDAO.getMyItems(ID, state, true)).thenReturn(list);
-       Assertions.assertEquals(list, itemUCC.getMyItems(ID, state, true));
-       Mockito.verify(itemDAO).getMyItems(ID, state, true);
-     }
 
-     @Test
-     public void getMyItemsFatalException() {
-       Mockito.when(itemDAO.getMyItems(ID, state, true)).thenThrow(FatalException.class);
-       Assertions.assertThrows(FatalException.class, () -> itemUCC.getMyItems(ID, state, true));
-       Mockito.verify(itemDAO).getMyItems(ID, state, true);
-     }
-   */
+  @Test
+  public void getMyItemsSuccessful() {
+    List<ItemDTO> list = Mockito.mock(List.class);
+
+    Mockito.when(itemDAO.getMyItems(ID, state, ID, true)).thenReturn(list);
+    Assertions.assertEquals(list, itemUCC.getMyItems(ID, state, ID, true));
+    Mockito.verify(itemDAO).getMyItems(ID, state, ID, true);
+  }
+
+  @Test
+  public void getMyItemsFatalException() {
+    Mockito.when(itemDAO.getMyItems(ID, state, ID, true)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.getMyItems(ID, state, ID, true));
+    Mockito.verify(itemDAO).getMyItems(ID, state, ID, true);
+  }
+
   @Test
   public void getLastItemsOfferedLimitZero() {
     List<ItemDTO> listItems = Mockito.mock(List.class);
@@ -190,18 +216,19 @@ public class ItemUCCTest {
     );
   }
 
+
   @Test
   public void addRecipientSuccessful() {
-    Mockito.when(itemDAO.addRecipient(ID, ID)).thenReturn(ID);
-    Assertions.assertEquals(ID, itemUCC.addRecipient(ID, ID));
-    Mockito.verify(itemDAO).addRecipient(ID, ID);
+    Mockito.when(itemDAO.addRecipient(ID, ID, ID)).thenReturn(ID);
+    Assertions.assertEquals(ID, itemUCC.addRecipient(ID, ID, ID));
+    Mockito.verify(itemDAO).addRecipient(ID, ID, ID);
   }
 
   @Test
   public void addRecipientFatalException() {
-    Mockito.when(itemDAO.addRecipient(ID, ID)).thenThrow(FatalException.class);
-    Assertions.assertThrows(FatalException.class, () -> itemUCC.addRecipient(ID, ID));
-    Mockito.verify(itemDAO).addRecipient(ID, ID);
+    Mockito.when(itemDAO.addRecipient(ID, ID, ID)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.addRecipient(ID, ID, ID));
+    Mockito.verify(itemDAO).addRecipient(ID, ID, ID);
   }
 
   @Test
@@ -241,18 +268,43 @@ public class ItemUCCTest {
     );
   }
 
+
   @Test
   public void offerAgainSuccessful() {
     ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
 
     Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
     Mockito.when(itemDTO.getOfferorId()).thenReturn(ID);
-    itemUCC.offerAgain(ID, ID);
+    Mockito.when(itemDTO.getRecipientId()).thenReturn(ID);
+    Mockito.when(itemDTO.getId()).thenReturn(ID);
+    Mockito.when(itemDTO.getOfferor()).thenReturn("user");
+    itemUCC.offerAgain(ID, ID, ID);
     Assertions.assertAll(
         () -> Mockito.verify(dateDAO).addDate(ID),
-        () -> Mockito.verify(itemDAO).changeItemCondition(ID, ID, "offered"),
+        () -> Mockito.verify(itemDAO).changeItemCondition(ID, ID, "offered", ID),
         () -> Mockito.verify(itemDAO).getOneById(ID),
-        () -> Mockito.verify(itemDTO).getOfferorId()
+        () -> Mockito.verify(itemDTO).getOfferorId(),
+        () -> Mockito.verify(itemDTO, Mockito.atMost(2)).getRecipientId(),
+        () -> Mockito.verify(itemDTO).getOfferor(),
+        () -> Mockito.verify(itemDTO).getId(),
+        () -> Mockito.verify(notificationDAO).sendNotification("user a réoffert cet objet", ID, ID)
+    );
+  }
+
+  @Test
+  public void offerAgainSuccessful1() {
+    ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
+
+    Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
+    Mockito.when(itemDTO.getOfferorId()).thenReturn(ID);
+    Mockito.when(itemDTO.getRecipientId()).thenReturn(0);
+    itemUCC.offerAgain(ID, ID, ID);
+    Assertions.assertAll(
+        () -> Mockito.verify(dateDAO).addDate(ID),
+        () -> Mockito.verify(itemDAO).changeItemCondition(ID, ID, "offered", ID),
+        () -> Mockito.verify(itemDAO).getOneById(ID),
+        () -> Mockito.verify(itemDTO).getOfferorId(),
+        () -> Mockito.verify(itemDTO, Mockito.atMost(2)).getRecipientId()
     );
   }
 
@@ -263,7 +315,7 @@ public class ItemUCCTest {
     Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
     Mockito.when(itemDTO.getOfferorId()).thenReturn(2);
     Assertions.assertAll(
-        () -> Assertions.assertThrows(BizzException.class, () -> itemUCC.offerAgain(ID, ID)),
+        () -> Assertions.assertThrows(BizzException.class, () -> itemUCC.offerAgain(ID, ID, ID)),
         () -> Mockito.verify(itemDAO).getOneById(ID),
         () -> Mockito.verify(itemDTO).getOfferorId()
     );
@@ -273,7 +325,7 @@ public class ItemUCCTest {
   public void offerAgainFatalException() {
     Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
     Assertions.assertAll(
-        () -> Assertions.assertThrows(FatalException.class, () -> itemUCC.offerAgain(ID, ID)),
+        () -> Assertions.assertThrows(FatalException.class, () -> itemUCC.offerAgain(ID, ID, ID)),
         () -> Mockito.verify(itemDAO).getOneById(ID)
     );
   }
@@ -284,9 +336,9 @@ public class ItemUCCTest {
 
     Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
     Mockito.when(itemDTO.getOfferorId()).thenReturn(ID);
-    itemUCC.itemCollectedOrNot(ID, true, ID);
+    itemUCC.itemCollectedOrNot(ID, true, ID, ID);
     Assertions.assertAll(
-        () -> Mockito.verify(itemDAO).itemCollectedOrNot(itemDTO, true),
+        () -> Mockito.verify(itemDAO).itemCollectedOrNot(itemDTO, true, ID),
         () -> Mockito.verify(itemDAO).getOneById(ID),
         () -> Mockito.verify(itemDTO).getOfferorId()
     );
@@ -300,7 +352,7 @@ public class ItemUCCTest {
     Mockito.when(itemDTO.getOfferorId()).thenReturn(2);
     Assertions.assertAll(
         () -> Assertions.assertThrows(BizzException.class,
-            () -> itemUCC.itemCollectedOrNot(ID, true, ID)),
+            () -> itemUCC.itemCollectedOrNot(ID, true, ID, ID)),
         () -> Mockito.verify(itemDAO).getOneById(ID),
         () -> Mockito.verify(itemDTO).getOfferorId()
     );
@@ -311,7 +363,7 @@ public class ItemUCCTest {
     Mockito.when(itemDAO.getOneById(ID)).thenThrow(FatalException.class);
     Assertions.assertAll(
         () -> Assertions.assertThrows(FatalException.class,
-            () -> itemUCC.itemCollectedOrNot(ID, true, ID)),
+            () -> itemUCC.itemCollectedOrNot(ID, true, ID, ID)),
         () -> Mockito.verify(itemDAO).getOneById(ID)
     );
   }
@@ -358,15 +410,30 @@ public class ItemUCCTest {
 
   @Test
   public void rateItemSuccessful() {
-    itemUCC.rateItem(ID, ID, state);
-    Mockito.verify(itemDAO).rateItem(ID, ID, state);
+    itemUCC.rateItem(ID, ID, state, ID);
+    Mockito.verify(itemDAO).rateItem(ID, ID, state, ID);
   }
 
 
   @Test
   public void rateItemFatalException() {
-    Mockito.doThrow(FatalException.class).when(itemDAO).rateItem(ID, ID, state);
-    Assertions.assertThrows(FatalException.class, () -> itemUCC.rateItem(ID, ID, state));
-    Mockito.verify(itemDAO).rateItem(ID, ID, state);
+    Mockito.doThrow(FatalException.class).when(itemDAO).rateItem(ID, ID, state, ID);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.rateItem(ID, ID, state, ID));
+    Mockito.verify(itemDAO).rateItem(ID, ID, state, ID);
   }
+
+  @Test
+  public void updateItemOfInvalidMemberSuccessful() {
+    itemUCC.updateItemOfInvalidMember(ID);
+    Mockito.verify(itemDAO).updateItemOfInvalidMember(ID);
+  }
+
+
+  @Test
+  public void updateItemOfInvalidMemberFatalException() {
+    Mockito.doThrow(FatalException.class).when(itemDAO).updateItemOfInvalidMember(ID);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.updateItemOfInvalidMember(ID));
+    Mockito.verify(itemDAO).updateItemOfInvalidMember(ID);
+  }
+
 }

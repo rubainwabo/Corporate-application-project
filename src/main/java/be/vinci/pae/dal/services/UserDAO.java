@@ -37,9 +37,9 @@ public interface UserDAO {
   void addPhoneNumber(int userId, String phoneNumber);
 
   boolean updateProfile(int id, String username, String firstName, String lastName,
-      String street, int number, int postcode, String box, String city, String phone);
+      String street, int number, int postcode, String box, String city, String phone, int version);
 
-  boolean updatePassword(int id, String password);
+  boolean updatePassword(int id, String password, int version);
 
   int register(UserDTO user);
 

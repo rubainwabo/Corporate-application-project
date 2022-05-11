@@ -32,6 +32,9 @@ const addItem = `
       </div>
    </form>
    <div id="add-item-pop-up">
+      <div id="close-pop-up">
+      <i style="font-size:25px;color:#CACACA"class="fa-regular fa-circle-xmark"></i>
+      </div>
       <form id="add-item-type-form">
          <span id="error"></span>
          <div>
@@ -70,6 +73,10 @@ const AddItemPage = () => {
   removePopUp.addEventListener("click", function () {
     popUp.style.display = "none";
   });
+  //close pop-up
+  document.getElementById("close-pop-up").addEventListener("click",function(e){
+    popUp.style.display="none";
+  })
   addItemTypeBtn.addEventListener("click", function (e) {
     e.preventDefault();
     popUp.style.display = "flex";
@@ -203,7 +210,6 @@ const AddItemPage = () => {
         let option = document.createElement("option");
         option.value = itemType.itemTypeName;
         option.innerText = itemType.itemTypeName;
-        console.log(itemType);
 
         selectBox.appendChild(option);
       });

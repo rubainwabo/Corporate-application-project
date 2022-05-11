@@ -23,7 +23,7 @@ public class UserUCCTest {
   // Constants
   private static final String USERNAME = "user";
   private static final String DENIED = "denied";
-  private static final String MESSAGE = "username or password incorrect";
+  private static final String MESSAGE = "pseudo ou mot de passe incorrect";
   private static final String PASSWORD = "password";
   private static final String WAITING = "waiting";
   private static final String VALID = "valid";
@@ -127,7 +127,7 @@ public class UserUCCTest {
         () -> userUCC.login(USERNAME, PASSWORD));
 
     Assertions.assertAll(
-        () -> Assertions.assertEquals("user on hold", exception.getMessage()),
+        () -> Assertions.assertEquals("utilisateur en attente", exception.getMessage()),
         () -> Mockito.verify(userWaiting).checkPassword(PASSWORD),
         () -> Mockito.verify(userWaiting, Mockito.atMost(3)).getState(),
         () -> Mockito.verify(userWaiting).isWaiting(),
@@ -172,7 +172,7 @@ public class UserUCCTest {
     // with the error message "invalid state"
     Throwable exception = Assertions.assertThrows(Exception.class,
         () -> userUCC.getUsersByState("wrong state"));
-    Assertions.assertEquals("invalid state", exception.getMessage());
+    Assertions.assertEquals("état invalide", exception.getMessage());
   }
 
   @Test
@@ -246,7 +246,7 @@ public class UserUCCTest {
     // with the error message "Trying to insert invalid state"
     Throwable exception = Assertions.assertThrows(Exception.class,
         () -> userUCC.changeState(ID, WAITING, EMPTY, true, ID));
-    Assertions.assertEquals("Trying to insert invalid state", exception.getMessage());
+    Assertions.assertEquals("vous essayez d'insérer un état invalide", exception.getMessage());
   }
 
   @Test
@@ -291,7 +291,7 @@ public class UserUCCTest {
     Mockito.when(userDAO.getOneByUsername(USERNAME)).thenReturn(user);
     Throwable exception = Assertions.assertThrows(Exception.class, () -> userUCC.register(user));
     Assertions.assertAll(
-        () -> Assertions.assertEquals("username already exists", exception.getMessage()),
+        () -> Assertions.assertEquals("le nom d'utilisateur existe déjà", exception.getMessage()),
         () -> Mockito.verify(user).getUserName(),
         () -> Mockito.verify(userDAO).getOneByUsername(USERNAME)
     );
@@ -328,35 +328,36 @@ public class UserUCCTest {
   @Test
   public void updateProfileSuccessful() {
     Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID, USERNAME,
-        USERNAME, USERNAME)).thenReturn(true);
+        USERNAME, USERNAME, ID)).thenReturn(true);
     Assertions.assertTrue(userUCC.updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
-        USERNAME, USERNAME, USERNAME));
+        USERNAME, USERNAME, USERNAME, ID));
     Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
-        USERNAME, USERNAME, USERNAME);
+        USERNAME, USERNAME, USERNAME, ID);
   }
 
   @Test
   public void updateProfileFatalException() {
     Mockito.when(userDAO.updateProfile(ID, USERNAME, USERNAME,
-        USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME)).thenThrow(FatalException.class);
+            USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME, ID))
+        .thenThrow(FatalException.class);
     Assertions.assertThrows(FatalException.class, () -> userUCC.updateProfile(ID, USERNAME,
-        USERNAME, USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME));
+        USERNAME, USERNAME, USERNAME, ID, ID, USERNAME, USERNAME, USERNAME, ID));
     Mockito.verify(userDAO).updateProfile(ID, USERNAME, USERNAME, USERNAME, USERNAME, ID, ID,
-        USERNAME, USERNAME, USERNAME);
+        USERNAME, USERNAME, USERNAME, ID);
   }
 
   @Test
   public void updatePasswordSuccessful() {
-    Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenReturn(true);
-    Assertions.assertTrue(userUCC.updatePassword(ID, PASSWORD));
-    Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
+    Mockito.when(userDAO.updatePassword(ID, PASSWORD, ID)).thenReturn(true);
+    Assertions.assertTrue(userUCC.updatePassword(ID, PASSWORD, ID));
+    Mockito.verify(userDAO).updatePassword(ID, PASSWORD, ID);
   }
 
   @Test
   public void updatePasswordFatalException() {
-    Mockito.when(userDAO.updatePassword(ID, PASSWORD)).thenThrow(FatalException.class);
-    Assertions.assertThrows(FatalException.class, () -> userUCC.updatePassword(ID, PASSWORD));
-    Mockito.verify(userDAO).updatePassword(ID, PASSWORD);
+    Mockito.when(userDAO.updatePassword(ID, PASSWORD, ID)).thenThrow(FatalException.class);
+    Assertions.assertThrows(FatalException.class, () -> userUCC.updatePassword(ID, PASSWORD, ID));
+    Mockito.verify(userDAO).updatePassword(ID, PASSWORD, ID);
   }
 
   @Test

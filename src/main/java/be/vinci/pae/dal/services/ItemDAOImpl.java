@@ -3,6 +3,7 @@ package be.vinci.pae.dal.services;
 import be.vinci.pae.buiseness.dto.ItemDTO;
 import be.vinci.pae.buiseness.factory.BizFactory;
 import be.vinci.pae.dal.DalBackService;
+import be.vinci.pae.utils.exception.ConflictException;
 import be.vinci.pae.utils.exception.FatalException;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
@@ -50,7 +51,7 @@ public class ItemDAOImpl implements ItemDAO {
     String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
         + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, "
         + "i.recipient, i.number_of_people_interested, "
-        + "i.number_of_people_interested,max(d._date) as maxDate "
+        + "i.version,max(d._date) as maxDate "
         + "from projet.items i, projet.item_type it, projet.dates d "
         + "where i.id_item=d.item and i.item_type=it.id_item_type "
         + add
@@ -65,8 +66,8 @@ public class ItemDAOImpl implements ItemDAO {
     try (PreparedStatement ps = myBackService.getPreparedStatementWithId(
         "insert into projet.items "
             + "(id_item,description,url_picture,item_condition,"
-            + "offeror,item_type,time_slot,number_of_people_interested) "
-            + "VALUES (DEFAULT,?,?,?,?,?,?,0)",
+            + "offeror,item_type,time_slot,number_of_people_interested,version) "
+            + "VALUES (DEFAULT,?,?,?,?,?,?,0,0)",
         Statement.RETURN_GENERATED_KEYS)) {
       // ps to find lastId insere
       ps.setString(1, item.getDescription());
@@ -102,7 +103,7 @@ public class ItemDAOImpl implements ItemDAO {
         "select i.id_item,t.item_type_name,i.description,i.url_picture,"
             + "i.offeror,i.time_slot,i.item_condition,i.number_of_people_interested,"
             + "m.last_name,m.first_name,m2.last_name,m2.first_name,i.recipient,"
-            + "i.rating "
+            + "i.rating,i.version "
             + "from projet.items i LEFT JOIN projet.members m2 on i.recipient=m2.user_id,"
             + "projet.item_type t,projet.dates d,projet.members m "
             + "where i.id_item=? and i.item_type = "
@@ -128,6 +129,7 @@ public class ItemDAOImpl implements ItemDAO {
         }
         item.setRecipientId(rs.getInt(13));
         item.setRating(rs.getInt(14));
+        item.setVersion(rs.getInt(15));
         return item;
       }
     } catch (Exception e) {
@@ -138,7 +140,7 @@ public class ItemDAOImpl implements ItemDAO {
 
   @Override
   public void addInterest(int idItem, int interestUserId, boolean callMe,
-      String phoneNumber, String availabilities) {
+      String phoneNumber, String availabilities, int version) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         "insert into projet.interests (_date,member,item) VALUES(?,?,?)")) {
       ps.setString(1, availabilities);
@@ -146,9 +148,13 @@ public class ItemDAOImpl implements ItemDAO {
       ps.setInt(3, idItem);
       ps.executeUpdate();
       try (PreparedStatement psNbrPeopleInteresed = myBackService.getPreparedStatement(
-          "update projet.items set number_of_people_interested = 1 + number_of_people_interested"
-              + " where id_item = " + idItem)) {
-        psNbrPeopleInteresed.executeUpdate();
+          "update projet.items set number_of_people_interested = 1 + number_of_people_interested, "
+              + "version =version+1 "
+              + "where id_item = " + idItem + " "
+              + "and version=" + version)) {
+        if (psNbrPeopleInteresed.executeUpdate() == 0) {
+          verifyVersion(idItem, version);
+        }
       }
       try (PreparedStatement psNotif = myBackService.getPreparedStatement(
           "insert into projet.notifications (id_notification,is_viewed,text,person,item) "
@@ -182,14 +188,18 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void changeItemCondition(int idItem, int userId, String condition) {
-    String query = "update projet.items set item_condition ='" + condition + "'";
+  public void changeItemCondition(int idItem, int userId, String condition, int version) {
+    String query = "update projet.items set item_condition ='" + condition + "', "
+        + "version = version+1";
     if (condition.equals("cancelled") || condition.equals("offered")) {
       query += ", recipient=null";
     }
-    query += " where id_item = " + idItem + "";
+    query += " where id_item = " + idItem + " AND version = " + version;
     try (PreparedStatement psChangeCondition = myBackService.getPreparedStatement(query)) {
-      psChangeCondition.executeUpdate();
+      if (psChangeCondition.executeUpdate() == 0) {
+        verifyVersion(idItem, 1);
+      }
+
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -203,10 +213,11 @@ public class ItemDAOImpl implements ItemDAO {
     String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
         + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, i.recipient, "
         + "i.number_of_people_interested, "
-        + "i.number_of_people_interested,max(d._date) as maxDate "
+        + "i.version,max(d._date) as maxDate "
         + "from projet.items i, "
         + "projet.item_type it, projet.dates d "
-        + "where i.item_condition='offered' and i.id_item=d.item and i.item_type=it.id_item_type "
+        + "where (i.item_condition='offered' OR i.item_condition='Assigned') "
+        + "and i.id_item=d.item and i.item_type=it.id_item_type "
         + "GROUP BY i.id_item, i.description, i.url_picture, i.number_of_people_interested, "
         + "it.item_type_name ORDER BY maxDate desc " + limite;
 
@@ -217,7 +228,7 @@ public class ItemDAOImpl implements ItemDAO {
   public List<ItemDTO> getMyItems(int id, String state, int type, boolean mine) {
     String query = "select i.id_item, i.description, i.url_picture,rating, i.comment, "
         + "i.item_condition, i.time_slot, i.offeror, it.item_type_name, "
-        + "i.recipient, i.number_of_people_interested, "
+        + "i.recipient, i.number_of_people_interested,i.version, "
         + "m.last_name,m.first_name,m2.last_name,m2.first_name, "
         + "max(d._date) as maxDate "
         + "from projet.items i LEFT JOIN projet.members m2 on i.recipient=m2.user_id, "
@@ -259,10 +270,11 @@ public class ItemDAOImpl implements ItemDAO {
           item.setItemtype(rs.getString(9));
           item.setRecipientId(rs.getInt(10));
           item.setNumberOfPeopleInterested(rs.getInt(11));
+          item.setVersion(rs.getInt(12));
           if (withNames) {
-            item.setOfferor(rs.getString(12) + " " + rs.getString(13));
-            if (rs.getString(14) != null) {
-              item.setRecipient(rs.getString(14) + " " + rs.getString(15));
+            item.setOfferor(rs.getString(13) + " " + rs.getString(14));
+            if (rs.getString(15) != null) {
+              item.setRecipient(rs.getString(15) + " " + rs.getString(16));
             }
           }
           arrayItemDTO.add(item);
@@ -275,16 +287,19 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void itemCollectedOrNot(ItemDTO item, boolean itemCollected) {
-    String query = itemCollected ? "Update projet.items set item_condition='gifted'"
-        + " where id_item=" + item.getId() :
-        "Update projet.items set item_condition='not collected',"
-            + "recipient=NULL where id_item=" + item.getId();
+  public void itemCollectedOrNot(ItemDTO item, boolean itemCollected, int version) {
+    String query = itemCollected ? "Update projet.items set item_condition='gifted',"
+        + "version=version+1 "
+        + "where id_item=" + item.getId() + "and version=" + version :
+        "Update projet.items set item_condition='offered'"
+            + " where id_item=" + item.getId();
 
     int idRecipient = item.getRecipientId();
     try (PreparedStatement ps = myBackService.getPreparedStatement(
         query)) {
-      ps.executeUpdate();
+      if (ps.executeUpdate() == 0) {
+        verifyVersion(item.getId(), version);
+      }
       if (!itemCollected) {
         try (PreparedStatement psUpdtItmNotTkn = myBackService.getPreparedStatement(
             "update projet.members set nb_of_item_not_taken= nb_of_item_not_taken "
@@ -298,11 +313,14 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public int addRecipient(int idItem, int idRecipient) {
+  public int addRecipient(int idItem, int idRecipient, int version) {
     try (PreparedStatement ps = myBackService.getPreparedStatement(""
         + "update projet.items set recipient=" + idRecipient
-        + ", item_condition='Assigned' WHERE id_item=" + idItem)) {
-      ps.executeUpdate();
+        + ", item_condition='Assigned', version=version+1 "
+        + "WHERE id_item=" + idItem + " and version = " + version)) {
+      if (ps.executeUpdate() == 0) {
+        verifyVersion(idItem, version);
+      }
       try (PreparedStatement psNotif = myBackService.getPreparedStatement(
           "INSERT INTO projet.notifications (id_notification,is_viewed,text,person,item)"
               + " VALUES (default,false,?,?,?)"
@@ -348,9 +366,10 @@ public class ItemDAOImpl implements ItemDAO {
   @Override
   public int updateItem(ItemDTO item) {
     try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
-        "UPDATE projet.items set description=?,"
+        "UPDATE projet.items set description=?, "
+            + "version = version+1, "
             + (item.getUrlPicture() != null ? "url_picture=?," : "")
-            + "time_slot=? WHERE id_item=" + item.getId()
+            + " time_slot=? WHERE id_item=" + item.getId() + " and version=" + item.getVersion()
     )) {
       psUpdate.setString(1, item.getDescription());
       if (item.getUrlPicture() != null) {
@@ -359,8 +378,9 @@ public class ItemDAOImpl implements ItemDAO {
       } else {
         psUpdate.setString(2, item.getTimeSlot());
       }
-
-      psUpdate.executeUpdate();
+      if (psUpdate.executeUpdate() == 0) {
+        verifyVersion(item.getId(), item.getVersion());
+      }
       return item.getId();
     } catch (Exception e) {
       throw new FatalException(e);
@@ -368,14 +388,18 @@ public class ItemDAOImpl implements ItemDAO {
   }
 
   @Override
-  public void rateItem(int itemId, int nbStars, String comment) {
+  public void rateItem(int itemId, int nbStars, String comment, int version) {
     try (PreparedStatement psUpdate = myBackService.getPreparedStatement(
-        "UPDATE projet.items set rating=?, comment=? WHERE id_item="
-            + itemId
+        "UPDATE projet.items set rating=?, comment=?,version=version+1"
+            + " WHERE id_item="
+            + itemId + " and version=" + version
     )) {
       psUpdate.setInt(1, nbStars);
       psUpdate.setString(2, comment);
-      psUpdate.executeUpdate();
+      if (psUpdate.executeUpdate() == 0) {
+        verifyVersion(itemId, version);
+      }
+
     } catch (Exception e) {
       throw new FatalException(e);
     }
@@ -416,7 +440,8 @@ public class ItemDAOImpl implements ItemDAO {
           ps.setInt(3, item.getId());
           ps.executeUpdate();
           if (!isOfferor) {
-            changeItemCondition(item.getId(), item.getOfferorId(), itemCondition);
+            changeItemCondition(item.getId(), item.getOfferorId(), itemCondition,
+                item.getVersion());
           }
         } catch (Exception e) {
           throw new FatalException(e);
@@ -425,6 +450,26 @@ public class ItemDAOImpl implements ItemDAO {
       if (isOfferor) {
         updateItemConditionOfInvalidOfferor(memberId, itemCondition);
       }
+    }
+  }
+
+
+  private void verifyVersion(int itemId, int version) {
+
+    String queryVersion = "SELECT version FROM projet.items"
+        + " WHERE  id_item  = " + itemId;
+
+    try (PreparedStatement psVersion = myBackService.getPreparedStatement(
+        queryVersion)) {
+      try (ResultSet verifVersion = psVersion.executeQuery()) {
+
+        if (verifVersion.next() && verifVersion.getInt(1) != version) {
+          throw new ConflictException("accès concurrent, veuillez réessayer plus tard");
+        }
+
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
   }
 }

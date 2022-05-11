@@ -90,7 +90,7 @@ const home = `
    <div id="home-page-navigation">
       <div class="row">
          <h2 class="col-4" id="home-page-title"> Dernières offres</h2>
-         <div class="col-8">
+         <div class="col-8" id="home-search-bar">
             <div class="row">
                <div class="col-4">
                   <div class="row" id="input-div">
@@ -131,7 +131,11 @@ const home = `
 
 const HomePage = async () => {
   const pageDiv = document.querySelector("#page");
+  
   pageDiv.innerHTML = home;
+  if(!getSessionObject("accessToken")){
+    document.getElementById("home-search-bar").style.display="none";
+  }
   let fetchMethodName = getSessionObject("accessToken")
     ? true
     : false;
@@ -217,14 +221,16 @@ const HomePage = async () => {
         "Content-Type": "application/json",
       },
     };
-    const date1 = document.getElementById("date-d").value;
+   const date1 = document.getElementById("date-d").value;
     const date2 = document.getElementById("date-f").value;
+    const splitDate2 = date2.split("/")
+    splitDate2[2] = parseInt(splitDate2[2])+1
+    let nouvDate = splitDate2.join("/");
     try {
       const response = await fetch(
-        "api/items/filtered?filter=date&input=" + date1 + "-" + date2,
+        "api/items/filtered?filter=date&input=" + date1 + "-" + nouvDate,
         options
       );
-      console.log(response);
 
       if (!response.ok) {
         throw new Error(

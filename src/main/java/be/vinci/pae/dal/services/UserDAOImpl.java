@@ -3,6 +3,7 @@ package be.vinci.pae.dal.services;
 import be.vinci.pae.buiseness.dto.UserDTO;
 import be.vinci.pae.buiseness.factory.BizFactory;
 import be.vinci.pae.dal.DalBackService;
+import be.vinci.pae.utils.exception.ConflictException;
 import be.vinci.pae.utils.exception.FatalException;
 import jakarta.inject.Inject;
 import java.sql.PreparedStatement;
@@ -99,7 +100,7 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public boolean updateProfile(int id, String username, String firstName, String lastName,
-      String street, int number, int postcode, String box, String city, String phone) {
+      String street, int number, int postcode, String box, String city, String phone, int version) {
 
     phone = phone.length() > 0 ? "'" + phone + "'" : "DEFAULT";
     String query = "update projet.members set username = '" + username + "'"
@@ -110,23 +111,29 @@ public class UserDAOImpl implements UserDAO {
         + ",postcode = '" + postcode + "'"
         + ",unit_number = '" + box + "'"
         + ",city = '" + city + "'"
-        + ",phone_number = " + phone
+        + ",phone_number = " + phone + ""
+        + ", version = version+1"
         + " where user_id = "
-        + id;
-    return execQuery(query);
+        + id + " and version=" + version;
+    return execQuery(query, id, version);
   }
 
   @Override
-  public boolean updatePassword(int id, String password) {
+  public boolean updatePassword(int id, String password, int version) {
     password = BCrypt.hashpw(password, BCrypt.gensalt());
-    String query = "update projet.members set password = '" + password + "' where "
-        + "user_id = " + id;
-    return execQuery(query);
+    String query = "update projet.members set password = '" + password + "',"
+        + "version=version+1 where "
+        + "user_id = " + id + " "
+        + "and version=" + version;
+    return execQuery(query, id, version);
   }
 
-  private boolean execQuery(String query) {
+  private boolean execQuery(String query, int userId, int version) {
     try (PreparedStatement ps = myDalService.getPreparedStatement(
         query)) {
+      if (ps.executeUpdate() == 0) {
+        verifyVersion(userId, version);
+      }
       ps.executeUpdate();
     } catch (Exception e) {
       throw new FatalException(e);
@@ -161,23 +168,11 @@ public class UserDAOImpl implements UserDAO {
             ? "',reason_for_connection_refusal = null" : "' ")
             + ", version = version+1 "
             + "where user_id = " + userId + " AND version = " + version;
-    String queryVersion = "SELECT version FROM projet.members"
-        + " WHERE user_id = " + userId;
 
     try (PreparedStatement psConfirm = myDalService.getPreparedStatement(
         query)) {
       if (psConfirm.executeUpdate() == 0) {
-        try (PreparedStatement psVersion = myDalService.getPreparedStatement(
-            queryVersion)) {
-
-          try (ResultSet verifVersion = psVersion.executeQuery()) {
-
-            if (verifVersion.next() && verifVersion.getInt(1) != version) {
-              throw new FatalException("optimistic lock");
-            }
-
-          }
-        }
+        verifyVersion(userId, version);
       }
     } catch (Exception e) {
       throw new FatalException(e);
@@ -354,5 +349,25 @@ public class UserDAOImpl implements UserDAO {
     } catch (Exception e) {
       throw new FatalException(e);
     }
+  }
+
+  private void verifyVersion(int userId, int version) {
+
+    String queryVersion = "SELECT version FROM projet.members"
+        + " WHERE user_id = " + userId;
+
+    try (PreparedStatement psVersion = myDalService.getPreparedStatement(
+        queryVersion)) {
+      try (ResultSet verifVersion = psVersion.executeQuery()) {
+
+        if (verifVersion.next() && verifVersion.getInt(1) != version) {
+          throw new ConflictException("accès concurrent, veuillez réessayer plus tard");
+        }
+
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
   }
 }

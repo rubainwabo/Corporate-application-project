@@ -30,7 +30,7 @@ public interface UserUCC {
    * @return true if correctly changed.
    */
   boolean updateProfile(int id, String username, String firstName, String lastName,
-      String street, int number, int postcode, String box, String city, String phone);
+      String street, int number, int postcode, String box, String city, String phone, int version);
 
   /**
    * updates the password of an user.
@@ -39,7 +39,7 @@ public interface UserUCC {
    * @param password new password.
    * @return true if changed.
    */
-  boolean updatePassword(int id, String password);
+  boolean updatePassword(int id, String password, int version);
 
   /**
    * returns the user.

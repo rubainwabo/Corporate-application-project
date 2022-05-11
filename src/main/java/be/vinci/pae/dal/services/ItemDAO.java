@@ -35,11 +35,12 @@ public interface ItemDAO {
   /**
    * try to add an interest for an object.
    *
-   * @param idItem         the item id
-   * @param userId         the user's who's sending a request
-   * @param callMe         if the user's want to be called
-   * @param phoneNumber    the user's phone number
-   * @param availabilities the user's availabilities
+   * @param idItem        the item id
+   * @param userId        the user's who's sending a request
+   * @param callMe        if the user's want to be called
+   * @param phoneNumber   the user's phone number
+   * @param availabilitie the user's availabilities
+   * @param version       the version of the item
    */
   void addInterest(int idItem, int userId, boolean callMe,
       String phoneNumber, String availabilitie, int version);

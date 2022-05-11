@@ -59,7 +59,7 @@ const myItems = `
          <div class="my-item-link"> <a  href="#" id="get-items-cancelled" data-uri="/mesOffres"> Mes offres annulées </a></div>
          <div class="my-item-link" > <a href="#" id="get-items-assigned"  data-uri="/userhandeler"> Mes offres attribuées </a></div>
          <div class="my-item-link" > <a href="#" id="get-items-gifted-by-me"  data-uri="/userhandeler"> Mes offres données </a></div>
-         <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçus  </a></div>
+         <div class="my-item-link"> <a  href="#" id="get-items-gifted" data-uri="/additem"> Mes offres reçues  </a></div>
          <div class="my-item-link"> <a  href="#" id="get-items-invalid" data-uri="/additem"> Mes offres en attente  </a></div>
       </div>
       <div id="all-recent-item">
@@ -127,7 +127,7 @@ const MyItems = async (id) => {
       }
       
     });
-
+  // cancel an item 
   document
     .getElementById("get-items-cancelled")
     .addEventListener("click", function (e) {
@@ -236,12 +236,10 @@ const MyItems = async (id) => {
   document
     .getElementById("pick-recipient")
     .addEventListener("click", function (e) {
-
-      if(offerAgain(currentItemId,currentVersion)){
+        currentState="offered";
         let params = [{ key: "id", value: currentItemId }];
         Redirect("/pickrecipient", params);   
-      }       
-         
+            
     });
 
   document.getElementById("show-item").addEventListener("click", function (e) {

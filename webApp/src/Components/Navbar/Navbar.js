@@ -13,11 +13,11 @@ import { Redirect } from "../Router/Router";
  * - the router will show the Page associated to this URI when the user click on a nav-link
  */
 
-const Navbar = () => {
+const Navbar = async () => {
   const navbarWrapper = document.querySelector("#navbarWrapper");
   let accesToken = getSessionObject("accessToken");
   let isAdmin = getSessionObject("role");
-
+ 
   let navbar = "";
   if (accesToken && isAdmin == "admin") {
     navbar = `
@@ -32,13 +32,14 @@ const Navbar = () => {
           <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/memberList"> Membres </a></div>
        </div>
        <div id="nav-connection">
-          <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
+          <div id="icon-bell"><i class="fa-solid fa-bell"></i></i><span id="nbr-notif"></span></div>
           <div class="notifications" id="box"></div>
           <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
        </div>
     </div>
  </nav>
   `;
+  
   } else {
     if (accesToken) {
       navbar = `
@@ -50,9 +51,10 @@ const Navbar = () => {
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/myitems"> Mes offres </a></div>
             <div id=""> <a class="nav-item menu-item" href="#"  data-uri="/additem"> Nouvelles offre + </a></div>
          </div>
-         <div id="icon-bell"><i class="fa-solid fa-bell"></i></div>
-         <div class="notifications" id="box"></div>
+         
          <div id="nav-connection">
+            <div id="icon-bell"><i class="fa-solid fa-bell"></i><div id="nbr-notif"></div></div>
+            <div class="notifications" id="box"></div>
             <div id="deconnection"> <a class="nav-item" href="#" data-uri="/logout"> Se deconnecter </a>  </div>
          </div>
       </div>
@@ -72,7 +74,17 @@ const Navbar = () => {
   `;
     }
   }
+
   navbarWrapper.innerHTML = navbar;
+  let nbrNotification = document.getElementById("nbr-notif");
+
+  if(accesToken){
+    let notifications = await getNotificationList(accesToken, false);
+    if(notifications.length>0){
+      nbrNotification.innerText=notifications.length;
+    }
+  }
+
   const bellIconDiv = document.getElementById("icon-bell");
   const boxDiv = document.getElementById("box");
   let isClicked = false;
@@ -88,6 +100,7 @@ const Navbar = () => {
       } else {
         boxDiv.innerHTML = "";
         isClicked = false;
+        nbrNotification.innerText="";
       }
     });
   }

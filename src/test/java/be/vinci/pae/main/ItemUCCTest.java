@@ -4,6 +4,7 @@ import be.vinci.pae.buiseness.dto.ItemDTO;
 import be.vinci.pae.buiseness.ucc.ItemUCC;
 import be.vinci.pae.dal.services.DateDAO;
 import be.vinci.pae.dal.services.ItemDAO;
+import be.vinci.pae.dal.services.NotificationDAO;
 import be.vinci.pae.utils.exception.BizzException;
 import be.vinci.pae.utils.exception.FatalException;
 import java.util.List;
@@ -26,6 +27,7 @@ public class ItemUCCTest {
   private static ServiceLocator locator;
   private ItemDAO itemDAO;
   private DateDAO dateDAO;
+  private static NotificationDAO notificationDAO;
 
 
   /**
@@ -44,10 +46,13 @@ public class ItemUCCTest {
   public void setup() {
     itemDAO = locator.getService(ItemDAO.class);
     dateDAO = locator.getService(DateDAO.class);
+    notificationDAO = locator.getService(NotificationDAO.class);
     Mockito.clearInvocations(itemDAO);
     Mockito.clearInvocations(dateDAO);
+    Mockito.clearInvocations(notificationDAO);
     Mockito.reset(itemDAO);
     Mockito.reset(dateDAO);
+    Mockito.reset(notificationDAO);
   }
 
   @Test
@@ -271,12 +276,19 @@ public class ItemUCCTest {
 
     Mockito.when(itemDAO.getOneById(ID)).thenReturn(itemDTO);
     Mockito.when(itemDTO.getOfferorId()).thenReturn(ID);
+    Mockito.when(itemDTO.getRecipientId()).thenReturn(ID);
+    Mockito.when(itemDTO.getId()).thenReturn(ID);
+    Mockito.when(itemDTO.getOfferor()).thenReturn("user");
     itemUCC.offerAgain(ID, ID, ID);
     Assertions.assertAll(
         () -> Mockito.verify(dateDAO).addDate(ID),
         () -> Mockito.verify(itemDAO).changeItemCondition(ID, ID, "offered", ID),
         () -> Mockito.verify(itemDAO).getOneById(ID),
-        () -> Mockito.verify(itemDTO).getOfferorId()
+        () -> Mockito.verify(itemDTO).getOfferorId(),
+        () -> Mockito.verify(itemDTO, Mockito.atMost(2)).getRecipientId(),
+        () -> Mockito.verify(itemDTO).getOfferor(),
+        () -> Mockito.verify(itemDTO).getId(),
+        () -> Mockito.verify(notificationDAO).sendNotification("user a réoffert cet objet", ID, ID)
     );
   }
 
@@ -392,6 +404,20 @@ public class ItemUCCTest {
     Mockito.doThrow(FatalException.class).when(itemDAO).rateItem(ID, ID, state, ID);
     Assertions.assertThrows(FatalException.class, () -> itemUCC.rateItem(ID, ID, state, ID));
     Mockito.verify(itemDAO).rateItem(ID, ID, state, ID);
+  }
+
+  @Test
+  public void updateItemOfInvalidMemberSuccessful() {
+    itemUCC.updateItemOfInvalidMember(ID);
+    Mockito.verify(itemDAO).updateItemOfInvalidMember(ID);
+  }
+
+
+  @Test
+  public void updateItemOfInvalidMemberFatalException() {
+    Mockito.doThrow(FatalException.class).when(itemDAO).updateItemOfInvalidMember(ID);
+    Assertions.assertThrows(FatalException.class, () -> itemUCC.updateItemOfInvalidMember(ID));
+    Mockito.verify(itemDAO).updateItemOfInvalidMember(ID);
   }
 
 }

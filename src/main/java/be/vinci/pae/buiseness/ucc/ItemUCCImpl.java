@@ -172,7 +172,7 @@ public class ItemUCCImpl implements ItemUCC {
       myItemDAOService.changeItemCondition(itemId, userId, "offered", version);
       
       if (item.getRecipientId() > 0) {
-        myNotificationDAO.sendNotification(item.getOfferor() + " a réoffert cette objet ",
+        myNotificationDAO.sendNotification(item.getOfferor() + " a réoffert cet objet",
             item.getRecipientId(), item.getId());
       }
 

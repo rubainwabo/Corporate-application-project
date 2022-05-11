@@ -217,14 +217,16 @@ const HomePage = async () => {
         "Content-Type": "application/json",
       },
     };
-    const date1 = document.getElementById("date-d").value;
+   const date1 = document.getElementById("date-d").value;
     const date2 = document.getElementById("date-f").value;
+    const splitDate2 = date2.split("/")
+    splitDate2[2] = parseInt(splitDate2[2])+1
+    let nouvDate = splitDate2.join("/");
     try {
       const response = await fetch(
-        "api/items/filtered?filter=date&input=" + date1 + "-" + date2,
+        "api/items/filtered?filter=date&input=" + date1 + "-" + nouvDate,
         options
       );
-      console.log(response);
 
       if (!response.ok) {
         throw new Error(

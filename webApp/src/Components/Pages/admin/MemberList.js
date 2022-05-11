@@ -19,6 +19,7 @@ const pageContaint = `
    </div>
    <div id="member-list-checkbox-container">
       <div id="member-list-checkbox-in">
+        <span id="member-list-invalid-msg"> </span>
          <div class="checkbox-member-list">
             <label for="name">Name</label>
             <input type="checkbox" id="user-name-member-list" name="name" >
@@ -212,6 +213,14 @@ async function getAllMemberByFilter(searchInput, token) {
       memberList.appendChild(divMemberToHandle);
       switchToInvalidMember.addEventListener("click",async () => {
         await updateInvalideMember(divUserHandler.id,token);
+        let invalidMsg = document.getElementById("member-list-invalid-msg");
+        invalidMsg.style.color="green"
+        invalidMsg.style.marginRight="50px"
+        invalidMsg.style.fontWeight="normal"
+        invalidMsg.innerHTML= "Votre demande a été traitée avec succès"; 
+        setTimeout(function(){
+          invalidMsg.innerHTML="";
+        }, 2000); //run this after 3 seconds
       })
     });
   } catch (error) {}

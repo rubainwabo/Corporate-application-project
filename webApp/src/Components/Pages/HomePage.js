@@ -90,7 +90,7 @@ const home = `
    <div id="home-page-navigation">
       <div class="row">
          <h2 class="col-4" id="home-page-title"> Dernières offres</h2>
-         <div class="col-8">
+         <div class="col-8" id="home-search-bar">
             <div class="row">
                <div class="col-4">
                   <div class="row" id="input-div">
@@ -131,7 +131,11 @@ const home = `
 
 const HomePage = async () => {
   const pageDiv = document.querySelector("#page");
+  
   pageDiv.innerHTML = home;
+  if(!getSessionObject("accessToken")){
+    document.getElementById("home-search-bar").style.display="none";
+  }
   let fetchMethodName = getSessionObject("accessToken")
     ? true
     : false;

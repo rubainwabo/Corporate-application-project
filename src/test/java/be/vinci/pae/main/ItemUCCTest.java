@@ -25,10 +25,9 @@ public class ItemUCCTest {
 
   private static ItemUCC itemUCC;
   private static ServiceLocator locator;
+  private static NotificationDAO notificationDAO;
   private ItemDAO itemDAO;
   private DateDAO dateDAO;
-  private static NotificationDAO notificationDAO;
-
 
   /**
    * Init for tests.
@@ -301,11 +300,11 @@ public class ItemUCCTest {
     Mockito.when(itemDTO.getRecipientId()).thenReturn(0);
     itemUCC.offerAgain(ID, ID, ID);
     Assertions.assertAll(
-            () -> Mockito.verify(dateDAO).addDate(ID),
-            () -> Mockito.verify(itemDAO).changeItemCondition(ID, ID, "offered", ID),
-            () -> Mockito.verify(itemDAO).getOneById(ID),
-            () -> Mockito.verify(itemDTO).getOfferorId(),
-            () -> Mockito.verify(itemDTO, Mockito.atMost(2)).getRecipientId()
+        () -> Mockito.verify(dateDAO).addDate(ID),
+        () -> Mockito.verify(itemDAO).changeItemCondition(ID, ID, "offered", ID),
+        () -> Mockito.verify(itemDAO).getOneById(ID),
+        () -> Mockito.verify(itemDTO).getOfferorId(),
+        () -> Mockito.verify(itemDTO, Mockito.atMost(2)).getRecipientId()
     );
   }
 

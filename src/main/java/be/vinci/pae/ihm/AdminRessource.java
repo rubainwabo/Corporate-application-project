@@ -135,19 +135,19 @@ public class AdminRessource {
   /**
    * change all item condition for a new invalid user.
    *
-   * @param node body of the request
+   * @param memberId id of the member.
    * @return if nothing gonna wrong, return status 200
    */
   @PUT
   @Path("update/invalidMember/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response adminInvalideMember(JsonNode node) {
-    if (!node.hasNonNull("memberId") || node.get("memberId").asInt() <= 0) {
+  public Response adminInvalideMember(@PathParam("id") int memberId) {
+    if (memberId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
           .entity("informations invalides").type("text/plain").build());
     }
-    myItemUCC.updateItemOfInvalidMember(node.get("memberId").asInt());
+    myItemUCC.updateItemOfInvalidMember(memberId);
     return Response.ok().build();
   }
 }

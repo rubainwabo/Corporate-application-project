@@ -405,9 +405,6 @@ async function updateInvalideMember(id,token) {
   try {
     const options = {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
-      body:  JSON.stringify({
-        memberId:id
-      }),
       headers: {
         token: token,
         "Content-Type": "application/json",

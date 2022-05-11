@@ -229,9 +229,10 @@ const MyItems = async (id) => {
     .getElementById("item-not-gived")
     .addEventListener("click", async function (e) {
       await itemGived(currentItemId,false,currentVersion);
-      currentState = "item-not-gived";
-      changeOptions(currentState);
 
+        currentState = "item-not-gived";
+        changeOptions(currentState);
+      
     });
 
   document
@@ -441,7 +442,7 @@ function changeOptions(state) {
     document.getElementById("hidden-invalid-option").selected=true;
     document.getElementById("invalid-selectbox").style.display="none";
   }
-  if(state!="Assigned"){
+  if(state!="Assigned" && state!="item-not-gived"){
     document.getElementById("assigned-option").selected=true;
     document.getElementById("assigned-selectbox").style.display="none";
   }

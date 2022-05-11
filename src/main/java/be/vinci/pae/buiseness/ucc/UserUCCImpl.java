@@ -34,16 +34,16 @@ public class UserUCCImpl implements UserUCC {
       myDalServices.start();
       User user = (User) myUserDAO.getOneByUsername(username);
       if (user == null) {
-        throw new PasswordOrUsernameException("username or password incorrect");
+        throw new PasswordOrUsernameException("pseudo ou mot de passe incorrect");
       }
       if (!user.checkPassword(password)) {
-        throw new PasswordOrUsernameException("username or password incorrect");
+        throw new PasswordOrUsernameException("pseudo ou mot de passe incorrect");
       }
       if (user.isDenied()) {
         throw new ReasonForConnectionRefusalException(user.getReasonForConnectionRefusal());
       }
       if (user.isWaiting()) {
-        throw new UserOnHoldException("user on hold");
+        throw new UserOnHoldException("utilisateur en attente");
       }
       myDalServices.commit();
       return user;
@@ -62,7 +62,7 @@ public class UserUCCImpl implements UserUCC {
         myDalServices.commit();
         return list;
       } else {
-        throw new InvalidStateException("invalid state");
+        throw new InvalidStateException("état invalide");
       }
     } catch (Exception e) {
       myDalServices.rollBack();
@@ -100,7 +100,7 @@ public class UserUCCImpl implements UserUCC {
       int version) {
     try {
       if (!state.equals("denied") && !state.equals("valid")) {
-        throw new InvalidStateException("Trying to insert invalid state");
+        throw new InvalidStateException("vous essayez d'insérer un état invalide");
       }
       myDalServices.start();
       if (myUserDAO.getOneById(id) == null) {
@@ -154,7 +154,7 @@ public class UserUCCImpl implements UserUCC {
       user1.setPassword(user1.hashPassword(user1.getPassword()));
       UserDTO userExist = myUserDAO.getOneByUsername(user.getUserName());
       if (userExist != null) {
-        throw new UsernameAlreadyExists("username already exists");
+        throw new UsernameAlreadyExists("le nom d'utilisateur existe déjà");
       }
       int idUser = myUserDAO.register(user1);
       myDalServices.commit();

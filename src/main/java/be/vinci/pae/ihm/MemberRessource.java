@@ -92,7 +92,7 @@ public class MemberRessource {
         || !body.hasNonNull("lastName")
         || !body.hasNonNull("version")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("id field is required").type("text/plain").build());
+          .entity("le champ id est obligatoire").type("text/plain").build());
     } else {
       return myUserUCC.updateProfile(
           userId,
@@ -122,16 +122,16 @@ public class MemberRessource {
   public boolean userUpdatePassword(@PathParam("id") int userId, JsonNode body) {
     if (!body.hasNonNull("newPassword")) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("newPassword field is required").type("text/plain").build());
+          .entity("le champ newPassword est obligatoire").type("text/plain").build());
     } else {
 
       if (body.get("newPassword").asText().isBlank()) {
         throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-            .entity("newPassword field is blank").type("text/plain").build());
+            .entity("le champ newPassword est vide").type("text/plain").build());
       }
       if (body.get("version").asInt() < 0) {
         throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-            .entity("number of version incorrect").type("text/plain").build());
+            .entity("le numéro de version est incorrect").type("text/plain").build());
       }
       return myUserUCC.updatePassword(userId, body.get("newPassword").asText(),
           body.get("version").asInt());

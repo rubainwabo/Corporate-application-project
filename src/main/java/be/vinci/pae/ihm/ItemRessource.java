@@ -252,7 +252,7 @@ public class ItemRessource {
   public int userUpdateItem(ItemDTO item, @Context ContainerRequest req) {
     if (item == null) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("informations manquantes").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
     return myItemUCC.updateItem(item, userId);
@@ -268,7 +268,7 @@ public class ItemRessource {
       @Context ContainerRequest req) {
     if (idItem <= 0 || version < 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("informations manquantes").type("text/plain").build());
     }
     int userId = (int) req.getProperty("id");
     myItemUCC.offerAgain(idItem, userId, version);
@@ -297,7 +297,7 @@ public class ItemRessource {
       myItemUCC.updateItemUrl(itemId, fileName);
     } catch (IOException e) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("no image uploaded").type("text/plain").build());
+          .entity("pas d'image chargée").type("text/plain").build());
     }
     return Response.ok(fileName).build();
   }
@@ -314,7 +314,7 @@ public class ItemRessource {
   public Response getPicture(@PathParam("id") int itemId) {
     if (itemId <= 0) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("information is missing").type("text/plain").build());
+          .entity("informations manquantes").type("text/plain").build());
     }
     ItemDTO item = myItemUCC.getDetails(itemId);
 

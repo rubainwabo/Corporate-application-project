@@ -35,7 +35,7 @@ public class ItemTypeRessource {
   public ItemTypeDTO userAddItemType(JsonNode itemType) {
     if (!itemType.hasNonNull("itemType") || itemType.get("itemType").asText().isBlank()) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-          .entity("itemType informations invalid").type("text/plain").build());
+          .entity("le type de l'objet est invalide").type("text/plain").build());
     }
     return myItemTypeUCC.addItemType(itemType.get("itemType").asText());
   }

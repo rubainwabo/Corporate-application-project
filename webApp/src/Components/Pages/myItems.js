@@ -52,6 +52,12 @@ const myItems = `
          <option value="invalid recipient">Receveur indisponible</option>  
          <option value="invalid offeror">offreur indisponible</option>
       </select>
+
+      <select class="" name="pets" id="assigned-selectbox" >
+        <option id="assigned-option" value="false">offres que j'ai attribuées</option>
+        <option value="true">Offres qui me sont dédiées</option>   
+      </select>
+      
    </div>
    <div id="my-items-page-content">
       <div id="my-item-menu">
@@ -105,7 +111,19 @@ const MyItems = async (id) => {
     let invalidState = document.getElementById("invalid-selectbox").value;
     currentState = invalidState;
     getMyItems(currentState, true);
-  })
+  });
+
+  document.getElementById("assigned-selectbox").addEventListener("change",function(e){
+    let assignedToMe = document.getElementById("assigned-selectbox").value;
+    console.log(assignedToMe);
+    if(assignedToMe=="true"){
+      getMyItems(currentState, false);
+    }else{
+      getMyItems(currentState, true);
+    }
+  
+  });
+
 
 
   document
@@ -143,6 +161,7 @@ const MyItems = async (id) => {
       e.preventDefault();
       currentState = "Assigned";
       document.getElementById("all-recent-item").innerText = "";
+      document.getElementById("assigned-selectbox").style.display="flex";
       getMyItems(currentState, true);
       changeOptions(currentState);
     });
@@ -421,6 +440,10 @@ function changeOptions(state) {
   if(state!="invalid offeror" && state!="invalid recipient"){
     document.getElementById("hidden-invalid-option").selected=true;
     document.getElementById("invalid-selectbox").style.display="none";
+  }
+  if(state!="Assigned"){
+    document.getElementById("assigned-option").selected=true;
+    document.getElementById("assigned-selectbox").style.display="none";
   }
 
   document.getElementById("my-items-pop-up").style.display = "none";

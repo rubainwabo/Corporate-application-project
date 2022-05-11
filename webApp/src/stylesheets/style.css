@@ -637,6 +637,10 @@ add-item-page
   display: none;
   margin-left: 15px;
 }
+#assigned-selectbox{
+  display: none;
+  margin-left: 15px;
+}
 #cancell-item {
   font-weight: bold;
   color: red;

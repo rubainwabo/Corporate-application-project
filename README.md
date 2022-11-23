@@ -1,4 +1,4 @@
 # Corporate-application-project
 
 
-Project d'application en entreprise
+Projet d'application en entreprise
